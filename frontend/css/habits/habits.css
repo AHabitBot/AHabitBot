@@ -1,0 +1,53 @@
+/* =========================================================
+   HABITS V2 — ОБЩАЯ ОБОЛОЧКА РАЗДЕЛА
+   ========================================================= */
+
+:root {
+    --habits-v2-text: #232428;
+    --habits-v2-muted: #a5a7ad;
+    --habits-v2-blue: #2f7fe5;
+    --habits-v2-button-bg: #eef5ff;
+}
+
+
+/* =========================================================
+   ОСНОВНАЯ СТРАНИЦА HABITS V2
+   ========================================================= */
+
+#habits-v2-page {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100dvh;
+    min-height: 100vh;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(255, 255, 255, 0.99) 0%,
+            rgba(250, 251, 253, 0.97) 55%,
+            rgba(247, 249, 252, 1) 100%
+        );
+}
+
+
+#habits-v2-page .page-content {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background: transparent;
+}

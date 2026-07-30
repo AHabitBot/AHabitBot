@@ -1,0 +1,335 @@
+/* =========================================================
+   КАЛЕНДАРЬ ПРИВЫЧКИ
+   ========================================================= */
+
+.habit-details__calendar {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-top: 24px;
+}
+
+
+/* =========================================================
+   НАЗВАНИЕ МЕСЯЦА
+   ========================================================= */
+
+.habit-calendar__month {
+    margin: 0 0 18px;
+
+    color: #292a2f;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 22px;
+    font-weight: 680;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   ДНИ НЕДЕЛИ
+   ========================================================= */
+
+.habit-calendar__weekdays {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    column-gap: 7px;
+
+    margin-bottom: 10px;
+}
+
+
+.habit-calendar__weekday {
+    min-width: 0;
+
+    color:
+        rgba(var(--habit-accent-rgb), 0.72);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   СЕТКА КАЛЕНДАРЯ
+   ========================================================= */
+
+.habit-calendar__grid {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    column-gap: 7px;
+    row-gap: 7px;
+}
+
+
+/* =========================================================
+   ОБЫЧНЫЙ ДЕНЬ
+   ========================================================= */
+
+.habit-calendar__day {
+    position: relative;
+
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(var(--habit-accent-rgb), 0.035);
+
+    border-radius: 13px;
+
+    color: #383a3f;
+
+    background:
+        rgba(var(--habit-accent-rgb), 0.045);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 520;
+    line-height: 1;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   ЧИСЛО
+   ========================================================= */
+
+.habit-calendar__day-number {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* =========================================================
+   ВЫПОЛНЕННЫЙ ДЕНЬ
+   ========================================================= */
+
+.habit-calendar__day--completed {
+    border-color:
+        rgba(var(--habit-accent-rgb), 0.16);
+
+    color: #1f2820;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(var(--habit-accent-rgb), 0.48) 0%,
+            rgba(var(--habit-accent-rgb), 0.72) 100%
+        );
+
+    box-shadow:
+        0 5px 12px
+        rgba(var(--habit-accent-rgb), 0.13);
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   СЕГОДНЯ
+
+   Сам квадрат остаётся обычным.
+   Сегодня обозначается только точкой.
+   ========================================================= */
+
+.habit-calendar__day--today {
+    color: #202126;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ТОЧКА СЕГОДНЯ
+   ========================================================= */
+
+.habit-calendar__today-dot {
+    position: absolute;
+
+    left: 50%;
+    bottom: 4px;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: #202126;
+
+    transform: translateX(-50%);
+}
+
+
+/* =========================================================
+   ДНИ ДО СОЗДАНИЯ И БУДУЩИЕ ДНИ
+
+   Не отличаются от обычных дней.
+   Классы остаются для логики и доступности,
+   но визуально ничего не меняют.
+   ========================================================= */
+
+.habit-calendar__day--before-created,
+.habit-calendar__day--future {
+    border-color:
+        rgba(var(--habit-accent-rgb), 0.035);
+
+    color: #383a3f;
+
+    background:
+        rgba(var(--habit-accent-rgb), 0.045);
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   ВЫПОЛНЕННЫЙ ДЕНЬ ИМЕЕТ ПРИОРИТЕТ
+   ========================================================= */
+
+.habit-calendar__day--completed.habit-calendar__day--before-created,
+.habit-calendar__day--completed.habit-calendar__day--future {
+    border-color:
+        rgba(var(--habit-accent-rgb), 0.16);
+
+    color: #1f2820;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(var(--habit-accent-rgb), 0.48) 0%,
+            rgba(var(--habit-accent-rgb), 0.72) 100%
+        );
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   ПУСТАЯ ЯЧЕЙКА
+   ========================================================= */
+
+.habit-calendar__day--empty {
+    border: none;
+
+    background: transparent;
+
+    box-shadow: none;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   АДАПТАЦИЯ
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .habit-details__calendar {
+        margin-top: 21px;
+    }
+
+
+    .habit-calendar__month {
+        margin-bottom: 15px;
+
+        font-size: 21px;
+    }
+
+
+    .habit-calendar__weekdays {
+        column-gap: 5px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .habit-calendar__grid {
+        column-gap: 5px;
+        row-gap: 6px;
+    }
+
+
+    .habit-calendar__weekday {
+        font-size: 12px;
+    }
+
+
+    .habit-calendar__day {
+        border-radius: 11px;
+
+        font-size: 13px;
+    }
+
+}
+
+
+@media (max-width: 340px) {
+
+    .habit-calendar__weekdays,
+    .habit-calendar__grid {
+        column-gap: 4px;
+    }
+
+
+    .habit-calendar__grid {
+        row-gap: 5px;
+    }
+
+
+    .habit-calendar__day {
+        border-radius: 10px;
+
+        font-size: 12px;
+    }
+
+}
