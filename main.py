@@ -1,24 +1,31 @@
 import asyncio
 
 from aiogram import Bot, Dispatcher
-from aiogram.filters import CommandStart
-from aiogram.types import Message
 
 from config import BOT_TOKEN
+from database.database import connect_db, close_db
+from handlers.start import router as start_router
 
 
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
+async def main() -> None:
+    bot = Bot(token=BOT_TOKEN)
+    dp = Dispatcher()
 
+    dp.include_router(start_router)
 
-@dp.message(CommandStart())
-async def start(message: Message):
-    await message.answer("AI Habit Bot запущен 🚀")
+    try:
+        await connect_db()
 
+        print("✅ База данных подключена")
+        print("✅ AI Habit Bot запущен")
 
-async def main():
-    print("✅ AI Habit Bot запущен")
-    await dp.start_polling(bot)
+        await dp.start_polling(bot)
+
+    finally:
+        await close_db()
+        await bot.session.close()
+
+        print("⛔ AI Habit Bot остановлен")
 
 
 if __name__ == "__main__":
