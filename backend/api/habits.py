@@ -12,9 +12,12 @@ from backend.repositories.habits import (
     create_habit,
     get_user_habits,
 )
+
 from backend.repositories.users import (
     get_user_by_telegram_id,
+    create_user,
 )
+
 from backend.services.telegram_auth import (
     validate_telegram_init_data,
 )
@@ -49,21 +52,30 @@ async def get_current_user(
         str | None,
         Header(alias="X-Telegram-Init-Data"),
     ] = None,
-) -> dict:
+):
+    telegram_user = validate_telegram_init_data(
+        x_telegram_init_data
+    )
+
+    telegram_id = telegram_user["id"]
+
     user = await get_user_by_telegram_id(
-        900410719
+        telegram_id
     )
 
     if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=(
-                "Тестовый пользователь "
-                "123456789 не найден"
+        user = await create_user(
+            telegram_id=telegram_id,
+            username=telegram_user.get(
+                "username"
+            ),
+            first_name=telegram_user.get(
+                "first_name"
             ),
         )
 
     return user
+
 
 
 @router.get("")
