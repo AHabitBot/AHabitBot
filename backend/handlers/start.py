@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-from services.users import register_user
+from backend.services.users import register_user
 
 router = Router()
 

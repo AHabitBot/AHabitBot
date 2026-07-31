@@ -1,87 +1,56 @@
 /* =========================================================
-   HABITS EVENTS
+   HABITS MAIN
 
    Главный контроллер раздела привычек.
 
    Отвечает за:
    - первоначальный запуск раздела;
-   - рендер главной страницы;
+   - выбор главного экрана;
+   - рендер пустого состояния или списка;
    - открытие страницы создания привычки;
-   - подключение событий пустой страницы;
-   - подключение событий списка привычек;
-   - повторную инициализацию открытых экранов.
+   - повторную инициализацию открытых экранов;
+   - подключение событий главной страницы.
 
-   Логика отдельных частей находится в:
+   Структура раздела:
 
    habitMainEmpty/
-   - addHabitEvents.js
-   - iconPickerEvents.js
+   - addHabitPage.js
+   - habitsDraft.js
+   - habitsEmpty.js
 
    habitMainList/
+   - habitsListPage.js
    - habitsListEvents.js
 
    viewHabitDetails/
-   - habitDetailsEvents.js
+   - habitDetailPage.js
    ========================================================= */
 
 
-/* =========================================================
-   РЕНДЕР ГЛАВНОЙ СТРАНИЦЫ
-   ========================================================= */
-
-import {
-    renderHabitsPage
-} from "./habitsPage.js"
-
-
-/* =========================================================
-   СОЗДАНИЕ ПРИВЫЧКИ
-   ========================================================= */
+/* 1. Импорты */
+import { renderHabitsEmpty } from "./habitMainEmpty/habitsEmpty.js"
+import { renderHabitsList } from "./habitMainList/habitsListPage.js"
 
 import {
     openAddHabitPage,
     restoreDraftToAddHabitPage,
-    initAddHabitPageEvents
-} from "./habitMainEmpty/addHabitEvents.js"
-
-
-/* =========================================================
-   ВЫБОР ЭМОДЗИ
-   ========================================================= */
-
-import {
+    initAddHabitPageEvents,
     initIconPickerEvents
-} from "./habitMainEmpty/iconPickerEvents.js"
-
-
-/* =========================================================
-   СПИСОК ПРИВЫЧЕК И ДЕТАЛИ
-   ========================================================= */
+} from "./habitMainEmpty/addHabitPage.js"
 
 import {
     initHabitsListEvents,
     initOpenedHabitDetailsEvents
 } from "./habitMainList/habitsListEvents.js"
 
-
-/* =========================================================
-   STORE
-   ========================================================= */
-
 import {
     getHabits,
     getHabitsStatistics
 } from "./habitsStore.js"
 
-
-/* =========================================================
-   ОБЩИЕ УТИЛИТЫ
-   ========================================================= */
-
 import {
     addPressAnimation
 } from "./habitsUtils.js"
-
 
 /* =========================================================
    ПОЛУЧИТЬ КОРНЕВОЙ КОНТЕЙНЕР
@@ -105,6 +74,50 @@ function getHabitsRoot() {
    явное положение прокрутки, переданное из
    habitsListEvents.js после подтверждения привычки.
    ========================================================= */
+
+export function renderHabitsPage(
+    habits = [],
+    statistics = {}
+) {
+    const root = document.getElementById(
+        "habits-v2-root"
+    )
+
+    if (!root) {
+        console.error(
+            "V2: не найден #habits-v2-root"
+        )
+
+        return
+    }
+
+    if (!Array.isArray(habits)) {
+        console.error(
+            "V2: renderHabitsPage ожидал массив привычек"
+        )
+
+        root.innerHTML = renderHabitsEmpty()
+        return
+    }
+
+    root.innerHTML =
+        habits.length === 0
+            ? renderHabitsEmpty()
+            : renderHabitsList(
+                habits,
+                statistics
+            )
+}
+
+
+
+
+
+
+
+
+
+
 
 function openHabitsPage({
     preserveScroll = false,
@@ -320,3 +333,14 @@ export function initHabitsEvents() {
 
     openHabitsPage()
 }
+
+
+
+
+
+
+
+
+
+
+

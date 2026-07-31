@@ -1,4 +1,4 @@
-from database.database import get_connection
+from backend.database.database import get_connection
 
 
 async def create_stats(user_id: int) -> None:

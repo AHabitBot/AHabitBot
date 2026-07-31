@@ -22,21 +22,11 @@
    ========================================================= */
 
 import {
-    renderHabitDetailsPage
-} from "../viewHabitDetails/habitDetailsPage.js"
-
-import {
-    initHabitDetailsEvents
-} from "../viewHabitDetails/habitDetailsEvents.js"
-
-import {
-    openHabitDetailsMenu
-} from "../viewHabitDetails/habitDetailsMenu.js"
-
-import {
+    renderHabitDetailsPage,
+    initHabitDetailsEvents,
+    openHabitDetailsMenu,
     openHabitDeleteConfirm
-} from "../viewHabitDetails/habitDeleteConfirm.js"
-
+} from "../viewHabitDetails/habitDetailPage.js"
 
 /* =========================================================
    СТРАНИЦА РЕДАКТИРОВАНИЯ
@@ -44,7 +34,7 @@ import {
 
 import {
     openAddHabitPage
-} from "../habitMainEmpty/addHabitEvents.js"
+} from "../habitMainEmpty/addHabitPage.js"
 
 import {
     startHabitEditDraft

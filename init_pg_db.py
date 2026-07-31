@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     telegram_id BIGINT NOT NULL UNIQUE,
     username VARCHAR(255),
     first_name VARCHAR(255),
+    nickname VARCHAR(50) UNIQUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

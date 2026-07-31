@@ -1,6 +1,6 @@
 import {
     initHabitsEvents
-} from "./habits/habitsEvents.js"
+} from "./habits/habitsMain.js"
 
 
 function initTelegramWebApp() {
