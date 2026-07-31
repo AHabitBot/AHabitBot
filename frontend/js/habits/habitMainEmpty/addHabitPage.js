@@ -11,10 +11,6 @@ import {
 } from "../habitsApi.js"
 
 import {
-    isHabitDraftEditing
-} from "./habitsDraft.js"
-
-import {
     getHabitDraft,
     getHabitDraftValue,
     setHabitDraftValue,
@@ -1541,42 +1537,6 @@ export function renderIconPickerPage(
    - возврат без сохранения;
    - подтверждение выбранного эмодзи;
    - сохранение эмодзи в черновик привычки.
-   ========================================================= */
-
-
-import {
-    getHabitDraftValue,
-    setHabitDraftValue
-} from "./habitsDraft.js"
-
-import {
-    addPressAnimation
-} from "../habitsUtils.js"
-
-
-/* =========================================================
-   ПОЛУЧИТЬ КОРНЕВОЙ КОНТЕЙНЕР
-   ========================================================= */
-
-function getHabitsRoot() {
-    return document.getElementById(
-        "habits-v2-root"
-    )
-}
-
-
-/* =========================================================
-   СОБЫТИЯ СТРАНИЦЫ ВЫБОРА ЭМОДЗИ
-
-   onBackToAddHabitPage:
-   функция возвращения на страницу создания привычки.
-
-   Возврат через стрелку:
-   - не сохраняет временно выбранный эмодзи.
-
-   Нажатие «Выбрать»:
-   - сохраняет эмодзи в habitsDraft;
-   - возвращает на страницу создания привычки.
    ========================================================= */
 
 export function initIconPickerEvents({
