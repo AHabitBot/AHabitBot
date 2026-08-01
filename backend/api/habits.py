@@ -19,6 +19,7 @@ from backend.repositories.users import (
 )
 
 from backend.services.habits.habit_service import (
+    archive_user_habit,
     edit_habit,
     update_habit_confirmation,
 )
@@ -184,6 +185,46 @@ async def update_existing_habit(
     return {
         "habit": habit,
     }
+
+
+
+
+
+
+
+
+
+
+@router.patch("/{habit_id}/archive")
+async def archive_habit_endpoint(
+    habit_id: int,
+    x_telegram_init_data: Annotated[
+        str | None,
+        Header(alias="X-Telegram-Init-Data"),
+    ] = None,
+):
+    user = await get_current_user(
+        x_telegram_init_data
+    )
+
+    archived = await archive_user_habit(
+        user_id=user["id"],
+        habit_id=habit_id,
+    )
+
+    if not archived:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Привычка не найдена",
+        )
+
+    return {
+        "success": True,
+        "habit_id": habit_id,
+    }
+
+
+
 
 
 

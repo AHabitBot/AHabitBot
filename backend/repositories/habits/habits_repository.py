@@ -315,6 +315,42 @@ async def update_habit(
     return dict(row)
 
 
+
+# =========================================================
+# АРХИВИРОВАТЬ ПРИВЫЧКУ
+# =========================================================
+
+async def archive_habit(
+    user_id: int,
+    habit_id: int,
+) -> bool:
+    """
+    Перемещает привычку пользователя в архив.
+
+    Возвращает:
+        True  - привычка успешно архивирована.
+        False - привычка не найдена.
+    """
+
+    async with get_connection() as connection:
+        result = await connection.execute(
+            """
+            UPDATE habits
+            SET
+                is_archived = TRUE,
+                updated_at = NOW()
+            WHERE
+                id = $1
+                AND user_id = $2
+                AND is_archived = FALSE
+            """,
+            habit_id,
+            user_id,
+        )
+
+    return result == "UPDATE 1"
+
+
 # =========================================================
 # ПОЛУЧИТЬ ЛОКАЛЬНУЮ ДАТУ ПОЛЬЗОВАТЕЛЯ
 # =========================================================

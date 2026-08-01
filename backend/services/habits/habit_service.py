@@ -1,6 +1,7 @@
 from typing import Any
 
 from backend.repositories.habits import (
+    archive_habit,
     set_habit_confirmation,
     update_habit,
 )
@@ -50,4 +51,20 @@ async def edit_habit(
         emoji=emoji,
         color=color,
         size=size,
+    )
+
+
+
+
+async def archive_user_habit(
+    user_id: int,
+    habit_id: int,
+) -> bool:
+    """
+    Архивирует привычку пользователя.
+    """
+
+    return await archive_habit(
+        user_id=user_id,
+        habit_id=habit_id,
     )
