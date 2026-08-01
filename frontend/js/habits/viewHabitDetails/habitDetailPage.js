@@ -806,18 +806,18 @@ const calendarHtml =
                 habit-details__menu-item--danger
             "
             type="button"
-            data-action="delete-habit"
+            data-action="archive-habit"
             role="menuitem"
         >
             <span
                 class="material-symbols-rounded habit-details__menu-icon"
                 aria-hidden="true"
             >
-                delete
+                archive
             </span>
 
             <span>
-                Удалить
+                Архивировать
             </span>
         </button>
 
@@ -1194,7 +1194,7 @@ function getHabitsRoot() {
    ЗАКРЫТЬ ОКНО
    ========================================================= */
 
-function closeHabitDeleteConfirm({
+function closeHabitArchiveConfirm({
     restoreFocus = true
 } = {}) {
     if (!activeModal) {
@@ -1244,15 +1244,15 @@ function closeHabitDeleteConfirm({
    ОТКРЫТЬ ОКНО
    ========================================================= */
 
-export function openHabitDeleteConfirm({
-    onDelete = null,
+export function openHabitArchiveConfirm({
+    onArchive = null,
     onKeep = null
 } = {}) {
     const root = getHabitsRoot()
 
     if (!root) {
         console.warn(
-            "Habit Delete Confirm: не найден #habits-v2-root"
+            "Habit Archive Confirm: не найден #habits-v2-root"
         )
 
         return
@@ -1263,7 +1263,7 @@ export function openHabitDeleteConfirm({
        УБИРАЕМ ПРЕДЫДУЩЕЕ ОКНО, ЕСЛИ ОНО ОСТАЛОСЬ
        --------------------------------------------------------- */
 
-    closeHabitDeleteConfirm({
+    closeHabitArchiveConfirm({
         restoreFocus: false
     })
 
@@ -1304,7 +1304,7 @@ export function openHabitDeleteConfirm({
                 aria-hidden="true"
             >
                 <span class="material-symbols-rounded">
-                    delete
+                    archive
                 </span>
             </div>
 
@@ -1312,7 +1312,7 @@ export function openHabitDeleteConfirm({
                 class="habit-delete-confirm__title"
                 id="habit-delete-confirm-title"
             >
-                Удалить безвозвратно привычку?
+                Переместить привычку в архив?
             </h2>
 
             <div class="habit-delete-confirm__actions">
@@ -1323,9 +1323,9 @@ export function openHabitDeleteConfirm({
                         habit-delete-confirm__button--delete
                     "
                     type="button"
-                    data-action="confirm-delete-habit"
+                    data-action="confirm-archive-habit"
                 >
-                    Удалить
+                    Архивировать
                 </button>
 
                 <button
@@ -1362,9 +1362,9 @@ export function openHabitDeleteConfirm({
         ".habit-delete-confirm__dialog"
     )
 
-    const deleteButton = modal.querySelector(
-        '[data-action="confirm-delete-habit"]'
-    )
+    const archiveButton = modal.querySelector(
+        '[data-action="confirm-archive-habit"]'
+    )  
 
     const keepButtons = modal.querySelectorAll(
         '[data-action="keep-habit"]'
@@ -1375,7 +1375,7 @@ export function openHabitDeleteConfirm({
        АНИМАЦИИ НАЖАТИЯ
        --------------------------------------------------------- */
 
-    addPressAnimation(deleteButton)
+    addPressAnimation(archiveButton)
 
     keepButtons.forEach((button) => {
         addPressAnimation(button)
@@ -1386,15 +1386,15 @@ export function openHabitDeleteConfirm({
        ПОДТВЕРДИТЬ УДАЛЕНИЕ
        --------------------------------------------------------- */
 
-    deleteButton?.addEventListener(
+    archiveButton?.addEventListener(
         "click",
         () => {
-            closeHabitDeleteConfirm({
+            closeHabitArchiveConfirm({
                 restoreFocus: false
             })
 
-            if (typeof onDelete === "function") {
-                onDelete()
+            if (typeof onArchive === "function") {
+                onArchive()
             }
         }
     )
@@ -1408,7 +1408,7 @@ export function openHabitDeleteConfirm({
         button.addEventListener(
             "click",
             () => {
-                closeHabitDeleteConfirm()
+                closeHabitArchiveConfirm()
 
                 if (typeof onKeep === "function") {
                     onKeep()
@@ -1443,7 +1443,7 @@ export function openHabitDeleteConfirm({
 
         event.preventDefault()
 
-        closeHabitDeleteConfirm()
+        closeHabitArchiveConfirm()
 
         if (typeof onKeep === "function") {
             onKeep()
@@ -1464,7 +1464,7 @@ modal.classList.add(
     "is-visible"
 )
 
-deleteButton?.focus()
+archiveButton?.focus()
 }
 
 
@@ -1491,7 +1491,7 @@ export function initHabitDetailsEvents({
     onBack = null,
     onConfirm = null,
     onEdit = null,
-    onDelete = null
+    onArchive = null
 } = {}) {
     const root = document.getElementById(
         "habits-v2-root"
@@ -1526,8 +1526,8 @@ export function initHabitDetailsEvents({
         '[data-action="edit-habit"]'
     )
 
-    const deleteButton = root.querySelector(
-        '[data-action="delete-habit"]'
+    const archiveButton = root.querySelector(
+        '[data-action="archive-habit"]'
     )
 
 
@@ -1539,7 +1539,7 @@ export function initHabitDetailsEvents({
     addPressAnimation(menuButton)
     addPressAnimation(confirmButton)
     addPressAnimation(editButton)
-    addPressAnimation(deleteButton)
+    addPressAnimation(archiveButton)
 
 
     /* =========================================================
@@ -1628,7 +1628,7 @@ export function initHabitDetailsEvents({
        Только передаём действие внешнему контроллеру.
        ========================================================= */
 
-    deleteButton?.addEventListener(
+    archiveButton?.addEventListener(
         "click",
         (event) => {
             event.preventDefault()
@@ -1636,15 +1636,15 @@ export function initHabitDetailsEvents({
 
             destroyHabitDetailsMenu()
 
-            if (typeof onDelete !== "function") {
+            if (typeof onArchive !== "function") {
                 console.warn(
-                    "Habit Details Events: не передан onDelete"
+                    "Habit Details Events: не передан onArchive"
                 )
 
                 return
             }
 
-            onDelete()
+            onArchive()
         }
     )
 }

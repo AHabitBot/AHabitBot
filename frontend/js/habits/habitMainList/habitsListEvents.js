@@ -25,8 +25,9 @@ import {
     renderHabitDetailsPage,
     initHabitDetailsEvents,
     openHabitDetailsMenu,
-    openHabitDeleteConfirm
+    openHabitArchiveConfirm
 } from "../viewHabitDetails/habitDetailPage.js"
+
 
 /* =========================================================
    СТРАНИЦА РЕДАКТИРОВАНИЯ
@@ -459,20 +460,10 @@ function openHabitEditPage(
 
 
 /* =========================================================
-   УДАЛИТЬ ПРИВЫЧКУ ИЗ ДЕТАЛЬНОЙ СТРАНИЦЫ
-
-   После удаления:
-   - выбранная привычка очищается в Store;
-   - текущая серия пересчитывается;
-   - накопленный XP сохраняется;
-   - открывается главная страница привычек.
-
-   XP не уменьшаем, потому что пользователь уже заработал
-   его за выполненные действия.
+   АРХИВИРОВАТЬ ПРИВЫЧКУ ИЗ ДЕТАЛЬНОЙ СТРАНИЦЫ
    ========================================================= */
 
-async function handleHabitDetailsDelete(
-
+async function handleHabitDetailsArchive(
     habitId,
     {
         onOpenHabitsPage = null
@@ -484,68 +475,64 @@ async function handleHabitDetailsDelete(
 
     if (!habit) {
         console.warn(
-            `Habits List Events: невозможно удалить привычку "${habitId}"`
+            `Habits List Events: невозможно архивировать привычку "${habitId}"`
         )
 
         return null
     }
 
     try {
-        await archiveHabitApi(habitId)
+        await archiveHabitApi(
+            habitId
+        )
     } catch (error) {
         console.error(
-            "Ошибка архивирования:",
+            "Ошибка архивирования привычки:",
             error
         )
 
         return null
     }
 
-    const removedHabit = removeHabit(
+    /*
+     * Backend уже пометил привычку как архивную.
+     * Теперь убираем её из активного Store,
+     * чтобы карточка исчезла с главной страницы.
+     */
+
+    const archivedHabit = removeHabit(
         habitId
     )
 
-    if (!removedHabit) {
+    if (!archivedHabit) {
         console.warn(
-            `Habits List Events: не удалось удалить привычку "${habitId}"`
+            `Habits List Events: не удалось убрать архивированную привычку "${habitId}" из Store`
         )
 
         return null
     }
-
-
-    /* ---------------------------------------------------------
-       ПЕРЕСЧИТЫВАЕМ ТЕКУЩУЮ СЕРИЮ
-
-       getHighestHabitStreak() вызывается уже после удаления,
-       поэтому удалённая привычка в расчёт не попадёт.
-       --------------------------------------------------------- */
 
     setHabitsStatistics({
         currentStreak:
             getHighestHabitStreak()
     })
 
-
-    /* ---------------------------------------------------------
-       ВОЗВРАЩАЕМСЯ НА ГЛАВНУЮ СТРАНИЦУ
-       --------------------------------------------------------- */
-
     if (
         typeof onOpenHabitsPage !==
         "function"
     ) {
         console.warn(
-            "Habits List Events: привычка удалена, но не передан onOpenHabitsPage"
+            "Habits List Events: привычка архивирована, но не передан onOpenHabitsPage"
         )
 
-        return removedHabit
+        return archivedHabit
     }
 
     onOpenHabitsPage()
 
-    return removedHabit
+    return archivedHabit
 }
+
 
 /* =========================================================
    ПОДКЛЮЧИТЬ СОБЫТИЯ ДЕТАЛЬНОЙ СТРАНИЦЫ
@@ -592,10 +579,10 @@ function initCurrentHabitDetailsEvents(
             )
         },
 
-        onDelete: () => {
-            openHabitDeleteConfirm({
-                onDelete: async () => {
-                    await handleHabitDetailsDelete(
+        onArchive: () => {
+            openHabitArchiveConfirm({
+                onArchive: async () => {
+                    await handleHabitDetailsArchive(
                         habitId,
                         {
                             onOpenHabitsPage
