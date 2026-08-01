@@ -41,6 +41,7 @@ import {
 } from "../habitMainEmpty/habitsDraft.js"
 
 import {
+    archiveHabitApi,
     setHabitConfirmation
 } from "../habitsApi.js"
 
@@ -470,7 +471,8 @@ function openHabitEditPage(
    его за выполненные действия.
    ========================================================= */
 
-function handleHabitDetailsDelete(
+async function handleHabitDetailsDelete(
+
     habitId,
     {
         onOpenHabitsPage = null
@@ -483,6 +485,17 @@ function handleHabitDetailsDelete(
     if (!habit) {
         console.warn(
             `Habits List Events: невозможно удалить привычку "${habitId}"`
+        )
+
+        return null
+    }
+
+    try {
+        await archiveHabitApi(habitId)
+    } catch (error) {
+        console.error(
+            "Ошибка архивирования:",
+            error
         )
 
         return null
@@ -581,8 +594,8 @@ function initCurrentHabitDetailsEvents(
 
         onDelete: () => {
             openHabitDeleteConfirm({
-                onDelete: () => {
-                    handleHabitDetailsDelete(
+                onDelete: async () => {
+                    await handleHabitDetailsDelete(
                         habitId,
                         {
                             onOpenHabitsPage

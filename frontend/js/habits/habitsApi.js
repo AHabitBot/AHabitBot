@@ -344,3 +344,30 @@ export async function setHabitConfirmation(
 
     return data
 }
+
+
+
+export async function archiveHabitApi(
+    habitId
+) {
+    if (!habitId) {
+        throw new Error(
+            "Не передан ID привычки"
+        )
+    }
+
+    const data = await apiRequest(
+        `/api/habits/${habitId}/archive`,
+        {
+            method: "PATCH"
+        }
+    )
+
+    if (!data?.success) {
+        throw new Error(
+            "Не удалось архивировать привычку"
+        )
+    }
+
+    return data
+}
