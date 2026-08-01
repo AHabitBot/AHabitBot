@@ -45,12 +45,57 @@ import {
 
 import {
     getHabits,
-    getHabitsStatistics
+    getHabitsStatistics,
+    setHabits
 } from "./habitsStore.js"
+
 
 import {
     addPressAnimation
 } from "./habitsUtils.js"
+
+import { fetchHabits } from "./habitsApi.js"
+
+
+
+
+
+
+
+function normalizeHabit(habit = {}) {
+    return {
+        id: String(habit.id),
+
+        name:
+            habit.title ||
+            "Без названия",
+
+        icon:
+            habit.emoji ||
+            "✱",
+
+        color:
+            habit.color ||
+            "green",
+
+        size:
+            habit.size ||
+            "large",
+
+        xpReward:
+            Number(habit.xp_reward) || 5,
+
+        createdAt:
+            habit.created_at ||
+            null,
+
+        completedToday: false,
+        streak: 0,
+        weekProgress: [],
+        completedDates: []
+    }
+}
+
 
 /* =========================================================
    ПОЛУЧИТЬ КОРНЕВОЙ КОНТЕЙНЕР
@@ -119,7 +164,7 @@ export function renderHabitsPage(
 
 
 
-function openHabitsPage({
+async function openHabitsPage({
     preserveScroll = false,
     scrollTop = null
 } = {}) {
@@ -137,6 +182,25 @@ function openHabitsPage({
                 ? currentList?.scrollTop || 0
                 : 0
 
+    try {
+        const apiHabits =
+            await fetchHabits()
+
+        const normalizedHabits =
+            apiHabits.map(
+                normalizeHabit
+            )
+
+        setHabits(
+            normalizedHabits
+        )
+    } catch (error) {
+        console.error(
+            "Не удалось загрузить привычки:",
+            error
+        )
+    }
+
     renderHabitsPage(
         getHabits(),
         getHabitsStatistics()
@@ -148,9 +212,10 @@ function openHabitsPage({
         return
     }
 
-    const renderedList = document.querySelector(
-        ".habits-v2-list"
-    )
+    const renderedList =
+        document.querySelector(
+            ".habits-v2-list"
+        )
 
     if (!renderedList) {
         return
