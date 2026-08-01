@@ -18,7 +18,7 @@ from backend.repositories.users import (
     create_user,
 )
 
-from backend.services.habits_service import (
+from backend.services.habits.habit_service import (
     update_habit_confirmation,
 )
 
