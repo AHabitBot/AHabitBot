@@ -7,7 +7,8 @@
  */
 
 import {
-    createHabit as createHabitApi
+    createHabit as createHabitApi,
+    updateHabitApi
 } from "../habitsApi.js"
 
 import {
@@ -708,7 +709,7 @@ export function createHabitFromDraft() {
    - сегодняшний статус.
    ========================================================= */
 
-export function updateHabitFromDraft() {
+export async function updateHabitFromDraft() {
     const editingHabitId =
         getEditingHabitId()
 
@@ -729,23 +730,39 @@ export function updateHabitFromDraft() {
         return null
     }
 
+    const response =
+        await updateHabitApi(
+            editingHabitId,
+            {
+                title: habitName,
+                emoji: draft.icon || "✱",
+                color: draft.color || "blue",
+                size: draft.size || "large"
+            }
+        )
+
+    if (!response?.habit) {
+        return null
+    }
+
     return updateHabit(
         editingHabitId,
         {
             name:
-                habitName,
+                response.habit.title,
 
             icon:
-                draft.icon || "✱",
+                response.habit.emoji,
 
             color:
-                draft.color || "blue",
+                response.habit.color,
 
             size:
-                draft.size || "large"
+                response.habit.size
         }
     )
 }
+
 
 
 /* =========================================================
@@ -1251,7 +1268,7 @@ saveButton?.addEventListener(
 
             if (wasEditing) {
                 savedHabit =
-                    updateHabitFromDraft()
+                    await updateHabitFromDraft()
             } else {
                 const draft =
                     getHabitDraft()

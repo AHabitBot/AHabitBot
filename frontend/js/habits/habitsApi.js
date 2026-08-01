@@ -263,6 +263,35 @@ export async function createHabit(payload) {
 }
 
 
+
+export async function updateHabitApi(
+    habitId,
+    payload,
+) {
+    const response = await fetch(
+        `${API_BASE_URL}/api/habits/${habitId}`,
+        {
+            method: "PATCH",
+
+            headers: {
+                "Content-Type": "application/json",
+                ...getTelegramHeaders(),
+            },
+
+            body: JSON.stringify(payload),
+        },
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Не удалось обновить привычку",
+        );
+    }
+
+    return await response.json();
+}
+
+
 /* =========================================================
    УСТАНОВИТЬ ПОДТВЕРЖДЕНИЕ ПРИВЫЧКИ
 
