@@ -54,13 +54,46 @@ async def create_user(
                 first_name,
             )
 
+            if new_user is None:
+                raise RuntimeError(
+                    "Не удалось создать пользователя"
+                )
+
             user_id = new_user["id"]
             nickname = f"Player{user_id}"
 
-            return await connection.fetchrow(
+            await connection.execute(
+                """
+                INSERT INTO user_settings (
+                    user_id,
+                    timezone,
+                    language
+                )
+                VALUES (
+                    $1,
+                    'Europe/Kyiv',
+                    'ru'
+                )
+                """,
+                user_id,
+            )
+
+            await connection.execute(
+                """
+                INSERT INTO user_stats (
+                    user_id
+                )
+                VALUES ($1)
+                """,
+                user_id,
+            )
+
+            user = await connection.fetchrow(
                 """
                 UPDATE users
-                SET nickname = $2
+                SET
+                    nickname = $2,
+                    updated_at = NOW()
                 WHERE id = $1
                 RETURNING
                     id,
@@ -75,6 +108,14 @@ async def create_user(
                 nickname,
             )
 
+            if user is None:
+                raise RuntimeError(
+                    "Не удалось завершить регистрацию пользователя"
+                )
+
+            return user
+
+
 # ============================================================================
 # Обновление пользователей
 # ============================================================================
@@ -83,7 +124,7 @@ async def update_user(
     telegram_id: int,
     username: str | None,
     first_name: str | None,
-) -> asyncpg.Record:
+) -> asyncpg.Record | None:
     async with get_connection() as connection:
         return await connection.fetchrow(
             """

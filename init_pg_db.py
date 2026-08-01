@@ -16,6 +16,20 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS user_settings (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL UNIQUE,
+    timezone VARCHAR(64) NOT NULL DEFAULT 'Europe/Kyiv',
+    language VARCHAR(10) NOT NULL DEFAULT 'ru'
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT fk_user_settings_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS habits (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
@@ -88,6 +102,9 @@ CREATE INDEX IF NOT EXISTS idx_confirmations_date
 
 CREATE INDEX IF NOT EXISTS idx_confirmations_habit_confirmed
     ON habit_confirmations(habit_id, is_confirmed);
+
+CREATE INDEX IF NOT EXISTS idx_user_settings_user
+    ON user_settings(user_id);
 """
 
 
