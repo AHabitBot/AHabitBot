@@ -18,6 +18,10 @@ from backend.repositories.users import (
     create_user,
 )
 
+from backend.services.habits_service import (
+    update_habit_confirmation,
+)
+
 from backend.services.telegram_auth import (
     validate_telegram_init_data,
 )
@@ -46,6 +50,9 @@ class HabitCreateRequest(BaseModel):
     )
     size: Literal["large"] = "large"
 
+
+class HabitConfirmationRequest(BaseModel):
+    is_confirmed: bool
 
 async def get_current_user(
     x_telegram_init_data: Annotated[
@@ -89,13 +96,13 @@ async def read_habits(
         x_telegram_init_data
     )
 
-    habits = await get_user_habits(
+    result = await get_user_habits(
         user["id"]
     )
 
-    return {
-        "habits": habits,
-    }
+    return result
+
+
 
 
 @router.post(
@@ -124,3 +131,34 @@ async def add_habit(
     return {
         "habit": habit,
     }
+
+
+
+
+
+@router.put("/{habit_id}/confirmation")
+async def set_confirmation(
+    habit_id: int,
+    payload: HabitConfirmationRequest,
+    x_telegram_init_data: Annotated[
+        str | None,
+        Header(alias="X-Telegram-Init-Data"),
+    ] = None,
+):
+    user = await get_current_user(
+        x_telegram_init_data
+    )
+
+    result = await update_habit_confirmation(
+        user_id=user["id"],
+        habit_id=habit_id,
+        is_confirmed=payload.is_confirmed,
+    )
+
+    if result is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Привычка не найдена",
+        )
+
+    return result

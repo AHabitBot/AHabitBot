@@ -40,6 +40,10 @@ import {
     startHabitEditDraft
 } from "../habitMainEmpty/habitsDraft.js"
 
+import {
+    setHabitConfirmation
+} from "../habitsApi.js"
+
 /* =========================================================
    STORE
    ========================================================= */
@@ -73,6 +77,8 @@ import {
 
 let habitsListScrollTop = 0
 
+const pendingHabitConfirmations =
+    new Set()
 
 /* =========================================================
    ПОЛУЧИТЬ КОРНЕВОЙ КОНТЕЙНЕР
@@ -206,7 +212,7 @@ function getHighestHabitStreak() {
    - completedAt очищается.
    ========================================================= */
 
-export function toggleHabitConfirmationLocally(
+export async function toggleHabitConfirmation(
     habitId
 ) {
     const habit = getHabitById(
@@ -215,107 +221,89 @@ export function toggleHabitConfirmationLocally(
 
     if (!habit) {
         console.warn(
-            `Habits List Events: привычка "${habitId}" не найдена`
+            `Привычка "${habitId}" не найдена`
         )
 
         return null
     }
 
-    const wasCompleted = Boolean(
-        habit.completedToday
+    if (
+        pendingHabitConfirmations.has(
+            habitId
+        )
+    ) {
+        return null
+    }
+
+    pendingHabitConfirmations.add(
+        habitId
     )
 
-    const xpReward =
-        normalizePositiveInteger(
-            habit.xpReward,
-            5
-        )
+    try {
+        const desiredState =
+            !Boolean(
+                habit.completedToday
+            )
 
-    const currentStreak =
-        normalizePositiveInteger(
-            habit.streak
-        )
+        const response =
+            await setHabitConfirmation(
+                habitId,
+                desiredState
+            )
 
-    const nextStreak = wasCompleted
-        ? Math.max(
-            0,
-            currentStreak - 1
-        )
-        : currentStreak + 1
+        const serverHabit =
+            response.habit
 
-    const weekProgress =
-        normalizeWeekProgress(
-            habit.weekProgress
-        )
+        const completedToday =
+            Boolean(
+                serverHabit.completed_today
+            )
 
-    weekProgress[getTodayWeekIndex()] =
-        !wasCompleted
+        const weekProgress =
+            normalizeWeekProgress(
+                habit.weekProgress
+            )
 
+        weekProgress[getTodayWeekIndex()] =
+            completedToday
 
-    /* ---------------------------------------------------------
-       ОБНОВЛЯЕМ ПРИВЫЧКУ
-       --------------------------------------------------------- */
+        const updatedHabit =
+            updateHabit(
+                habitId,
+                {
+                    completedToday,
+                    weekProgress,
 
-    const updatedHabit = updateHabit(
-        habitId,
-        {
-            completedToday:
-                !wasCompleted,
+                    completedAt:
+                        completedToday
+                            ? new Date().toISOString()
+                            : null
+                }
+            )
 
-            streak:
-                nextStreak,
-
-            weekProgress,
-
-            completedAt:
-                wasCompleted
-                    ? null
-                    : new Date().toISOString()
+        if (response.statistics) {
+            setHabitsStatistics({
+                totalXp:
+                    normalizePositiveInteger(
+                        response.statistics
+                            .total_xp
+                    )
+            })
         }
-    )
 
-    if (!updatedHabit) {
-        console.warn(
-            `Habits List Events: не удалось обновить привычку "${habitId}"`
+        return updatedHabit
+    } catch (error) {
+        console.error(
+            "Ошибка подтверждения привычки:",
+            error
         )
 
         return null
+    } finally {
+        pendingHabitConfirmations.delete(
+            habitId
+        )
     }
-
-
-    /* ---------------------------------------------------------
-       ОБНОВЛЯЕМ ОБЩИЙ XP
-       --------------------------------------------------------- */
-
-    const statistics =
-        getHabitsStatistics()
-
-    const currentTotalXp =
-        normalizePositiveInteger(
-            statistics.totalXp
-        )
-
-    const nextTotalXp = wasCompleted
-        ? Math.max(
-            0,
-            currentTotalXp - xpReward
-        )
-        : currentTotalXp + xpReward
-
-
-    /* ---------------------------------------------------------
-       ОБНОВЛЯЕМ ОБЩУЮ СТАТИСТИКУ
-       --------------------------------------------------------- */
-
-    setHabitsStatistics({
-        totalXp:
-            nextTotalXp,
-
-        currentStreak:
-            getHighestHabitStreak()
-    })
-
-    return updatedHabit
 }
 
 
@@ -687,7 +675,7 @@ function refreshHabitDetails(
    После обновления меню остаётся открытым.
    ========================================================= */
 
-function handleHabitDetailsConfirmation(
+async function handleHabitDetailsConfirmation(
     habitId,
     {
         onOpenHabitsPage = null,
@@ -695,7 +683,7 @@ function handleHabitDetailsConfirmation(
     } = {}
 ) {
     const updatedHabit =
-        toggleHabitConfirmationLocally(
+        await toggleHabitConfirmation(
             habitId
         )
 
@@ -711,6 +699,8 @@ function handleHabitDetailsConfirmation(
         }
     )
 }
+
+
 /* =========================================================
    ОТКРЫТЬ ДЕТАЛИ ПРИВЫЧКИ
    ========================================================= */
@@ -895,20 +885,27 @@ function initSingleHabitCardEvents(
        ПОДТВЕРЖДЕНИЕ ПРИВЫЧКИ В СПИСКЕ
        --------------------------------------------------------- */
 
-    confirmButton?.addEventListener(
-        "click",
-        (event) => {
-            event.preventDefault()
-            event.stopPropagation()
+confirmButton?.addEventListener(
+    "click",
+    async (event) => {
+        event.preventDefault()
+        event.stopPropagation()
 
-            const currentList =
-                getHabitsListElement()
+        if (confirmButton.disabled) {
+            return
+        }
 
-            const savedScrollTop =
-                currentList?.scrollTop || 0
+        const currentList =
+            getHabitsListElement()
 
+        const savedScrollTop =
+            currentList?.scrollTop || 0
+
+        confirmButton.disabled = true
+
+        try {
             const updatedHabit =
-                toggleHabitConfirmationLocally(
+                await toggleHabitConfirmation(
                     habitId
                 )
 
@@ -920,10 +917,6 @@ function initSingleHabitCardEvents(
                 typeof onOpenHabitsPage !==
                 "function"
             ) {
-                console.warn(
-                    "Habits List Events: привычка обновлена, но не передан onOpenHabitsPage"
-                )
-
                 return
             }
 
@@ -931,8 +924,18 @@ function initSingleHabitCardEvents(
                 preserveScroll: true,
                 scrollTop: savedScrollTop
             })
+        } finally {
+            if (
+                document.contains(
+                    confirmButton
+                )
+            ) {
+                confirmButton.disabled =
+                    false
+            }
         }
-    )
+    }
+)
 }
 
 

@@ -268,3 +268,41 @@ export async function createHabit(payload) {
 
     return data.habit
 }
+
+
+/* =========================================================
+   УСТАНОВИТЬ ПОДТВЕРЖДЕНИЕ ПРИВЫЧКИ
+
+   isConfirmed = true  — подтвердить
+   isConfirmed = false — отменить
+   ========================================================= */
+
+export async function setHabitConfirmation(
+    habitId,
+    isConfirmed
+) {
+    if (!habitId) {
+        throw new Error(
+            "Не передан ID привычки"
+        )
+    }
+
+    const data = await apiRequest(
+        `/api/habits/${habitId}/confirmation`,
+        {
+            method: "PUT",
+            body: {
+                is_confirmed:
+                    Boolean(isConfirmed)
+            }
+        }
+    )
+
+    if (!data?.habit) {
+        throw new Error(
+            "Сервер не вернул состояние привычки"
+        )
+    }
+
+    return data
+}
