@@ -46,7 +46,8 @@ import {
 import {
     getHabits,
     getHabitsStatistics,
-    setHabits
+    setHabits,
+    setHabitsStatistics
 } from "./habitsStore.js"
 
 
@@ -89,9 +90,17 @@ function normalizeHabit(habit = {}) {
             habit.created_at ||
             null,
 
-        completedToday: false,
-        streak: 0,
-        weekProgress: [],
+        completedToday:
+            Boolean(habit.completed_today),
+
+        streak:
+            Number(habit.streak) || 0,
+
+        weekProgress:
+            Array.isArray(habit.week_progress)
+                ? habit.week_progress
+                : [],
+
         completedDates: []
     }
 }
@@ -183,17 +192,27 @@ async function openHabitsPage({
                 : 0
 
     try {
-        const apiHabits =
-            await fetchHabits()
+        const {
+            habits,
+            statistics
+        } = await fetchHabits()
 
         const normalizedHabits =
-            apiHabits.map(
-                normalizeHabit
-            )
+            habits.map(normalizeHabit)
 
-        setHabits(
-            normalizedHabits
-        )
+        setHabits(normalizedHabits)
+
+        setHabitsStatistics({
+            currentStreak:
+                Number(
+                    statistics.current_streak
+                ) || 0,
+
+            totalXp:
+                Number(
+                    statistics.total_xp
+                ) || 0
+        })
     } catch (error) {
         console.error(
             "Не удалось загрузить привычки:",

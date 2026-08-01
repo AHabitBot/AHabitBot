@@ -170,29 +170,22 @@ async function apiRequest(
 
 
 /* =========================================================
-   ПОЛУЧИТЬ ПРИВЫЧКИ
-
-   Backend должен вернуть:
-
-   {
-       "habits": [...]
-   }
+   
    ========================================================= */
 
 export async function fetchHabits() {
-    const data = await apiRequest(
-        "/api/habits"
-    )
+    const data = await apiRequest("/api/habits")
 
     if (!Array.isArray(data?.habits)) {
-        console.warn(
-            "Habits API: сервер вернул некорректный список привычек"
+        throw new Error(
+            "Некорректный ответ сервера"
         )
-
-        return []
     }
 
-    return data.habits
+    return {
+        habits: data.habits,
+        statistics: data.statistics || {}
+    }
 }
 
 
