@@ -794,6 +794,79 @@ function stopConfirmEvent(event) {
 }
 
 
+function updateHabitCardVisualState(
+    card,
+    habit
+) {
+    if (!card || !habit) {
+        return
+    }
+
+    const completedToday =
+        Boolean(habit.completedToday)
+
+    const confirmButton = card.querySelector(
+        '[data-action="confirm-habit"]'
+    )
+
+    const description = card.querySelector(
+        ".habit-card__description"
+    )
+
+    const progressItems = card.querySelectorAll(
+        ".habit-card__progress-item"
+    )
+
+    const xpReward =
+        normalizePositiveInteger(
+            habit.xpReward,
+            5
+        )
+
+    card.classList.toggle(
+        "is-completed",
+        completedToday
+    )
+
+    confirmButton?.classList.toggle(
+        "is-completed",
+        completedToday
+    )
+
+    confirmButton?.setAttribute(
+        "aria-pressed",
+        String(completedToday)
+    )
+
+    confirmButton?.setAttribute(
+        "aria-label",
+        completedToday
+            ? "Привычка выполнена"
+            : "Подтвердить выполнение привычки"
+    )
+
+    if (description) {
+        description.classList.toggle(
+            "is-completed",
+            completedToday
+        )
+
+        description.textContent =
+            completedToday
+                ? `Выполнено +${xpReward} XP`
+                : "В процессе"
+    }
+
+    const todayProgressItem =
+        progressItems[
+            getTodayWeekIndex()
+        ]
+
+    todayProgressItem?.classList.toggle(
+        "is-completed",
+        completedToday
+    )
+}
 /* =========================================================
    СОБЫТИЯ ОДНОЙ КАРТОЧКИ
    ========================================================= */
@@ -891,40 +964,155 @@ confirmButton?.addEventListener(
         event.preventDefault()
         event.stopPropagation()
 
-        if (confirmButton.disabled) {
+        if (
+            pendingHabitConfirmations.has(
+                habitId
+            )
+        ) {
             return
         }
 
-        const currentList =
-            getHabitsListElement()
+        const habit = getHabitById(
+            habitId
+        )
 
-        const savedScrollTop =
-            currentList?.scrollTop || 0
+        if (!habit) {
+            return
+        }
+
+        pendingHabitConfirmations.add(
+            habitId
+        )
 
         confirmButton.disabled = true
 
+        const previousHabit = {
+            ...habit,
+            weekProgress:
+                normalizeWeekProgress(
+                    habit.weekProgress
+                )
+        }
+
+        const desiredState =
+            !Boolean(
+                habit.completedToday
+            )
+
+        const optimisticWeekProgress =
+            normalizeWeekProgress(
+                habit.weekProgress
+            )
+
+        optimisticWeekProgress[
+            getTodayWeekIndex()
+        ] = desiredState
+
+        const optimisticHabit =
+            updateHabit(
+                habitId,
+                {
+                    completedToday:
+                        desiredState,
+
+                    weekProgress:
+                        optimisticWeekProgress,
+
+                    completedAt:
+                        desiredState
+                            ? new Date().toISOString()
+                            : null
+                }
+            )
+
+        /*
+         * Интерфейс меняется сразу,
+         * до ответа сервера.
+         */
+        updateHabitCardVisualState(
+            card,
+            optimisticHabit
+        )
+
         try {
-            const updatedHabit =
-                await toggleHabitConfirmation(
-                    habitId
+            const response =
+                await setHabitConfirmation(
+                    habitId,
+                    desiredState
                 )
 
-            if (!updatedHabit) {
-                return
-            }
+            const serverCompletedToday =
+                Boolean(
+                    response.habit
+                        .completed_today
+                )
 
-            if (
-                typeof onOpenHabitsPage !==
-                "function"
-            ) {
-                return
-            }
+            const finalWeekProgress =
+                normalizeWeekProgress(
+                    optimisticHabit
+                        .weekProgress
+                )
 
-            onOpenHabitsPage({
-                preserveScroll: true,
-                scrollTop: savedScrollTop
-            })
+            finalWeekProgress[
+                getTodayWeekIndex()
+            ] = serverCompletedToday
+
+            const finalHabit =
+                updateHabit(
+                    habitId,
+                    {
+                        completedToday:
+                            serverCompletedToday,
+
+                        weekProgress:
+                            finalWeekProgress,
+
+                        completedAt:
+                            serverCompletedToday
+                                ? optimisticHabit
+                                    .completedAt
+                                : null
+                    }
+                )
+
+            updateHabitCardVisualState(
+                card,
+                finalHabit
+            )
+
+            if (response.statistics) {
+                setHabitsStatistics({
+                    totalXp:
+                        normalizePositiveInteger(
+                            response.statistics
+                                .total_xp
+                        )
+                })
+            }
+        } catch (error) {
+            /*
+             * Если API вернул ошибку,
+             * возвращаем старое состояние.
+             */
+            updateHabit(
+                habitId,
+                previousHabit
+            )
+
+            updateHabitCardVisualState(
+                card,
+                previousHabit
+            )
+
+            console.error(
+                "Ошибка подтверждения привычки:",
+                error
+            )
         } finally {
+            pendingHabitConfirmations.delete(
+                habitId
+            )
+
             if (
                 document.contains(
                     confirmButton
@@ -936,8 +1124,6 @@ confirmButton?.addEventListener(
         }
     }
 )
-}
-
 
 /* =========================================================
    ИНИЦИАЛИЗАЦИЯ СОБЫТИЙ СПИСКА
