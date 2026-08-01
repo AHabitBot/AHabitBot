@@ -542,14 +542,14 @@ async def set_habit_confirmation(
                 confirmation_date,
             )
 
-            completed_today = Boolean(
+            completed_today = bool(
                 final_confirmation
                 and final_confirmation[
                     "is_confirmed"
                 ]
             )
 
-            xp_awarded_today = Boolean(
+            xp_awarded_today = bool(
                 final_confirmation
                 and final_confirmation[
                     "is_confirmed"
