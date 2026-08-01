@@ -741,24 +741,17 @@ export async function updateHabitFromDraft() {
             }
         )
 
-    if (!response?.habit) {
+    if (!response) {
         return null
     }
 
     return updateHabit(
         editingHabitId,
         {
-            name:
-                response.habit.title,
-
-            icon:
-                response.habit.emoji,
-
-            color:
-                response.habit.color,
-
-            size:
-                response.habit.size
+            name: response.title,
+            icon: response.emoji,
+            color: response.color,
+            size: response.size
         }
     )
 }

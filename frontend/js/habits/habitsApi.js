@@ -266,31 +266,47 @@ export async function createHabit(payload) {
 
 export async function updateHabitApi(
     habitId,
-    payload,
+    payload
 ) {
-    const response = await fetch(
-        `${API_BASE_URL}/api/habits/${habitId}`,
-        {
-            method: "PATCH",
-
-            headers: {
-                "Content-Type": "application/json",
-                ...getTelegramHeaders(),
-            },
-
-            body: JSON.stringify(payload),
-        },
-    );
-
-    if (!response.ok) {
+    if (!habitId) {
         throw new Error(
-            "Не удалось обновить привычку",
-        );
+            "Не передан ID привычки"
+        )
     }
 
-    return await response.json();
-}
+    const title =
+        String(payload.title || "").trim()
 
+    if (!title) {
+        throw new Error(
+            "Название привычки обязательно"
+        )
+    }
+
+    const data = await apiRequest(
+        `/api/habits/${habitId}`,
+        {
+            method: "PATCH",
+            body: {
+                title,
+                emoji:
+                    String(payload.emoji || "✱"),
+                color:
+                    String(payload.color || "blue"),
+                size:
+                    String(payload.size || "large")
+            }
+        }
+    )
+
+    if (!data?.habit) {
+        throw new Error(
+            "Сервер не вернул обновлённую привычку"
+        )
+    }
+
+    return data.habit
+}
 
 /* =========================================================
    УСТАНОВИТЬ ПОДТВЕРЖДЕНИЕ ПРИВЫЧКИ
