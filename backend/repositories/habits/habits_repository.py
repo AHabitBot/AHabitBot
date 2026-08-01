@@ -254,6 +254,68 @@ async def create_habit(
 
 
 # =========================================================
+# ОБНОВИТЬ ПРИВЫЧКУ
+# =========================================================
+
+async def update_habit(
+    user_id: int,
+    habit_id: int,
+    title: str,
+    emoji: str,
+    color: str,
+    size: str,
+) -> dict[str, Any] | None:
+    """
+    Обновляет привычку текущего пользователя.
+
+    Возвращает обновлённую привычку.
+
+    Возвращает None, если:
+    - привычка не найдена;
+    - привычка принадлежит другому пользователю;
+    - привычка уже находится в архиве.
+    """
+
+    async with get_connection() as connection:
+        row = await connection.fetchrow(
+            """
+            UPDATE habits
+            SET
+                title = $3,
+                emoji = $4,
+                color = $5,
+                size = $6,
+                updated_at = NOW()
+            WHERE id = $1
+              AND user_id = $2
+              AND is_archived = FALSE
+            RETURNING
+                id,
+                user_id,
+                title,
+                emoji,
+                color,
+                size,
+                xp_reward,
+                is_archived,
+                created_at,
+                updated_at
+            """,
+            habit_id,
+            user_id,
+            title,
+            emoji,
+            color,
+            size,
+        )
+
+    if row is None:
+        return None
+
+    return dict(row)
+
+
+# =========================================================
 # ПОЛУЧИТЬ ЛОКАЛЬНУЮ ДАТУ ПОЛЬЗОВАТЕЛЯ
 # =========================================================
 

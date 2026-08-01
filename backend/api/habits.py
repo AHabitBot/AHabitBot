@@ -19,6 +19,7 @@ from backend.repositories.users import (
 )
 
 from backend.services.habits.habit_service import (
+    edit_habit,
     update_habit_confirmation,
 )
 
@@ -34,6 +35,23 @@ router = APIRouter(
 
 
 class HabitCreateRequest(BaseModel):
+    title: str = Field(
+        min_length=1,
+        max_length=60,
+    )
+    emoji: str = Field(
+        default="✱",
+        min_length=1,
+        max_length=20,
+    )
+    color: str = Field(
+        default="blue",
+        min_length=1,
+        max_length=30,
+    )
+    size: Literal["large"] = "large"
+
+class HabitUpdateRequest(BaseModel):
     title: str = Field(
         min_length=1,
         max_length=60,
@@ -132,6 +150,40 @@ async def add_habit(
         "habit": habit,
     }
 
+
+
+
+@router.patch("/{habit_id}")
+async def update_existing_habit(
+    habit_id: int,
+    payload: HabitUpdateRequest,
+    x_telegram_init_data: Annotated[
+        str | None,
+        Header(alias="X-Telegram-Init-Data"),
+    ] = None,
+):
+    user = await get_current_user(
+        x_telegram_init_data
+    )
+
+    habit = await edit_habit(
+        user_id=user["id"],
+        habit_id=habit_id,
+        title=payload.title.strip(),
+        emoji=payload.emoji,
+        color=payload.color,
+        size=payload.size,
+    )
+
+    if habit is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Привычка не найдена",
+        )
+
+    return {
+        "habit": habit,
+    }
 
 
 
