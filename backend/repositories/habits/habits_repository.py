@@ -17,6 +17,10 @@ async def get_user_habits(
     user_id: int,
 ) -> dict[str, Any]:
     async with get_connection() as connection:
+        # -------------------------------------------------
+        # Получаем часовой пояс пользователя.
+        # -------------------------------------------------
+
         timezone_name = await connection.fetchval(
             """
             SELECT timezone
@@ -37,6 +41,13 @@ async def get_user_habits(
         week_end = week_start + timedelta(
             days=6
         )
+
+        # -------------------------------------------------
+        # Получаем все активные привычки пользователя.
+        #
+        # Отдельно присоединяем подтверждение за сегодня,
+        # чтобы сразу вернуть completed_today.
+        # -------------------------------------------------
 
         habit_rows = await connection.fetch(
             """
@@ -85,6 +96,13 @@ async def get_user_habits(
             today,
         )
 
+        # -------------------------------------------------
+        # Получаем подтверждения текущей недели.
+        #
+        # Пока сохраняем текущую рабочую логику
+        # week_progress.
+        # -------------------------------------------------
+
         week_rows = await connection.fetch(
             """
             SELECT
@@ -97,14 +115,57 @@ async def get_user_habits(
                 ON h.id = hc.habit_id
 
             WHERE h.user_id = $1
+              AND h.is_archived = FALSE
               AND hc.confirmation_date
                   BETWEEN $2 AND $3
               AND hc.is_confirmed = TRUE
+
+            ORDER BY
+                hc.confirmation_date ASC
             """,
             user_id,
             week_start,
             week_end,
         )
+
+        # -------------------------------------------------
+        # Получаем всю историю подтверждённых дат
+        # каждой активной привычки пользователя.
+        #
+        # Эти даты будут использоваться:
+        # - календарём;
+        # - серией конкретной привычки;
+        # - недельным прогрессом.
+        # -------------------------------------------------
+
+        completed_dates_rows = await connection.fetch(
+            """
+            SELECT
+                hc.habit_id,
+                hc.confirmation_date
+
+            FROM habit_confirmations AS hc
+
+            INNER JOIN habits AS h
+                ON h.id = hc.habit_id
+
+            WHERE h.user_id = $1
+              AND h.is_archived = FALSE
+              AND hc.is_confirmed = TRUE
+
+            ORDER BY
+                hc.habit_id ASC,
+                hc.confirmation_date ASC
+            """,
+            user_id,
+        )
+
+        # -------------------------------------------------
+        # Общую статистику пока только читаем.
+        #
+        # На этом этапе общий current_streak
+        # и max_streak не пересчитываем.
+        # -------------------------------------------------
 
         statistics = await connection.fetchrow(
             """
@@ -119,7 +180,14 @@ async def get_user_habits(
             user_id,
         )
 
-    week_progress_by_habit: dict[int, list[bool]] = {}
+    # =====================================================
+    # СОБИРАЕМ НЕДЕЛЬНЫЙ ПРОГРЕСС
+    # =====================================================
+
+    week_progress_by_habit: dict[
+        int,
+        list[bool],
+    ] = {}
 
     for row in habit_rows:
         week_progress_by_habit[
@@ -151,6 +219,41 @@ async def get_user_habits(
                 habit_id
             ][day_index] = True
 
+    # =====================================================
+    # СОБИРАЕМ COMPLETED DATES
+    # =====================================================
+
+    completed_dates_by_habit: dict[
+        int,
+        list[str],
+    ] = {}
+
+    for row in habit_rows:
+        completed_dates_by_habit[
+            row["id"]
+        ] = []
+
+    for row in completed_dates_rows:
+        habit_id = row["habit_id"]
+
+        if (
+            habit_id
+            not in completed_dates_by_habit
+        ):
+            continue
+
+        completed_dates_by_habit[
+            habit_id
+        ].append(
+            row[
+                "confirmation_date"
+            ].isoformat()
+        )
+
+    # =====================================================
+    # ФОРМИРУЕМ ФИНАЛЬНЫЙ СПИСОК ПРИВЫЧЕК
+    # =====================================================
+
     habits = []
 
     for row in habit_rows:
@@ -171,6 +274,15 @@ async def get_user_habits(
             )
         )
 
+        habit["completed_dates"] = (
+            completed_dates_by_habit.get(
+                row["id"],
+                [],
+            )
+        )
+
+        # Серия конкретной привычки
+        # будет реализована следующим шагом.
         habit["streak"] = 0
 
         habits.append(habit)
@@ -203,6 +315,7 @@ async def get_user_habits(
             ),
         },
     }
+
 
 # =========================================================
 # СОЗДАТЬ ПРИВЫЧКУ
@@ -273,7 +386,7 @@ async def update_habit(
     Возвращает None, если:
     - привычка не найдена;
     - привычка принадлежит другому пользователю;
-    - привычка уже находится в архиве.
+    - привычка находится в архиве.
     """
 
     async with get_connection() as connection:
@@ -315,7 +428,6 @@ async def update_habit(
     return dict(row)
 
 
-
 # =========================================================
 # АРХИВИРОВАТЬ ПРИВЫЧКУ
 # =========================================================
@@ -328,8 +440,8 @@ async def archive_habit(
     Перемещает привычку пользователя в архив.
 
     Возвращает:
-        True  - привычка успешно архивирована.
-        False - привычка не найдена.
+        True  — привычка успешно архивирована.
+        False — привычка не найдена.
     """
 
     async with get_connection() as connection:
@@ -339,10 +451,9 @@ async def archive_habit(
             SET
                 is_archived = TRUE,
                 updated_at = NOW()
-            WHERE
-                id = $1
-                AND user_id = $2
-                AND is_archived = FALSE
+            WHERE id = $1
+              AND user_id = $2
+              AND is_archived = FALSE
             """,
             habit_id,
             user_id,
@@ -464,9 +575,8 @@ async def set_habit_confirmation(
             # -------------------------------------------------
 
             if is_confirmed:
-
                 # Уже подтверждено.
-                # Ничего повторно не начисляем.
+                # Повторно ничего не начисляем.
                 if (
                     confirmation is not None
                     and confirmation["is_confirmed"]
@@ -479,8 +589,10 @@ async def set_habit_confirmation(
                             """
                             SELECT COUNT(*)
                             FROM habit_confirmations AS hc
+
                             INNER JOIN habits AS h
                                 ON h.id = hc.habit_id
+
                             WHERE h.user_id = $1
                               AND hc.confirmation_date = $2
                               AND hc.is_confirmed = TRUE
@@ -518,14 +630,17 @@ async def set_habit_confirmation(
                             $3,
                             $4
                         )
+
                         ON CONFLICT (
                             habit_id,
                             confirmation_date
                         )
                         DO UPDATE SET
                             is_confirmed = TRUE,
-                            xp_awarded = EXCLUDED.xp_awarded,
-                            xp_amount = EXCLUDED.xp_amount,
+                            xp_awarded =
+                                EXCLUDED.xp_awarded,
+                            xp_amount =
+                                EXCLUDED.xp_amount,
                             updated_at = NOW()
                         """,
                         habit_id,
@@ -581,8 +696,10 @@ async def set_habit_confirmation(
                         AS total_xp
 
                 FROM habit_confirmations AS hc
+
                 INNER JOIN habits AS h
                     ON h.id = hc.habit_id
+
                 WHERE h.user_id = $1
                 """,
                 user_id,
@@ -679,6 +796,7 @@ async def set_habit_confirmation(
                     "confirmation_date":
                         confirmation_date,
                 },
+
                 "statistics": {
                     "total_confirmations":
                         total_confirmations,
