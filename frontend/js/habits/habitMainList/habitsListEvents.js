@@ -818,6 +818,11 @@ function updateHabitCardVisualState(
     const completedToday =
         Boolean(habit.completedToday)
 
+    const streak =
+        normalizePositiveInteger(
+            habit.streak
+        )
+
     const confirmButton = card.querySelector(
         '[data-action="confirm-habit"]'
     )
@@ -828,6 +833,14 @@ function updateHabitCardVisualState(
 
     const progressItems = card.querySelectorAll(
         ".habit-card__progress-item"
+    )
+
+    const streakContainer = card.querySelector(
+        ".habit-card__streak"
+    )
+
+    const streakValue = card.querySelector(
+        ".habit-card__streak-value"
     )
 
     const xpReward =
@@ -870,16 +883,34 @@ function updateHabitCardVisualState(
                 : "В процессе"
     }
 
-    const todayProgressItem =
-        progressItems[
-            getTodayWeekIndex()
-        ]
+    progressItems.forEach(
+        (
+            progressItem,
+            index
+        ) => {
+            progressItem.classList.toggle(
+                "is-completed",
+                Boolean(
+                    habit.weekProgress?.[
+                        index
+                    ]
+                )
+            )
+        }
+    )
 
-    todayProgressItem?.classList.toggle(
-        "is-completed",
-        completedToday
+    if (streakValue) {
+        streakValue.textContent =
+            String(streak)
+    }
+
+    streakContainer?.setAttribute(
+        "aria-label",
+        `Текущая серия: ${streak}`
     )
 }
+
+
 /* =========================================================
    СОБЫТИЯ ОДНОЙ КАРТОЧКИ
    ========================================================= */
