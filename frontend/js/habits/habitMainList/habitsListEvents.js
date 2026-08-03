@@ -68,6 +68,10 @@ import {
     addPressAnimation
 } from "../habitsUtils.js"
 
+import {
+    renderHabitsStats
+} from "./habitsListPage.js"
+
 
 /* =========================================================
    СОХРАНЁННАЯ ПОЗИЦИЯ СПИСКА
@@ -168,6 +172,34 @@ function normalizeWeekProgress(
         }
     )
 }
+
+/* =========================================================
+   ОБНОВИТЬ ВИЗУАЛЬНУЮ СТАТИСТИКУ
+
+   Перерисовывает только блок:
+   - текущая серия;
+   - максимальная серия.
+
+   Полный список и карточки не перерисовываются.
+   Повторный GET не выполняется.
+   ========================================================= */
+
+function refreshHabitsStatsVisual() {
+    const currentStatsElement =
+        document.querySelector(
+            ".habits-stats"
+        )
+
+    if (!currentStatsElement) {
+        return
+    }
+
+    currentStatsElement.outerHTML =
+        renderHabitsStats(
+            getHabitsStatistics()
+        )
+}
+
 
 /* =========================================================
    ПЕРЕКЛЮЧИТЬ ПОДТВЕРЖДЕНИЕ ПРИВЫЧКИ
@@ -281,6 +313,8 @@ export async function toggleHabitConfirmation(
                         ?.max_streak
                 )
         })
+
+        refreshHabitsStatsVisual()
 
         return updatedHabit
 
@@ -1125,6 +1159,8 @@ confirmButton?.addEventListener(
                             ?.max_streak
                     )
             })
+
+            refreshHabitsStatsVisual()
 
         } catch (error) {
             /*
