@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -225,7 +225,7 @@ async def get_user_habits(
 
     completed_dates_by_habit: dict[
         int,
-        list[str],
+        list[date],
     ] = {}
 
     for row in habit_rows:
@@ -245,9 +245,7 @@ async def get_user_habits(
         completed_dates_by_habit[
             habit_id
         ].append(
-            row[
-                "confirmation_date"
-            ].isoformat()
+            row["confirmation_date"]
         )
 
     # =====================================================
@@ -274,16 +272,26 @@ async def get_user_habits(
             )
         )
 
-        habit["completed_dates"] = (
-            completed_dates_by_habit.get(
-                row["id"],
-                [],
+habit_completed_dates = (
+    completed_dates_by_habit.get(
+        row["id"],
+        [],
+    )
+)
+
+        habit["completed_dates"] = [
+            completed_date.isoformat()
+            for completed_date
+            in habit_completed_dates
+        ]
+
+        habit["streak"] = (
+            calculate_habit_streak(
+                completed_dates=
+                    habit_completed_dates,
+                today=today,
             )
         )
-
-        # Серия конкретной привычки
-        # будет реализована следующим шагом.
-        habit["streak"] = 0
 
         habits.append(habit)
 
@@ -487,6 +495,53 @@ def get_user_local_date(
         timezone
     ).date()
 
+
+# =========================================================
+# РАССЧИТАТЬ ТЕКУЩУЮ СЕРИЮ ПРИВЫЧКИ
+# =========================================================
+
+def calculate_habit_streak(
+    completed_dates: list[date],
+    today: date,
+) -> int:
+    """
+    Считает текущую серию конкретной привычки.
+
+    Если привычка подтверждена сегодня,
+    серия считается назад от сегодняшнего дня.
+
+    Если сегодня ещё не подтверждена,
+    серия считается назад от вчерашнего дня.
+    Текущий незавершённый день серию не обрывает.
+    """
+
+    if not completed_dates:
+        return 0
+
+    completed_dates_set = set(
+        completed_dates
+    )
+
+    if today in completed_dates_set:
+        current_date = today
+    else:
+        current_date = (
+            today - timedelta(days=1)
+        )
+
+    streak = 0
+
+    while (
+        current_date
+        in completed_dates_set
+    ):
+        streak += 1
+
+        current_date -= timedelta(
+            days=1
+        )
+
+    return streak
 
 # =========================================================
 # УСТАНОВИТЬ СОСТОЯНИЕ ПОДТВЕРЖДЕНИЯ
