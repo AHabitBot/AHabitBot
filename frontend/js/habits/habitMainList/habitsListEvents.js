@@ -51,7 +51,6 @@ import {
    ========================================================= */
 
 import {
-    getHabits,
     getHabitById,
     getHabitsStatistics,
     updateHabit,
@@ -170,32 +169,6 @@ function normalizeWeekProgress(
     )
 }
 
-
-/* =========================================================
-   ВЫЧИСЛИТЬ САМОЕ ВЫСОКОЕ ЗНАЧЕНИЕ СЕРИИ
-   ========================================================= */
-
-function getHighestHabitStreak() {
-    return getHabits().reduce(
-        (
-            highestStreak,
-            storedHabit
-        ) => {
-            const storedStreak =
-                normalizePositiveInteger(
-                    storedHabit.streak
-                )
-
-            return Math.max(
-                highestStreak,
-                storedStreak
-            )
-        },
-        0
-    )
-}
-
-
 /* =========================================================
    ПЕРЕКЛЮЧИТЬ ПОДТВЕРЖДЕНИЕ ПРИВЫЧКИ
 
@@ -297,12 +270,15 @@ export async function toggleHabitConfirmation(
 
         setHabitsStatistics({
             currentStreak:
-                getHighestHabitStreak(),
-
-            totalXp:
                 normalizePositiveInteger(
                     response.statistics
-                        ?.total_xp
+                        ?.current_streak
+                ),
+
+            maxStreak:
+                normalizePositiveInteger(
+                    response.statistics
+                        ?.max_streak
                 )
         })
 
@@ -526,11 +502,6 @@ async function handleHabitDetailsArchive(
 
         return null
     }
-
-    setHabitsStatistics({
-        currentStreak:
-            getHighestHabitStreak()
-    })
 
     if (
         typeof onOpenHabitsPage !==
@@ -1143,12 +1114,15 @@ confirmButton?.addEventListener(
 
             setHabitsStatistics({
                 currentStreak:
-                    getHighestHabitStreak(),
-
-                totalXp:
                     normalizePositiveInteger(
                         response.statistics
-                            ?.total_xp
+                            ?.current_streak
+                    ),
+
+                maxStreak:
+                    normalizePositiveInteger(
+                        response.statistics
+                            ?.max_streak
                     )
             })
 

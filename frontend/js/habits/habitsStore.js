@@ -16,7 +16,7 @@ const habitsState = {
     selectedHabitId: null,
     statistics: {
         currentStreak: 0,
-        totalXp: 0
+        maxStreak: 0
     },
     isLoading: false,
     error: null
@@ -244,7 +244,7 @@ export function resetHabitsStore() {
 
     habitsState.statistics = {
         currentStreak: 0,
-        totalXp: 0
+        maxStreak: 0
     }
 
     habitsState.isLoading = false

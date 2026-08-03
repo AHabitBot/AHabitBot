@@ -64,8 +64,9 @@ export function renderHabitsList(
 /* =========================================================
    HABITS STATS
 
-   Общая статистика привычек:
-   текущая серия и суммарный XP.
+   Общая статистика пользователя:
+   - текущая серия;
+   - максимальная серия.
    ========================================================= */
 
 
@@ -120,14 +121,18 @@ function formatDays(value) {
    РЕНДЕР СТАТИСТИКИ
    ========================================================= */
 
-export function renderHabitsStats(statistics = {}) {
-    const currentStreak = normalizeStatValue(
-        statistics.currentStreak
-    )
+export function renderHabitsStats(
+    statistics = {}
+) {
+    const currentStreak =
+        normalizeStatValue(
+            statistics.currentStreak
+        )
 
-    const totalXp = normalizeStatValue(
-        statistics.totalXp
-    )
+    const maxStreak =
+        normalizeStatValue(
+            statistics.maxStreak
+        )
 
     return `
         <section
@@ -168,22 +173,23 @@ export function renderHabitsStats(statistics = {}) {
 
                     <span
                         class="
+                            material-symbols-rounded
                             habits-stats__icon
-                            habits-stats__icon--xp
+                            habits-stats__icon--max-streak
                         "
                         aria-hidden="true"
                     >
-                        ⭐
+                        fire_check
                     </span>
 
                     <span class="habits-stats__value">
-                        ${totalXp}
+                        ${formatDays(maxStreak)}
                     </span>
 
                 </div>
 
                 <div class="habits-stats__label">
-                    Всего XP
+                    Максимальная серия
                 </div>
 
             </article>
@@ -191,11 +197,6 @@ export function renderHabitsStats(statistics = {}) {
         </section>
     `
 }
-
-
-
-
-
 
 
 
