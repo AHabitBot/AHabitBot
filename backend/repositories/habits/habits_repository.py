@@ -605,6 +605,53 @@ def calculate_habit_max_streak(
 
     return max_streak
 
+
+# =========================================================
+# РАССЧИТАТЬ ОБЩУЮ ТЕКУЩУЮ СЕРИЮ ПОЛЬЗОВАТЕЛЯ
+# =========================================================
+
+def calculate_user_streak(
+    confirmation_dates: list[date],
+    today: date,
+) -> int:
+    """
+    Считает общий текущий стрик пользователя.
+
+    День засчитывается, если в этот день была
+    подтверждена хотя бы одна привычка.
+
+    Несколько подтверждений в один день
+    считаются одним днём серии.
+
+    Если сегодня ещё ничего не подтверждено,
+    серия считается назад от вчерашнего дня.
+    """
+
+    if not confirmation_dates:
+        return 0
+
+    unique_dates = set(
+        confirmation_dates
+    )
+
+    if today in unique_dates:
+        current_date = today
+    else:
+        current_date = (
+            today - timedelta(days=1)
+        )
+
+    streak = 0
+
+    while current_date in unique_dates:
+        streak += 1
+
+        current_date -= timedelta(
+            days=1
+        )
+
+    return streak
+
 # =========================================================
 # УСТАНОВИТЬ СОСТОЯНИЕ ПОДТВЕРЖДЕНИЯ
 #
@@ -786,9 +833,20 @@ async def set_habit_confirmation(
                     )
 
             # -------------------------------------------------
-            # Пересчитываем только базовую статистику.
+            # ПЕРЕСЧИТЫВАЕМ ОБЩУЮ СТАТИСТИКУ ПОЛЬЗОВАТЕЛЯ
             #
-            # current_streak и max_streak пока не трогаем.
+            # total_confirmations:
+            # количество всех активных подтверждений.
+            #
+            # total_xp:
+            # сумма реально начисленного XP.
+            #
+            # current_streak:
+            # количество дней подряд, в которые была
+            # подтверждена хотя бы одна привычка.
+            #
+            # max_streak:
+            # исторический рекорд общего стрика.
             # -------------------------------------------------
 
             statistics = await connection.fetchrow(
@@ -834,28 +892,99 @@ async def set_habit_confirmation(
                 else 0
             )
 
+            user_confirmation_rows = (
+                await connection.fetch(
+                    """
+                    SELECT DISTINCT
+                        hc.confirmation_date
+
+                    FROM habit_confirmations AS hc
+
+                    INNER JOIN habits AS h
+                        ON h.id = hc.habit_id
+
+                    WHERE h.user_id = $1
+                      AND hc.is_confirmed = TRUE
+
+                    ORDER BY
+                        hc.confirmation_date ASC
+                    """,
+                    user_id,
+                )
+            )
+
+            user_confirmation_dates = [
+                row["confirmation_date"]
+                for row in user_confirmation_rows
+            ]
+
+            current_streak = (
+                calculate_user_streak(
+                    confirmation_dates=
+                        user_confirmation_dates,
+                    today=confirmation_date,
+                )
+            )
+
+            previous_max_streak = (
+                await connection.fetchval(
+                    """
+                    SELECT max_streak
+                    FROM user_stats
+                    WHERE user_id = $1
+                    FOR UPDATE
+                    """,
+                    user_id,
+                )
+            )
+
+            max_streak = max(
+                int(previous_max_streak or 0),
+                current_streak,
+            )
+
             await connection.execute(
                 """
                 INSERT INTO user_stats (
                     user_id,
+                    current_streak,
+                    max_streak,
                     total_confirmations,
                     total_xp
                 )
-                VALUES ($1, $2, $3)
+                VALUES (
+                    $1,
+                    $2,
+                    $3,
+                    $4,
+                    $5
+                )
 
                 ON CONFLICT (user_id)
                 DO UPDATE SET
+                    current_streak =
+                        EXCLUDED.current_streak,
+
+                    max_streak =
+                        GREATEST(
+                            user_stats.max_streak,
+                            EXCLUDED.max_streak
+                        ),
+
                     total_confirmations =
                         EXCLUDED.total_confirmations,
+
                     total_xp =
                         EXCLUDED.total_xp,
+
                     updated_at = NOW()
                 """,
                 user_id,
+                current_streak,
+                max_streak,
                 total_confirmations,
                 total_xp,
             )
-
             # -------------------------------------------------
             # Получаем финальное состояние подтверждения
             # за сегодняшний день.
@@ -1033,6 +1162,12 @@ async def set_habit_confirmation(
                 },
 
                 "statistics": {
+                    "current_streak":
+                        current_streak,
+
+                    "max_streak":
+                        max_streak,
+
                     "total_confirmations":
                         total_confirmations,
 
