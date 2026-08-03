@@ -1117,7 +1117,7 @@ confirmButton?.addEventListener(
                         response.statistics
                             ?.total_xp
                     )
-            })ч
+            })
 
         } catch (error) {
             /*
