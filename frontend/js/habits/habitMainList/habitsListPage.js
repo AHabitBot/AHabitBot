@@ -146,12 +146,13 @@ export function renderHabitsStats(
 
                     <span
                         class="
+                            material-symbols-rounded
                             habits-stats__icon
                             habits-stats__icon--streak
                         "
                         aria-hidden="true"
                     >
-                        🔥
+                        mode_heat
                     </span>
 
                     <span class="habits-stats__value">
