@@ -376,9 +376,11 @@ function handleHabitDetailsBack(
         return
     }
 
-    onOpenHabitsPage()
-
-    restoreHabitsListScroll()
+    onOpenHabitsPage({
+        preserveScroll: true,
+        scrollTop:
+            habitsListScrollTop
+    })
 }
 
 

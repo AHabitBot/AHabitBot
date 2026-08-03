@@ -176,52 +176,29 @@ export function renderHabitsPage(
 
 
 
-async function openHabitsPage({
+/* =========================================================
+   ОТКРЫТЬ ГЛАВНУЮ СТРАНИЦУ ИЗ STORE
+
+   Используется для внутренней навигации:
+   - возврат из деталей;
+   - возврат после редактирования;
+   - возврат после создания;
+   - возврат после архивирования.
+
+   Повторный GET не выполняется.
+   ========================================================= */
+
+function openHabitsPageFromStore({
     preserveScroll = false,
     scrollTop = null
 } = {}) {
-    const currentList = document.querySelector(
-        ".habits-v2-list"
-    )
-
     const savedScrollTop =
         scrollTop !== null
             ? Math.max(
                 0,
                 Number(scrollTop) || 0
             )
-            : preserveScroll
-                ? currentList?.scrollTop || 0
-                : 0
-
-    try {
-        const {
-            habits,
-            statistics
-        } = await fetchHabits()
-
-        const normalizedHabits =
-            habits.map(normalizeHabit)
-
-        setHabits(normalizedHabits)
-
-        setHabitsStatistics({
-            currentStreak:
-                Number(
-                    statistics.current_streak
-                ) || 0,
-
-            totalXp:
-                Number(
-                    statistics.total_xp
-                ) || 0
-        })
-    } catch (error) {
-        console.error(
-            "Не удалось загрузить привычки:",
-            error
-        )
-    }
+            : 0
 
     renderHabitsPage(
         getHabits(),
@@ -251,6 +228,65 @@ async function openHabitsPage({
 
 
 /* =========================================================
+   ОТКРЫТЬ ГЛАВНУЮ СТРАНИЦУ С ЗАГРУЗКОЙ API
+
+   Используется при:
+   - первом входе в раздел;
+   - повторном входе в Mini App;
+   - будущем ручном обновлении данных.
+   ========================================================= */
+
+async function openHabitsPage({
+    preserveScroll = false,
+    scrollTop = null
+} = {}) {
+    try {
+        const {
+            habits,
+            statistics
+        } = await fetchHabits()
+
+        const normalizedHabits =
+            habits.map(normalizeHabit)
+
+        setHabits(normalizedHabits)
+
+        setHabitsStatistics({
+            currentStreak:
+                Number(
+                    statistics.current_streak
+                ) || 0,
+
+            maxStreak:
+                Number(
+                    statistics.max_streak
+                ) || 0,
+
+            totalConfirmations:
+                Number(
+                    statistics.total_confirmations
+                ) || 0,
+
+            totalXp:
+                Number(
+                    statistics.total_xp
+                ) || 0
+        })
+    } catch (error) {
+        console.error(
+            "Не удалось загрузить привычки:",
+            error
+        )
+    }
+
+    openHabitsPageFromStore({
+        preserveScroll,
+        scrollTop
+    })
+}
+
+
+/* =========================================================
    ОТКРЫТЬ НОВУЮ СТРАНИЦУ СОЗДАНИЯ
 
    resetDraft: true означает, что пользователь начинает
@@ -260,10 +296,11 @@ async function openHabitsPage({
 function openNewHabitPage() {
     openAddHabitPage({
         resetDraft: true,
-        onOpenHabitsPage: openHabitsPage
+
+        onOpenHabitsPage:
+            openHabitsPageFromStore
     })
 }
-
 
 /* =========================================================
    ВЕРНУТЬСЯ ИЗ EMOJI PICKER В СОЗДАНИЕ
@@ -278,10 +315,11 @@ function openNewHabitPage() {
 function openAddHabitPageFromIconPicker() {
     openAddHabitPage({
         resetDraft: false,
-        onOpenHabitsPage: openHabitsPage
+
+        onOpenHabitsPage:
+            openHabitsPageFromStore
     })
 }
-
 
 /* =========================================================
    СОБЫТИЯ ГЛАВНОЙ СТРАНИЦЫ
@@ -330,7 +368,7 @@ function initHabitsPageEvents() {
 
     initHabitsListEvents({
         onOpenHabitsPage:
-            openHabitsPage
+            openHabitsPageFromStore
     })
 }
 
@@ -362,7 +400,7 @@ export function initHabitsEvents() {
     if (habitDetailsPage) {
         initOpenedHabitDetailsEvents({
             onOpenHabitsPage:
-                openHabitsPage
+                openHabitsPageFromStore
         })
 
         return
@@ -403,7 +441,7 @@ export function initHabitsEvents() {
 
         initAddHabitPageEvents({
             onOpenHabitsPage:
-                openHabitsPage
+                openHabitsPageFromStore
         })
 
         return
