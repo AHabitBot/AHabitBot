@@ -261,24 +261,36 @@ export async function toggleHabitConfirmation(
                 serverHabit.completed_today
             )
 
-        const weekProgress =
-            normalizeWeekProgress(
-                habit.weekProgress
+        const completedDates =
+            Array.isArray(
+                serverHabit.completed_dates
+            )
+                ? serverHabit.completed_dates
+                : []
+
+        const streak =
+            normalizePositiveInteger(
+                serverHabit.streak
             )
 
-        weekProgress[getTodayWeekIndex()] =
-            completedToday
+        const weekProgress =
+            normalizeWeekProgress(
+                serverHabit.week_progress
+            )
 
         const updatedHabit =
             updateHabit(
                 habitId,
                 {
                     completedToday,
+                    completedDates,
+                    streak,
                     weekProgress,
 
                     completedAt:
                         completedToday
-                            ? new Date().toISOString()
+                            ? new Date()
+                                .toISOString()
                             : null
                 }
             )
@@ -307,7 +319,6 @@ export async function toggleHabitConfirmation(
         )
     }
 }
-
 
 /* =========================================================
    СОХРАНИТЬ ПОЗИЦИЮ СПИСКА
@@ -1041,21 +1052,30 @@ confirmButton?.addEventListener(
                     desiredState
                 )
 
+            const serverHabit =
+                response.habit
+
             const serverCompletedToday =
                 Boolean(
-                    response.habit
-                        .completed_today
+                    serverHabit.completed_today
+                )
+
+            const serverCompletedDates =
+                Array.isArray(
+                    serverHabit.completed_dates
+                )
+                    ? serverHabit.completed_dates
+                    : []
+
+            const serverStreak =
+                normalizePositiveInteger(
+                    serverHabit.streak
                 )
 
             const finalWeekProgress =
                 normalizeWeekProgress(
-                    optimisticHabit
-                        .weekProgress
+                    serverHabit.week_progress
                 )
-
-            finalWeekProgress[
-                getTodayWeekIndex()
-            ] = serverCompletedToday
 
             const finalHabit =
                 updateHabit(
@@ -1063,6 +1083,12 @@ confirmButton?.addEventListener(
                     {
                         completedToday:
                             serverCompletedToday,
+
+                        completedDates:
+                            serverCompletedDates,
+
+                        streak:
+                            serverStreak,
 
                         weekProgress:
                             finalWeekProgress,
@@ -1089,6 +1115,7 @@ confirmButton?.addEventListener(
                         )
                 })
             }
+
         } catch (error) {
             /*
              * Если API вернул ошибку,

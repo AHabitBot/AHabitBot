@@ -795,7 +795,8 @@ async def set_habit_confirmation(
             )
 
             # -------------------------------------------------
-            # Получаем финальное состояние подтверждения.
+            # Получаем финальное состояние подтверждения
+            # за сегодняшний день.
             # -------------------------------------------------
 
             final_confirmation = await connection.fetchrow(
@@ -839,22 +840,123 @@ async def set_habit_confirmation(
                 else 0
             )
 
+            # -------------------------------------------------
+            # Получаем все актуальные подтверждённые даты
+            # изменённой привычки.
+            #
+            # Эти данные сразу возвращаются frontend,
+            # чтобы без полного GET обновить:
+            # - календарь;
+            # - серию;
+            # - недельный прогресс.
+            # -------------------------------------------------
+
+            completed_date_rows = await connection.fetch(
+                """
+                SELECT
+                    confirmation_date
+                FROM habit_confirmations
+                WHERE habit_id = $1
+                  AND is_confirmed = TRUE
+                ORDER BY confirmation_date ASC
+                """,
+                habit_id,
+            )
+
+            habit_completed_dates = [
+                row["confirmation_date"]
+                for row in completed_date_rows
+            ]
+
+            # -------------------------------------------------
+            # Рассчитываем актуальную серию привычки.
+            # -------------------------------------------------
+
+            habit_streak = calculate_habit_streak(
+                completed_dates=
+                    habit_completed_dates,
+                today=confirmation_date,
+            )
+
+            # -------------------------------------------------
+            # Формируем недельный прогресс:
+            #
+            # 0 — понедельник
+            # 1 — вторник
+            # ...
+            # 6 — воскресенье
+            # -------------------------------------------------
+
+            week_start = (
+                confirmation_date
+                - timedelta(
+                    days=
+                        confirmation_date.weekday()
+                )
+            )
+
+            habit_week_progress = [
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+            ]
+
+            for completed_date in (
+                habit_completed_dates
+            ):
+                day_index = (
+                    completed_date
+                    - week_start
+                ).days
+
+                if 0 <= day_index <= 6:
+                    habit_week_progress[
+                        day_index
+                    ] = True
+
+            # -------------------------------------------------
+            # Возвращаем frontend полное актуальное
+            # состояние изменённой привычки.
+            # -------------------------------------------------
+
             return {
                 "habit": {
-                    "id": habit_id,
+                    "id":
+                        habit_id,
+
                     "completed_today":
                         completed_today,
+
+                    "completed_dates": [
+                        completed_date.isoformat()
+                        for completed_date
+                        in habit_completed_dates
+                    ],
+
+                    "streak":
+                        habit_streak,
+
+                    "week_progress":
+                        habit_week_progress,
+
                     "xp_awarded_today":
                         xp_awarded_today,
+
                     "xp_amount_today":
                         xp_amount_today,
+
                     "confirmation_date":
-                        confirmation_date,
+                        confirmation_date.isoformat(),
                 },
 
                 "statistics": {
                     "total_confirmations":
                         total_confirmations,
+
                     "total_xp":
                         total_xp,
                 },

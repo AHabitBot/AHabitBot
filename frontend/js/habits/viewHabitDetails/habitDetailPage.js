@@ -698,26 +698,15 @@ export function renderHabitDetailsPage(habit = {}) {
    Пока API нет.
 
    Если привычка подтверждена сегодня,
-   временно добавляем сегодняшнюю дату
-   в локальный календарь.
+    добавляем сегодняшнюю дату
 */
-
-const calendarCompletedDates = [
-    ...completedDates
-]
-
-if (completedToday) {
-    calendarCompletedDates.push(
-        new Date()
-    )
-}
 
 const calendarHtml =
     renderHabitCalendar({
-        completedDates:
-            calendarCompletedDates,
+        completedDates,
         createdAt
     })
+
 
     root.innerHTML = `
         <section
