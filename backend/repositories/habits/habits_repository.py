@@ -293,6 +293,17 @@ async def get_user_habits(
             )
         )
 
+        habit["max_streak"] = (
+            calculate_habit_max_streak(
+                completed_dates=
+                    habit_completed_dates,
+            )
+        )
+
+        habit["completed_count"] = len(
+            habit_completed_dates
+        )
+
         habits.append(habit)
 
     return {
@@ -542,6 +553,57 @@ def calculate_habit_streak(
         )
 
     return streak
+
+
+# =========================================================
+# РАССЧИТАТЬ МАКСИМАЛЬНУЮ СЕРИЮ ПРИВЫЧКИ
+# =========================================================
+
+def calculate_habit_max_streak(
+    completed_dates: list[date],
+) -> int:
+    """
+    Считает самую длинную серию привычки
+    за всю историю подтверждений.
+    """
+
+    if not completed_dates:
+        return 0
+
+    unique_dates = sorted(
+        set(completed_dates)
+    )
+
+    max_streak = 1
+    current_streak = 1
+
+    for index in range(
+        1,
+        len(unique_dates),
+    ):
+        previous_date = (
+            unique_dates[index - 1]
+        )
+
+        current_date = (
+            unique_dates[index]
+        )
+
+        if (
+            current_date
+            - previous_date
+            == timedelta(days=1)
+        ):
+            current_streak += 1
+        else:
+            current_streak = 1
+
+        max_streak = max(
+            max_streak,
+            current_streak,
+        )
+
+    return max_streak
 
 # =========================================================
 # УСТАНОВИТЬ СОСТОЯНИЕ ПОДТВЕРЖДЕНИЯ
@@ -878,6 +940,17 @@ async def set_habit_confirmation(
                 today=confirmation_date,
             )
 
+            habit_max_streak = (
+                calculate_habit_max_streak(
+                    completed_dates=
+                        habit_completed_dates,
+                )
+            )
+
+            habit_completed_count = len(
+                habit_completed_dates
+            )
+
             # -------------------------------------------------
             # Формируем недельный прогресс:
             #
@@ -939,6 +1012,12 @@ async def set_habit_confirmation(
 
                     "streak":
                         habit_streak,
+
+                    "max_streak":
+                        habit_max_streak,
+
+                    "completed_count":
+                        habit_completed_count,
 
                     "week_progress":
                         habit_week_progress,
