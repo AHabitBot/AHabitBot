@@ -272,12 +272,12 @@ async def get_user_habits(
             )
         )
 
-habit_completed_dates = (
-    completed_dates_by_habit.get(
-        row["id"],
-        [],
-    )
-)
+        habit_completed_dates = (
+            completed_dates_by_habit.get(
+                row["id"],
+                [],
+            )
+        )
 
         habit["completed_dates"] = [
             completed_date.isoformat()
