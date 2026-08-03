@@ -101,7 +101,10 @@ function normalizeHabit(habit = {}) {
                 ? habit.week_progress
                 : [],
 
-        completedDates: []
+        completedDates:
+            Array.isArray(habit.completed_dates)
+                ? habit.completed_dates
+                : []
     }
 }
 
