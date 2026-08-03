@@ -44,6 +44,7 @@ import {
 } from "./habitMainList/habitsListEvents.js"
 
 import {
+    addHabit,
     getHabits,
     getHabitsStatistics,
     setHabits,
@@ -298,7 +299,40 @@ function openNewHabitPage() {
         resetDraft: true,
 
         onOpenHabitsPage:
-            openHabitsPageFromStore
+            openHabitsPageFromStore,
+
+        onHabitSaved: (
+            savedHabit,
+            {
+                wasEditing = false
+            } = {}
+        ) => {
+            if (
+                !savedHabit ||
+                wasEditing
+            ) {
+                openHabitsPageFromStore()
+                return
+            }
+
+            const normalizedHabit =
+                normalizeHabit(
+                    savedHabit
+                )
+
+            const addedHabit =
+                addHabit(
+                    normalizedHabit
+                )
+
+            if (!addedHabit) {
+                console.warn(
+                    "Habits Main: созданная привычка не добавлена в Store"
+                )
+            }
+
+            openHabitsPageFromStore()
+        }
     })
 }
 
