@@ -295,17 +295,19 @@ export async function toggleHabitConfirmation(
                 }
             )
 
-        if (response.statistics) {
-            setHabitsStatistics({
-                totalXp:
-                    normalizePositiveInteger(
-                        response.statistics
-                            .total_xp
-                    )
-            })
-        }
+        setHabitsStatistics({
+            currentStreak:
+                getHighestHabitStreak(),
+
+            totalXp:
+                normalizePositiveInteger(
+                    response.statistics
+                        ?.total_xp
+                )
+        })
 
         return updatedHabit
+
     } catch (error) {
         console.error(
             "Ошибка подтверждения привычки:",
@@ -1106,15 +1108,16 @@ confirmButton?.addEventListener(
                 finalHabit
             )
 
-            if (response.statistics) {
-                setHabitsStatistics({
-                    totalXp:
-                        normalizePositiveInteger(
-                            response.statistics
-                                .total_xp
-                        )
-                })
-            }
+            setHabitsStatistics({
+                currentStreak:
+                    getHighestHabitStreak(),
+
+                totalXp:
+                    normalizePositiveInteger(
+                        response.statistics
+                            ?.total_xp
+                    )
+            })ч
 
         } catch (error) {
             /*
