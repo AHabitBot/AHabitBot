@@ -3,14 +3,18 @@ import {
 } from "../leaderboardSection.js";
 
 
-const AVATAR =
-    "/img/profile/avatar/beginer.png";
+const AVATARM =
+    "/img/profile/avatar/beginer_m.png";
+
+const AVATARF =
+    "/img/profile/avatar/beginer_f.png";
 
 
 export const globalCurrentUser = {
     rank: 14,
     name: "Вы",
-    xp: "12 680",
+    xp: "2 180",
+    streak: 7,
     avatar: AVATAR
 };
 
@@ -20,45 +24,147 @@ export function renderGlobalLeaderboard() {
         topUsers: [
             {
                 rank: 2,
-                medal: "🥈",
-                name: "Владимир",
-                xp: "43 870",
-                avatar: AVATAR
+                name: "Shadow",
+                xp: "9 430",
+                streak: 21,
+                avatar: AVATARM
             },
             {
                 rank: 1,
-                medal: "🥇",
-                name: "Александр",
-                xp: "50 230",
-                avatar: AVATAR
+                name: "Maximus",
+                xp: "12 560",
+                streak: 28,
+                avatar: AVATARM
             },
             {
                 rank: 3,
-                medal: "🥉",
-                name: "Игорь",
-                xp: "38 640",
-                avatar: AVATAR
+                name: "Panda",
+                xp: "8 210",
+                streak: 18,
+                avatar: AVATARF
             }
         ],
 
         users: [
-            { rank: 4, name: "Дмитрий", xp: "32 210", avatar: AVATAR },
-            { rank: 5, name: "Максим", xp: "28 450", avatar: AVATAR },
-            { rank: 6, name: "Анна", xp: "24 780", avatar: AVATAR },
-            { rank: 7, name: "Екатерина", xp: "22 190", avatar: AVATAR },
-            { rank: 8, name: "Сергей", xp: "18 450", avatar: AVATAR },
-            { rank: 9, name: "Мария", xp: "16 320", avatar: AVATAR },
-            { rank: 10, name: "Артём", xp: "14 050", avatar: AVATAR },
-            { rank: 11, name: "Никита", xp: "13 760", avatar: AVATAR },
-            { rank: 12, name: "Ольга", xp: "13 420", avatar: AVATAR },
-            { rank: 13, name: "Кирилл", xp: "13 010", avatar: AVATAR },
-            { rank: 14, name: "Fhntv", xp: "12 680", avatar: AVATAR },
-            { rank: 15, name: "Алина", xp: "12 310", avatar: AVATAR },
-            { rank: 16, name: "Виктор", xp: "11 980", avatar: AVATAR },
-            { rank: 17, name: "Дарья", xp: "11 540", avatar: AVATAR },
-            { rank: 18, name: "Роман", xp: "10 920", avatar: AVATAR },
-            { rank: 19, name: "Елена", xp: "10 410", avatar: AVATAR },
-            { rank: 20, name: "Олег", xp: "9 870", avatar: AVATAR }
+            {
+                rank: 4,
+                name: "Wolf",
+                xp: "7 450",
+                streak: 16,
+                avatar: AVATARF
+            },
+            {
+                rank: 5,
+                name: "Robo",
+                xp: "6 870",
+                streak: 15,
+                avatar: AVATARF
+            },
+            {
+                rank: 6,
+                name: "Fox",
+                xp: "6 120",
+                streak: 14,
+                avatar: AVATARM
+            },
+            {
+                rank: 7,
+                name: "Penguin",
+                xp: "5 340",
+                streak: 12,
+                avatar: AVATARF
+            },
+            {
+                rank: 8,
+                name: "Leo",
+                xp: "4 980",
+                streak: 11,
+                avatar: AVATARM
+            },
+            {
+                rank: 9,
+                name: "Storm",
+                xp: "4 650",
+                streak: 10,
+                avatar: AVATARM
+            },
+            {
+                rank: 10,
+                name: "Hunter",
+                xp: "4 320",
+                streak: 9,
+                avatar: AVATARM
+            },
+            {
+                rank: 11,
+                name: "Rocky",
+                xp: "3 970",
+                streak: 9,
+                avatar: AVATARM
+            },
+            {
+                rank: 12,
+                name: "Flash",
+                xp: "3 640",
+                streak: 8,
+                avatar: AVATARF
+            },
+            {
+                rank: 13,
+                name: "Blade",
+                xp: "3 210",
+                streak: 8,
+                avatar: AVATARF
+            },
+            {
+                rank: 14,
+                name: "Fhntv",
+                xp: "2 180",
+                streak: 7,
+                avatar: AVATARF
+            },
+            {
+                rank: 15,
+                name: "Phoenix",
+                xp: "2 030",
+                streak: 7,
+                avatar: AVATARM
+            },
+            {
+                rank: 16,
+                name: "Tiger",
+                xp: "1 890",
+                streak: 6,
+                avatar: AVATARF
+            },
+            {
+                rank: 17,
+                name: "Ace",
+                xp: "1 760",
+                streak: 6,
+                avatar: AVATARF
+            },
+            {
+                rank: 18,
+                name: "Atlas",
+                xp: "1 540",
+                streak: 5,
+                avatar: AVATARF
+            },
+            {
+                rank: 19,
+                name: "Ghost",
+                xp: "1 320",
+                streak: 5,
+                avatar: AVATARF
+            },
+            {
+                rank: 20,
+                name: "Falcon",
+                xp: "1 180",
+                streak: 4,
+                avatar: AVATARF
+            }
         ]
     });
 }
