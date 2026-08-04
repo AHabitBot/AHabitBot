@@ -1,11 +1,11 @@
 /* =========================================================
    НИЖНЯЯ НАВИГАЦИЯ
-   Стиль основан на кнопке «Выбрать»
    ========================================================= */
 
 .bottom-navigation {
     position: fixed;
     z-index: 900;
+    isolation: isolate;
 
     left: 16px;
     right: 16px;
@@ -49,10 +49,41 @@
 
     -webkit-font-smoothing: antialiased;
     text-rendering: geometricPrecision;
+}
 
-    transition:
-        opacity 180ms ease,
-        transform 180ms ease;
+
+/* =========================================================
+   ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ КОНТЕНТА НАД НАВИГАЦИЕЙ
+
+   Повторяет принцип градиента над кнопкой «Выбрать»
+   в меню выбора иконки.
+   ========================================================= */
+
+.bottom-navigation::before {
+    content: "";
+
+    position: absolute;
+    z-index: -1;
+
+    left: -16px;
+    right: -16px;
+
+    bottom: calc(100% - 18px);
+
+    height: 78px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(248, 249, 251, 0) 0%,
+            rgba(248, 249, 251, 0.18) 22%,
+            rgba(248, 249, 251, 0.48) 46%,
+            rgba(248, 249, 251, 0.82) 70%,
+            rgba(248, 249, 251, 0.98) 90%,
+            rgba(248, 249, 251, 1) 100%
+        );
+
+    pointer-events: none;
 }
 
 
@@ -75,11 +106,14 @@
     margin: 0;
     padding: 0 10px;
 
-    border: 1px solid transparent;
+    border:
+        1px solid
+        transparent;
+
     border-radius: 20px;
     outline: none;
 
-    color: #92959d;
+    color: #92959D;
     background: transparent;
 
     font-family: inherit;
@@ -140,6 +174,7 @@
 
 .bottom-navigation__label {
     min-width: 0;
+    max-width: 100%;
 
     overflow: hidden;
     white-space: nowrap;
@@ -167,11 +202,10 @@
 
 /* =========================================================
    АКТИВНЫЙ РАЗДЕЛ
-   Повторяет характер кнопки «Выбрать»
    ========================================================= */
 
 .bottom-navigation__item.is-active {
-    color: #74764e;
+    color: #74764E;
 
     border-color:
         rgba(50, 53, 59, 0.07);
@@ -205,7 +239,6 @@
 
 /* =========================================================
    НАЖАТИЕ
-   Как у кнопки «Выбрать»
    ========================================================= */
 
 .bottom-navigation__item:active,
@@ -218,6 +251,11 @@
         inset 0 2px 4px rgba(31, 38, 49, 0.025);
 }
 
+
+/* =========================================================
+   ФОКУС
+   ========================================================= */
+
 .bottom-navigation__item:focus {
     outline: none;
 }
@@ -229,37 +267,12 @@
 
 
 /* =========================================================
-   ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ КОНТЕНТА
-   ========================================================= */
-
-.page-content {
-    opacity: 1;
-    transform: translateY(0);
-
-    transition:
-        opacity 180ms ease,
-        transform 180ms ease;
-
-    will-change:
-        opacity,
-        transform;
-}
-
-.page-content.is-navigation-leaving {
-    opacity: 0;
-    transform: translateY(5px);
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   ОТСТУП ПОД ЗАКРЕПЛЁННУЮ НАВИГАЦИЮ
+   ОТСТУП КОНТЕНТА ПОД НАВИГАЦИЮ
    ========================================================= */
 
 .habits-v2-list {
     padding-bottom:
-        calc(92px + env(safe-area-inset-bottom));
+        calc(96px + env(safe-area-inset-bottom));
 }
 
 
@@ -278,6 +291,15 @@
         padding: 4px;
 
         border-radius: 22px;
+    }
+
+    .bottom-navigation::before {
+        left: -12px;
+        right: -12px;
+
+        bottom: calc(100% - 16px);
+
+        height: 70px;
     }
 
     .bottom-navigation__item {
@@ -301,7 +323,7 @@
 
     .habits-v2-list {
         padding-bottom:
-            calc(86px + env(safe-area-inset-bottom));
+            calc(90px + env(safe-area-inset-bottom));
     }
 }
 
@@ -312,9 +334,7 @@
 
 @media (prefers-reduced-motion: reduce) {
 
-    .bottom-navigation,
-    .bottom-navigation__item,
-    .page-content {
+    .bottom-navigation__item {
         transition: none;
     }
 }
