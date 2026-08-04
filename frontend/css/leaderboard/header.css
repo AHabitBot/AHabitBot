@@ -1,16 +1,38 @@
+/* =========================================================
+   LEADERBOARD V2 — СТРАНИЦА
+   ========================================================= */
+
 .leaderboard-page {
-  width: 100%;
-  min-height: 100%;
-  padding: 24px 16px;
-  box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+
+    padding:
+        26px
+        16px
+        calc(112px + env(safe-area-inset-bottom));
+
+    box-sizing: border-box;
 }
+
+
+/* =========================================================
+   ХЕДЕР
+   ========================================================= */
 
 .leaderboard-header {
-  width: 100%;
+    width: 100%;
 }
 
+
+/* =========================================================
+   НАЗВАНИЕ РАЗДЕЛА
+   ========================================================= */
+
 .leaderboard-header__title {
-    margin: 0 0 18px;
+    margin:
+        0
+        0
+        12px;
 
     color: #232428;
 
@@ -23,121 +45,164 @@
         Arial,
         sans-serif;
 
-    font-size: 36px;
+    font-size: 28px;
     font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.045em;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+
+    text-align: center;
 
     -webkit-font-smoothing: antialiased;
     text-rendering: geometricPrecision;
-
-    text-align: center;
 }
 
+
+/* =========================================================
+   ПЕРЕКЛЮЧАТЕЛЬ
+   ========================================================= */
 
 .leaderboard-tabs {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  width: 100%;
-  padding: 4px;
-  border: 1px solid rgba(26, 26, 26, 0.08);
-  border-radius: 18px;
-  background: #ffffff;
-  box-sizing: border-box;
-  box-shadow:
-    0 3px 12px rgba(20, 20, 20, 0.04);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    width: 100%;
+    height: 48px;
+
+    padding: 3px;
+
+    box-sizing: border-box;
+
+    border:
+        1px
+        solid
+        rgba(35, 36, 40, 0.08);
+
+    border-radius: 15px;
+
+    background:
+        rgba(255, 255, 255, 0.96);
+
+    box-shadow:
+        0 3px 10px rgba(36, 48, 72, 0.035);
 }
+
+
+/* =========================================================
+   КНОПКИ ПЕРЕКЛЮЧАТЕЛЯ
+   ========================================================= */
 
 .leaderboard-tabs__button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  min-width: 0;
-  min-height: 52px;
-  padding: 0 12px;
-  border: 0;
-  border-radius: 14px;
-  background: transparent;
-  color: #777781;
-  font-family:
-       -apple-system,
-       BlinkMacSystemFont,
-       "SF Pro Display",
-       "SF Pro Text",
-       Inter,
-       Arial,
-       sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-   -webkit-font-smoothing: antialiased;
-   text-rendering: geometricPrecision;
+    gap: 7px;
 
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1;
-  cursor: pointer;
-  outline: none;
-  transition:
-    background-color 180ms ease,
-    color 180ms ease,
-    box-shadow 180ms ease;
-  -webkit-tap-highlight-color: transparent;
+    min-width: 0;
+    height: 40px;
+
+    padding:
+        0
+        10px;
+
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 12px;
+
+    color: #7d7f89;
+    background: transparent;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.015em;
+
+    cursor: pointer;
+    outline: none;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        background-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease;
 }
+
+
+/* =========================================================
+   АКТИВНАЯ КНОПКА
+   ========================================================= */
 
 .leaderboard-tabs__button--active {
-  color: #66751f;
-  background: #f3f5e9;
-  box-shadow:
-    0 2px 8px rgba(89, 103, 31, 0.08);
+    color: #687823;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(246, 248, 236, 0.98),
+            rgba(241, 244, 226, 0.98)
+        );
+
+    box-shadow:
+        0 2px 7px rgba(95, 111, 36, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
+
+/* =========================================================
+   ФОКУС
+   ========================================================= */
+
 .leaderboard-tabs__button:focus-visible {
-  box-shadow:
-    0 0 0 2px rgba(102, 117, 31, 0.18);
+    box-shadow:
+        0 0 0 2px rgba(102, 117, 31, 0.16);
 }
 
 .leaderboard-tabs__button--active:focus-visible {
-  box-shadow:
-    0 2px 8px rgba(89, 103, 31, 0.08),
-    0 0 0 2px rgba(102, 117, 31, 0.18);
+    box-shadow:
+        0 2px 7px rgba(95, 111, 36, 0.07),
+        0 0 0 2px rgba(102, 117, 31, 0.16);
 }
+
+
+/* =========================================================
+   ИКОНКИ
+   ========================================================= */
 
 .leaderboard-tabs__icon {
-  flex: 0 0 auto;
-  width: 21px;
-  height: 21px;
-  color: currentColor;
+    flex: 0 0 auto;
+
+    width: 18px;
+    height: 18px;
+
+    overflow: hidden;
+
+    color: currentColor;
+
+    font-size: 18px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 20;
 }
 
-.leaderboard-tabs__label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.leaderboard-content {
-  width: 100%;
-  margin-top: 20px;
-}
-
-@media (max-width: 360px) {
-  .leaderboard-page {
-    padding-right: 12px;
-    padding-left: 12px;
-  }
-
-  .leaderboard-header__title {
-    font-size: 27px;
-  }
-
-  .leaderboard-tabs__button {
-    gap: 7px;
-    padding: 0 8px;
-    font-size: 15px;
-  }
-
-  .leaderboard-tabs__icon {
-    width: 19px;
-    height: 19px;
-  }
-}
+.leaderboard-tabs__button--active
+.leaderboard-tabs__icon {
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 500,
