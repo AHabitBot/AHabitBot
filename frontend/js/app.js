@@ -2,6 +2,8 @@ import {
     initHabitsEvents
 } from "./habits/habitsMain.js"
 
+import { mountBottomNavigation } from "./navigation.js"
+
 
 function initTelegramWebApp() {
     const telegram =
@@ -52,6 +54,7 @@ function initV2() {
 
     initTelegramWebApp()
     initHabitsEvents()
+    mountBottomNavigation("habits")
 }
 
 
