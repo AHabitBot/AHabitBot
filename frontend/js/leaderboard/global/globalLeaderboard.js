@@ -21,21 +21,21 @@ export function renderGlobalLeaderboard() {
                 rank: 2,
                 name: "Мария",
                 xp: "39 600",
-                avatar: "/img/profile/avatar beginer.png"
+                avatar: "/img/profile/avatar/beginer.png"
             },
 
             {
                 rank: 1,
                 name: "Александр",
                 xp: "50 230",
-                avatar: "/img/profile/avatar beginer.png"
+                avatar: "/img/profile/avatar/beginer.png"
             },
 
             {
                 rank: 3,
                 name: "Игорь",
                 xp: "38 640",
-                avatar: "/img/profile/avatar beginer.png"
+                avatar: "/img/profile/avatar/beginer.png"
             }
 
         ]
