@@ -1,1 +1,114 @@
+@import url("./leaderboardPage/leaderboardPage.css");
+@import url("./leaderboardPage/header.css");
+
+/* =========================================================
+   LEADERBOARD V2 — ОБЩАЯ ОБОЛОЧКА РАЗДЕЛА
+   ========================================================= */
+
+:root {
+    --leaderboard-v2-text: #232428;
+    --leaderboard-v2-muted: #7d7f89;
+    --leaderboard-v2-accent: #687827;
+    --leaderboard-v2-accent-bg: #f2f4e6;
+    --leaderboard-v2-border: rgba(35, 36, 40, 0.08);
+}
+
+
+/* =========================================================
+   ОСНОВНАЯ СТРАНИЦА LEADERBOARD V2
+   ========================================================= */
+
+#leaderboard-v2-page {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100dvh;
+    min-height: 100vh;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(255, 255, 255, 0.99) 0%,
+            rgba(250, 251, 253, 0.97) 55%,
+            rgba(247, 249, 252, 1) 100%
+        );
+}
+
+
+#leaderboard-v2-page .page-content {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background: transparent;
+}
+
+
+/* =========================================================
+   ВНУТРЕННЯЯ СТРАНИЦА ЛИДЕРБОРДА
+   ========================================================= */
+
+.leaderboard-page {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+
+    box-sizing: border-box;
+
+    padding:
+        max(54px, env(safe-area-inset-top))
+        18px
+        calc(112px + env(safe-area-inset-bottom));
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    background: transparent;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.leaderboard-page::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================================
+   КОНТЕНТ ЛИДЕРБОРДА
+   ========================================================= */
+
+.leaderboard-content {
+    width: 100%;
+    margin-top: 18px;
+}
+
+
+@media (max-width: 360px) {
+    .leaderboard-page {
+        padding-right: 14px;
+        padding-left: 14px;
+    }
+}
+
+
+/* =========================================================
+   СОСТАВНЫЕ СТИЛИ
+   ========================================================= */
+
 @import url("./header.css");
