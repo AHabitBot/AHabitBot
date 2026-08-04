@@ -1,16 +1,20 @@
 import {
-  canAccessLeaderboard,
-  getActiveLeaderboardTab,
+    canAccessLeaderboard,
+    getActiveLeaderboardTab,
 } from "./leaderboardStore.js";
 
 import {
-  renderLeaderboardHeader,
-  renderLeaderboardContentShell,
+    renderLeaderboardHeader,
+    renderLeaderboardContentShell,
 } from "./leaderboardComponents.js";
 
 import {
-  initLeaderboardEvents,
+    initLeaderboardEvents,
 } from "./leaderboardEvents.js";
+
+import {
+    renderGlobalLeaderboard,
+} from "./global/globalLeaderboard.js";
 
 
 let leaderboardRoot = null;
@@ -18,92 +22,93 @@ let destroyLeaderboardEvents = null;
 
 
 export function openLeaderboardPage(root) {
-  if (!canAccessLeaderboard()) {
-    console.warn(
-      "Leaderboard is unavailable for this user"
-    );
+    if (!canAccessLeaderboard()) {
+        console.warn(
+            "Leaderboard is unavailable for this user"
+        );
 
-    return false;
-  }
+        return false;
+    }
 
-  renderLeaderboardPage(root);
+    renderLeaderboardPage(root);
 
-  return true;
+    return true;
 }
 
 
 export function renderLeaderboardPage(root) {
-  if (!root) {
-    console.error(
-      "Leaderboard: корневой контейнер не найден"
-    );
+    if (!root) {
+        console.error(
+            "Leaderboard: корневой контейнер не найден"
+        );
 
-    return;
-  }
+        return;
+    }
 
-  destroyLeaderboardPage();
+    destroyLeaderboardPage();
 
-  leaderboardRoot = root;
+    leaderboardRoot = root;
 
-  leaderboardRoot.innerHTML = `
-    <main class="leaderboard-page">
-      ${renderLeaderboardHeader()}
-      ${renderLeaderboardContentShell()}
-    </main>
-  `;
+    leaderboardRoot.innerHTML = `
+        <main class="leaderboard-page">
+            ${renderLeaderboardHeader()}
+            ${renderLeaderboardContentShell()}
+        </main>
+    `;
 
-  renderActiveLeaderboardContent();
+    renderActiveLeaderboardContent();
 
-  destroyLeaderboardEvents = initLeaderboardEvents({
-    root: leaderboardRoot,
-    onTabChange: renderActiveLeaderboardContent,
-  });
+    destroyLeaderboardEvents = initLeaderboardEvents({
+        root: leaderboardRoot,
+        onTabChange: renderActiveLeaderboardContent,
+    });
 }
 
 
 function renderActiveLeaderboardContent() {
-  if (!leaderboardRoot) {
-    return;
-  }
+    if (!leaderboardRoot) {
+        return;
+    }
 
-  const content = leaderboardRoot.querySelector(
-    "[data-leaderboard-content]"
-  );
-
-  if (!content) {
-    console.error(
-      "Leaderboard: контейнер содержимого не найден"
+    const content = leaderboardRoot.querySelector(
+        "[data-leaderboard-content]"
     );
 
-    return;
-  }
+    if (!content) {
+        console.error(
+            "Leaderboard: контейнер содержимого не найден"
+        );
 
-  const activeTab = getActiveLeaderboardTab();
+        return;
+    }
 
-  content.dataset.activeTab = activeTab;
+    const activeTab = getActiveLeaderboardTab();
 
-  /*
-   * Пока содержимое остаётся пустым.
-   *
-   * На следующем этапе здесь подключим:
-   *
-   * global/globalLeaderboard.js
-   * season/seasonLeaderboard.js
-   *
-   * Важно: при переключении вкладки будет обновляться
-   * только leaderboard-content.
-   * Хедер и вся страница заново не создаются.
-   */
+    content.dataset.activeTab = activeTab;
 
-  content.innerHTML = "";
+    if (activeTab === "global") {
+        content.innerHTML =
+            renderGlobalLeaderboard();
+
+        return;
+    }
+
+    /*
+     * Сезонный рейтинг подключим следующим этапом.
+     * Пока вкладка остаётся пустой.
+     */
+    content.innerHTML = "";
 }
 
 
 export function destroyLeaderboardPage() {
-  if (typeof destroyLeaderboardEvents === "function") {
-    destroyLeaderboardEvents();
-  }
+    if (
+        typeof destroyLeaderboardEvents
+        === "function"
+    ) {
+        destroyLeaderboardEvents();
+    }
 
-  destroyLeaderboardEvents = null;
-  leaderboardRoot = null;
+    destroyLeaderboardEvents = null;
+    leaderboardRoot = null;
 }

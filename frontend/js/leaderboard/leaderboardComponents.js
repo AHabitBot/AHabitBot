@@ -92,10 +92,10 @@ export function renderLeaderboardContentShell() {
 
 
 export function renderSectionIntro({
-    title,
-    subtitle,
-    backgroundImage
-}) {
+    title = "",
+    subtitle = "",
+    backgroundImage = ""
+} = {}) {
     return `
         <section
             class="leaderboard-section-intro"

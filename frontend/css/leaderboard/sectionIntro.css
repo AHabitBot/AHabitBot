@@ -1,0 +1,200 @@
+/* =========================================================
+   LEADERBOARD V2 — ОБЩИЙ INTRO-БЛОК РЕЙТИНГА
+   ========================================================= */
+
+.leaderboard-section-intro {
+    position: relative;
+
+    width: 100%;
+    min-height: 150px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(35, 36, 40, 0.06);
+
+    border-radius: 18px;
+
+    background-image:
+        var(--section-intro-background);
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    box-shadow:
+        0 4px 14px rgba(35, 36, 40, 0.025);
+}
+
+
+/* =========================================================
+   ЛЁГКОЕ ОСВЕТЛЕНИЕ ПОД ТЕКСТОМ
+   ========================================================= */
+
+.leaderboard-section-intro::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.96) 0%,
+            rgba(255, 255, 255, 0.88) 31%,
+            rgba(255, 255, 255, 0.34) 55%,
+            rgba(255, 255, 255, 0) 76%
+        );
+}
+
+
+/* =========================================================
+   КОНТЕНТ
+   ========================================================= */
+
+.leaderboard-section-intro__content {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 52%;
+    min-height: 150px;
+
+    box-sizing: border-box;
+
+    padding:
+        20px
+        0
+        20px
+        20px;
+}
+
+
+/* =========================================================
+   ЗАГОЛОВОК
+   ========================================================= */
+
+.leaderboard-section-intro__title {
+    margin: 0 0 10px;
+
+    color: var(
+        --leaderboard-v2-text,
+        #232428
+    );
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 21px;
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+}
+
+
+/* =========================================================
+   ПОДЗАГОЛОВОК
+   ========================================================= */
+
+.leaderboard-section-intro__subtitle {
+    margin: 0;
+
+    color: #777984;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 450;
+    line-height: 1.45;
+    letter-spacing: -0.015em;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+}
+
+
+/* =========================================================
+   ЭКРАНЫ ДО 380 PX
+   ========================================================= */
+
+@media (max-width: 380px) {
+    .leaderboard-section-intro {
+        min-height: 138px;
+
+        border-radius: 16px;
+
+        background-position: 58% center;
+    }
+
+    .leaderboard-section-intro__content {
+        width: 56%;
+        min-height: 138px;
+
+        padding:
+            18px
+            0
+            18px
+            16px;
+    }
+
+    .leaderboard-section-intro__title {
+        margin-bottom: 8px;
+
+        font-size: 19px;
+    }
+
+    .leaderboard-section-intro__subtitle {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+}
+
+
+/* =========================================================
+   ОЧЕНЬ УЗКИЕ ЭКРАНЫ
+   ========================================================= */
+
+@media (max-width: 340px) {
+    .leaderboard-section-intro {
+        min-height: 130px;
+    }
+
+    .leaderboard-section-intro__content {
+        width: 60%;
+        min-height: 130px;
+
+        padding-left: 14px;
+    }
+
+    .leaderboard-section-intro__title {
+        font-size: 18px;
+    }
+
+    .leaderboard-section-intro__subtitle {
+        font-size: 12px;
+    }
+}
