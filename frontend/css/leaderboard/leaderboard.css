@@ -1,6 +1,7 @@
 @import url("./leaderboardPage/leaderboardPage.css");
 @import url("./leaderboardPage/header.css");
 
+
 /* =========================================================
    LEADERBOARD V2 — ОБЩАЯ ОБОЛОЧКА РАЗДЕЛА
    ========================================================= */
@@ -70,9 +71,14 @@
 
     box-sizing: border-box;
 
+    /*
+     * Заголовок поднимается почти к верхней границе.
+     * Отступ сверху равен расстоянию между заголовком
+     * и переключателем.
+     */
     padding:
-        max(54px, env(safe-area-inset-top))
-        18px
+        max(12px, env(safe-area-inset-top))
+        16px
         calc(112px + env(safe-area-inset-bottom));
 
     overflow-x: hidden;
@@ -95,7 +101,7 @@
 
 .leaderboard-content {
     width: 100%;
-    margin-top: 18px;
+    margin-top: 14px;
 }
 
 
@@ -105,10 +111,3 @@
         padding-left: 14px;
     }
 }
-
-
-/* =========================================================
-   СОСТАВНЫЕ СТИЛИ
-   ========================================================= */
-
-@import url("./header.css");

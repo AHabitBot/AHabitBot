@@ -52,9 +52,9 @@
     );
 
     width: 100%;
-    min-height: 58px;
+    height: 38px;
 
-    padding: 4px;
+    padding: 3px;
 
     box-sizing: border-box;
 
@@ -65,7 +65,7 @@
             rgba(35, 36, 40, 0.08)
         );
 
-    border-radius: 18px;
+    border-radius: 14px;
 
     background: rgba(
         255,
@@ -75,7 +75,7 @@
     );
 
     box-shadow:
-        0 4px 14px rgba(35, 36, 40, 0.035);
+        0 3px 10px rgba(35, 36, 40, 0.035);
 }
 
 
@@ -88,18 +88,19 @@
     align-items: center;
     justify-content: center;
 
-    gap: 7px;
+    gap: 6px;
 
     width: 100%;
     min-width: 0;
-    min-height: 48px;
+    height: 30px;
 
-    padding: 0 8px;
+    margin: 0;
+    padding: 0 6px;
 
     box-sizing: border-box;
 
     border: none;
-    border-radius: 14px;
+    border-radius: 11px;
 
     color: var(
         --leaderboard-v2-muted,
@@ -117,7 +118,7 @@
         Arial,
         sans-serif;
 
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1;
     letter-spacing: -0.015em;
@@ -153,7 +154,7 @@
         );
 
     box-shadow:
-        0 2px 7px rgba(104, 120, 39, 0.07);
+        0 1px 5px rgba(104, 120, 39, 0.07);
 }
 
 
@@ -168,7 +169,7 @@
 
 .leaderboard-tabs__button--active:focus-visible {
     box-shadow:
-        0 2px 7px rgba(104, 120, 39, 0.07),
+        0 1px 5px rgba(104, 120, 39, 0.07),
         0 0 0 2px rgba(104, 120, 39, 0.16);
 }
 
@@ -178,28 +179,33 @@
    ========================================================= */
 
 .leaderboard-tabs__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
 
     flex: 0 0 auto;
 
-    width: 20px;
-    height: 20px;
+    /*
+     * Не ограничиваем символ жёсткой квадратной областью.
+     * Material Symbols получает достаточно места и не режется.
+     */
+    width: auto;
+    min-width: 18px;
+    height: auto;
 
-    overflow: hidden;
+    overflow: visible;
 
     color: currentColor;
 
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
     line-height: 1;
+
+    vertical-align: middle;
 
     font-variation-settings:
         "FILL" 0,
         "wght" 450,
         "GRAD" 0,
-        "opsz" 20;
+        "opsz" 18;
 }
 
 
@@ -224,26 +230,30 @@
 @media (max-width: 360px) {
     .leaderboard-header__title {
         margin-bottom: 11px;
-
         font-size: 26px;
     }
 
     .leaderboard-tabs {
-        min-height: 56px;
+        height: 36px;
+        padding: 3px;
     }
 
     .leaderboard-tabs__button {
-        gap: 6px;
-        min-height: 46px;
-        padding: 0 6px;
+        gap: 5px;
+        height: 28px;
+        padding: 0 4px;
 
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .leaderboard-tabs__icon {
-        width: 19px;
-        height: 19px;
+        min-width: 17px;
+        font-size: 17px;
 
-        font-size: 19px;
+        font-variation-settings:
+            "FILL" 0,
+            "wght" 450,
+            "GRAD" 0,
+            "opsz" 17;
     }
 }
