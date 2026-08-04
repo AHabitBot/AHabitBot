@@ -1,73 +1,89 @@
-/* =========================================================
-   LEADERBOARD COMPONENTS
-
-   Общие компоненты для:
-   - глобального рейтинга;
-   - сезонного рейтинга;
-   - рейтинга друзей.
-   ========================================================= */
+import {
+  getActiveLeaderboardTab,
+} from "./leaderboardStore.js";
 
 
-/* =========================================================
-   ШАПКА ЛИДЕРБОРДА
-   ========================================================= */
+function renderMaterialIcon(iconName) {
+  return `
+    <span
+      class="material-symbols-rounded leaderboard-tabs__icon"
+      aria-hidden="true"
+    >
+      ${iconName}
+    </span>
+  `;
+}
 
-export function renderLeaderboardHeader(
-    activeTab = "global"
-) {
-    return `
-        <header class="leaderboard-header">
 
-            <h1 class="leaderboard-header__title">
-                Лидерборд
-            </h1>
+export function renderLeaderboardHeader() {
+  const activeTab = getActiveLeaderboardTab();
 
-            <div
-                class="leaderboard-tabs"
-                role="tablist"
-                aria-label="Разделы лидерборда"
-            >
+  const isGlobalActive = activeTab === "global";
+  const isSeasonActive = activeTab === "season";
 
-                <button
-                    class="
-                        leaderboard-tabs__button
-                        ${
-                            activeTab === "global"
-                                ? "is-active"
-                                : ""
-                        }
-                    "
-                    type="button"
-                    role="tab"
-                    data-leaderboard-tab="global"
-                    aria-selected="${
-                        activeTab === "global"
-                    }"
-                >
-                    Глобальный
-                </button>
+  return `
+    <header class="leaderboard-header">
+      <h1 class="leaderboard-header__title">
+        Лидерборд
+      </h1>
 
-                <button
-                    class="
-                        leaderboard-tabs__button
-                        ${
-                            activeTab === "season"
-                                ? "is-active"
-                                : ""
-                        }
-                    "
-                    type="button"
-                    role="tab"
-                    data-leaderboard-tab="season"
-                    aria-selected="${
-                        activeTab === "season"
-                    }"
-                >
-                    Сезонный
-                </button>
+      <div
+        class="leaderboard-tabs"
+        role="tablist"
+        aria-label="Тип рейтинга"
+      >
+        <button
+          class="leaderboard-tabs__button ${
+            isGlobalActive
+              ? "leaderboard-tabs__button--active"
+              : ""
+          }"
+          type="button"
+          role="tab"
+          data-leaderboard-tab="global"
+          aria-selected="${isGlobalActive}"
+          tabindex="${isGlobalActive ? "0" : "-1"}"
+        >
+          ${renderMaterialIcon("public")}
 
-            </div>
+          <span class="leaderboard-tabs__label">
+            Глобальный
+          </span>
+        </button>
 
-        </header>
-    `;
+        <button
+          class="leaderboard-tabs__button ${
+            isSeasonActive
+              ? "leaderboard-tabs__button--active"
+              : ""
+          }"
+          type="button"
+          role="tab"
+          data-leaderboard-tab="season"
+          aria-selected="${isSeasonActive}"
+          tabindex="${isSeasonActive ? "0" : "-1"}"
+        >
+          ${renderMaterialIcon("calendar_month")}
+
+          <span class="leaderboard-tabs__label">
+            Сезонный
+          </span>
+        </button>
+      </div>
+    </header>
+  `;
+}
+
+
+export function renderLeaderboardContentShell() {
+  const activeTab = getActiveLeaderboardTab();
+
+  return `
+    <section
+      class="leaderboard-content"
+      data-leaderboard-content
+      data-active-tab="${activeTab}"
+      aria-live="polite"
+    ></section>
+  `;
 }

@@ -1,138 +1,109 @@
-import { canAccessLeaderboard } from "./leaderboardStore.js";
-import { renderLeaderboardHeader } from "./leaderboardComponents.js";
-import { renderGlobalLeaderboard } from "./global/globalLeaderboard.js";
+import {
+  canAccessLeaderboard,
+  getActiveLeaderboardTab,
+} from "./leaderboardStore.js";
+
+import {
+  renderLeaderboardHeader,
+  renderLeaderboardContentShell,
+} from "./leaderboardComponents.js";
+
+import {
+  initLeaderboardEvents,
+} from "./leaderboardEvents.js";
 
 
-/* =========================================================
-   LEADERBOARD MAIN
-
-   Главный контроллер страницы лидерборда.
-   ========================================================= */
+let leaderboardRoot = null;
+let destroyLeaderboardEvents = null;
 
 
-/* =========================================================
-   ПОЛУЧИТЬ КОРНЕВОЙ КОНТЕЙНЕР
-   ========================================================= */
-
-function getLeaderboardRoot() {
-    return document.getElementById(
-        "leaderboard-v2-root"
+export function openLeaderboardPage(root) {
+  if (!canAccessLeaderboard()) {
+    console.warn(
+      "Leaderboard is unavailable for this user"
     );
+
+    return false;
+  }
+
+  renderLeaderboardPage(root);
+
+  return true;
 }
 
 
-/* =========================================================
-   ОТРИСОВАТЬ СТРАНИЦУ
-   ========================================================= */
+export function renderLeaderboardPage(root) {
+  if (!root) {
+    console.error(
+      "Leaderboard: корневой контейнер не найден"
+    );
 
-function renderLeaderboardPage() {
-    const root =
-        getLeaderboardRoot();
+    return;
+  }
 
-    if (!root) {
-        console.error(
-            "Leaderboard: не найден #leaderboard-v2-root"
-        );
+  destroyLeaderboardPage();
 
-        return;
-    }
+  leaderboardRoot = root;
 
-    root.innerHTML = `
-        <section class="leaderboard-page">
+  leaderboardRoot.innerHTML = `
+    <main class="leaderboard-page">
+      ${renderLeaderboardHeader()}
+      ${renderLeaderboardContentShell()}
+    </main>
+  `;
 
-            ${renderLeaderboardHeader("global")}
+  renderActiveLeaderboardContent();
 
-            <main class="leaderboard-content">
-                ${renderGlobalLeaderboard()}
-            </main>
-
-        </section>
-    `;
+  destroyLeaderboardEvents = initLeaderboardEvents({
+    root: leaderboardRoot,
+    onTabChange: renderActiveLeaderboardContent,
+  });
 }
 
 
-/* =========================================================
-   СОБЫТИЯ ВКЛАДОК
-   ========================================================= */
+function renderActiveLeaderboardContent() {
+  if (!leaderboardRoot) {
+    return;
+  }
 
-function initLeaderboardTabs() {
-    const root =
-        getLeaderboardRoot()
+  const content = leaderboardRoot.querySelector(
+    "[data-leaderboard-content]"
+  );
 
-    if (!root) {
-        return
-    }
+  if (!content) {
+    console.error(
+      "Leaderboard: контейнер содержимого не найден"
+    );
 
-    const tabs =
-        root.querySelector(
-            ".leaderboard-tabs"
-        )
+    return;
+  }
 
-    const tabButtons =
-        root.querySelectorAll(
-            "[data-leaderboard-tab]"
-        )
+  const activeTab = getActiveLeaderboardTab();
 
-    if (!tabs || tabButtons.length === 0) {
-        return
-    }
+  content.dataset.activeTab = activeTab;
 
-    tabButtons.forEach((button) => {
-        button.addEventListener(
-            "click",
-            () => {
-                const selectedTab =
-                    button.dataset.leaderboardTab
+  /*
+   * Пока содержимое остаётся пустым.
+   *
+   * На следующем этапе здесь подключим:
+   *
+   * global/globalLeaderboard.js
+   * season/seasonLeaderboard.js
+   *
+   * Важно: при переключении вкладки будет обновляться
+   * только leaderboard-content.
+   * Хедер и вся страница заново не создаются.
+   */
 
-                if (!selectedTab) {
-                    return
-                }
-
-                tabButtons.forEach(
-                    (tabButton) => {
-                        const isActive =
-                            tabButton === button
-
-                        tabButton.classList.toggle(
-                            "is-active",
-                            isActive
-                        )
-
-                        tabButton.setAttribute(
-                            "aria-selected",
-                            String(isActive)
-                        )
-                    }
-                )
-
-                tabs.dataset.activeTab =
-                    selectedTab
-
-                /*
-                   Пока меняем только визуальное состояние.
-
-                   Контент остаётся глобальным.
-                   Сезонную страницу подключим позже.
-                */
-            }
-        )
-    })
+  content.innerHTML = "";
 }
 
 
-/* =========================================================
-   ОТКРЫТЬ ЛИДЕРБОРД
-   ========================================================= */
+export function destroyLeaderboardPage() {
+  if (typeof destroyLeaderboardEvents === "function") {
+    destroyLeaderboardEvents();
+  }
 
-export function openLeaderboardPage() {
-    if (!canAccessLeaderboard()) {
-        console.warn(
-            "Leaderboard is unavailable for this user"
-        );
-
-        return;
-    }
-
-    renderLeaderboardPage();
-    initLeaderboardTabs();
+  destroyLeaderboardEvents = null;
+  leaderboardRoot = null;
 }

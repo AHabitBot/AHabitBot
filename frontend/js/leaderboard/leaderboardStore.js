@@ -16,3 +16,23 @@ export function canAccessLeaderboard() {
   return telegramId !== null
     && LEADERBOARD_ALLOWED_USER_IDS.has(telegramId);
 }
+
+const leaderboardState = {
+  activeTab: "global",
+};
+
+export function getLeaderboardState() {
+  return leaderboardState;
+}
+
+export function getActiveLeaderboardTab() {
+  return leaderboardState.activeTab;
+}
+
+export function setActiveLeaderboardTab(tab) {
+  if (!["global", "season"].includes(tab)) {
+    return;
+  }
+
+  leaderboardState.activeTab = tab;
+}

@@ -1,0 +1,115 @@
+.leaderboard-page {
+  width: 100%;
+  min-height: 100%;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+.leaderboard-header {
+  width: 100%;
+}
+
+.leaderboard-header__title {
+  margin: 0 0 18px;
+  color: #111111;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.leaderboard-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  padding: 4px;
+  border: 1px solid rgba(26, 26, 26, 0.08);
+  border-radius: 18px;
+  background: #ffffff;
+  box-sizing: border-box;
+  box-shadow:
+    0 3px 12px rgba(20, 20, 20, 0.04);
+}
+
+.leaderboard-tabs__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-width: 0;
+  min-height: 52px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: #777781;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.leaderboard-tabs__button--active {
+  color: #66751f;
+  background: #f3f5e9;
+  box-shadow:
+    0 2px 8px rgba(89, 103, 31, 0.08);
+}
+
+.leaderboard-tabs__button:focus-visible {
+  box-shadow:
+    0 0 0 2px rgba(102, 117, 31, 0.18);
+}
+
+.leaderboard-tabs__button--active:focus-visible {
+  box-shadow:
+    0 2px 8px rgba(89, 103, 31, 0.08),
+    0 0 0 2px rgba(102, 117, 31, 0.18);
+}
+
+.leaderboard-tabs__icon {
+  flex: 0 0 auto;
+  width: 21px;
+  height: 21px;
+  color: currentColor;
+}
+
+.leaderboard-tabs__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard-content {
+  width: 100%;
+  margin-top: 20px;
+}
+
+@media (max-width: 360px) {
+  .leaderboard-page {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .leaderboard-header__title {
+    font-size: 27px;
+  }
+
+  .leaderboard-tabs__button {
+    gap: 7px;
+    padding: 0 8px;
+    font-size: 15px;
+  }
+
+  .leaderboard-tabs__icon {
+    width: 19px;
+    height: 19px;
+  }
+}
