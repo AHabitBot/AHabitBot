@@ -60,9 +60,7 @@ export function renderGlobalLeaderboard() {
             { rank: 11, name: "Никита", xp: "13 760", avatar: AVATAR },
             { rank: 12, name: "Ольга", xp: "13 420", avatar: AVATAR },
             { rank: 13, name: "Кирилл", xp: "13 010", avatar: AVATAR },
-
-            /* 14 место здесь не выводим */
-
+            { rank: 14, name: "Fhntv", xp: "12 680", avatar: AVATAR },
             { rank: 15, name: "Алина", xp: "12 310", avatar: AVATAR },
             { rank: 16, name: "Виктор", xp: "11 980", avatar: AVATAR },
             { rank: 17, name: "Дарья", xp: "11 540", avatar: AVATAR },

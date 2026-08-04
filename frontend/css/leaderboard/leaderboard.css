@@ -98,40 +98,54 @@
 }
 
 .leaderboard-scroll-area {
-
     position: absolute;
 
     top: 92px;
-    right: 16px;
+    right: 8px;
     bottom: calc(
         166px + env(safe-area-inset-bottom)
     );
     left: 16px;
 
-    overflow-y: auto;
-    overflow-x: hidden;
+    box-sizing: border-box;
 
+    /*
+     * Справа резервируем отдельную полосу.
+     * На телефоне скроллбар будет накладываться
+     * на пустое пространство, а не на карточки.
+     */
+    padding-right: 8px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
-    scrollbar-color: rgba(120,120,120,.35) transparent;
+    scrollbar-color:
+        rgba(120, 120, 120, 0.35)
+        transparent;
 
     -webkit-overflow-scrolling: touch;
-
 }
 
-.leaderboard-scroll-area::-webkit-scrollbar{
-    width:4px;
+
+.leaderboard-scroll-area::-webkit-scrollbar {
+    width: 4px;
 }
 
-.leaderboard-scroll-area::-webkit-scrollbar-track{
-    background:transparent;
+
+.leaderboard-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.leaderboard-scroll-area::-webkit-scrollbar-thumb{
 
-    background:rgba(120,120,120,.35);
+.leaderboard-scroll-area::-webkit-scrollbar-thumb {
+    min-height: 40px;
 
-    border-radius:999px;
+    border-radius: 999px;
 
+    background:
+        rgba(120, 120, 120, 0.35);
 }
 
 
@@ -141,7 +155,7 @@
 
 .leaderboard-content {
     width: 100%;
-    margin-top: 0px;
+    margin-top: 14px;
 }
 
 
@@ -149,5 +163,21 @@
     .leaderboard-page {
         padding-right: 14px;
         padding-left: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .leaderboard-scroll-area {
+        right: 4px;
+        left: 16px;
+
+        padding-right: 12px;
+
+        /*
+         * На iPhone системный scrollbar является overlay.
+         * Дополнительный padding не даёт ему заходить
+         * на Intro и список.
+         */
+        scrollbar-gutter: stable;
     }
 }
