@@ -93,16 +93,22 @@ export function renderLeaderboardHeader() {
    ========================================================= */
 
 export function renderLeaderboardContentShell() {
-
     const activeTab = getActiveLeaderboardTab();
 
     return `
-        <section
-            class="leaderboard-content"
-            data-leaderboard-content
-            data-active-tab="${activeTab}"
-            aria-live="polite"
-        ></section>
+        <div class="leaderboard-scroll-area">
+            <section
+                class="leaderboard-content"
+                data-leaderboard-content
+                data-active-tab="${activeTab}"
+                aria-live="polite"
+            ></section>
+        </div>
+
+        <div
+            class="leaderboard-current-user-slot"
+            data-leaderboard-current-user
+        ></div>
     `;
 }
 
@@ -190,6 +196,83 @@ export function renderTopThree(users = []) {
 
             `).join("")}
 
+        </section>
+    `;
+}
+
+
+
+export function renderLeaderboardList(users = []) {
+    return `
+        <section class="leaderboard-list">
+            ${users.map(user => `
+                <div class="leaderboard-list__row">
+                    <span class="leaderboard-list__rank">
+                        ${user.rank}
+                    </span>
+
+                    <img
+                        class="leaderboard-list__avatar"
+                        src="${user.avatar}"
+                        alt="${user.name}"
+                    >
+
+                    <span class="leaderboard-list__name">
+                        ${user.name}
+                    </span>
+
+                    <div class="leaderboard-list__xp">
+                        <span
+                            class="material-symbols-rounded
+                                   leaderboard-list__trophy"
+                            aria-hidden="true"
+                        >
+                            trophy
+                        </span>
+
+                        <span>${user.xp}</span>
+                        <span>XP</span>
+                    </div>
+                </div>
+            `).join("")}
+        </section>
+    `;
+}
+
+
+export function renderCurrentUser(user = null) {
+    if (!user) {
+        return "";
+    }
+
+    return `
+        <section class="leaderboard-current-user">
+            <span class="leaderboard-current-user__rank">
+                ${user.rank}
+            </span>
+
+            <img
+                class="leaderboard-current-user__avatar"
+                src="${user.avatar}"
+                alt="${user.name}"
+            >
+
+            <span class="leaderboard-current-user__name">
+                ${user.name}
+            </span>
+
+            <div class="leaderboard-current-user__xp">
+                <span
+                    class="material-symbols-rounded
+                           leaderboard-current-user__trophy"
+                    aria-hidden="true"
+                >
+                    trophy
+                </span>
+
+                <span>${user.xp}</span>
+                <span>XP</span>
+            </div>
         </section>
     `;
 }

@@ -2,6 +2,8 @@
 @import url("./leaderboardPage/header.css");
 @import url("./sectionIntro.css");
 @import url("./topThree.css");
+@import url("./leaderboardList.css");
+@import url("./currentUser.css");
 
 
 /* =========================================================
@@ -84,7 +86,6 @@
         calc(112px + env(safe-area-inset-bottom));
 
     overflow-x: hidden;
-    overflow-y: auto;
 
     background: transparent;
 
@@ -96,6 +97,43 @@
     display: none;
 }
 
+.leaderboard-scroll-area {
+
+    position: absolute;
+
+    top: 92px;
+    right: 16px;
+    bottom: calc(
+        166px + env(safe-area-inset-bottom)
+    );
+    left: 16px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(120,120,120,.35) transparent;
+
+    -webkit-overflow-scrolling: touch;
+
+}
+
+.leaderboard-scroll-area::-webkit-scrollbar{
+    width:4px;
+}
+
+.leaderboard-scroll-area::-webkit-scrollbar-track{
+    background:transparent;
+}
+
+.leaderboard-scroll-area::-webkit-scrollbar-thumb{
+
+    background:rgba(120,120,120,.35);
+
+    border-radius:999px;
+
+}
+
 
 /* =========================================================
    КОНТЕНТ ЛИДЕРБОРДА
@@ -103,7 +141,7 @@
 
 .leaderboard-content {
     width: 100%;
-    margin-top: 14px;
+    margin-top: 0px;
 }
 
 

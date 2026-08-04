@@ -1,0 +1,93 @@
+.leaderboard-current-user-slot {
+    position: absolute;
+    right: 16px;
+    bottom: calc(
+        94px + env(safe-area-inset-bottom)
+    );
+    left: 16px;
+
+    z-index: 40;
+}
+
+
+.leaderboard-current-user {
+    display: grid;
+    grid-template-columns:
+        34px
+        42px
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+    gap: 10px;
+
+    min-height: 62px;
+    padding: 6px 14px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid rgba(104, 120, 39, 0.08);
+
+    border-radius: 18px;
+
+    background: rgba(247, 248, 237, 0.97);
+
+    box-shadow:
+        0 8px 24px rgba(35, 36, 40, 0.09);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+.leaderboard-current-user__rank {
+    color: #687827;
+
+    font-size: 17px;
+    font-weight: 700;
+    text-align: center;
+}
+
+
+.leaderboard-current-user__avatar {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+
+.leaderboard-current-user__name {
+    color: #687827;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+.leaderboard-current-user__xp {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    color: #7135dc;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.leaderboard-current-user__trophy {
+    font-size: 19px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 550,
+        "GRAD" 0,
+        "opsz" 20;
+}
