@@ -57,35 +57,66 @@ function renderLeaderboardPage() {
 
 function initLeaderboardTabs() {
     const root =
-        getLeaderboardRoot();
+        getLeaderboardRoot()
 
     if (!root) {
-        return;
+        return
     }
+
+    const tabs =
+        root.querySelector(
+            ".leaderboard-tabs"
+        )
 
     const tabButtons =
         root.querySelectorAll(
             "[data-leaderboard-tab]"
-        );
+        )
+
+    if (!tabs || tabButtons.length === 0) {
+        return
+    }
 
     tabButtons.forEach((button) => {
         button.addEventListener(
             "click",
             () => {
-                const tab =
-                    button.dataset.leaderboardTab;
+                const selectedTab =
+                    button.dataset.leaderboardTab
+
+                if (!selectedTab) {
+                    return
+                }
+
+                tabButtons.forEach(
+                    (tabButton) => {
+                        const isActive =
+                            tabButton === button
+
+                        tabButton.classList.toggle(
+                            "is-active",
+                            isActive
+                        )
+
+                        tabButton.setAttribute(
+                            "aria-selected",
+                            String(isActive)
+                        )
+                    }
+                )
+
+                tabs.dataset.activeTab =
+                    selectedTab
 
                 /*
-                   Сезонный рейтинг реализуем
-                   после завершения глобального.
-                */
+                   Пока меняем только визуальное состояние.
 
-                if (tab !== "global") {
-                    return;
-                }
+                   Контент остаётся глобальным.
+                   Сезонную страницу подключим позже.
+                */
             }
-        );
-    });
+        )
+    })
 }
 
 
