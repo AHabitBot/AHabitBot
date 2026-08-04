@@ -65,7 +65,7 @@
 
     color: #24262B;
 
-    font-size: 32px;
+    font-size: 20px;
     font-weight: 720;
     line-height: 1.08;
     letter-spacing: -0.04em;
@@ -187,7 +187,7 @@
     background: transparent;
 
     font-family: inherit;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 620;
     line-height: 1;
     letter-spacing: -0.025em;
@@ -263,7 +263,7 @@
 
     width: 58%;
 
-    padding-top: 30px;
+    padding-top: 17px;
 }
 
 .leaderboard-intro__title {
@@ -275,7 +275,7 @@
     color: #24262B;
 
     font-size: 23px;
-    font-weight: 700;
+    font-weight: 650;
     line-height: 1.12;
     letter-spacing: -0.035em;
 }
@@ -285,7 +285,7 @@
 
     color: #686D76;
 
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 520;
     line-height: 1.48;
     letter-spacing: -0.015em;
