@@ -7,90 +7,198 @@
 
     left: 16px;
     right: 16px;
-    bottom: calc(16px + env(safe-area-inset-bottom));
+    bottom: calc(10px + env(safe-area-inset-bottom));
 
     display: flex;
-    align-items: center;
-
-    gap: 8px;
-
-    height: 84px;
-
-    padding: 8px;
-
-    background: #FFFFFF;
-
-    border: 1px solid rgba(0, 0, 0, 0.04);
-
-    border-radius: 28px;
-
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.08);
-
-    z-index: 1000;
-}
-
-.bottom-navigation__item {
-    flex: 1;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
 
     gap: 6px;
 
-    height: 100%;
+    height: 62px;
 
-    border: none;
-    outline: none;
+    padding: 5px;
 
-    background: transparent;
+    background: rgba(255, 255, 255, 0.96);
 
+    border: 1px solid rgba(28, 28, 30, 0.04);
     border-radius: 22px;
 
+    box-sizing: border-box;
+
+    box-shadow:
+        0 8px 24px rgba(30, 34, 40, 0.08),
+        0 2px 8px rgba(30, 34, 40, 0.04);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    z-index: 1000;
+}
+
+
+/* =====================================================
+   NAVIGATION ITEM
+===================================================== */
+
+.bottom-navigation__item {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 1px;
+
+    margin: 0;
+    padding: 3px 6px;
+
+    border: none;
+    border-radius: 17px;
+
+    background: transparent;
+    color: #929292;
+
+    font: inherit;
+
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+
+    -webkit-tap-highlight-color: transparent;
 
     transition:
-        background .25s ease,
-        color .25s ease,
-        transform .15s ease;
+        background-color 180ms ease,
+        color 180ms ease,
+        transform 120ms ease;
 }
 
-.bottom-navigation__item:active {
-    transform: scale(0.98);
-}
 
-.bottom-navigation__item.is-active {
-    background: #F3F4EC;
-}
+/* =====================================================
+   ICON
+===================================================== */
 
 .bottom-navigation__icon {
-    font-size: 28px;
+    display: block;
 
-    color: #A6A88B;
-
-    transition: color .25s ease;
-}
-
-.bottom-navigation__label {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 22px;
     line-height: 1;
 
-    color: #8E8E93;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 24;
 
-    transition: color .25s ease;
+    color: currentColor;
+
+    transition:
+        color 180ms ease,
+        font-variation-settings 180ms ease;
+}
+
+
+/* =====================================================
+   LABEL
+===================================================== */
+
+.bottom-navigation__label {
+    display: block;
+
+    max-width: 100%;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.15;
+
+    color: currentColor;
 
     user-select: none;
+    -webkit-user-select: none;
 }
 
-.bottom-navigation__item.is-active
-.bottom-navigation__icon {
-    color: #74764E;
+
+/* =====================================================
+   ACTIVE ITEM
+===================================================== */
+
+.bottom-navigation__item.is-active {
+    background: #F2F2E9;
+    color: #77774C;
 }
 
-.bottom-navigation__item.is-active
-.bottom-navigation__label {
-    color: #74764E;
+.bottom-navigation__item.is-active .bottom-navigation__icon {
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 550,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+
+/* =====================================================
+   INTERACTION
+===================================================== */
+
+.bottom-navigation__item:active {
+    transform: scale(0.975);
+}
+
+.bottom-navigation__item:focus {
+    outline: none;
+}
+
+.bottom-navigation__item:focus-visible {
+    outline: 2px solid rgba(119, 119, 76, 0.28);
+    outline-offset: -2px;
+}
+
+
+/* =====================================================
+   PAGE SPACE UNDER FIXED NAVIGATION
+===================================================== */
+
+.page-content {
+    padding-bottom:
+        calc(84px + env(safe-area-inset-bottom));
+}
+
+
+/* =====================================================
+   SMALL SCREENS
+===================================================== */
+
+@media (max-width: 360px) {
+    .bottom-navigation {
+        left: 12px;
+        right: 12px;
+
+        height: 58px;
+
+        padding: 4px;
+        border-radius: 20px;
+    }
+
+    .bottom-navigation__item {
+        border-radius: 16px;
+    }
+
+    .bottom-navigation__icon {
+        font-size: 21px;
+    }
+
+    .bottom-navigation__label {
+        font-size: 11px;
+    }
+
+    .page-content {
+        padding-bottom:
+            calc(78px + env(safe-area-inset-bottom));
+    }
 }
