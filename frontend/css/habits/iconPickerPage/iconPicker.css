@@ -104,7 +104,6 @@
    СКРЫВАЕМ НИЖНЮЮ НАВИГАЦИЮ
    ========================================================= */
 
-body:has(.habit-icon-picker) .bottom-nav {
+body:has(.habit-icon-picker) .bottom-navigation {
     display: none !important;
 }
-

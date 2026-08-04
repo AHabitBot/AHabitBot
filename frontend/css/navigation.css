@@ -1,10 +1,11 @@
 /* =========================================================
    НИЖНЯЯ НАВИГАЦИЯ
+   Стиль основан на кнопке «Выбрать»
    ========================================================= */
 
 .bottom-navigation {
     position: fixed;
-    z-index: 1000;
+    z-index: 900;
 
     left: 16px;
     right: 16px;
@@ -13,7 +14,7 @@
     height: 62px;
 
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 6px;
 
     box-sizing: border-box;
@@ -22,20 +23,20 @@
 
     border:
         1px solid
-        rgba(57, 60, 66, 0.06);
+        rgba(50, 53, 59, 0.11);
 
-    border-radius: 22px;
+    border-radius: 25px;
 
     background:
-        rgba(255, 255, 255, 0.96);
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.99) 0%,
+            rgba(252, 252, 253, 0.99) 100%
+        );
 
     box-shadow:
-        0 10px 26px rgba(42, 51, 70, 0.075),
-        0 3px 9px rgba(42, 51, 70, 0.04),
-        inset 0 1px 0 rgba(255, 255, 255, 0.96);
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+        0 4px 16px rgba(31, 38, 49, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 1);
 
     font-family:
         -apple-system,
@@ -48,6 +49,10 @@
 
     -webkit-font-smoothing: antialiased;
     text-rendering: geometricPrecision;
+
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease;
 }
 
 
@@ -61,17 +66,17 @@
     height: 100%;
 
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 8px;
 
-    gap: 2px;
+    box-sizing: border-box;
 
     margin: 0;
-    padding: 3px 6px;
+    padding: 0 10px;
 
-    border: none;
-    border-radius: 17px;
+    border: 1px solid transparent;
+    border-radius: 20px;
     outline: none;
 
     color: #92959d;
@@ -89,8 +94,10 @@
     touch-action: manipulation;
 
     transition:
-        transform 100ms ease,
+        transform 90ms ease,
+        opacity 90ms ease,
         color 160ms ease,
+        border-color 160ms ease,
         background 160ms ease,
         box-shadow 160ms ease;
 }
@@ -101,7 +108,9 @@
    ========================================================= */
 
 .bottom-navigation__icon {
-    display: flex;
+    flex: 0 0 auto;
+
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 
@@ -131,7 +140,6 @@
 
 .bottom-navigation__label {
     min-width: 0;
-    max-width: 100%;
 
     overflow: hidden;
     white-space: nowrap;
@@ -147,10 +155,10 @@
         Arial,
         sans-serif;
 
-    font-size: 12px;
-    font-weight: 550;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.025em;
 
     -webkit-font-smoothing: antialiased;
     text-rendering: geometricPrecision;
@@ -159,20 +167,25 @@
 
 /* =========================================================
    АКТИВНЫЙ РАЗДЕЛ
+   Повторяет характер кнопки «Выбрать»
    ========================================================= */
 
 .bottom-navigation__item.is-active {
     color: #74764e;
 
+    border-color:
+        rgba(50, 53, 59, 0.07);
+
     background:
         linear-gradient(
-            145deg,
-            rgba(246, 246, 237, 0.98) 0%,
-            rgba(240, 241, 229, 0.96) 100%
+            180deg,
+            rgba(248, 248, 240, 0.99) 0%,
+            rgba(242, 243, 232, 0.99) 100%
         );
 
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+        0 4px 16px rgba(31, 38, 49, 0.055),
+        inset 0 1px 1px rgba(255, 255, 255, 1);
 }
 
 .bottom-navigation__item.is-active
@@ -186,16 +199,23 @@
 
 .bottom-navigation__item.is-active
 .bottom-navigation__label {
-    font-weight: 600;
+    font-weight: 650;
 }
 
 
 /* =========================================================
-   НАЖАТИЕ И ФОКУС
+   НАЖАТИЕ
+   Как у кнопки «Выбрать»
    ========================================================= */
 
-.bottom-navigation__item:active {
-    transform: scale(0.97);
+.bottom-navigation__item:active,
+.bottom-navigation__item.is-pressed {
+    transform: scale(0.98);
+    opacity: 0.78;
+
+    box-shadow:
+        0 2px 8px rgba(31, 38, 49, 0.045),
+        inset 0 2px 4px rgba(31, 38, 49, 0.025);
 }
 
 .bottom-navigation__item:focus {
@@ -203,21 +223,43 @@
 }
 
 .bottom-navigation__item:focus-visible {
-    outline:
-        2px solid
-        rgba(116, 118, 78, 0.22);
-
-    outline-offset: -2px;
+    box-shadow:
+        0 0 0 3px rgba(116, 118, 78, 0.12);
 }
 
 
 /* =========================================================
-   ОТСТУП СТРАНИЦЫ ПОД НАВИГАЦИЮ
+   ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ КОНТЕНТА
    ========================================================= */
 
 .page-content {
+    opacity: 1;
+    transform: translateY(0);
+
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+
+    will-change:
+        opacity,
+        transform;
+}
+
+.page-content.is-navigation-leaving {
+    opacity: 0;
+    transform: translateY(5px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   ОТСТУП ПОД ЗАКРЕПЛЁННУЮ НАВИГАЦИЮ
+   ========================================================= */
+
+.habits-v2-list {
     padding-bottom:
-        calc(84px + env(safe-area-inset-bottom));
+        calc(92px + env(safe-area-inset-bottom));
 }
 
 
@@ -235,11 +277,15 @@
 
         padding: 4px;
 
-        border-radius: 20px;
+        border-radius: 22px;
     }
 
     .bottom-navigation__item {
-        border-radius: 16px;
+        gap: 6px;
+
+        padding: 0 8px;
+
+        border-radius: 18px;
     }
 
     .bottom-navigation__icon {
@@ -250,17 +296,25 @@
     }
 
     .bottom-navigation__label {
-        font-size: 11px;
-        font-weight: 550;
+        font-size: 13px;
     }
 
-    .bottom-navigation__item.is-active
-    .bottom-navigation__label {
-        font-weight: 600;
-    }
-
-    .page-content {
+    .habits-v2-list {
         padding-bottom:
-            calc(78px + env(safe-area-inset-bottom));
+            calc(86px + env(safe-area-inset-bottom));
+    }
+}
+
+
+/* =========================================================
+   УМЕНЬШЕННАЯ АНИМАЦИЯ
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .bottom-navigation,
+    .bottom-navigation__item,
+    .page-content {
+        transition: none;
     }
 }

@@ -138,29 +138,70 @@ function bindBottomNavigationEvents() {
  * @param {MouseEvent} event
  */
 function handleNavigationClick(event) {
-  const button = event.target.closest("[data-navigation-page]");
+    const button =
+        event.target.closest(
+            "[data-navigation-page]"
+        );
 
-  if (!button) {
-    return;
-  }
+    if (!button) {
+        return;
+    }
 
-  const page = button.dataset.navigationPage;
+    const page =
+        button.dataset.navigationPage;
 
-  if (!page) {
-    return;
-  }
+    if (!page) {
+        return;
+    }
 
-  if (page === "leaderboard" && !canAccessLeaderboard()) {
-    return;
-  }
+    if (
+        button.classList.contains(
+            "is-active"
+        )
+    ) {
+        return;
+    }
 
-  setActiveNavigationPage(page);
+    if (
+        page === "leaderboard"
+        && !canAccessLeaderboard()
+    ) {
+        return;
+    }
 
-  document.dispatchEvent(
-    new CustomEvent("app:navigate", {
-      detail: {
-        page,
-      },
-    })
-  );
+    const activeContent =
+        document.querySelector(
+            ".page.active .page-content"
+        );
+
+    button.classList.add(
+        "is-pressed"
+    );
+
+    activeContent?.classList.add(
+        "is-navigation-leaving"
+    );
+
+    window.setTimeout(() => {
+        setActiveNavigationPage(page);
+
+        document.dispatchEvent(
+            new CustomEvent(
+                "app:navigate",
+                {
+                    detail: {
+                        page,
+                    },
+                }
+            )
+        );
+
+        button.classList.remove(
+            "is-pressed"
+        );
+
+        activeContent?.classList.remove(
+            "is-navigation-leaving"
+        );
+    }, 180);
 }
