@@ -10,13 +10,30 @@
 }
 
 .leaderboard-header__title {
-  margin: 0 0 18px;
-  color: #111111;
-  font-size: 30px;
-  font-weight: 700;
-  line-height: 1.2;
-  text-align: center;
+    margin: 0 0 18px;
+
+    color: #232428;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.045em;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+
+    text-align: center;
 }
+
 
 .leaderboard-tabs {
   display: grid;
@@ -43,7 +60,18 @@
   border-radius: 14px;
   background: transparent;
   color: #777781;
-  font: inherit;
+  font-family:
+       -apple-system,
+       BlinkMacSystemFont,
+       "SF Pro Display",
+       "SF Pro Text",
+       Inter,
+       Arial,
+       sans-serif;
+
+   -webkit-font-smoothing: antialiased;
+   text-rendering: geometricPrecision;
+
   font-size: 16px;
   font-weight: 500;
   line-height: 1;
