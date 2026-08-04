@@ -1,0 +1,135 @@
+/* =========================================================
+   TOP 3
+   ========================================================= */
+
+.leaderboard-top-three{
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-top:18px;
+
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.leaderboard-top-card{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:flex-start;
+
+    padding:18px 10px;
+
+    border-radius:18px;
+
+    border:1px solid rgba(35,36,40,.06);
+
+    background:#ffffff;
+
+    box-shadow:
+        0 4px 14px rgba(35,36,40,.025);
+
+}
+
+
+.leaderboard-top-card--1{
+
+    height:170px;
+
+    background:#F8F8F0;
+
+}
+
+
+.leaderboard-top-card--2,
+
+.leaderboard-top-card--3{
+
+    height:150px;
+
+    margin-bottom:18px;
+
+}
+
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.leaderboard-top-card__avatar{
+
+    width:74px;
+
+    height:74px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+
+/* =========================================================
+   NAME
+   ========================================================= */
+
+.leaderboard-top-card__name{
+
+    margin-top:14px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    color:#232428;
+
+    text-align:center;
+
+}
+
+
+/* =========================================================
+   XP
+   ========================================================= */
+
+.leaderboard-top-card__xp{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:4px;
+
+    margin-top:auto;
+
+    color:#6F32D2;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+
+.leaderboard-top-card__xp .material-symbols-rounded{
+
+    font-size:18px;
+
+}

@@ -1,18 +1,22 @@
 import {
-    renderSectionIntro
-} from "./leaderboardComponents.js"
+    renderSectionIntro,
+    renderTopThree
+} from "./leaderboardComponents.js";
 
 
 export function renderLeaderboardSection({
-    intro
+    intro,
+    topUsers = []
 }) {
-    if (!intro) {
-        return ""
-    }
 
     return `
         <div class="leaderboard-section">
+
             ${renderSectionIntro(intro)}
+
+            ${renderTopThree(topUsers)}
+
         </div>
-    `
+    `;
+
 }
