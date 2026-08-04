@@ -6,7 +6,7 @@
     position: relative;
 
     width: 100%;
-    min-height: 150px;
+    min-height: 136px;
 
     box-sizing: border-box;
     overflow: hidden;
@@ -64,10 +64,10 @@
     box-sizing: border-box;
 
     padding:
-        20px
+        18px
         0
-        20px
-        20px;
+        18px
+        18px;
 }
 
 
@@ -92,9 +92,9 @@
         Arial,
         sans-serif;
 
-    font-size: 21px;
+    font-size: 18px;
     font-weight: 650;
-    line-height: 1.15;
+    line-height: 1.12;
     letter-spacing: -0.035em;
 
     -webkit-font-smoothing: antialiased;
@@ -120,9 +120,9 @@
         Arial,
         sans-serif;
 
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 450;
-    line-height: 1.45;
+    line-height: 1.35;
     letter-spacing: -0.015em;
 
     -webkit-font-smoothing: antialiased;
