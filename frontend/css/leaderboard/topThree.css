@@ -397,7 +397,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 3px;
 
     margin-top: 10px;
 
@@ -425,14 +425,9 @@
    ========================================================= */
 
 .leaderboard-top-card__streak-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
 
     flex: 0 0 auto;
-
-    width: 19px;
-    height: 19px;
 
     overflow: visible;
 
@@ -576,9 +571,6 @@
     }
 
     .leaderboard-top-card__streak-icon {
-        width: 17px;
-        height: 17px;
-
         font-size: 17px;
     }
 }
@@ -672,9 +664,6 @@
     }
 
     .leaderboard-top-card__streak-icon {
-        width: 15px;
-        height: 15px;
-
         font-size: 15px;
     }
 }
