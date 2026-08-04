@@ -3,6 +3,10 @@ import {
 } from "./leaderboardStore.js";
 
 
+/* =========================================================
+   MATERIAL ICON
+   ========================================================= */
+
 function renderMaterialIcon(
     iconName,
     className = ""
@@ -167,15 +171,18 @@ export function renderTopThree(users = []) {
                         <img
                             class="leaderboard-top-card__avatar"
                             src="${user.avatar}"
-                            alt="${user.name}"
+                            alt="${escapeHtml(user.name)}"
                         >
                     </div>
 
                     <div class="leaderboard-top-card__name">
-                        ${user.name}
+                        ${escapeHtml(user.name)}
                     </div>
 
-                    <div class="leaderboard-top-card__xp">
+                    <div
+                        class="leaderboard-top-card__xp"
+                        aria-label="${user.xp} очков опыта"
+                    >
                         ${renderMaterialIcon(
                             "award_star",
                             "leaderboard-top-card__xp-icon"
@@ -204,7 +211,7 @@ export function renderTopThree(users = []) {
 
 
 /* =========================================================
-   LEADERBOARD LIST
+   LEADERBOARD LIST — МЕСТА 4–100
    ========================================================= */
 
 export function renderLeaderboardList(users = []) {
@@ -218,7 +225,8 @@ export function renderLeaderboardList(users = []) {
             aria-label="Участники рейтинга"
         >
             ${users.map((user) => `
-                <div class="leaderboard-list__row">
+                <article class="leaderboard-list__row">
+
                     <span class="leaderboard-list__rank">
                         ${user.rank}
                     </span>
@@ -226,22 +234,43 @@ export function renderLeaderboardList(users = []) {
                     <img
                         class="leaderboard-list__avatar"
                         src="${user.avatar}"
-                        alt="${user.name}"
+                        alt="${escapeHtml(user.name)}"
                     >
 
-                    <span class="leaderboard-list__name">
-                        ${user.name}
-                    </span>
+                    <div class="leaderboard-list__info">
 
-                    <div class="leaderboard-list__xp">
+                        <span class="leaderboard-list__name">
+                            ${escapeHtml(user.name)}
+                        </span>
+
+                        <div class="leaderboard-list__streak">
+                            ${renderMaterialIcon(
+                                "local_fire_department",
+                                "leaderboard-list__streak-icon"
+                            )}
+
+                            <span class="leaderboard-list__streak-value">
+                                ${formatStreak(user.streak)}
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="leaderboard-list__xp"
+                        aria-label="${user.xp} очков опыта"
+                    >
                         ${renderMaterialIcon(
                             "award_star",
-                            "leaderboard-list__trophy"
+                            "leaderboard-list__xp-icon"
                         )}
 
-                        <span>${user.xp}</span>
+                        <span class="leaderboard-list__xp-value">
+                            ${user.xp}
+                        </span>
                     </div>
-                </div>
+
+                </article>
             `).join("")}
         </section>
     `;
@@ -269,20 +298,40 @@ export function renderCurrentUser(user = null) {
             <img
                 class="leaderboard-current-user__avatar"
                 src="${user.avatar}"
-                alt="${user.name}"
+                alt="${escapeHtml(user.name)}"
             >
 
-            <span class="leaderboard-current-user__name">
-                ${user.name}
-            </span>
+            <div class="leaderboard-current-user__info">
 
-            <div class="leaderboard-current-user__xp">
+                <span class="leaderboard-current-user__name">
+                    ${escapeHtml(user.name)}
+                </span>
+
+                <div class="leaderboard-current-user__streak">
+                    ${renderMaterialIcon(
+                        "local_fire_department",
+                        "leaderboard-current-user__streak-icon"
+                    )}
+
+                    <span class="leaderboard-current-user__streak-value">
+                        ${formatStreak(user.streak)}
+                    </span>
+                </div>
+
+            </div>
+
+            <div
+                class="leaderboard-current-user__xp"
+                aria-label="${user.xp} очков опыта"
+            >
                 ${renderMaterialIcon(
                     "award_star",
-                    "leaderboard-current-user__trophy"
+                    "leaderboard-current-user__xp-icon"
                 )}
 
-                <span>${user.xp}</span>
+                <span class="leaderboard-current-user__xp-value">
+                    ${user.xp}
+                </span>
             </div>
         </section>
     `;
@@ -294,9 +343,12 @@ export function renderCurrentUser(user = null) {
    ========================================================= */
 
 function formatStreak(value) {
+    const numericValue =
+        Number(value);
+
     const streak =
-        Number.isFinite(Number(value))
-            ? Math.max(0, Number(value))
+        Number.isFinite(numericValue)
+            ? Math.max(0, Math.floor(numericValue))
             : 0;
 
     const lastTwoDigits =
@@ -324,4 +376,18 @@ function formatStreak(value) {
     }
 
     return `${streak} дней`;
+}
+
+
+/* =========================================================
+   SAFE TEXT
+   ========================================================= */
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }

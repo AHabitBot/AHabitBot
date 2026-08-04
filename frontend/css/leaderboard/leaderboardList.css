@@ -1,32 +1,50 @@
+/* =========================================================
+   LEADERBOARD — LIST 4–100
+   ========================================================= */
+
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
 .leaderboard-list {
     width: 100%;
-    margin-top: 16px;
+    margin-top: 14px;
 
     overflow: hidden;
 
-    border: 1px solid rgba(35, 36, 40, 0.06);
+    box-sizing: border-box;
+
+    border: 1px solid rgba(35, 36, 40, 0.07);
     border-radius: 18px;
 
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 255, 255, 0.98);
 
     box-shadow:
         0 4px 14px rgba(35, 36, 40, 0.025);
 }
 
 
+/* =========================================================
+   ROW
+   ========================================================= */
+
 .leaderboard-list__row {
     display: grid;
     grid-template-columns:
-        28px
-        38px
+        26px
+        42px
         minmax(0, 1fr)
         auto;
 
     align-items: center;
-    gap: 10px;
+    column-gap: 10px;
 
-    min-height: 58px;
-    padding: 0 14px;
+    min-height: 64px;
+
+    padding:
+        7px
+        14px;
 
     box-sizing: border-box;
 
@@ -40,60 +58,378 @@
 }
 
 
-.leaderboard-list__rank {
-    color: #737680;
+/* =========================================================
+   RANK
+   ========================================================= */
 
-    font-size: 14px;
-    font-weight: 600;
+.leaderboard-list__rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+
+    color: #292b30;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1;
+
     text-align: center;
+
+    -webkit-font-smoothing: antialiased;
 }
 
 
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
 .leaderboard-list__avatar {
-    width: 34px;
-    height: 34px;
+    display: block;
+
+    width: 40px;
+    height: 40px;
 
     border-radius: 50%;
 
     object-fit: cover;
+    object-position: center;
+
+    background: #f2f3f5;
 }
 
 
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.leaderboard-list__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   NAME
+   ========================================================= */
+
 .leaderboard-list__name {
+    display: block;
+
     min-width: 0;
 
     overflow: hidden;
 
-    color: #232428;
+    color: #202126;
 
-    font-size: 14px;
-    font-weight: 600;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================================================
+   STREAK
+   ========================================================= */
+
+.leaderboard-list__streak {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    min-width: 0;
+
+    margin-top: 4px;
+
+    color: #3caf55;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 550;
+    line-height: 1;
+
+    white-space: nowrap;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+.leaderboard-list__streak-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    width: 16px;
+    height: 16px;
+
+    overflow: visible;
+
+    color: currentColor;
+
+    font-size: 16px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 600,
+        "GRAD" 0,
+        "opsz" 18;
+}
+
+
+.leaderboard-list__streak-value {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: currentColor;
 
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 
+/* =========================================================
+   XP
+   ========================================================= */
+
 .leaderboard-list__xp {
     display: flex;
     align-items: center;
-    gap: 3px;
+    justify-content: flex-end;
+    gap: 5px;
 
-    color: #7135dc;
+    min-width: max-content;
 
-    font-size: 13px;
-    font-weight: 600;
+    color: #8b8e98;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
 
     white-space: nowrap;
+
+    -webkit-font-smoothing: antialiased;
 }
 
 
-.leaderboard-list__trophy {
-    font-size: 17px;
+.leaderboard-list__xp-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    width: 18px;
+    height: 18px;
+
+    overflow: visible;
+
+    color: #f4b814;
+
+    font-size: 18px;
+    line-height: 1;
 
     font-variation-settings:
-        "FILL" 0,
-        "wght" 500,
+        "FILL" 1,
+        "wght" 600,
         "GRAD" 0,
         "opsz" 18;
+}
+
+
+.leaderboard-list__xp-value {
+    color: #8b8e98;
+}
+
+
+/* =========================================================
+   HOVER / ACTIVE
+   ========================================================= */
+
+@media (hover: hover) {
+    .leaderboard-list__row:hover {
+        background:
+            rgba(248, 249, 251, 0.72);
+    }
+}
+
+
+.leaderboard-list__row:active {
+    background:
+        rgba(246, 247, 249, 0.9);
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 380px) {
+    .leaderboard-list {
+        margin-top: 12px;
+        border-radius: 17px;
+    }
+
+    .leaderboard-list__row {
+        grid-template-columns:
+            24px
+            38px
+            minmax(0, 1fr)
+            auto;
+
+        column-gap: 8px;
+
+        min-height: 60px;
+
+        padding:
+            6px
+            11px;
+    }
+
+    .leaderboard-list__rank {
+        font-size: 14px;
+    }
+
+    .leaderboard-list__avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .leaderboard-list__name {
+        font-size: 14px;
+    }
+
+    .leaderboard-list__streak {
+        margin-top: 3px;
+
+        font-size: 11px;
+    }
+
+    .leaderboard-list__streak-icon {
+        width: 15px;
+        height: 15px;
+
+        font-size: 15px;
+    }
+
+    .leaderboard-list__xp {
+        gap: 4px;
+
+        font-size: 13px;
+    }
+
+    .leaderboard-list__xp-icon {
+        width: 17px;
+        height: 17px;
+
+        font-size: 17px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 340px) {
+    .leaderboard-list__row {
+        grid-template-columns:
+            22px
+            34px
+            minmax(0, 1fr)
+            auto;
+
+        column-gap: 7px;
+
+        min-height: 56px;
+
+        padding:
+            5px
+            9px;
+    }
+
+    .leaderboard-list__rank {
+        font-size: 13px;
+    }
+
+    .leaderboard-list__avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .leaderboard-list__name {
+        font-size: 13px;
+    }
+
+    .leaderboard-list__streak {
+        font-size: 10px;
+    }
+
+    .leaderboard-list__streak-icon {
+        width: 14px;
+        height: 14px;
+
+        font-size: 14px;
+    }
+
+    .leaderboard-list__xp {
+        gap: 3px;
+
+        font-size: 12px;
+    }
+
+    .leaderboard-list__xp-icon {
+        width: 16px;
+        height: 16px;
+
+        font-size: 16px;
+    }
 }
