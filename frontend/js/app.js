@@ -2,7 +2,14 @@ import {
     initHabitsEvents
 } from "./habits/habitsMain.js"
 
-import { mountBottomNavigation } from "./navigation.js"
+import {
+    openLeaderboardPage
+} from "./leaderboard/leaderboardMain.js"
+
+import {
+    mountBottomNavigation,
+    setActiveNavigationPage
+} from "./navigation.js"
 
 
 function initTelegramWebApp() {
@@ -22,6 +29,59 @@ function initTelegramWebApp() {
 
     window.initData =
         telegram.initData
+}
+
+
+function handleNavigation(event) {
+    const page =
+        event.detail?.page
+
+    const habitsPage =
+        document.getElementById(
+            "habits-v2-page"
+        )
+
+    const leaderboardPage =
+        document.getElementById(
+            "leaderboard-v2-page"
+        )
+
+    const leaderboardRoot =
+        document.getElementById(
+            "leaderboard-v2-root"
+        )
+
+
+    if (page === "leaderboard") {
+        habitsPage.hidden = true
+        habitsPage.classList.remove("active")
+
+        leaderboardPage.hidden = false
+        leaderboardPage.classList.add("active")
+
+        openLeaderboardPage(
+            leaderboardRoot
+        )
+
+        setActiveNavigationPage(
+            "leaderboard"
+        )
+
+        return
+    }
+
+
+    if (page === "habits") {
+        leaderboardPage.hidden = true
+        leaderboardPage.classList.remove("active")
+
+        habitsPage.hidden = false
+        habitsPage.classList.add("active")
+
+        setActiveNavigationPage(
+            "habits"
+        )
+    }
 }
 
 
@@ -55,6 +115,11 @@ function initV2() {
     initTelegramWebApp()
     initHabitsEvents()
     mountBottomNavigation("habits")
+
+    document.addEventListener(
+        "app:navigate",
+        handleNavigation
+    )
 }
 
 
