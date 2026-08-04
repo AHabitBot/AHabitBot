@@ -41,7 +41,7 @@
     height: 216px;
 
     padding:
-        34px
+        20px
         7px
         14px;
 
@@ -68,7 +68,7 @@
 
     height: 246px;
 
-    padding-top: 36px;
+    padding-top: 22px;
 
     border-color: rgba(229, 178, 25, 0.55);
 
@@ -122,11 +122,8 @@
 
 .leaderboard-top-card__crown {
     position: absolute;
-
+    top: 0;
     left: 50%;
-    top: -20px;
-
-    transform: translate(-50%, -50%);
 
     display: flex;
     align-items: center;
@@ -134,6 +131,8 @@
 
     width: 44px;
     height: 44px;
+
+    transform: translate(-50%, -50%);
 
     z-index: 10;
 
@@ -146,21 +145,15 @@
    ========================================================= */
 
 .leaderboard-top-card__crown-icon {
-    position: absolute;
-    inset: 0;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 100%;
-    height: 100%;
-
     overflow: visible;
 
     color: currentColor;
 
-    font-size: 54px;
     line-height: 1;
 
     font-variation-settings:
@@ -505,32 +498,35 @@
         padding-top: 24px;
     }
 
-    .leaderboard-top-card {
-        height: 204px;
+.leaderboard-top-card {
+    height: 204px;
 
-        padding:
-            31px
-            5px
-            13px;
+    padding:
+        18px
+        5px
+        13px;
 
-        border-radius: 17px;
-    }
+    border-radius: 17px;
+}
 
-    .leaderboard-top-card--1 {
-        height: 232px;
-        padding-top: 33px;
-    }
+.leaderboard-top-card--1 {
+    height: 232px;
+    padding-top: 20px;
+}
 
-    .leaderboard-top-card__crown {
-        top: -23px;
+.leaderboard-top-card__crown {
+    top: 0;
 
-        width: 50px;
-        height: 50px;
-    }
+    width: 42px;
+    height: 42px;
+}
 
-    .leaderboard-top-card__crown-icon {
-        font-size: 50px;
-    }
+.leaderboard-top-card__crown-icon {
+    width: 42px;
+    height: 42px;
+
+    font-size: 42px;
+}
 
     .leaderboard-top-card__avatar-wrap {
         width: 78px;
@@ -598,33 +594,35 @@
         padding-top: 22px;
     }
 
-    .leaderboard-top-card {
-        height: 194px;
+.leaderboard-top-card {
+    height: 194px;
 
-        padding:
-            29px
-            4px
-            11px;
+    padding:
+        16px
+        4px
+        11px;
 
-        border-radius: 15px;
-    }
+    border-radius: 15px;
+}
 
-    .leaderboard-top-card--1 {
-        height: 220px;
-        padding-top: 31px;
-    }
+.leaderboard-top-card--1 {
+    height: 220px;
+    padding-top: 18px;
+}
 
-    .leaderboard-top-card__crown {
-        top: -21px;
+.leaderboard-top-card__crown {
+    top: 0;
 
-        width: 46px;
-        height: 46px;
-    }
+    width: 40px;
+    height: 40px;
+}
 
-    .leaderboard-top-card__crown-icon {
-        font-size: 46px;
-    }
+.leaderboard-top-card__crown-icon {
+    width: 40px;
+    height: 40px;
 
+    font-size: 40px;
+}
 
     .leaderboard-top-card__avatar-wrap {
         width: 70px;
