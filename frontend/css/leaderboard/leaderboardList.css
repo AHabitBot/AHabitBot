@@ -162,7 +162,7 @@
 
 .leaderboard-list__streak {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 3px;
 
     min-width: 0;
@@ -207,8 +207,6 @@
     font-size: 16px;
     line-height: 1;
 
-    transform: translateY(-1px);
-
     font-variation-settings:
         "FILL" 1,
         "wght" 600,
@@ -226,6 +224,8 @@
 
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    transform: translateY(1px);
 }
 
 
