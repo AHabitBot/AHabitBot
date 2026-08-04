@@ -1,15 +1,55 @@
 /* =========================================================
+   ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ КОНТЕНТА
+
+   Отдельный слой поверх прокручиваемого контента.
+   Повторяет принцип нижней области в выборе иконки.
+   ========================================================= */
+
+.bottom-navigation-fade {
+    position: fixed;
+    z-index: 899;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height:
+        calc(
+            138px +
+            env(safe-area-inset-bottom)
+        );
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(248, 249, 251, 0) 0%,
+            rgba(248, 249, 251, 0.15) 18%,
+            rgba(248, 249, 251, 0.42) 38%,
+            rgba(248, 249, 251, 0.76) 58%,
+            rgba(248, 249, 251, 0.95) 76%,
+            rgba(248, 249, 251, 1) 90%,
+            rgba(248, 249, 251, 1) 100%
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
    НИЖНЯЯ НАВИГАЦИЯ
    ========================================================= */
 
 .bottom-navigation {
     position: fixed;
     z-index: 900;
-    isolation: isolate;
 
     left: 16px;
     right: 16px;
-    bottom: calc(10px + env(safe-area-inset-bottom));
+    bottom:
+        calc(
+            10px +
+            env(safe-area-inset-bottom)
+        );
 
     height: 62px;
 
@@ -35,8 +75,11 @@
         );
 
     box-shadow:
-        0 4px 16px rgba(31, 38, 49, 0.06),
-        inset 0 1px 1px rgba(255, 255, 255, 1);
+        0 4px 16px
+        rgba(31, 38, 49, 0.06),
+
+        inset 0 1px 1px
+        rgba(255, 255, 255, 1);
 
     font-family:
         -apple-system,
@@ -47,43 +90,11 @@
         Arial,
         sans-serif;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
-}
+    -webkit-font-smoothing:
+        antialiased;
 
-
-/* =========================================================
-   ПЛАВНОЕ ИСЧЕЗНОВЕНИЕ КОНТЕНТА НАД НАВИГАЦИЕЙ
-
-   Повторяет принцип градиента над кнопкой «Выбрать»
-   в меню выбора иконки.
-   ========================================================= */
-
-.bottom-navigation::before {
-    content: "";
-
-    position: absolute;
-    z-index: -1;
-
-    left: -16px;
-    right: -16px;
-
-    bottom: calc(100% - 18px);
-
-    height: 78px;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(248, 249, 251, 0) 0%,
-            rgba(248, 249, 251, 0.18) 22%,
-            rgba(248, 249, 251, 0.48) 46%,
-            rgba(248, 249, 251, 0.82) 70%,
-            rgba(248, 249, 251, 0.98) 90%,
-            rgba(248, 249, 251, 1) 100%
-        );
-
-    pointer-events: none;
+    text-rendering:
+        geometricPrecision;
 }
 
 
@@ -123,7 +134,9 @@
 
     appearance: none;
     -webkit-appearance: none;
-    -webkit-tap-highlight-color: transparent;
+
+    -webkit-tap-highlight-color:
+        transparent;
 
     touch-action: manipulation;
 
@@ -164,7 +177,8 @@
 
     transition:
         color 160ms ease,
-        font-variation-settings 160ms ease;
+        font-variation-settings
+        160ms ease;
 }
 
 
@@ -195,8 +209,11 @@
     line-height: 1;
     letter-spacing: -0.025em;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        geometricPrecision;
 }
 
 
@@ -218,8 +235,11 @@
         );
 
     box-shadow:
-        0 4px 16px rgba(31, 38, 49, 0.055),
-        inset 0 1px 1px rgba(255, 255, 255, 1);
+        0 4px 16px
+        rgba(31, 38, 49, 0.055),
+
+        inset 0 1px 1px
+        rgba(255, 255, 255, 1);
 }
 
 .bottom-navigation__item.is-active
@@ -247,8 +267,11 @@
     opacity: 0.78;
 
     box-shadow:
-        0 2px 8px rgba(31, 38, 49, 0.045),
-        inset 0 2px 4px rgba(31, 38, 49, 0.025);
+        0 2px 8px
+        rgba(31, 38, 49, 0.045),
+
+        inset 0 2px 4px
+        rgba(31, 38, 49, 0.025);
 }
 
 
@@ -262,17 +285,21 @@
 
 .bottom-navigation__item:focus-visible {
     box-shadow:
-        0 0 0 3px rgba(116, 118, 78, 0.12);
+        0 0 0 3px
+        rgba(116, 118, 78, 0.12);
 }
 
 
 /* =========================================================
-   ОТСТУП КОНТЕНТА ПОД НАВИГАЦИЮ
+   ОТСТУП СПИСКА ПОД НАВИГАЦИЮ
    ========================================================= */
 
 .habits-v2-list {
     padding-bottom:
-        calc(96px + env(safe-area-inset-bottom));
+        calc(
+            96px +
+            env(safe-area-inset-bottom)
+        );
 }
 
 
@@ -281,6 +308,14 @@
    ========================================================= */
 
 @media (max-width: 370px) {
+
+    .bottom-navigation-fade {
+        height:
+            calc(
+                128px +
+                env(safe-area-inset-bottom)
+            );
+    }
 
     .bottom-navigation {
         left: 12px;
@@ -291,15 +326,6 @@
         padding: 4px;
 
         border-radius: 22px;
-    }
-
-    .bottom-navigation::before {
-        left: -12px;
-        right: -12px;
-
-        bottom: calc(100% - 16px);
-
-        height: 70px;
     }
 
     .bottom-navigation__item {
@@ -323,7 +349,10 @@
 
     .habits-v2-list {
         padding-bottom:
-            calc(90px + env(safe-area-inset-bottom));
+            calc(
+                90px +
+                env(safe-area-inset-bottom)
+            );
     }
 }
 

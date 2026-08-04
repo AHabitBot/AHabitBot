@@ -1,142 +1,219 @@
 import { canAccessLeaderboard } from "./leaderboard/leaderboardStore.js";
 
 const NAVIGATION_ID = "bottom-navigation";
+const NAVIGATION_FADE_ID = "bottom-navigation-fade";
 
-/**
- * Создаёт HTML нижней навигации.
- *
- * @param {"habits" | "leaderboard"} activePage
- * @returns {string}
- */
-export function renderBottomNavigation(activePage = "habits") {
-  const showLeaderboard = canAccessLeaderboard();
 
-  return `
-    <nav
-      id="${NAVIGATION_ID}"
-      class="bottom-navigation"
-      aria-label="Основная навигация"
-    >
-      <button
-        type="button"
-        class="bottom-navigation__item ${
-          activePage === "habits" ? "is-active" : ""
-        }"
-        data-navigation-page="habits"
-        aria-label="Открыть привычки"
-      >
-        <span
-          class="material-symbols-rounded bottom-navigation__icon"
-          aria-hidden="true"
-        >
-          task_alt
-        </span>
+/* =========================================================
+   РЕНДЕР НИЖНЕЙ НАВИГАЦИИ
 
-        <span class="bottom-navigation__label">
-          Привычки
-        </span>
-      </button>
+   Временно вся навигация доступна только пользователю,
+   которому разрешён доступ через canAccessLeaderboard().
+   ========================================================= */
 
-      ${
-        showLeaderboard
-          ? `
-            <button
-              type="button"
-              class="bottom-navigation__item ${
-                activePage === "leaderboard" ? "is-active" : ""
-              }"
-              data-navigation-page="leaderboard"
-              aria-label="Открыть лидерборд"
-            >
-              <span
-                class="material-symbols-rounded bottom-navigation__icon"
-                aria-hidden="true"
-              >
-                trophy
-              </span>
-
-              <span class="bottom-navigation__label">
-                Лидерборд
-              </span>
-            </button>
-          `
-          : ""
-      }
-    </nav>
-  `;
-}
-
-/**
- * Добавляет навигацию в приложение.
- *
- * @param {"habits" | "leaderboard"} activePage
- */
-export function mountBottomNavigation(activePage = "habits") {
-  removeBottomNavigation();
-
-  document.body.insertAdjacentHTML(
-    "beforeend",
-    renderBottomNavigation(activePage)
-  );
-
-  bindBottomNavigationEvents();
-}
-
-/**
- * Удаляет навигацию со страницы.
- */
-export function removeBottomNavigation() {
-  document.getElementById(NAVIGATION_ID)?.remove();
-}
-
-/**
- * Подсвечивает выбранный раздел без полной перерисовки.
- *
- * @param {"habits" | "leaderboard"} activePage
- */
-export function setActiveNavigationPage(activePage) {
-  const navigation = document.getElementById(NAVIGATION_ID);
-
-  if (!navigation) {
-    return;
-  }
-
-  const buttons = navigation.querySelectorAll(
-    "[data-navigation-page]"
-  );
-
-  buttons.forEach((button) => {
-    const page = button.dataset.navigationPage;
-    const isActive = page === activePage;
-
-    button.classList.toggle("is-active", isActive);
-
-    if (isActive) {
-      button.setAttribute("aria-current", "page");
-    } else {
-      button.removeAttribute("aria-current");
+export function renderBottomNavigation(
+    activePage = "habits"
+) {
+    if (!canAccessLeaderboard()) {
+        return "";
     }
-  });
+
+    return `
+        <div
+            id="${NAVIGATION_FADE_ID}"
+            class="bottom-navigation-fade"
+            aria-hidden="true"
+        ></div>
+
+        <nav
+            id="${NAVIGATION_ID}"
+            class="bottom-navigation"
+            aria-label="Основная навигация"
+        >
+
+            <button
+                type="button"
+                class="
+                    bottom-navigation__item
+                    ${
+                        activePage === "habits"
+                            ? "is-active"
+                            : ""
+                    }
+                "
+                data-navigation-page="habits"
+                aria-label="Открыть привычки"
+                ${
+                    activePage === "habits"
+                        ? 'aria-current="page"'
+                        : ""
+                }
+            >
+                <span
+                    class="
+                        material-symbols-rounded
+                        bottom-navigation__icon
+                    "
+                    aria-hidden="true"
+                >
+                    task_alt
+                </span>
+
+                <span class="bottom-navigation__label">
+                    Привычки
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="
+                    bottom-navigation__item
+                    ${
+                        activePage === "leaderboard"
+                            ? "is-active"
+                            : ""
+                    }
+                "
+                data-navigation-page="leaderboard"
+                aria-label="Открыть лидерборд"
+                ${
+                    activePage === "leaderboard"
+                        ? 'aria-current="page"'
+                        : ""
+                }
+            >
+                <span
+                    class="
+                        material-symbols-rounded
+                        bottom-navigation__icon
+                    "
+                    aria-hidden="true"
+                >
+                    trophy
+                </span>
+
+                <span class="bottom-navigation__label">
+                    Лидерборд
+                </span>
+            </button>
+
+        </nav>
+    `;
 }
 
-/**
- * Подключает обработчики нижней навигации.
- */
+
+/* =========================================================
+   ДОБАВИТЬ НАВИГАЦИЮ НА СТРАНИЦУ
+   ========================================================= */
+
+export function mountBottomNavigation(
+    activePage = "habits"
+) {
+    removeBottomNavigation();
+
+    if (!canAccessLeaderboard()) {
+        return;
+    }
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+        renderBottomNavigation(activePage)
+    );
+
+    bindBottomNavigationEvents();
+}
+
+
+/* =========================================================
+   УДАЛИТЬ НАВИГАЦИЮ И ГРАДИЕНТ
+   ========================================================= */
+
+export function removeBottomNavigation() {
+    document
+        .getElementById(NAVIGATION_ID)
+        ?.remove();
+
+    document
+        .getElementById(NAVIGATION_FADE_ID)
+        ?.remove();
+}
+
+
+/* =========================================================
+   ИЗМЕНИТЬ АКТИВНЫЙ РАЗДЕЛ
+   ========================================================= */
+
+export function setActiveNavigationPage(
+    activePage
+) {
+    const navigation =
+        document.getElementById(
+            NAVIGATION_ID
+        );
+
+    if (!navigation) {
+        return;
+    }
+
+    const buttons =
+        navigation.querySelectorAll(
+            "[data-navigation-page]"
+        );
+
+    buttons.forEach((button) => {
+        const page =
+            button.dataset.navigationPage;
+
+        const isActive =
+            page === activePage;
+
+        button.classList.toggle(
+            "is-active",
+            isActive
+        );
+
+        if (isActive) {
+            button.setAttribute(
+                "aria-current",
+                "page"
+            );
+
+            return;
+        }
+
+        button.removeAttribute(
+            "aria-current"
+        );
+    });
+}
+
+
+/* =========================================================
+   ПОДКЛЮЧИТЬ СОБЫТИЯ
+   ========================================================= */
+
 function bindBottomNavigationEvents() {
-  const navigation = document.getElementById(NAVIGATION_ID);
+    const navigation =
+        document.getElementById(
+            NAVIGATION_ID
+        );
 
-  if (!navigation) {
-    return;
-  }
+    if (!navigation) {
+        return;
+    }
 
-  navigation.addEventListener("click", handleNavigationClick);
+    navigation.addEventListener(
+        "click",
+        handleNavigationClick
+    );
 }
 
-/**
- * Обрабатывает нажатие на кнопку навигации.
- *
- * @param {MouseEvent} event
- */
+
+/* =========================================================
+   ОБРАБОТАТЬ НАЖАТИЕ
+   ========================================================= */
+
 function handleNavigationClick(event) {
     const button =
         event.target.closest(
@@ -144,13 +221,6 @@ function handleNavigationClick(event) {
         );
 
     if (!button) {
-        return;
-    }
-
-    const page =
-        button.dataset.navigationPage;
-
-    if (!page) {
         return;
     }
 
@@ -162,46 +232,28 @@ function handleNavigationClick(event) {
         return;
     }
 
-    if (
-        page === "leaderboard"
-        && !canAccessLeaderboard()
-    ) {
+    const page =
+        button.dataset.navigationPage;
+
+    if (!page) {
         return;
     }
 
-    const activeContent =
-        document.querySelector(
-            ".page.active .page-content"
-        );
+    if (!canAccessLeaderboard()) {
+        removeBottomNavigation();
+        return;
+    }
 
-    button.classList.add(
-        "is-pressed"
-    );
+    setActiveNavigationPage(page);
 
-    activeContent?.classList.add(
-        "is-navigation-leaving"
-    );
-
-    window.setTimeout(() => {
-        setActiveNavigationPage(page);
-
-        document.dispatchEvent(
-            new CustomEvent(
-                "app:navigate",
-                {
-                    detail: {
-                        page,
-                    },
+    document.dispatchEvent(
+        new CustomEvent(
+            "app:navigate",
+            {
+                detail: {
+                    page
                 }
-            )
-        );
-
-        button.classList.remove(
-            "is-pressed"
-        );
-
-        activeContent?.classList.remove(
-            "is-navigation-leaving"
-        );
-    }, 180);
+            }
+        )
+    );
 }
