@@ -113,37 +113,6 @@ export function renderLeaderboardContentShell() {
 }
 
 
-/* =========================================================
-   INTRO
-   ========================================================= */
-
-export function renderSectionIntro({
-    title = "",
-    subtitle = "",
-    backgroundImage = ""
-} = {}) {
-
-    return `
-        <section
-            class="leaderboard-section-intro"
-            style="background-image:url('${backgroundImage}')"
-        >
-
-            <div class="leaderboard-section-intro__content">
-
-                <h2 class="leaderboard-section-intro__title">
-                    ${title}
-                </h2>
-
-                <p class="leaderboard-section-intro__subtitle">
-                    ${subtitle}
-                </p>
-
-            </div>
-
-        </section>
-    `;
-}
 
 
 /* =========================================================

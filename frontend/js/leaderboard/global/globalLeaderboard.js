@@ -17,14 +17,6 @@ export const globalCurrentUser = {
 
 export function renderGlobalLeaderboard() {
     return renderLeaderboardSection({
-        intro: {
-            title: "Глобальный рейтинг",
-            subtitle:
-                "Соревнуйтесь с лучшими привычками мира",
-            backgroundImage:
-                "/img/leaderboard/global-section-intro.jpg"
-        },
-
         topUsers: [
             {
                 rank: 2,
