@@ -99,10 +99,7 @@ export function renderSectionIntro({
     return `
         <section
             class="leaderboard-section-intro"
-            style="
-                --section-intro-background:
-                url('${backgroundImage}');
-            "
+            style="background-image: url('${backgroundImage}');"
         >
             <div class="leaderboard-section-intro__content">
                 <h2 class="leaderboard-section-intro__title">

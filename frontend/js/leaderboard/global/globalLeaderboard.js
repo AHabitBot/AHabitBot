@@ -10,13 +10,7 @@ export function renderGlobalLeaderboard() {
             subtitle:
                 "Соревнуйтесь с лучшими привычками мира",
             backgroundImage:
-                "./img/leaderboard/global-section-intro.jpg"
-        },
-
-        topUsers: [],
-
-        users: [],
-
-        currentUser: null
+                "/img/leaderboard/global-section-intro.jpg"
+        }
     })
 }

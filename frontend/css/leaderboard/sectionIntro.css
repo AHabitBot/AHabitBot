@@ -9,18 +9,12 @@
     min-height: 150px;
 
     box-sizing: border-box;
-
     overflow: hidden;
 
-    border:
-        1px solid
-        rgba(35, 36, 40, 0.06);
-
+    border: 1px solid rgba(35, 36, 40, 0.06);
     border-radius: 18px;
 
-    background-image:
-        var(--section-intro-background);
-
+    background-color: #ffffff;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -28,7 +22,6 @@
     box-shadow:
         0 4px 14px rgba(35, 36, 40, 0.025);
 }
-
 
 /* =========================================================
    ЛЁГКОЕ ОСВЕТЛЕНИЕ ПОД ТЕКСТОМ
