@@ -161,10 +161,6 @@ export function renderTopThree(users = []) {
                             "crown",
                             "leaderboard-top-card__crown-icon"
                         )}
-
-                        <span class="leaderboard-top-card__rank">
-                            ${user.rank}
-                        </span>
                     </div>
 
                     <div class="leaderboard-top-card__avatar-wrap">
