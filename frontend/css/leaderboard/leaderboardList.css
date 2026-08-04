@@ -163,7 +163,7 @@
 .leaderboard-list__streak {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 2px;
 
     min-width: 0;
 
@@ -191,27 +191,20 @@
 
 
 .leaderboard-list__streak-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
 
     flex: 0 0 auto;
 
-    width: 16px;
-    height: 16px;
-
-    overflow: visible;
+    font-size: 17px;
+    line-height: 1;
 
     color: currentColor;
-
-    font-size: 16px;
-    line-height: 1;
 
     font-variation-settings:
         "FILL" 1,
         "wght" 600,
         "GRAD" 0,
-        "opsz" 18;
+        "opsz" 20;
 }
 
 
