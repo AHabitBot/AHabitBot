@@ -15,7 +15,7 @@ export const globalCurrentUser = {
     name: "Вы",
     xp: "2 180",
     streak: 7,
-    avatar: AVATAR
+    avatar: AVATARM
 };
 
 
