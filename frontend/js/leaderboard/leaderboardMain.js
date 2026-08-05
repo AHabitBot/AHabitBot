@@ -18,40 +18,46 @@ import {
     globalCurrentUser,
 } from "./global/globalLeaderboard.js";
 
+import {
+    renderSeasonLeaderboard,
+    seasonCurrentUser,
+} from "./season/seasonLeaderboard.js";
+
 
 let leaderboardRoot = null;
 let destroyLeaderboardEvents = null;
 
 
+/* =========================================================
+   OPEN
+   ========================================================= */
+
 export function openLeaderboardPage(root) {
-
     if (!canAccessLeaderboard()) {
-
         console.warn(
             "Leaderboard is unavailable for this user"
         );
 
         return false;
-
     }
 
     renderLeaderboardPage(root);
 
     return true;
-
 }
 
 
+/* =========================================================
+   PAGE
+   ========================================================= */
+
 export function renderLeaderboardPage(root) {
-
     if (!root) {
-
         console.error(
             "Leaderboard: корневой контейнер не найден"
         );
 
         return;
-
     }
 
     destroyLeaderboardPage();
@@ -60,29 +66,25 @@ export function renderLeaderboardPage(root) {
 
     leaderboardRoot.innerHTML = `
         <main class="leaderboard-page">
-
             ${renderLeaderboardHeader()}
-
             ${renderLeaderboardContentShell()}
-
         </main>
     `;
 
     renderActiveLeaderboardContent();
 
     destroyLeaderboardEvents = initLeaderboardEvents({
-
         root: leaderboardRoot,
-
         onTabChange: renderActiveLeaderboardContent,
-
     });
-
 }
 
 
-function renderActiveLeaderboardContent() {
+/* =========================================================
+   ACTIVE CONTENT
+   ========================================================= */
 
+function renderActiveLeaderboardContent() {
     if (!leaderboardRoot) {
         return;
     }
@@ -96,35 +98,39 @@ function renderActiveLeaderboardContent() {
     );
 
     if (!content) {
-
         console.error(
             "Leaderboard: контейнер содержимого не найден"
         );
 
         return;
-
     }
 
-    const activeTab = getActiveLeaderboardTab();
+    const activeTab =
+        getActiveLeaderboardTab();
 
-    content.dataset.activeTab = activeTab;
+    content.dataset.activeTab =
+        activeTab;
 
     if (activeTab === "global") {
-
-        content.innerHTML =
-            renderGlobalLeaderboard();
-
-        if (currentUserSlot) {
-
-            currentUserSlot.innerHTML =
-                renderCurrentUser(
-                    globalCurrentUser
-                );
-
-        }
+        renderLeaderboardState({
+            content,
+            currentUserSlot,
+            renderContent: renderGlobalLeaderboard,
+            currentUser: globalCurrentUser,
+        });
 
         return;
+    }
 
+    if (activeTab === "season") {
+        renderLeaderboardState({
+            content,
+            currentUserSlot,
+            renderContent: renderSeasonLeaderboard,
+            currentUser: seasonCurrentUser,
+        });
+
+        return;
     }
 
     content.innerHTML = "";
@@ -132,12 +138,54 @@ function renderActiveLeaderboardContent() {
     if (currentUserSlot) {
         currentUserSlot.innerHTML = "";
     }
-
 }
 
 
-export function destroyLeaderboardPage() {
+/* =========================================================
+   SHARED RENDER
+   ========================================================= */
 
+function renderLeaderboardState({
+    content,
+    currentUserSlot,
+    renderContent,
+    currentUser,
+}) {
+    content.innerHTML =
+        renderContent();
+
+    if (currentUserSlot) {
+        currentUserSlot.innerHTML =
+            renderCurrentUser(currentUser);
+    }
+
+    resetLeaderboardScroll();
+}
+
+
+/* =========================================================
+   RESET SCROLL
+   ========================================================= */
+
+function resetLeaderboardScroll() {
+    const scrollArea =
+        leaderboardRoot?.querySelector(
+            ".leaderboard-scroll-area"
+        );
+
+    if (!scrollArea) {
+        return;
+    }
+
+    scrollArea.scrollTop = 0;
+}
+
+
+/* =========================================================
+   DESTROY
+   ========================================================= */
+
+export function destroyLeaderboardPage() {
     if (
         typeof destroyLeaderboardEvents
         === "function"
@@ -146,7 +194,5 @@ export function destroyLeaderboardPage() {
     }
 
     destroyLeaderboardEvents = null;
-
     leaderboardRoot = null;
-
 }
