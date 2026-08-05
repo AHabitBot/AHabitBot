@@ -61,8 +61,8 @@ async def get_global_current_user(
             """
             SELECT
                 current_stats.user_id,
-                current_user.nickname,
-                current_user.avatar_key,
+                user_data.nickname,
+                user_data.avatar_key,
 
                 current_stats.total_xp,
                 current_stats.current_streak,
@@ -88,8 +88,8 @@ async def get_global_current_user(
 
             FROM user_stats AS current_stats
 
-            INNER JOIN users AS current_user
-                ON current_user.id =
+            INNER JOIN users AS user_data
+                ON user_data.id =
                     current_stats.user_id
 
             WHERE
