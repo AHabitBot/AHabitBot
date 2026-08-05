@@ -19,7 +19,7 @@
    ========================================================= */
 
 .leaderboard-header__title {
-    margin: 0 0 16px;
+    margin: 0;
 
     color: #111216;
 
@@ -41,6 +41,83 @@
 
     -webkit-font-smoothing: antialiased;
     text-rendering: geometricPrecision;
+}
+
+.leaderboard-header__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+
+.leaderboard-header__title-row
+.leaderboard-header__title {
+    margin: 0;
+}
+
+
+.leaderboard-season-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    flex: 0 0 auto;
+
+    color: #2fa442;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    line-height: 1;
+    text-align: center;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+.leaderboard-season-heading[hidden] {
+    display: none;
+}
+
+
+.leaderboard-season-heading__title {
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+
+.leaderboard-season-heading__dates {
+    margin-top: 5px;
+
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+
+@media (max-width: 360px) {
+    .leaderboard-header__title-row {
+        margin-bottom: 13px;
+    }
+
+    .leaderboard-season-heading__title {
+        font-size: 14px;
+    }
+
+    .leaderboard-season-heading__dates {
+        margin-top: 4px;
+        font-size: 11px;
+    }
 }
 
 
@@ -220,7 +297,7 @@
 
 @media (max-width: 360px) {
     .leaderboard-header__title {
-        margin-bottom: 13px;
+        margin-bottom: 0px;
 
         font-size: 26px;
         letter-spacing: -0.035em;

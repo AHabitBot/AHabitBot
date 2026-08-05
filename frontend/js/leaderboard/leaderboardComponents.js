@@ -42,9 +42,29 @@ export function renderLeaderboardHeader() {
     return `
         <header class="leaderboard-header">
 
-            <h1 class="leaderboard-header__title">
-                Лидерборд
-            </h1>
+<div class="leaderboard-header__title-row">
+
+    <h1 class="leaderboard-header__title">
+        Лидерборд
+    </h1>
+
+    <div
+        class="leaderboard-season-heading"
+        data-season-heading
+        hidden
+    >
+        <span
+            class="leaderboard-season-heading__title"
+            data-season-title
+        ></span>
+
+        <span
+            class="leaderboard-season-heading__dates"
+            data-season-dates
+        ></span>
+    </div>
+
+</div>
 
             <div
                 class="leaderboard-tabs"

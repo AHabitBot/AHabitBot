@@ -193,6 +193,7 @@ async function renderGlobalLeaderboardContent({
 
         content.innerHTML =
             result.content;
+        hideSeasonHeading();
 
         if (currentUserSlot) {
             currentUserSlot.innerHTML =
@@ -265,6 +266,10 @@ async function renderSeasonLeaderboardContent({
         content.innerHTML =
             result.content;
 
+        renderSeasonHeading(
+            result.season
+        );
+
         if (currentUserSlot) {
             currentUserSlot.innerHTML =
                 renderCurrentUser(
@@ -296,6 +301,97 @@ async function renderSeasonLeaderboardContent({
         });
     }
 }
+
+
+/* =========================================================
+   СКРЫВАЕМ СЕЗОН И ДАТЫ В ГЛОБАЛЬНОМ
+   ========================================================= */
+
+function renderSeasonHeading(
+    season
+) {
+    const heading =
+        leaderboardRoot?.querySelector(
+            "[data-season-heading]"
+        );
+
+    if (!heading || !season) {
+        hideSeasonHeading();
+        return;
+    }
+
+    const title =
+        heading.querySelector(
+            "[data-season-title]"
+        );
+
+    const dates =
+        heading.querySelector(
+            "[data-season-dates]"
+        );
+
+    if (title) {
+        title.textContent =
+            season.title;
+    }
+
+    if (dates) {
+        dates.textContent =
+            formatSeasonPeriod(
+                season.startDate,
+                season.endDate
+            );
+    }
+
+    heading.hidden = false;
+}
+
+
+function hideSeasonHeading() {
+    const heading =
+        leaderboardRoot?.querySelector(
+            "[data-season-heading]"
+        );
+
+    if (heading) {
+        heading.hidden = true;
+    }
+}
+
+
+function formatSeasonPeriod(
+    startDate,
+    endDate
+) {
+    if (!startDate || !endDate) {
+        return "";
+    }
+
+    return (
+        formatShortDate(startDate)
+        + " – "
+        + formatShortDate(endDate)
+    );
+}
+
+
+function formatShortDate(
+    value
+) {
+    const [
+        year,
+        month,
+        day
+    ] = value.split("-");
+
+    if (!year || !month || !day) {
+        return "";
+    }
+
+    return `${day}.${month}`;
+}
+
+
 /* =========================================================
    СОСТОЯНИЕ ЗАГРУЗКИ
    ========================================================= */

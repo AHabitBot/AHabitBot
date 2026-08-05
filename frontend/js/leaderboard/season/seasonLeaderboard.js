@@ -48,6 +48,12 @@ export async function loadSeasonLeaderboard(
             response?.current_user
         );
 
+    const season =
+        normalizeSeason(
+            response?.season,
+            response?.season_number
+        );
+
     const result = {
         content:
             renderSeasonLeaderboard(
@@ -56,10 +62,7 @@ export async function loadSeasonLeaderboard(
 
         currentUser,
 
-        seasonNumber:
-            normalizePositiveInteger(
-                response?.season_number
-            )
+        season
     };
 
     setSeasonLeaderboardData(
@@ -117,6 +120,107 @@ function getTopThree(
         usersByRank.get(1),
         usersByRank.get(3)
     ].filter(Boolean);
+}
+
+
+/* =========================================================
+   НОРМАЛИЗОВАТЬ ДАННЫЕ СЕЗОНА
+   ========================================================= */
+
+function normalizeSeason(
+    season,
+    legacySeasonNumber
+) {
+    const number =
+        normalizePositiveInteger(
+            season?.number
+            ?? legacySeasonNumber
+        );
+
+    const title =
+        normalizeSeasonTitle(
+            season?.title,
+            number
+        );
+
+    const startDate =
+        normalizeIsoDate(
+            season?.start_date
+        );
+
+    const endDate =
+        normalizeIsoDate(
+            season?.end_date
+        );
+
+    return {
+        number,
+        title,
+        startDate,
+        endDate
+    };
+}
+
+
+function normalizeSeasonTitle(
+    value,
+    seasonNumber
+) {
+    const title =
+        String(
+            value || ""
+        ).trim();
+
+    if (title) {
+        return title;
+    }
+
+    return `Сезон ${seasonNumber}`;
+}
+
+
+function normalizeIsoDate(
+    value
+) {
+    const date =
+        String(
+            value || ""
+        ).trim();
+
+    if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(
+            date
+        )
+    ) {
+        return null;
+    }
+
+    const [
+        year,
+        month,
+        day
+    ] = date
+        .split("-")
+        .map(Number);
+
+    const parsedDate =
+        new Date(
+            Date.UTC(
+                year,
+                month - 1,
+                day
+            )
+        );
+
+    const isValidDate =
+        parsedDate.getUTCFullYear() === year
+        && parsedDate.getUTCMonth()
+            === month - 1
+        && parsedDate.getUTCDate() === day;
+
+    return isValidDate
+        ? date
+        : null;
 }
 
 
