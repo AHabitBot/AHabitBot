@@ -256,14 +256,9 @@
 
 
 .leaderboard-list__xp-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
 
     flex: 0 0 auto;
-
-    width: 18px;
-    height: 18px;
 
     overflow: visible;
 
@@ -362,10 +357,8 @@
     }
 
     .leaderboard-list__xp-icon {
-        width: 17px;
-        height: 17px;
 
-        font-size: 17px;
+        font-size: 16px;
     }
 }
 
@@ -422,8 +415,6 @@
     }
 
     .leaderboard-list__xp-icon {
-        width: 16px;
-        height: 16px;
 
         font-size: 16px;
     }

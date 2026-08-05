@@ -356,14 +356,9 @@
    ========================================================= */
 
 .leaderboard-top-card__xp-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
 
     flex: 0 0 auto;
-
-    width: 20px;
-    height: 20px;
 
     overflow: visible;
 
@@ -556,8 +551,6 @@
     }
 
     .leaderboard-top-card__xp-icon {
-        width: 18px;
-        height: 18px;
 
         font-size: 18px;
     }
@@ -649,8 +642,6 @@
     }
 
     .leaderboard-top-card__xp-icon {
-        width: 16px;
-        height: 16px;
 
         font-size: 16px;
     }

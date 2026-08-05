@@ -240,24 +240,15 @@
 .leaderboard-current-user__xp {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 5px;
 
     min-width: max-content;
-    min-height: 42px;
 
-    padding:
-        0
-        13px;
-
-    box-sizing: border-box;
-
-    border-radius: 15px;
-
-    background:
-        rgba(226, 242, 218, 0.96);
+    padding: 0;
 
     color: #2fa442;
+    background: transparent;
 
     font-family:
         -apple-system,
@@ -365,14 +356,7 @@
     }
 
     .leaderboard-current-user__xp {
-        min-height: 38px;
-
-        padding:
-            0
-            10px;
-
-        border-radius: 14px;
-
+        gap: 4px;
         font-size: 15px;
     }
 
@@ -428,15 +412,6 @@
 
     .leaderboard-current-user__xp {
         gap: 3px;
-
-        min-height: 35px;
-
-        padding:
-            0
-            8px;
-
-        border-radius: 13px;
-
         font-size: 14px;
     }
 
