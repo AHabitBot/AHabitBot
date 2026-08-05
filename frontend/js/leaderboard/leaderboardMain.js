@@ -18,10 +18,9 @@ import {
 } from "./global/globalLeaderboard.js";
 
 import {
-    renderSeasonLeaderboard,
-    seasonCurrentUser
-} from "./season/seasonLeaderboard.js";
-
+    loadSeasonLeaderboard
+}
+from "./season/seasonLeaderboard.js";
 
 let leaderboardRoot = null;
 
@@ -30,6 +29,9 @@ let destroyLeaderboardEvents =
 
 let activeRenderId = 0;
 let shouldRefreshGlobalLeaderboard =
+    true;
+
+let shouldRefreshSeasonLeaderboard =
     true;
 
 /* =========================================================
@@ -138,7 +140,7 @@ async function renderActiveLeaderboardContent() {
     }
 
     if (activeTab === "season") {
-        renderSeasonLeaderboardContent({
+         await renderSeasonLeaderboardContent({
             content,
             currentUserSlot,
             renderId: currentRenderId
@@ -227,36 +229,73 @@ async function renderGlobalLeaderboardContent({
 
 /* =========================================================
    СЕЗОННЫЙ РЕЙТИНГ
-
-   Пока продолжает использовать тестовые данные.
    ========================================================= */
 
-function renderSeasonLeaderboardContent({
+async function renderSeasonLeaderboardContent({
     content,
     currentUserSlot,
     renderId
 }) {
-    if (
-        !isRenderCurrent(
-            renderId,
-            "season"
-        )
-    ) {
-        return;
-    }
+    setLeaderboardLoading({
+        content,
+        currentUserSlot
+    });
 
-    content.innerHTML =
-        renderSeasonLeaderboard();
+    try {
+        const refresh =
+            shouldRefreshSeasonLeaderboard;
 
-    if (currentUserSlot) {
-        currentUserSlot.innerHTML =
-            renderCurrentUser(
-                seasonCurrentUser
-            );
+        const result =
+            await loadSeasonLeaderboard({
+                refresh
+            });
+
+        if (
+            !isRenderCurrent(
+                renderId,
+                "season"
+            )
+        ) {
+            return;
+        }
+
+        shouldRefreshSeasonLeaderboard =
+            false;
+
+        content.innerHTML =
+            result.content;
+
+        if (currentUserSlot) {
+            currentUserSlot.innerHTML =
+                renderCurrentUser(
+                    result.currentUser
+                );
+        }
+
+    } catch (error) {
+        if (
+            !isRenderCurrent(
+                renderId,
+                "season"
+            )
+        ) {
+            return;
+        }
+
+        console.error(
+            "Leaderboard: ошибка загрузки сезонного рейтинга",
+            error
+        );
+
+        renderLeaderboardError({
+            content,
+            currentUserSlot,
+            message:
+                error?.message
+                || "Не удалось загрузить сезонный рейтинг"
+        });
     }
 }
-
-
 /* =========================================================
    СОСТОЯНИЕ ЗАГРУЗКИ
    ========================================================= */

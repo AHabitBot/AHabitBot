@@ -1,178 +1,313 @@
 import {
+    fetchSeasonLeaderboard
+} from "../leaderboardApi.js";
+
+import {
+    getSeasonLeaderboardData,
+    hasSeasonLeaderboardData,
+    setSeasonLeaderboardData
+} from "../leaderboardStore.js";
+
+import {
     renderLeaderboardSection
 } from "../leaderboardSection.js";
 
 
-const AVATARM =
-    "/img/profile/avatar/beginer_m.png";
-
-const AVATARF =
-    "/img/profile/avatar/beginer_f.png";
+const DEFAULT_AVATAR_KEY =
+    "beginer_m";
 
 
 /* =========================================================
-   CURRENT USER — SEASON
+   ЗАГРУЗИТЬ СЕЗОННЫЙ РЕЙТИНГ
    ========================================================= */
 
-export const seasonCurrentUser = {
-    rank: 9,
-    name: "Вы",
-    xp: "860",
-    streak: 7,
-    avatar: AVATARM
-};
+export async function loadSeasonLeaderboard(
+    {
+        refresh = false
+    } = {}
+) {
+    if (
+        !refresh
+        && hasSeasonLeaderboardData()
+    ) {
+        return getSeasonLeaderboardData();
+    }
+
+    const response =
+        await fetchSeasonLeaderboard();
+
+    const leaderboardUsers =
+        Array.isArray(response?.users)
+            ? response.users.map(
+                normalizeLeaderboardUser
+            )
+            : [];
+
+    const currentUser =
+        normalizeCurrentUser(
+            response?.current_user
+        );
+
+    const result = {
+        content:
+            renderSeasonLeaderboard(
+                leaderboardUsers
+            ),
+
+        currentUser,
+
+        seasonNumber:
+            normalizePositiveInteger(
+                response?.season_number
+            )
+    };
+
+    setSeasonLeaderboardData(
+        result
+    );
+
+    return result;
+}
 
 
 /* =========================================================
-   SEASON LEADERBOARD
+   ОТРЕНДЕРИТЬ СЕЗОННЫЙ РЕЙТИНГ
    ========================================================= */
 
-export function renderSeasonLeaderboard() {
+function renderSeasonLeaderboard(
+    users = []
+) {
+    const topUsers =
+        getTopThree(users);
+
+    const listUsers =
+        users.filter(
+            (user) => user.rank >= 4
+        );
+
     return renderLeaderboardSection({
-        topUsers: [
-            {
-                rank: 2,
-                name: "Storm",
-                xp: "3 240",
-                streak: 18,
-                avatar: AVATARF
-            },
-            {
-                rank: 1,
-                name: "Phoenix",
-                xp: "3 860",
-                streak: 23,
-                avatar: AVATARM
-            },
-            {
-                rank: 3,
-                name: "Hunter",
-                xp: "2 940",
-                streak: 16,
-                avatar: AVATARM
-            }
-        ],
-
-        users: [
-            {
-                rank: 4,
-                name: "Flash",
-                xp: "2 610",
-                streak: 15,
-                avatar: AVATARF
-            },
-            {
-                rank: 5,
-                name: "Atlas",
-                xp: "2 340",
-                streak: 14,
-                avatar: AVATARM
-            },
-            {
-                rank: 6,
-                name: "Tiger",
-                xp: "1 980",
-                streak: 12,
-                avatar: AVATARF
-            },
-            {
-                rank: 7,
-                name: "Falcon",
-                xp: "1 620",
-                streak: 10,
-                avatar: AVATARM
-            },
-            {
-                rank: 8,
-                name: "Blade",
-                xp: "1 240",
-                streak: 8,
-                avatar: AVATARF
-            },
-            {
-                rank: 9,
-                name: "Fhntv",
-                xp: "860",
-                streak: 7,
-                avatar: AVATARF
-            },
-            {
-                rank: 10,
-                name: "Ace",
-                xp: "790",
-                streak: 7,
-                avatar: AVATARM
-            },
-            {
-                rank: 11,
-                name: "Ghost",
-                xp: "710",
-                streak: 6,
-                avatar: AVATARF
-            },
-            {
-                rank: 12,
-                name: "Rocky",
-                xp: "640",
-                streak: 6,
-                avatar: AVATARM
-            },
-            {
-                rank: 13,
-                name: "Leo",
-                xp: "570",
-                streak: 5,
-                avatar: AVATARM
-            },
-            {
-                rank: 14,
-                name: "Robo",
-                xp: "510",
-                streak: 5,
-                avatar: AVATARF
-            },
-            {
-                rank: 15,
-                name: "Penguin",
-                xp: "460",
-                streak: 4,
-                avatar: AVATARF
-            },
-            {
-                rank: 16,
-                name: "Shadow",
-                xp: "390",
-                streak: 4,
-                avatar: AVATARM
-            },
-            {
-                rank: 17,
-                name: "Panda",
-                xp: "330",
-                streak: 3,
-                avatar: AVATARF
-            },
-            {
-                rank: 18,
-                name: "Wolf",
-                xp: "280",
-                streak: 3,
-                avatar: AVATARM
-            },
-            {
-                rank: 19,
-                name: "Fox",
-                xp: "210",
-                streak: 2,
-                avatar: AVATARM
-            },
-            {
-                rank: 20,
-                name: "Max",
-                xp: "150",
-                streak: 1,
-                avatar: AVATARM
-            }
-        ]
+        topUsers,
+        users: listUsers
     });
+}
+
+
+/* =========================================================
+   ПОРЯДОК ТОП-3
+
+   Компонент отображает карточки так:
+   2 место | 1 место | 3 место
+   ========================================================= */
+
+function getTopThree(
+    users = []
+) {
+    const usersByRank =
+        new Map(
+            users.map(
+                (user) => [
+                    user.rank,
+                    user
+                ]
+            )
+        );
+
+    return [
+        usersByRank.get(2),
+        usersByRank.get(1),
+        usersByRank.get(3)
+    ].filter(Boolean);
+}
+
+
+/* =========================================================
+   НОРМАЛИЗОВАТЬ УЧАСТНИКА СЕЗОННОГО РЕЙТИНГА
+   ========================================================= */
+
+function normalizeLeaderboardUser(
+    user
+) {
+    return {
+        rank:
+            normalizePositiveInteger(
+                user?.rank
+            ),
+
+        name:
+            normalizeName(
+                user?.nickname
+            ),
+
+        xp:
+            formatXp(
+                user?.season_xp
+            ),
+
+        streak:
+            normalizeNonNegativeInteger(
+                user?.current_streak
+            ),
+
+        avatar:
+            getAvatarPath(
+                user?.avatar_key
+            )
+    };
+}
+
+
+/* =========================================================
+   НОРМАЛИЗОВАТЬ ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
+   ========================================================= */
+
+function normalizeCurrentUser(
+    user
+) {
+    if (!user) {
+        return null;
+    }
+
+    return {
+        rank:
+            normalizePositiveInteger(
+                user.rank
+            ),
+
+        name: "Вы",
+
+        xp:
+            formatXp(
+                user.season_xp
+            ),
+
+        streak:
+            normalizeNonNegativeInteger(
+                user.current_streak
+            ),
+
+        avatar:
+            getAvatarPath(
+                user.avatar_key
+            )
+    };
+}
+
+
+/* =========================================================
+   ПУТЬ К АВАТАРУ
+   ========================================================= */
+
+function getAvatarPath(
+    avatarKey
+) {
+    const safeAvatarKey =
+        normalizeAvatarKey(
+            avatarKey
+        );
+
+    return (
+        "/img/profile/avatar/"
+        + `${safeAvatarKey}.png`
+    );
+}
+
+
+function normalizeAvatarKey(
+    avatarKey
+) {
+    const value =
+        String(
+            avatarKey || ""
+        ).trim();
+
+    if (
+        !/^[a-zA-Z0-9_-]+$/.test(
+            value
+        )
+    ) {
+        return DEFAULT_AVATAR_KEY;
+    }
+
+    return value;
+}
+
+
+/* =========================================================
+   ФОРМАТ XP
+   ========================================================= */
+
+function formatXp(
+    value
+) {
+    const xp =
+        normalizeNonNegativeInteger(
+            value
+        );
+
+    return new Intl.NumberFormat(
+        "ru-RU"
+    )
+        .format(xp)
+        .replaceAll(
+            "\u00A0",
+            " "
+        )
+        .replaceAll(
+            "\u202F",
+            " "
+        );
+}
+
+
+/* =========================================================
+   ЧИСЛА
+   ========================================================= */
+
+function normalizePositiveInteger(
+    value
+) {
+    const number =
+        Number(value);
+
+    if (
+        !Number.isFinite(number)
+        || number < 1
+    ) {
+        return 1;
+    }
+
+    return Math.floor(number);
+}
+
+
+function normalizeNonNegativeInteger(
+    value
+) {
+    const number =
+        Number(value);
+
+    if (
+        !Number.isFinite(number)
+        || number < 0
+    ) {
+        return 0;
+    }
+
+    return Math.floor(number);
+}
+
+
+/* =========================================================
+   ИМЯ
+   ========================================================= */
+
+function normalizeName(
+    value
+) {
+    const name =
+        String(
+            value || ""
+        ).trim();
+
+    return name || "Пользователь";
 }
