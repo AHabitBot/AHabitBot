@@ -9,7 +9,7 @@ CREATE_TABLES_SQL = """
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     telegram_id BIGINT NOT NULL UNIQUE,
-    username VARCHAR(255),
+    nickname VARCHAR(32) NOT NULL UNIQUE,
     first_name VARCHAR(255),
     nickname VARCHAR(50) UNIQUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS user_settings (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL UNIQUE,
     timezone VARCHAR(64) NOT NULL DEFAULT 'Europe/Kyiv',
-    language VARCHAR(10) NOT NULL DEFAULT 'ru'
+    language VARCHAR(10) NOT NULL DEFAULT 'ru',
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
@@ -105,6 +105,12 @@ CREATE INDEX IF NOT EXISTS idx_confirmations_habit_confirmed
 
 CREATE INDEX IF NOT EXISTS idx_user_settings_user
     ON user_settings(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_user_stats_global_leaderboard
+    ON user_stats (
+        total_xp DESC,
+        user_id ASC
+    );
 """
 
 

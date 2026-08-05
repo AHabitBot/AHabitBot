@@ -8,9 +8,14 @@ from fastapi.middleware.cors import (
 from backend.api.habits import (
     router as habits_router,
 )
+
 from backend.database.database import (
     close_db,
     connect_db,
+)
+
+from backend.api.leaderboard import (
+    router as leaderboard_router,
 )
 
 
@@ -49,6 +54,10 @@ app.add_middleware(
 
 app.include_router(
     habits_router
+)
+
+app.include_router(
+    leaderboard_router
 )
 
 

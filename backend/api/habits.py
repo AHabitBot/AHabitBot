@@ -1,12 +1,16 @@
 import logging
-from typing import Annotated, Literal
+from typing import Literal
 
 from fastapi import (
     APIRouter,
-    Header,
     HTTPException,
     status,
 )
+
+from backend.api.dependencies import (
+    CurrentUser,
+)
+
 from pydantic import BaseModel, Field
 
 from backend.repositories.habits import (
@@ -14,21 +18,11 @@ from backend.repositories.habits import (
     get_user_habits,
 )
 
-from backend.repositories.users import (
-    create_user,
-    get_user_by_telegram_id,
-)
-
 from backend.services.habits.habit_service import (
     archive_user_habit,
     edit_habit,
     update_habit_confirmation,
 )
-
-from backend.services.telegram_auth import (
-    validate_telegram_init_data,
-)
-
 
 # Используем логгер Uvicorn, чтобы сообщения гарантированно
 # попадали в существующий файл api.log.
@@ -92,64 +86,14 @@ class HabitUpdateRequest(BaseModel):
 class HabitConfirmationRequest(BaseModel):
     is_confirmed: bool
 
-
-# =========================================================
-# ПОЛУЧИТЬ ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
-# =========================================================
-
-async def get_current_user(
-    x_telegram_init_data: Annotated[
-        str | None,
-        Header(
-            alias="X-Telegram-Init-Data"
-        ),
-    ] = None,
-):
-    telegram_user = (
-        validate_telegram_init_data(
-            x_telegram_init_data
-        )
-    )
-
-    telegram_id = telegram_user["id"]
-
-    user = await get_user_by_telegram_id(
-        telegram_id
-    )
-
-    if user is None:
-        user = await create_user(
-            telegram_id=telegram_id,
-
-            username=telegram_user.get(
-                "username"
-            ),
-
-            first_name=telegram_user.get(
-                "first_name"
-            ),
-        )
-
-    return user
-
-
 # =========================================================
 # ПОЛУЧИТЬ ПРИВЫЧКИ
 # =========================================================
 
 @router.get("")
 async def read_habits(
-    x_telegram_init_data: Annotated[
-        str | None,
-        Header(
-            alias="X-Telegram-Init-Data"
-        ),
-    ] = None,
+    user: CurrentUser,
 ):
-    user = await get_current_user(
-        x_telegram_init_data
-    )
-
     result = await get_user_habits(
         user["id"]
     )
@@ -176,17 +120,8 @@ async def read_habits(
 async def add_habit(
     payload: HabitCreateRequest,
 
-    x_telegram_init_data: Annotated[
-        str | None,
-        Header(
-            alias="X-Telegram-Init-Data"
-        ),
-    ] = None,
+    user: CurrentUser,
 ):
-    user = await get_current_user(
-        x_telegram_init_data
-    )
-
     habit = await create_habit(
         user_id=user["id"],
         title=payload.title.strip(),
@@ -209,17 +144,8 @@ async def update_existing_habit(
     habit_id: int,
     payload: HabitUpdateRequest,
 
-    x_telegram_init_data: Annotated[
-        str | None,
-        Header(
-            alias="X-Telegram-Init-Data"
-        ),
-    ] = None,
+    user: CurrentUser,
 ):
-    user = await get_current_user(
-        x_telegram_init_data
-    )
-
     try:
         habit = await edit_habit(
             user_id=user["id"],
@@ -282,7 +208,6 @@ async def update_existing_habit(
 
         raise
 
-
 # =========================================================
 # АРХИВИРОВАТЬ ПРИВЫЧКУ
 # =========================================================
@@ -291,17 +216,8 @@ async def update_existing_habit(
 async def archive_habit_endpoint(
     habit_id: int,
 
-    x_telegram_init_data: Annotated[
-        str | None,
-        Header(
-            alias="X-Telegram-Init-Data"
-        ),
-    ] = None,
+    user: CurrentUser,
 ):
-    user = await get_current_user(
-        x_telegram_init_data
-    )
-
     try:
         archived = await archive_user_habit(
             user_id=user["id"],
@@ -361,7 +277,6 @@ async def archive_habit_endpoint(
 
         raise
 
-
 # =========================================================
 # ПОДТВЕРДИТЬ ИЛИ ОТМЕНИТЬ ПОДТВЕРЖДЕНИЕ
 # =========================================================
@@ -371,17 +286,8 @@ async def set_confirmation(
     habit_id: int,
     payload: HabitConfirmationRequest,
 
-    x_telegram_init_data: Annotated[
-        str | None,
-        Header(
-            alias="X-Telegram-Init-Data"
-        ),
-    ] = None,
+    user: CurrentUser,
 ):
-    user = await get_current_user(
-        x_telegram_init_data
-    )
-
     try:
         result = (
             await update_habit_confirmation(
