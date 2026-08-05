@@ -1,8 +1,3 @@
-export const LEADERBOARD_ALLOWED_USER_IDS = new Set([
-    900410719,
-]);
-
-
 /* =========================================================
    ACCESS
    ========================================================= */
@@ -21,14 +16,7 @@ export function getTelegramUserId() {
 
 
 export function canAccessLeaderboard() {
-    const telegramId =
-        getTelegramUserId();
-
-    return (
-        telegramId !== null
-        && LEADERBOARD_ALLOWED_USER_IDS
-            .has(telegramId)
-    );
+    return true;
 }
 
 
