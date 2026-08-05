@@ -31,3 +31,32 @@ export async function fetchGlobalLeaderboard() {
 
     return data;
 }
+
+/* =========================================================
+   SEASON LEADERBOARD
+   ========================================================= */
+
+export async function fetchSeasonLeaderboard() {
+    const data =
+        await apiRequest(
+            "/api/leaderboard/season"
+        );
+
+    if (
+        !Array.isArray(
+            data?.users
+        )
+    ) {
+        throw new Error(
+            "Некорректный ответ сервера"
+        );
+    }
+
+    if (!data.current_user) {
+        throw new Error(
+            "Не получен текущий пользователь"
+        );
+    }
+
+    return data;
+}
