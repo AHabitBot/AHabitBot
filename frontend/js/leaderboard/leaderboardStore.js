@@ -21,10 +21,6 @@ const leaderboardState = {
   activeTab: "global",
 };
 
-export function getLeaderboardState() {
-  return leaderboardState;
-}
-
 export function getActiveLeaderboardTab() {
   return leaderboardState.activeTab;
 }

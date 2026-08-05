@@ -8,15 +8,6 @@
    LEADERBOARD V2 — ОБЩАЯ ОБОЛОЧКА РАЗДЕЛА
    ========================================================= */
 
-:root {
-    --leaderboard-v2-text: #232428;
-    --leaderboard-v2-muted: #7d7f89;
-    --leaderboard-v2-accent: #687827;
-    --leaderboard-v2-accent-bg: #f2f4e6;
-    --leaderboard-v2-border: rgba(35, 36, 40, 0.08);
-}
-
-
 /* =========================================================
    ОСНОВНАЯ СТРАНИЦА LEADERBOARD V2
    ========================================================= */
@@ -86,14 +77,8 @@
     overflow-x: hidden;
 
     background: transparent;
-
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
 }
 
-.leaderboard-page::-webkit-scrollbar {
-    display: none;
-}
 
 .leaderboard-scroll-area {
     position: absolute;

@@ -115,15 +115,11 @@ export function renderLeaderboardHeader() {
    ========================================================= */
 
 export function renderLeaderboardContentShell() {
-    const activeTab =
-        getActiveLeaderboardTab();
-
     return `
         <div class="leaderboard-scroll-area">
             <section
                 class="leaderboard-content"
                 data-leaderboard-content
-                data-active-tab="${activeTab}"
                 aria-live="polite"
             ></section>
         </div>
