@@ -1,38 +1,44 @@
 import {
     canAccessLeaderboard,
-    getActiveLeaderboardTab,
+    getActiveLeaderboardTab
 } from "./leaderboardStore.js";
 
 import {
     renderLeaderboardHeader,
     renderLeaderboardContentShell,
-    renderCurrentUser,
+    renderCurrentUser
 } from "./leaderboardComponents.js";
 
 import {
-    initLeaderboardEvents,
+    initLeaderboardEvents
 } from "./leaderboardEvents.js";
 
 import {
-    renderGlobalLeaderboard,
-    globalCurrentUser,
+    loadGlobalLeaderboard
 } from "./global/globalLeaderboard.js";
 
 import {
     renderSeasonLeaderboard,
-    seasonCurrentUser,
+    seasonCurrentUser
 } from "./season/seasonLeaderboard.js";
 
 
 let leaderboardRoot = null;
-let destroyLeaderboardEvents = null;
 
+let destroyLeaderboardEvents =
+    null;
+
+let activeRenderId = 0;
+let shouldRefreshGlobalLeaderboard =
+    true;
 
 /* =========================================================
-   OPEN
+   ОТКРЫТЬ ЛИДЕРБОРД
    ========================================================= */
 
-export function openLeaderboardPage(root) {
+export function openLeaderboardPage(
+    root
+) {
     if (!canAccessLeaderboard()) {
         console.warn(
             "Leaderboard is unavailable for this user"
@@ -48,10 +54,12 @@ export function openLeaderboardPage(root) {
 
 
 /* =========================================================
-   PAGE
+   ОТРЕНДЕРИТЬ СТРАНИЦУ
    ========================================================= */
 
-export function renderLeaderboardPage(root) {
+export function renderLeaderboardPage(
+    root
+) {
     if (!root) {
         console.error(
             "Leaderboard: корневой контейнер не найден"
@@ -71,31 +79,40 @@ export function renderLeaderboardPage(root) {
         </main>
     `;
 
-    renderActiveLeaderboardContent();
+    void renderActiveLeaderboardContent();
 
-    destroyLeaderboardEvents = initLeaderboardEvents({
-        root: leaderboardRoot,
-        onTabChange: renderActiveLeaderboardContent,
-    });
+    destroyLeaderboardEvents =
+        initLeaderboardEvents({
+            root: leaderboardRoot,
+
+            onTabChange: () => {
+                void renderActiveLeaderboardContent();
+            }
+        });
 }
 
 
 /* =========================================================
-   ACTIVE CONTENT
+   ОТРЕНДЕРИТЬ АКТИВНУЮ ВКЛАДКУ
    ========================================================= */
 
-function renderActiveLeaderboardContent() {
+async function renderActiveLeaderboardContent() {
     if (!leaderboardRoot) {
         return;
     }
 
-    const content = leaderboardRoot.querySelector(
-        "[data-leaderboard-content]"
-    );
+    const currentRenderId =
+        ++activeRenderId;
 
-    const currentUserSlot = leaderboardRoot.querySelector(
-        "[data-leaderboard-current-user]"
-    );
+    const content =
+        leaderboardRoot.querySelector(
+            "[data-leaderboard-content]"
+        );
+
+    const currentUserSlot =
+        leaderboardRoot.querySelector(
+            "[data-leaderboard-current-user]"
+        );
 
     if (!content) {
         console.error(
@@ -108,31 +125,195 @@ function renderActiveLeaderboardContent() {
     const activeTab =
         getActiveLeaderboardTab();
 
-    content.dataset.activeTab =
-        activeTab;
+    resetLeaderboardScroll();
 
     if (activeTab === "global") {
-        renderLeaderboardState({
+        await renderGlobalLeaderboardContent({
             content,
             currentUserSlot,
-            renderContent: renderGlobalLeaderboard,
-            currentUser: globalCurrentUser,
+            renderId: currentRenderId
         });
 
         return;
     }
 
     if (activeTab === "season") {
-        renderLeaderboardState({
+        renderSeasonLeaderboardContent({
             content,
             currentUserSlot,
-            renderContent: renderSeasonLeaderboard,
-            currentUser: seasonCurrentUser,
+            renderId: currentRenderId
         });
 
         return;
     }
 
+    clearLeaderboardContent({
+        content,
+        currentUserSlot
+    });
+}
+
+
+/* =========================================================
+   ГЛОБАЛЬНЫЙ РЕЙТИНГ
+   ========================================================= */
+
+async function renderGlobalLeaderboardContent({
+    content,
+    currentUserSlot,
+    renderId
+}) {
+    setLeaderboardLoading({
+        content,
+        currentUserSlot
+    });
+
+    try {
+        const refresh =
+            shouldRefreshGlobalLeaderboard;
+
+        const result =
+            await loadGlobalLeaderboard({
+                refresh
+            });
+
+        if (
+            !isRenderCurrent(
+                renderId,
+                "global"
+            )
+        ) {
+            return;
+        }
+
+        shouldRefreshGlobalLeaderboard =
+            false;
+
+        content.innerHTML =
+            result.content;
+
+        if (currentUserSlot) {
+            currentUserSlot.innerHTML =
+                renderCurrentUser(
+                    result.currentUser
+                );
+        }
+
+    } catch (error) {
+        if (
+            !isRenderCurrent(
+                renderId,
+                "global"
+            )
+        ) {
+            return;
+        }
+
+        console.error(
+            "Leaderboard: ошибка загрузки глобального рейтинга",
+            error
+        );
+
+        renderLeaderboardError({
+            content,
+            currentUserSlot,
+            message:
+                error?.message
+                || "Не удалось загрузить рейтинг"
+        });
+    }
+}
+
+
+/* =========================================================
+   СЕЗОННЫЙ РЕЙТИНГ
+
+   Пока продолжает использовать тестовые данные.
+   ========================================================= */
+
+function renderSeasonLeaderboardContent({
+    content,
+    currentUserSlot,
+    renderId
+}) {
+    if (
+        !isRenderCurrent(
+            renderId,
+            "season"
+        )
+    ) {
+        return;
+    }
+
+    content.innerHTML =
+        renderSeasonLeaderboard();
+
+    if (currentUserSlot) {
+        currentUserSlot.innerHTML =
+            renderCurrentUser(
+                seasonCurrentUser
+            );
+    }
+}
+
+
+/* =========================================================
+   СОСТОЯНИЕ ЗАГРУЗКИ
+   ========================================================= */
+
+function setLeaderboardLoading({
+    content,
+    currentUserSlot
+}) {
+    content.innerHTML = `
+        <div
+            class="leaderboard-state"
+            role="status"
+            aria-live="polite"
+        >
+            Загрузка рейтинга…
+        </div>
+    `;
+
+    if (currentUserSlot) {
+        currentUserSlot.innerHTML = "";
+    }
+}
+
+
+/* =========================================================
+   ОШИБКА
+   ========================================================= */
+
+function renderLeaderboardError({
+    content,
+    currentUserSlot,
+    message
+}) {
+    content.innerHTML = `
+        <div
+            class="leaderboard-state
+                   leaderboard-state--error"
+            role="alert"
+        >
+            ${escapeHtml(message)}
+        </div>
+    `;
+
+    if (currentUserSlot) {
+        currentUserSlot.innerHTML = "";
+    }
+}
+
+
+/* =========================================================
+   ОЧИСТИТЬ КОНТЕНТ
+   ========================================================= */
+
+function clearLeaderboardContent({
+    content,
+    currentUserSlot
+}) {
     content.innerHTML = "";
 
     if (currentUserSlot) {
@@ -142,29 +323,24 @@ function renderActiveLeaderboardContent() {
 
 
 /* =========================================================
-   SHARED RENDER
+   ПРОВЕРКА АКТУАЛЬНОСТИ ЗАПРОСА
    ========================================================= */
 
-function renderLeaderboardState({
-    content,
-    currentUserSlot,
-    renderContent,
-    currentUser,
-}) {
-    content.innerHTML =
-        renderContent();
-
-    if (currentUserSlot) {
-        currentUserSlot.innerHTML =
-            renderCurrentUser(currentUser);
-    }
-
-    resetLeaderboardScroll();
+function isRenderCurrent(
+    renderId,
+    expectedTab
+) {
+    return (
+        leaderboardRoot !== null
+        && renderId === activeRenderId
+        && getActiveLeaderboardTab()
+            === expectedTab
+    );
 }
 
 
 /* =========================================================
-   RESET SCROLL
+   СБРОС СКРОЛЛА
    ========================================================= */
 
 function resetLeaderboardScroll() {
@@ -182,10 +358,30 @@ function resetLeaderboardScroll() {
 
 
 /* =========================================================
-   DESTROY
+   БЕЗОПАСНЫЙ ТЕКСТ
+   ========================================================= */
+
+function escapeHtml(
+    value
+) {
+    return String(
+        value ?? ""
+    )
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* =========================================================
+   УНИЧТОЖИТЬ СТРАНИЦУ
    ========================================================= */
 
 export function destroyLeaderboardPage() {
+    activeRenderId += 1;
+
     if (
         typeof destroyLeaderboardEvents
         === "function"
