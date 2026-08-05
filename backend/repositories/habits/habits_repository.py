@@ -3,7 +3,10 @@ from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from backend.database.database import get_connection
-
+from backend.services.leaderboard.season_service import (
+    get_season_dates,
+    get_season_number,
+)
 
 DAILY_XP_CONFIRMATIONS_LIMIT = 3
 DEFAULT_TIMEZONE = "Europe/Kyiv"
@@ -714,6 +717,16 @@ async def set_habit_confirmation(
                 timezone_name
             )
 
+            season_number = get_season_number(
+                confirmation_date
+            )
+
+            season_starts_on, season_ends_on = (
+                get_season_dates(
+                    season_number
+                )
+            )
+
             # -------------------------------------------------
             # Получаем существующее подтверждение за сегодня.
             # -------------------------------------------------
@@ -985,6 +998,72 @@ async def set_habit_confirmation(
                 total_confirmations,
                 total_xp,
             )
+
+            # -------------------------------------------------
+            # ПЕРЕСЧИТЫВАЕМ XP ПОЛЬЗОВАТЕЛЯ
+            # В РАМКАХ СЕЗОНА ПОДТВЕРЖДЕНИЯ
+            #
+            # Источник истины — habit_confirmations.
+            # Повторный запрос не начисляет XP дважды,
+            # а отмена корректно уменьшает значение.
+            # -------------------------------------------------
+
+            season_xp = await connection.fetchval(
+                """
+                SELECT
+                    COALESCE(
+                        SUM(hc.xp_amount),
+                        0
+                    )::INTEGER
+
+                FROM habit_confirmations AS hc
+
+                INNER JOIN habits AS h
+                    ON h.id = hc.habit_id
+
+                WHERE h.user_id = $1
+                  AND hc.confirmation_date
+                      BETWEEN $2 AND $3
+                  AND hc.is_confirmed = TRUE
+                  AND hc.xp_awarded = TRUE
+                """,
+                user_id,
+                season_starts_on,
+                season_ends_on,
+            )
+
+            season_xp = int(
+                season_xp or 0
+            )
+
+            await connection.execute(
+                """
+                INSERT INTO user_season_stats (
+                    season_number,
+                    user_id,
+                    season_xp
+                )
+                VALUES (
+                    $1,
+                    $2,
+                    $3
+                )
+
+                ON CONFLICT (
+                    season_number,
+                    user_id
+                )
+                DO UPDATE SET
+                    season_xp =
+                        EXCLUDED.season_xp,
+
+                    updated_at = NOW()
+                """,
+                season_number,
+                user_id,
+                season_xp,
+            )
+
             # -------------------------------------------------
             # Получаем финальное состояние подтверждения
             # за сегодняшний день.

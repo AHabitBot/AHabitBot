@@ -9,10 +9,10 @@ CREATE_TABLES_SQL = """
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     telegram_id BIGINT NOT NULL UNIQUE,
-    nickname VARCHAR(32) NOT NULL UNIQUE,
+    nickname VARCHAR(32) UNIQUE,
     avatar_key VARCHAR(64) NOT NULL DEFAULT 'beginer_m',
     first_name VARCHAR(255),
-    nickname VARCHAR(50) UNIQUE,
+    username VARCHAR(255),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -89,6 +89,39 @@ CREATE TABLE IF NOT EXISTS user_stats (
         CHECK (max_streak >= current_streak)
 );
 
+CREATE TABLE IF NOT EXISTS user_season_stats (
+    season_number INTEGER NOT NULL,
+    user_id BIGINT NOT NULL,
+    season_xp INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (
+        season_number,
+        user_id
+    ),
+
+    CONSTRAINT fk_user_season_stats_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT chk_season_number_positive
+        CHECK (season_number >= 1),
+
+    CONSTRAINT chk_season_xp_non_negative
+        CHECK (season_xp >= 0)
+);
+
+CREATE INDEX IF NOT EXISTS
+idx_user_season_stats_leaderboard
+ON user_season_stats (
+    season_number,
+    season_xp DESC,
+    user_id ASC
+);
+
+
 CREATE INDEX IF NOT EXISTS idx_habits_user_id
     ON habits(user_id);
 
@@ -126,9 +159,11 @@ async def init_database() -> None:
 
         print("✅ Таблицы успешно созданы:")
         print("   • users")
+        print("   • user_settings")
         print("   • habits")
         print("   • habit_confirmations")
         print("   • user_stats")
+        print("   • user_season_stats")
 
     finally:
         await connection.close()
