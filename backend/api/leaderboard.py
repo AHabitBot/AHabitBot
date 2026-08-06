@@ -112,11 +112,6 @@ async def read_season_leaderboard(
                 season_end_date.isoformat(),
         },
 
-        # Пока оставляем для обратной совместимости
-        # со старой версией frontend.
-        "season_number":
-            season_number,
-
         "users": [
             dict(leaderboard_user)
             for leaderboard_user

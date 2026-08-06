@@ -50,8 +50,7 @@ export async function loadSeasonLeaderboard(
 
     const season =
         normalizeSeason(
-            response?.season,
-            response?.season_number
+            response?.season
         );
 
     const result = {
@@ -128,13 +127,11 @@ function getTopThree(
    ========================================================= */
 
 function normalizeSeason(
-    season,
-    legacySeasonNumber
+    season
 ) {
     const number =
         normalizePositiveInteger(
             season?.number
-            ?? legacySeasonNumber
         );
 
     const title =
