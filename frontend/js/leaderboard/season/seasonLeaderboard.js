@@ -79,6 +79,25 @@ export async function loadSeasonLeaderboard(
 function renderSeasonLeaderboard(
     users = []
 ) {
+    if (!users.length) {
+        return `
+            <div class="leaderboard-empty">
+                <span class="material-symbols-rounded leaderboard-empty__icon">
+                    emoji_events
+                </span>
+
+                <div class="leaderboard-empty__title">
+                    В этом сезоне пока нет участников
+                </div>
+
+                <div class="leaderboard-empty__text">
+                    Подтвердите первую привычку
+                    и станьте лидером сезона.
+                </div>
+            </div>
+        `;
+    }
+
     const topUsers =
         getTopThree(users);
 

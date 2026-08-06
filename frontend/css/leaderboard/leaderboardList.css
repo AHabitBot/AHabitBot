@@ -254,6 +254,9 @@
     -webkit-font-smoothing: antialiased;
 }
 
+/* =========================================================
+   ТЕКСТ ЕСЛИ В СЕЗОННОМ ОТСУТСТВУЮТ УЧАСТНИКИ
+   ========================================================= */
 
 .leaderboard-list__xp-icon {
     display: block;
@@ -277,6 +280,38 @@
 
 .leaderboard-list__xp-value {
     color: #8b8e98;
+}
+
+
+
+.leaderboard-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 56px 24px;
+    text-align: center;
+}
+
+.leaderboard-empty__icon {
+    font-size: 56px;
+    color: #B59A52;
+    margin-bottom: 18px;
+}
+
+.leaderboard-empty__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2E3A1F;
+    margin-bottom: 10px;
+}
+
+.leaderboard-empty__text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #6E7463;
+    max-width: 260px;
 }
 
 
