@@ -118,46 +118,36 @@ async def get_season_leaderboard_users(
             SELECT
                 ROW_NUMBER() OVER (
                     ORDER BY
-                        COALESCE(
-                            season_stats.season_xp,
-                            0
-                        ) DESC,
-
-                        users.id ASC
+                        season_stats.season_xp DESC,
+                        season_stats.user_id ASC
                 )::INTEGER AS rank,
 
                 users.id AS user_id,
                 users.nickname,
                 users.avatar_key,
 
-                COALESCE(
-                    season_stats.season_xp,
-                    0
-                )::INTEGER AS season_xp,
+                season_stats.season_xp::INTEGER
+                    AS season_xp,
 
                 global_stats.current_streak
 
-            FROM users
+            FROM user_season_stats AS season_stats
+
+            INNER JOIN users
+                ON users.id = season_stats.user_id
 
             INNER JOIN user_stats AS global_stats
                 ON global_stats.user_id =
-                    users.id
+                    season_stats.user_id
 
-            LEFT JOIN user_season_stats
-                AS season_stats
-                ON season_stats.user_id =
-                    users.id
+            WHERE
+                season_stats.season_number = $1
 
-               AND season_stats.season_number =
-                    $1
+                AND season_stats.season_xp > 0
 
             ORDER BY
-                COALESCE(
-                    season_stats.season_xp,
-                    0
-                ) DESC,
-
-                users.id ASC
+                season_stats.season_xp DESC,
+                season_stats.user_id ASC
 
             LIMIT $2
             """,
