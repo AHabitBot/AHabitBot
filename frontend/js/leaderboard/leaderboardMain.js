@@ -1,5 +1,4 @@
 import {
-    canAccessLeaderboard,
     getActiveLeaderboardTab
 } from "./leaderboardStore.js";
 
@@ -41,19 +40,10 @@ let shouldRefreshSeasonLeaderboard =
 export function openLeaderboardPage(
     root
 ) {
-    if (!canAccessLeaderboard()) {
-        console.warn(
-            "Leaderboard is unavailable for this user"
-        );
-
-        return false;
-    }
-
     renderLeaderboardPage(root);
 
     return true;
 }
-
 
 /* =========================================================
    ОТРЕНДЕРИТЬ СТРАНИЦУ

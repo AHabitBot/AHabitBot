@@ -1,26 +1,4 @@
 /* =========================================================
-   ACCESS
-   ========================================================= */
-
-export function getTelegramUserId() {
-    const telegramId =
-        window.Telegram?.WebApp
-            ?.initDataUnsafe
-            ?.user
-            ?.id;
-
-    return Number.isInteger(telegramId)
-        ? telegramId
-        : null;
-}
-
-
-export function canAccessLeaderboard() {
-    return true;
-}
-
-
-/* =========================================================
    STATE
    ========================================================= */
 
