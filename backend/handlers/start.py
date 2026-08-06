@@ -12,5 +12,5 @@ async def start_handler(message: Message):
     await register_user(message.from_user)
 
     await message.answer(
-        "👇🏻👇🏻👇🏻!"
+        "👇🏻👇🏻👇🏻👇🏻👇🏻"
     )
