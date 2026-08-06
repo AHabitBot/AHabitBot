@@ -1,5 +1,3 @@
-import { canAccessLeaderboard } from "./leaderboard/leaderboardStore.js";
-
 const NAVIGATION_ID = "bottom-navigation";
 const NAVIGATION_FADE_ID = "bottom-navigation-fade";
 
@@ -14,9 +12,6 @@ const NAVIGATION_FADE_ID = "bottom-navigation-fade";
 export function renderBottomNavigation(
     activePage = "habits"
 ) {
-    if (!canAccessLeaderboard()) {
-        return "";
-    }
 
     return `
         <div
@@ -111,10 +106,6 @@ export function mountBottomNavigation(
     activePage = "habits"
 ) {
     removeBottomNavigation();
-
-    if (!canAccessLeaderboard()) {
-        return;
-    }
 
     document.body.insertAdjacentHTML(
         "beforeend",
@@ -236,11 +227,6 @@ function handleNavigationClick(event) {
         button.dataset.navigationPage;
 
     if (!page) {
-        return;
-    }
-
-    if (!canAccessLeaderboard()) {
-        removeBottomNavigation();
         return;
     }
 
