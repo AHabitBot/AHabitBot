@@ -1,6 +1,5 @@
 from aiogram.types import User
 
-from backend.repositories.stats import create_stats
 from backend.repositories.users import (
     create_user,
     get_user_by_telegram_id,
@@ -21,8 +20,6 @@ async def register_user(user: User):
             username=user.username,
             first_name=user.first_name,
         )
-
-        await create_stats(db_user["id"])
 
         print(
             f"🆕 Новый пользователь | "
