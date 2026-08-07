@@ -1,17 +1,79 @@
 const NAVIGATION_ID = "bottom-navigation";
 const NAVIGATION_FADE_ID = "bottom-navigation-fade";
 
+const PROFILE_ALLOWED_TELEGRAM_ID =
+    900410719;
+
+
+/* =========================================================
+   ПРОВЕРИТЬ ДОСТУП К ПРОФИЛЮ
+   ========================================================= */
+
+export function canAccessProfile() {
+    const telegramId =
+        Number(
+            window.Telegram
+                ?.WebApp
+                ?.initDataUnsafe
+                ?.user
+                ?.id
+        );
+
+    return (
+        telegramId ===
+        PROFILE_ALLOWED_TELEGRAM_ID
+    );
+}
+
 
 /* =========================================================
    РЕНДЕР НИЖНЕЙ НАВИГАЦИИ
 
-   Временно вся навигация доступна только пользователю,
-   которому разрешён доступ через canAccessLeaderboard().
+   Привычки и лидерборд доступны всем.
+   Профиль временно доступен только разрешённому Telegram ID.
    ========================================================= */
 
 export function renderBottomNavigation(
     activePage = "habits"
 ) {
+
+    const profileNavigationItem =
+        canAccessProfile()
+            ? `
+                <button
+                    type="button"
+                    class="
+                        bottom-navigation__item
+                        ${
+                            activePage === "profile"
+                                ? "is-active"
+                                : ""
+                        }
+                    "
+                    data-navigation-page="profile"
+                    aria-label="Открыть профиль"
+                    ${
+                        activePage === "profile"
+                            ? 'aria-current="page"'
+                            : ""
+                    }
+                >
+                    <span
+                        class="
+                            material-symbols-rounded
+                            bottom-navigation__icon
+                        "
+                        aria-hidden="true"
+                    >
+                        person
+                    </span>
+
+                    <span class="bottom-navigation__label">
+                        Профиль
+                    </span>
+                </button>
+            `
+            : "";
 
     return `
         <div
@@ -92,6 +154,9 @@ export function renderBottomNavigation(
                     Лидерборд
                 </span>
             </button>
+
+
+            ${profileNavigationItem}
 
         </nav>
     `;
@@ -229,6 +294,19 @@ function handleNavigationClick(event) {
     if (!page) {
         return;
     }
+
+
+    /* -----------------------------------------------------
+       Дополнительная проверка доступа к профилю
+       ----------------------------------------------------- */
+
+    if (
+        page === "profile" &&
+        !canAccessProfile()
+    ) {
+        return;
+    }
+
 
     setActiveNavigationPage(page);
 

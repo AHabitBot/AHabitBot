@@ -7,8 +7,13 @@ import {
 } from "./leaderboard/leaderboardMain.js"
 
 import {
+    openProfilePage
+} from "./profile/profileMain.js"
+
+import {
     mountBottomNavigation,
-    setActiveNavigationPage
+    setActiveNavigationPage,
+    canAccessProfile
 } from "./navigation.js"
 
 
@@ -57,13 +62,36 @@ function handleNavigation(event) {
             "leaderboard-v2-root"
         )
 
+    const profilePage =
+        document.getElementById(
+            "profile-v2-page"
+        )
+
+    const profileRoot =
+        document.getElementById(
+            "profile-v2-root"
+        )
+
+
+    /* =====================================================
+       ЛИДЕРБОРД
+       ====================================================== */
 
     if (page === "leaderboard") {
         habitsPage.hidden = true
-        habitsPage.classList.remove("active")
+        habitsPage.classList.remove(
+            "active"
+        )
+
+        profilePage.hidden = true
+        profilePage.classList.remove(
+            "active"
+        )
 
         leaderboardPage.hidden = false
-        leaderboardPage.classList.add("active")
+        leaderboardPage.classList.add(
+            "active"
+        )
 
         openLeaderboardPage(
             leaderboardRoot
@@ -77,16 +105,67 @@ function handleNavigation(event) {
     }
 
 
+    /* =====================================================
+       ПРОФИЛЬ
+       ====================================================== */
+
+    if (page === "profile") {
+        if (!canAccessProfile()) {
+            return
+        }
+
+        habitsPage.hidden = true
+        habitsPage.classList.remove(
+            "active"
+        )
+
+        leaderboardPage.hidden = true
+        leaderboardPage.classList.remove(
+            "active"
+        )
+
+        profilePage.hidden = false
+        profilePage.classList.add(
+            "active"
+        )
+
+        openProfilePage(
+            profileRoot
+        )
+
+        setActiveNavigationPage(
+            "profile"
+        )
+
+        return
+    }
+
+
+    /* =====================================================
+       ПРИВЫЧКИ
+       ====================================================== */
+
     if (page === "habits") {
         leaderboardPage.hidden = true
-        leaderboardPage.classList.remove("active")
+        leaderboardPage.classList.remove(
+            "active"
+        )
+
+        profilePage.hidden = true
+        profilePage.classList.remove(
+            "active"
+        )
 
         habitsPage.hidden = false
-        habitsPage.classList.add("active")
+        habitsPage.classList.add(
+            "active"
+        )
 
         setActiveNavigationPage(
             "habits"
         )
+
+        return
     }
 }
 
@@ -101,6 +180,27 @@ function initV2() {
         document.getElementById(
             "habits-v2-root"
         )
+
+    const leaderboardPage =
+        document.getElementById(
+            "leaderboard-v2-page"
+        )
+
+    const leaderboardRoot =
+        document.getElementById(
+            "leaderboard-v2-root"
+        )
+
+    const profilePage =
+        document.getElementById(
+            "profile-v2-page"
+        )
+
+    const profileRoot =
+        document.getElementById(
+            "profile-v2-root"
+        )
+
 
     if (!habitsPage) {
         console.error(
@@ -118,9 +218,45 @@ function initV2() {
         return
     }
 
+    if (!leaderboardPage) {
+        console.error(
+            "V2: не найдена страница #leaderboard-v2-page"
+        )
+
+        return
+    }
+
+    if (!leaderboardRoot) {
+        console.error(
+            "V2: не найден контейнер #leaderboard-v2-root"
+        )
+
+        return
+    }
+
+    if (!profilePage) {
+        console.error(
+            "V2: не найдена страница #profile-v2-page"
+        )
+
+        return
+    }
+
+    if (!profileRoot) {
+        console.error(
+            "V2: не найден контейнер #profile-v2-root"
+        )
+
+        return
+    }
+
+
     initTelegramWebApp()
     initHabitsEvents()
-    mountBottomNavigation("habits")
+
+    mountBottomNavigation(
+        "habits"
+    )
 
     document.addEventListener(
         "app:navigate",

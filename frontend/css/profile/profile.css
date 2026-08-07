@@ -1,0 +1,32 @@
+/* =========================================================
+   PROFILE V2
+   ========================================================= */
+
+.profile-page {
+    min-height: 100%;
+    box-sizing: border-box;
+
+    padding:
+        calc(18px + env(safe-area-inset-top))
+        20px
+        120px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.profile-header {
+    width: 100%;
+}
+
+.profile-header__title {
+    margin: 0;
+
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+
+    color: #111111;
+}
