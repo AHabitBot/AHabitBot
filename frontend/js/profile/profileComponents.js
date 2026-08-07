@@ -29,7 +29,7 @@ export function renderProfileUserCard() {
                     <div class="profile-user-card__name-row">
 
                         <h2 class="profile-user-card__name">
-                            Вы
+                            Player4
                         </h2>
 
                         <span
@@ -45,29 +45,49 @@ export function renderProfileUserCard() {
                     </div>
 
 
-                    <div class="profile-user-card__level-row">
+<div class="profile-user-card__level">
 
-                        <span class="profile-user-card__level">
-                            Уровень 12
-                        </span>
+    <span
+        class="
+            material-symbols-rounded
+            profile-user-card__level-icon
+        "
+        aria-hidden="true"
+    >
+        shield_with_heart
+    </span>
 
-                        <span class="profile-user-card__xp">
-                            650 / 1000 XP
-                        </span>
+    <span class="profile-user-card__level-text">
+        Уровень 12
+    </span>
 
-                    </div>
+</div>
+
+                </div>
+
+            </div>
 
 
+            <div class="profile-user-card__progress-row">
+
+                <div
+                    class="profile-user-card__progress"
+                    aria-hidden="true"
+                >
                     <div
-                        class="profile-user-card__progress"
-                        aria-hidden="true"
-                    >
-                        <div
-                            class="profile-user-card__progress-fill"
-                            style="width: 65%;"
-                        ></div>
-                    </div>
+                        class="profile-user-card__progress-fill"
+                        style="width: 65%;"
+                    ></div>
+                </div>
 
+                <div class="profile-user-card__xp">
+                    <span class="profile-user-card__xp-current">
+                        650
+                    </span>
+
+                    <span class="profile-user-card__xp-total">
+                        / 1000 XP
+                    </span>
                 </div>
 
             </div>

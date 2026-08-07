@@ -24,7 +24,7 @@
 
 
 /* =========================================================
-   ОСНОВНАЯ СТРОКА
+   ВЕРХНЯЯ ЧАСТЬ
    ========================================================= */
 
 .profile-user-card__top {
@@ -42,12 +42,12 @@
 .profile-user-card__avatar-wrap {
     flex: 0 0 auto;
 
-    width: 74px;
-    height: 74px;
+    width: 92px;
+    height: 92px;
 
     overflow: hidden;
 
-    border-radius: 22px;
+    border-radius: 24px;
 
     background:
         rgba(226, 231, 218, 0.9);
@@ -70,6 +70,7 @@
 
 .profile-user-card__info {
     flex: 1;
+
     min-width: 0;
 }
 
@@ -94,45 +95,129 @@
     font-size: 24px;
     font-weight: 700;
     line-height: 1.1;
+
+    letter-spacing: -0.025em;
 }
 
 
 .profile-user-card__edit-icon {
-    font-size: 18px;
+    flex: 0 0 auto;
 
     color:
         rgba(35, 36, 40, 0.42);
+
+    font-size: 20px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 500,
+        "GRAD" 0,
+        "opsz" 20;
 }
 
 
 /* =========================================================
-   LEVEL + XP
+   LEVEL
    ========================================================= */
 
-.profile-user-card__level-row {
-    display: flex;
+.profile-user-card__level {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
 
-    gap: 12px;
+    gap: 6px;
+
+    width: fit-content;
 
     margin-top: 10px;
+    padding: 6px 10px;
+
+    border: 1px solid
+        rgba(101, 126, 75, 0.10);
+
+    border-radius: 12px;
+
+    background:
+        rgba(231, 239, 221, 0.72);
+
+    color: #657e4b;
 }
 
 
-.profile-user-card__level,
-.profile-user-card__xp {
-    color:
-        rgba(35, 36, 40, 0.62);
+/* =========================================================
+   LEVEL — ICON
+   ========================================================= */
 
-    font-size: 13px;
+.profile-user-card__level-icon {
+    flex: 0 0 auto;
+
+    font-size: 17px;
+    line-height: 1;
+
+    color: #657e4b;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 500,
+        "GRAD" 0,
+        "opsz" 17;
+}
+
+
+/* =========================================================
+   LEVEL — TEXT
+   ========================================================= */
+
+.profile-user-card__level-text {
+    font-size: 14px;
     font-weight: 600;
-    line-height: 1.2;
+    line-height: 1;
+
+    white-space: nowrap;
 }
 
 
-.profile-user-card__xp {
-    text-align: right;
+/* =========================================================
+   МАЛЕНЬКИЕ ЭКРАНЫ
+   ========================================================= */
+
+@media (max-width: 360px) {
+    .profile-user-card__level {
+        gap: 5px;
+
+        margin-top: 8px;
+        padding: 5px 9px;
+    }
+
+    .profile-user-card__level-icon {
+        font-size: 16px;
+
+        font-variation-settings:
+            "FILL" 1,
+            "wght" 500,
+            "GRAD" 0,
+            "opsz" 16;
+    }
+
+    .profile-user-card__level-text {
+        font-size: 13px;
+    }
+}
+
+
+/* =========================================================
+   XP ROW
+   ========================================================= */
+
+.profile-user-card__progress-row {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    width: 100%;
+
+    margin-top: 18px;
 }
 
 
@@ -141,10 +226,9 @@
    ========================================================= */
 
 .profile-user-card__progress {
-    width: 100%;
-    height: 8px;
+    flex: 1;
 
-    margin-top: 8px;
+    height: 10px;
 
     overflow: hidden;
 
@@ -166,4 +250,82 @@
             #7d8b64,
             #98a77b
         );
+}
+
+
+/* =========================================================
+   XP VALUE
+   ========================================================= */
+
+.profile-user-card__xp {
+    flex: 0 0 auto;
+
+    min-width: 88px;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+
+    color:
+        rgba(35, 36, 40, 0.48);
+}
+
+
+.profile-user-card__xp-current {
+    color: #617247;
+}
+
+
+.profile-user-card__xp-total {
+    color:
+        rgba(35, 36, 40, 0.48);
+}
+
+
+/* =========================================================
+   МАЛЕНЬКИЕ ЭКРАНЫ
+   ========================================================= */
+
+@media (max-width: 360px) {
+    .profile-user-card {
+        padding: 16px;
+
+        border-radius: 22px;
+    }
+
+
+    .profile-user-card__avatar-wrap {
+        width: 84px;
+        height: 84px;
+
+        border-radius: 22px;
+    }
+
+
+    .profile-user-card__name {
+        font-size: 22px;
+    }
+
+
+    .profile-user-card__progress-row {
+        gap: 10px;
+
+        margin-top: 16px;
+    }
+
+
+    .profile-user-card__progress {
+        height: 9px;
+    }
+
+
+    .profile-user-card__xp {
+        min-width: 82px;
+
+        font-size: 13px;
+    }
 }
