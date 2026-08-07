@@ -9,7 +9,13 @@
 
 export function renderProfileUserCard() {
     return `
-        <section class="profile-user-card">
+        <section
+            class="profile-user-card"
+            style="
+                background-image:
+                    url('./img/profile/background/background_beginer_1.jpg');
+            "
+        >
 
             <div class="profile-user-card__top">
 
@@ -45,23 +51,23 @@ export function renderProfileUserCard() {
                     </div>
 
 
-<div class="profile-user-card__level">
+                    <div class="profile-user-card__level">
 
-    <span
-        class="
-            material-symbols-rounded
-            profile-user-card__level-icon
-        "
-        aria-hidden="true"
-    >
-        shield_with_heart
-    </span>
+                        <span
+                            class="
+                                material-symbols-rounded
+                                profile-user-card__level-icon
+                            "
+                            aria-hidden="true"
+                        >
+                            shield_with_heart
+                        </span>
 
-    <span class="profile-user-card__level-text">
-        Уровень 12
-    </span>
+                        <span class="profile-user-card__level-text">
+                            Уровень 12
+                        </span>
 
-</div>
+                    </div>
 
                 </div>
 
@@ -80,7 +86,9 @@ export function renderProfileUserCard() {
                     ></div>
                 </div>
 
+
                 <div class="profile-user-card__xp">
+
                     <span class="profile-user-card__xp-current">
                         650
                     </span>
@@ -88,6 +96,7 @@ export function renderProfileUserCard() {
                     <span class="profile-user-card__xp-total">
                         / 1000 XP
                     </span>
+
                 </div>
 
             </div>
