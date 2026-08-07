@@ -95,6 +95,8 @@
 
     text-rendering:
         geometricPrecision;
+
+    touch-action: none;
 }
 
 
