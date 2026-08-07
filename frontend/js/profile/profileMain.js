@@ -1,3 +1,8 @@
+import {
+    renderProfileUserCard
+} from "./profileComponents.js"
+
+
 /* =========================================================
    PROFILE V2 — ГЛАВНАЯ СТРАНИЦА
    ========================================================= */
@@ -33,6 +38,8 @@ function renderProfilePage(root) {
                     Профиль
                 </h1>
             </header>
+
+            ${renderProfileUserCard()}
 
         </section>
     `

@@ -1,0 +1,18 @@
+/* =========================================================
+   PROFILE V2 — HEADER
+   ========================================================= */
+
+.profile-header {
+    width: 100%;
+}
+
+
+.profile-header__title {
+    margin: 0;
+
+    color: #232428;
+
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+}

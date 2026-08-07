@@ -1,0 +1,8 @@
+/* =========================================================
+   PROFILE V2 — ТОЧКА ВХОДА СТИЛЕЙ
+   ========================================================= */
+
+@import url("./profile.css");
+@import url("./profileHeader.css");
+@import url("./profileUserCard.css");
+@import url("./profileMenu.css");
