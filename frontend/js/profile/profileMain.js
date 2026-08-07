@@ -1,5 +1,6 @@
 import {
-    renderProfileUserCard
+    renderProfileUserCard,
+    renderProfileMenu
 } from "./profileComponents.js"
 
 
@@ -40,6 +41,8 @@ function renderProfilePage(root) {
             </header>
 
             ${renderProfileUserCard()}
+
+            ${renderProfileMenu()}
 
         </section>
     `
