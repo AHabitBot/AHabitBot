@@ -12,7 +12,6 @@
     margin: 0;
     padding: 0;
 
-    touch-action: none;
 }
 
 /* =========================================================
@@ -147,6 +146,8 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
 
     overflow: hidden;
+
+    touch-action: none;
 }
 
 
@@ -202,11 +203,15 @@
         background-color 160ms ease,
         box-shadow 160ms ease,
         transform 120ms ease;
+
+    touch-action: none;
+
 }
 
 .leaderboard-tabs__button:active {
     transform: scale(0.985);
 }
+
 
 
 /* =========================================================
