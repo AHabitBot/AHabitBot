@@ -65,7 +65,7 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 
-    pointer-events: auto;
+    pointer-events: none;
 }
 
 
