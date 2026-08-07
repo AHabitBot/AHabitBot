@@ -96,7 +96,7 @@
 
     color: #202126;
 
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 700;
     line-height: 1.15;
     letter-spacing: -0.025em;
@@ -138,12 +138,12 @@
     width: fit-content;
 
     margin-top: 8px;
-    padding: 4px 7px;
+    padding: 4px 8px;
 
     border: 1px solid
         rgba(101, 126, 75, 0.08);
 
-    border-radius: 9px;
+    border-radius: 999px;
 
     background:
         rgba(231, 239, 221, 0.68);
@@ -200,7 +200,7 @@
 .profile-user-card__progress {
     flex: 1;
 
-    height: 10px;
+    height: 6px;
 
     overflow: hidden;
 
@@ -232,29 +232,28 @@
 .profile-user-card__xp {
     flex: 0 0 auto;
 
-    min-width: 88px;
+    min-width: 80px;
 
     text-align: right;
-
     white-space: nowrap;
 
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 1;
 
     color:
-        rgba(35, 36, 40, 0.48);
+        rgba(35, 36, 40, 0.44);
 }
 
 
 .profile-user-card__xp-current {
-    color: #617247;
+    color: #657e4b;
 }
 
 
 .profile-user-card__xp-total {
     color:
-        rgba(35, 36, 40, 0.48);
+        rgba(35, 36, 40, 0.44);
 }
 
 
