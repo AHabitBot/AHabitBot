@@ -92,15 +92,13 @@
 
     box-sizing: border-box;
 
-    /*
-     * Справа резервируем отдельную полосу.
-     * На телефоне скроллбар будет накладываться
-     * на пустое пространство, а не на карточки.
-     */
     padding-right: 8px;
 
     overflow-x: hidden;
     overflow-y: auto;
+
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
 
     scrollbar-gutter: stable;
     scrollbar-width: thin;
