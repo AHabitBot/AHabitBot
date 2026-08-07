@@ -27,6 +27,12 @@ function initTelegramWebApp() {
     telegram.ready()
     telegram.expand()
 
+    if (
+        typeof telegram.disableVerticalSwipes === "function"
+    ) {
+        telegram.disableVerticalSwipes()
+    }
+
     window.initData =
         telegram.initData
 }
