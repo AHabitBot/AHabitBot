@@ -7,6 +7,10 @@ import {
     initProfileEvents
 } from "./profileEvents.js"
 
+import {
+    fetchProfile
+} from "./profileApi.js"
+
 
 /* =========================================================
    PROFILE V2 — ГЛАВНАЯ СТРАНИЦА
@@ -17,7 +21,7 @@ import {
    ОТКРЫТЬ ПРОФИЛЬ
    ========================================================= */
 
-export function openProfilePage(root) {
+export async function openProfilePage(root) {
     if (!root) {
         console.error(
             "Profile: не найден корневой контейнер"
@@ -26,28 +30,49 @@ export function openProfilePage(root) {
         return
     }
 
+
     initProfileEvents(
         root,
         {
             renderMainPage:
-                renderProfileMainPage
+                openProfilePage
         }
     )
 
-    renderProfileMainPage(root)
+
+    try {
+        const profile =
+            await fetchProfile()
+
+        renderProfileMainPage(
+            root,
+            profile
+        )
+    }
+
+    catch (error) {
+        console.error(
+            "Profile: ошибка загрузки профиля",
+            error
+        )
+
+        renderProfileLoadError(root)
+    }
 }
 
 
 /* =========================================================
-   РЕНДЕР ГЛАВНОЙ СТРАНИЦЫ ПРОФИЛЯ
+   ГЛАВНАЯ СТРАНИЦА ПРОФИЛЯ
    ========================================================= */
 
 export function renderProfileMainPage(
-    root
+    root,
+    profile
 ) {
     if (!root) {
         return
     }
+
 
     root.innerHTML = `
         <section class="profile-page">
@@ -60,9 +85,34 @@ export function renderProfileMainPage(
 
             </header>
 
-            ${renderProfileUserCard()}
+            ${renderProfileUserCard(profile)}
 
             ${renderProfileMenu()}
+
+        </section>
+    `
+}
+
+
+/* =========================================================
+   ОШИБКА ЗАГРУЗКИ
+   ========================================================= */
+
+function renderProfileLoadError(root) {
+    root.innerHTML = `
+        <section class="profile-page">
+
+            <header class="profile-header">
+
+                <h1 class="profile-header__title">
+                    Профиль
+                </h1>
+
+            </header>
+
+            <div class="profile-load-error">
+                Не удалось загрузить профиль
+            </div>
 
         </section>
     `
