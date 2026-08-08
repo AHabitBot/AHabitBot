@@ -15,7 +15,7 @@
 */
 
 export const PROFILE_FEATURES = {
-    stats: false,
+    stats: true,
     achievements: false,
     appearance: false,
     settings: false,
