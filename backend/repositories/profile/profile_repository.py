@@ -42,3 +42,41 @@ async def get_profile_data(
         return None
 
     return dict(row)
+
+
+
+async def update_nickname_once(
+    user_id: int,
+    nickname: str,
+) -> dict | None:
+    """
+    Меняет nickname только в том случае,
+    если пользователь ещё не использовал
+    единственную смену nickname.
+
+    Возвращает обновлённого пользователя
+    или None, если смена уже была использована.
+    """
+
+    async with get_connection() as connection:
+        row = await connection.fetchrow(
+            """
+            UPDATE users
+            SET
+                nickname = $1,
+                nickname_changed_at = NOW(),
+                updated_at = NOW()
+            WHERE id = $2
+              AND nickname_changed_at IS NULL
+            RETURNING
+                nickname,
+                nickname_changed_at
+            """,
+            nickname,
+            user_id,
+        )
+
+    if row is None:
+        return None
+
+    return dict(row)

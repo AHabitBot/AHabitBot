@@ -30,6 +30,10 @@ import {
     isProfileFeatureEnabled
 } from "./profileFeatures.js"
 
+import {
+    openProfileNicknameEditor
+} from "./nickname/profileNickname.js"
+
 
 /* =========================================================
    PROFILE V2 — СОБЫТИЯ

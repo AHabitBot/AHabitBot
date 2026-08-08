@@ -1,0 +1,436 @@
+/* =========================================================
+   PROFILE NICKNAME — OVERLAY
+   ========================================================= */
+
+.profile-nickname-overlay {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    padding:
+        16px
+        14px
+        calc(
+            env(safe-area-inset-bottom, 0px)
+            + 16px
+        );
+
+    background:
+        rgba(22, 27, 23, 0.28);
+
+    backdrop-filter:
+        blur(4px);
+
+    -webkit-backdrop-filter:
+        blur(4px);
+
+    opacity: 0;
+
+    transition:
+        opacity 180ms ease;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+.profile-nickname-overlay.is-visible {
+    opacity: 1;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.profile-nickname-modal {
+    width: min(
+        100%,
+        420px
+    );
+
+    padding:
+        18px
+        16px
+        16px;
+
+    border:
+        1px solid
+        rgba(66, 83, 67, 0.10);
+
+    border-radius: 24px;
+
+    background:
+        rgba(
+            248,
+            249,
+            244,
+            0.98
+        );
+
+    box-shadow:
+        0 18px 46px
+        rgba(27, 37, 29, 0.18);
+
+    transform:
+        translateY(24px)
+        scale(0.985);
+
+    transition:
+        transform 180ms ease;
+}
+
+
+.profile-nickname-overlay.is-visible
+.profile-nickname-modal {
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.profile-nickname-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 10px;
+}
+
+
+.profile-nickname-modal__title {
+    margin: 0;
+
+    font-size: 20px;
+    font-weight: 750;
+    line-height: 1.2;
+
+    color: #222922;
+}
+
+
+.profile-nickname-modal__close {
+    flex: 0 0 auto;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 12px;
+
+    background:
+        rgba(
+            91,
+            108,
+            91,
+            0.08
+        );
+
+    color: #3d493e;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+.profile-nickname-modal__close
+.material-symbols-rounded {
+    font-size: 21px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 500,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+
+.profile-nickname-modal__close:active {
+    transform: scale(0.94);
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.profile-nickname-modal__description {
+    margin:
+        0
+        0
+        16px;
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.45;
+
+    color: #687269;
+}
+
+
+/* =========================================================
+   INPUT FIELD
+   ========================================================= */
+
+.profile-nickname-modal__field {
+    position: relative;
+
+    margin-bottom: 8px;
+}
+
+
+.profile-nickname-modal__input {
+    width: 100%;
+    height: 52px;
+
+    box-sizing: border-box;
+
+    padding:
+        0
+        58px
+        0
+        14px;
+
+    border:
+        1px solid
+        rgba(
+            76,
+            94,
+            77,
+            0.16
+        );
+
+    border-radius: 15px;
+
+    outline: none;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.88
+        );
+
+    font-size: 16px;
+    font-weight: 650;
+
+    color: #222922;
+
+    caret-color: #536b56;
+
+    transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease,
+        background 150ms ease;
+}
+
+
+.profile-nickname-modal__input::placeholder {
+    color: #a0a8a1;
+    font-weight: 500;
+}
+
+
+.profile-nickname-modal__input:focus {
+    border-color:
+        rgba(
+            71,
+            101,
+            74,
+            0.44
+        );
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            86,
+            112,
+            88,
+            0.09
+        );
+}
+
+
+.profile-nickname-modal__input:disabled {
+    opacity: 0.65;
+}
+
+
+/* =========================================================
+   COUNTER
+   ========================================================= */
+
+.profile-nickname-modal__counter {
+    position: absolute;
+
+    right: 14px;
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    font-size: 12px;
+    font-weight: 650;
+
+    color: #929b93;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   RULES
+   ========================================================= */
+
+.profile-nickname-modal__rules {
+    margin:
+        0
+        2px
+        12px;
+
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.35;
+
+    color: #8b948c;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.profile-nickname-modal__error {
+    margin-bottom: 12px;
+
+    padding:
+        10px
+        12px;
+
+    border:
+        1px solid
+        rgba(
+            168,
+            74,
+            74,
+            0.12
+        );
+
+    border-radius: 12px;
+
+    background:
+        rgba(
+            188,
+            84,
+            84,
+            0.07
+        );
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+
+    color: #9a4e4e;
+}
+
+
+.profile-nickname-modal__error[hidden] {
+    display: none;
+}
+
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+.profile-nickname-modal__save {
+    width: 100%;
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        12px
+        16px;
+
+    border: 0;
+    border-radius: 15px;
+
+    background: #536b56;
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 750;
+    line-height: 1.2;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 16px
+        rgba(
+            59,
+            82,
+            62,
+            0.16
+        );
+
+    transition:
+        transform 120ms ease,
+        opacity 120ms ease,
+        box-shadow 120ms ease;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+.profile-nickname-modal__save:active {
+    transform: scale(0.985);
+}
+
+
+.profile-nickname-modal__save:disabled {
+    opacity: 0.6;
+
+    cursor: default;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   DESKTOP / LARGE MOBILE
+   ========================================================= */
+
+@media (
+    min-width: 560px
+) {
+    .profile-nickname-overlay {
+        align-items: center;
+    }
+}
