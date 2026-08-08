@@ -219,3 +219,323 @@ export function renderProfileUserCard(
         </section>
     `
 }
+
+
+
+/* =========================================================
+   МЕНЮ ПРОФИЛЯ
+   ========================================================= */
+
+export function renderProfileMenu() {
+    return `
+        <section class="profile-menu">
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="stats"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--stats
+                        "
+                        aria-hidden="true"
+                    >
+                        target
+                    </span>
+
+                    <span class="profile-menu__label">
+                        Игровые показатели
+                    </span>
+
+                </div>
+
+                <span
+                    class="
+                        material-symbols-rounded
+                        profile-menu__arrow
+                    "
+                    aria-hidden="true"
+                >
+                    chevron_right
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="achievements"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--achievements
+                        "
+                        aria-hidden="true"
+                    >
+                        workspace_premium
+                    </span>
+
+                    <span class="profile-menu__label">
+                        Достижения
+                    </span>
+
+                </div>
+
+                <div class="profile-menu__right">
+
+                    <span class="profile-menu__value">
+                        12/48
+                    </span>
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__arrow
+                        "
+                        aria-hidden="true"
+                    >
+                        chevron_right
+                    </span>
+
+                </div>
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="appearance"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--appearance
+                        "
+                        aria-hidden="true"
+                    >
+                        checkroom
+                    </span>
+
+                    <span class="profile-menu__label">
+                        Внешний вид
+                    </span>
+
+                </div>
+
+                <span
+                    class="
+                        material-symbols-rounded
+                        profile-menu__arrow
+                    "
+                    aria-hidden="true"
+                >
+                    chevron_right
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="settings"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--settings
+                        "
+                        aria-hidden="true"
+                    >
+                        settings
+                    </span>
+
+                    <span class="profile-menu__label">
+                        Данные и настройки
+                    </span>
+
+                </div>
+
+                <span
+                    class="
+                        material-symbols-rounded
+                        profile-menu__arrow
+                    "
+                    aria-hidden="true"
+                >
+                    chevron_right
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="support"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--support
+                        "
+                        aria-hidden="true"
+                    >
+                        help
+                    </span>
+
+                    <span class="profile-menu__label">
+                        Поддержка
+                    </span>
+
+                </div>
+
+                <span
+                    class="
+                        material-symbols-rounded
+                        profile-menu__arrow
+                    "
+                    aria-hidden="true"
+                >
+                    chevron_right
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="referral"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--invite
+                        "
+                        aria-hidden="true"
+                    >
+                        person_add
+                    </span>
+
+                    <span class="profile-menu__label">
+                        Пригласить друга
+                    </span>
+
+                </div>
+
+                <div class="profile-menu__right">
+
+                    <span class="profile-menu__reward">
+                        +5 XP
+                    </span>
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__arrow
+                        "
+                        aria-hidden="true"
+                    >
+                        chevron_right
+                    </span>
+
+                </div>
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="archive"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--archive
+                        "
+                        aria-hidden="true"
+                    >
+                        inventory_2
+                    </span>
+
+                    <span class="profile-menu__label">
+                        Архив привычек
+                    </span>
+
+                </div>
+
+                <span
+                    class="
+                        material-symbols-rounded
+                        profile-menu__arrow
+                    "
+                    aria-hidden="true"
+                >
+                    chevron_right
+                </span>
+            </button>
+
+        </section>
+    `
+}
+
+
+
+/* =========================================================
+   HEADER ВНУТРЕННИХ РАЗДЕЛОВ
+   ========================================================= */
+
+export function renderProfileSectionHeader(
+    title
+) {
+    return `
+        <header class="profile-section-header">
+
+            <button
+                type="button"
+                class="profile-section-header__back"
+                data-profile-back
+                aria-label="Назад"
+            >
+                <span
+                    class="material-symbols-rounded"
+                    aria-hidden="true"
+                >
+                    arrow_back_ios_new
+                </span>
+            </button>
+
+            <h1 class="profile-section-header__title">
+                ${escapeProfileText(title)}
+            </h1>
+
+            <div
+                class="profile-section-header__spacer"
+                aria-hidden="true"
+            ></div>
+
+        </header>
+    `
+}
