@@ -14,12 +14,22 @@
        --------------------------------------------------------- */
 
     .habits-v2-list {
-        padding-left: 13px;
-        padding-right: 13px;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .habits-v2-list__header {
+        margin-bottom: 22px;
+    }
+
+    .habits-v2-list__date {
+        margin-bottom: 7px;
+
+        font-size: 13px;
     }
 
     .habits-v2-list__title {
-        font-size: 32px;
+        font-size: 26px;
     }
 
     .habits-v2-list__add-button {
@@ -36,6 +46,7 @@
 
     .habits-stats {
         gap: 9px;
+
         margin-bottom: 20px;
     }
 
@@ -160,13 +171,24 @@
 
 @media (max-height: 720px) {
 
-    .habits-v2-list {
-        padding-top:
-            max(38px, env(safe-area-inset-top));
-    }
+    /*
+     * ВАЖНО:
+     * padding-top здесь НЕ переопределяем.
+     *
+     * Верхним отступом управляет habitHeader.css:
+     *
+     * max(16px, env(safe-area-inset-top))
+     *
+     * Раньше здесь было 38px,
+     * из-за чего Habits опускался ниже Leaderboard.
+     */
 
     .habits-v2-list__header {
-        margin-bottom: 22px;
+        margin-bottom: 20px;
+    }
+
+    .habits-stats {
+        margin-bottom: 18px;
     }
 
     .habits-v2-list__cards {
@@ -176,5 +198,25 @@
     .habit-card,
     .habit-card--large {
         min-height: 158px;
+    }
+}
+
+
+/* =========================================================
+   ОЧЕНЬ НИЗКИЕ ЭКРАНЫ
+   ========================================================= */
+
+@media (max-height: 640px) {
+
+    .habits-v2-list__header {
+        margin-bottom: 18px;
+    }
+
+    .habits-stats {
+        margin-bottom: 16px;
+    }
+
+    .habits-v2-list__cards {
+        gap: 10px;
     }
 }
