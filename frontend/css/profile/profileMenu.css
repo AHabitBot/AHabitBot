@@ -9,14 +9,18 @@
 
     overflow: hidden;
 
-    border: 1px solid rgba(35, 36, 40, 0.08);
-    border-radius: 22px;
+    border:
+        1px solid
+        var(--app-border);
+
+    border-radius:
+        var(--app-radius-large);
 
     background:
-        rgba(255, 255, 255, 0.92);
+        var(--app-surface);
 
     box-shadow:
-        0 6px 18px rgba(35, 36, 40, 0.04);
+        var(--app-shadow);
 }
 
 
@@ -43,11 +47,13 @@
 
     background: transparent;
 
-    color: #202126;
+    color:
+        var(--app-text-primary);
 
     text-align: left;
 
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:
+        transparent;
 }
 
 
@@ -108,7 +114,8 @@
 
     overflow: hidden;
 
-    color: #202126;
+    color:
+        var(--app-text-primary);
 
     font-size: 15px;
     font-weight: 500;
@@ -150,37 +157,44 @@
    ========================================================= */
 
 .profile-menu__icon--stats {
-    color: #5f873f;
+    color:
+        var(--app-green-ui);
 }
 
 
 .profile-menu__icon--achievements {
-    color: #c99216;
+    color:
+        #c99216;
 }
 
 
 .profile-menu__icon--appearance {
-    color: #567da7;
+    color:
+        #567da7;
 }
 
 
 .profile-menu__icon--settings {
-    color: #777b86;
+    color:
+        #777b86;
 }
 
 
 .profile-menu__icon--support {
-    color: #6c6687;
+    color:
+        #6c6687;
 }
 
 
 .profile-menu__icon--invite {
-    color: #678d58;
+    color:
+        var(--app-green-ui);
 }
 
 
 .profile-menu__icon--archive {
-    color: #7c7f88;
+    color:
+        #7c7f88;
 }
 
 
@@ -205,7 +219,8 @@
    ========================================================= */
 
 .profile-menu__reward {
-    color: #657e4b;
+    color:
+        var(--app-green-ui);
 
     font-size: 14px;
     font-weight: 600;
@@ -251,6 +266,7 @@
    ========================================================= */
 
 @media (max-width: 360px) {
+
     .profile-menu {
         margin-top: 16px;
 

@@ -4,13 +4,18 @@
 
 .habits-stats {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
     width: 100%;
 
     gap: 12px;
 
-    margin: 0 0 24px;
+    margin:
+        0
+        0
+        24px;
 }
 
 
@@ -29,16 +34,22 @@
 
     box-sizing: border-box;
 
-    padding: 16px 17px;
+    padding:
+        16px
+        17px;
 
-    border: 1px solid rgba(35, 36, 40, 0.08);
-    border-radius: 20px;
+    border:
+        1px solid
+        var(--app-border);
+
+    border-radius:
+        var(--app-radius-medium);
 
     background:
-        rgba(255, 255, 255, 0.92);
+        var(--app-surface);
 
     box-shadow:
-        0 6px 18px rgba(35, 36, 40, 0.04);
+        var(--app-shadow);
 }
 
 
@@ -80,7 +91,8 @@
     font-weight: 400;
     line-height: 1;
 
-    transform: translateY(-1px);
+    transform:
+        translateY(-1px);
 }
 
 
@@ -93,7 +105,8 @@
 
     overflow: hidden;
 
-    color: #202126;
+    color:
+        var(--app-text-primary);
 
     font-family:
         -apple-system,
@@ -112,8 +125,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        geometricPrecision;
 }
 
 
@@ -124,7 +140,8 @@
 .habits-stats__label {
     margin-top: 8px;
 
-    color: #92959d;
+    color:
+        var(--app-text-secondary);
 
     font-family:
         -apple-system,
@@ -141,5 +158,6 @@
 
     white-space: nowrap;
 
-    -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing:
+        antialiased;
 }

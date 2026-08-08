@@ -8,7 +8,10 @@
     margin-top: 18px;
     padding: 18px;
 
-    border: 1px solid rgba(69, 91, 49, 0.16);
+    border:
+        1px solid
+        rgba(69, 91, 49, 0.16);
+
     border-radius: 24px;
 
     background-position: center;
@@ -16,7 +19,8 @@
     background-size: cover;
 
     box-shadow:
-        0 7px 16px rgba(35, 36, 40, 0.055);
+        0 7px 16px
+        rgba(35, 36, 40, 0.055);
 }
 
 
@@ -48,10 +52,12 @@
 
     border-radius: 24px;
 
-    background: rgba(255, 255, 255, 0.94);
+    background:
+        rgba(255, 255, 255, 0.94);
 
     box-shadow:
-        0 2px 7px rgba(35, 36, 40, 0.06);
+        0 2px 7px
+        rgba(35, 36, 40, 0.06);
 }
 
 
@@ -97,7 +103,7 @@
 
     overflow: hidden;
 
-    color: #202126;
+    color: var(--app-text-primary);
 
     font-size: 19px;
     font-weight: 700;
@@ -114,7 +120,8 @@
 .profile-user-card__edit-icon {
     flex: 0 0 auto;
 
-    color: rgba(35, 36, 40, 0.42);
+    color:
+        rgba(35, 36, 40, 0.42);
 
     font-size: 17px;
     line-height: 1;
@@ -142,7 +149,8 @@
     margin-top: 8px;
     padding: 4px 8px;
 
-    border: 1px solid
+    border:
+        1px solid
         rgba(101, 126, 75, 0.08);
 
     border-radius: 999px;
@@ -150,14 +158,14 @@
     background:
         rgba(231, 239, 221, 0.68);
 
-    color: #657e4b;
+    color: var(--app-green-ui);
 }
 
 
 .profile-user-card__level-icon {
     flex: 0 0 auto;
 
-    color: #657e4b;
+    color: var(--app-green-ui);
 
     font-size: 14px;
     line-height: 1;
@@ -202,7 +210,7 @@
 .profile-user-card__progress {
     flex: 1;
 
-    height: 4px;
+    height: 6px;
 
     overflow: hidden;
 
@@ -221,17 +229,13 @@
     background:
         linear-gradient(
             90deg,
-            #2fa442,
+            var(--app-green-active),
             #55be64
         );
 
     box-shadow:
-        0 0 8px rgba(47, 164, 66, 0.12);
-}
-
-
-.profile-user-card__xp-current {
-    color: #2fa442;
+        0 0 8px
+        rgba(47, 164, 66, 0.12);
 }
 
 
@@ -244,20 +248,21 @@
 
     min-width: 80px;
 
-    text-align: right;
-    white-space: nowrap;
+    color:
+        rgba(35, 36, 40, 0.44);
 
     font-size: 12px;
     font-weight: 600;
     line-height: 1;
 
-    color:
-        rgba(35, 36, 40, 0.44);
+    text-align: right;
+
+    white-space: nowrap;
 }
 
 
 .profile-user-card__xp-current {
-    color: #657e4b;
+    color: var(--app-green-active);
 }
 
 
@@ -272,13 +277,15 @@
    ========================================================= */
 
 @media (max-width: 360px) {
+
     .profile-user-card {
         padding: 16px;
 
         border-radius: 22px;
 
         box-shadow:
-            0 6px 14px rgba(35, 36, 40, 0.05);
+            0 6px 14px
+            rgba(35, 36, 40, 0.05);
     }
 
 

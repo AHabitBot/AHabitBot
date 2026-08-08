@@ -16,14 +16,12 @@
 
     box-sizing: border-box;
 
-    border: 1px solid rgba(35, 36, 40, 0.08);
-    border-radius: 22px;
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-large);
 
-    background:
-        rgba(255, 255, 255, 0.92);
+    background: var(--app-surface);
 
-    box-shadow:
-        0 6px 18px rgba(35, 36, 40, 0.04);
+    box-shadow: var(--app-shadow);
 }
 
 
@@ -73,7 +71,7 @@
 
     min-width: 0;
 
-    color: #202126;
+    color: var(--app-text-primary);
 
     font-family:
         -apple-system,
@@ -137,7 +135,7 @@
 
     overflow: hidden;
 
-    color: #202126;
+    color: var(--app-text-primary);
 
     font-family:
         -apple-system,
@@ -174,7 +172,7 @@
 
     margin-top: 4px;
 
-    color: #3caf55;
+    color: var(--app-green-active);
 
     font-family:
         -apple-system,
@@ -240,7 +238,7 @@
 
     gap: 5px;
 
-    color: #8b8e98;
+    color: var(--app-text-secondary);
 
     font-family:
         -apple-system,
@@ -268,7 +266,7 @@
 
     overflow: visible;
 
-    color: #f4b814;
+    color: var(--app-xp);
 
     font-size: 18px;
     line-height: 1;
