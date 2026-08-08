@@ -385,3 +385,36 @@ export function renderProfileMenu() {
         </section>
     `
 }
+
+
+
+export function renderProfileSectionHeader(title) {
+    return `
+        <header class="profile-section-header">
+
+            <button
+                type="button"
+                class="profile-section-header__back"
+                data-profile-back
+                aria-label="Назад"
+            >
+                <span
+                    class="material-symbols-rounded"
+                    aria-hidden="true"
+                >
+                    arrow_back_ios_new
+                </span>
+            </button>
+
+            <h1 class="profile-section-header__title">
+                ${title}
+            </h1>
+
+            <div
+                class="profile-section-header__spacer"
+                aria-hidden="true"
+            ></div>
+
+        </header>
+    `
+}

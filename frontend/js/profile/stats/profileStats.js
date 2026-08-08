@@ -1,24 +1,15 @@
-export function renderProfileStatsPage(
-    root
-) {
+import {
+    renderProfileSectionHeader
+} from "../profileComponents.js"
+
+
+export function renderProfileStatsPage(root) {
     root.innerHTML = `
         <section class="profile-page">
 
-            <header class="profile-header">
-
-                <button
-                    type="button"
-                    data-profile-back
-                    aria-label="Назад"
-                >
-                    ←
-                </button>
-
-                <h1 class="profile-header__title">
-                    Игровые показатели
-                </h1>
-
-            </header>
+            ${renderProfileSectionHeader(
+                "Игровые показатели"
+            )}
 
         </section>
     `
