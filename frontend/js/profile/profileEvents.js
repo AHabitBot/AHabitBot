@@ -26,6 +26,10 @@ import {
     renderProfileArchivePage
 } from "./archive/profileArchive.js"
 
+import {
+    isProfileFeatureEnabled
+} from "./profileFeatures.js"
+
 
 /* =========================================================
    PROFILE V2 — СОБЫТИЯ
@@ -48,7 +52,7 @@ const PROFILE_PAGES = {
 
 
 /* =========================================================
-   ИНИЦИАЛИЗИРОВАТЬ СОБЫТИЯ ПРОФИЛЯ
+   ИНИЦИАЛИЗИРОВАТЬ СОБЫТИЯ
    ========================================================= */
 
 export function initProfileEvents(
@@ -105,6 +109,14 @@ function handleProfileClick(
         const page =
             pageButton.dataset.profilePage
 
+        if (
+            !isProfileFeatureEnabled(page)
+        ) {
+            showProfileDevelopmentMessage()
+
+            return
+        }
+
         openProfileSection(
             root,
             page
@@ -115,7 +127,7 @@ function handleProfileClick(
 
 
     /* -----------------------------------------------------
-       Возврат на главную страницу профиля
+       Возврат назад
        ----------------------------------------------------- */
 
     const backButton =
@@ -133,7 +145,7 @@ function handleProfileClick(
 
 
 /* =========================================================
-   ОТКРЫТЬ ВНУТРЕННИЙ РАЗДЕЛ
+   ОТКРЫТЬ РАЗДЕЛ
    ========================================================= */
 
 function openProfileSection(
@@ -154,4 +166,38 @@ function openProfileSection(
     }
 
     renderer(root)
+}
+
+
+/* =========================================================
+   РАЗДЕЛ В РАЗРАБОТКЕ
+   ========================================================= */
+
+function showProfileDevelopmentMessage() {
+    const message =
+        "Раздел пока ещё находится на этапе разработки"
+
+    /*
+        В Telegram Mini App используем родной alert,
+        если он доступен.
+    */
+
+    const telegramWebApp =
+        window.Telegram?.WebApp
+
+    if (
+        telegramWebApp &&
+        typeof telegramWebApp.showAlert === "function"
+    ) {
+        telegramWebApp.showAlert(message)
+
+        return
+    }
+
+
+    /*
+        Обычный браузер / локальная разработка.
+    */
+
+    window.alert(message)
 }
