@@ -118,6 +118,7 @@ export function renderProfileMenu() {
             <button
                 type="button"
                 class="profile-menu__item"
+                data-profile-page="stats"
             >
                 <div class="profile-menu__left">
 
@@ -153,6 +154,7 @@ export function renderProfileMenu() {
             <button
                 type="button"
                 class="profile-menu__item"
+                data-profile-page="achievements"
             >
                 <div class="profile-menu__left">
 
@@ -196,6 +198,7 @@ export function renderProfileMenu() {
             <button
                 type="button"
                 class="profile-menu__item"
+                data-profile-page="appearance"
             >
                 <div class="profile-menu__left">
 
@@ -231,6 +234,7 @@ export function renderProfileMenu() {
             <button
                 type="button"
                 class="profile-menu__item"
+                data-profile-page="settings"
             >
                 <div class="profile-menu__left">
 
@@ -266,6 +270,7 @@ export function renderProfileMenu() {
             <button
                 type="button"
                 class="profile-menu__item"
+                data-profile-page="support"
             >
                 <div class="profile-menu__left">
 
@@ -301,6 +306,7 @@ export function renderProfileMenu() {
             <button
                 type="button"
                 class="profile-menu__item"
+                data-profile-page="referral"
             >
                 <div class="profile-menu__left">
 
@@ -344,6 +350,7 @@ export function renderProfileMenu() {
             <button
                 type="button"
                 class="profile-menu__item"
+                data-profile-page="archive"
             >
                 <div class="profile-menu__left">
 

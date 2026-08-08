@@ -3,6 +3,10 @@ import {
     renderProfileMenu
 } from "./profileComponents.js"
 
+import {
+    initProfileEvents
+} from "./profileEvents.js"
+
 
 /* =========================================================
    PROFILE V2 — ГЛАВНАЯ СТРАНИЦА
@@ -22,7 +26,15 @@ export function openProfilePage(root) {
         return
     }
 
-    renderProfilePage(root)
+    initProfileEvents(
+        root,
+        {
+            renderMainPage:
+                renderProfileMainPage
+        }
+    )
+
+    renderProfileMainPage(root)
 }
 
 
@@ -30,14 +42,22 @@ export function openProfilePage(root) {
    РЕНДЕР ГЛАВНОЙ СТРАНИЦЫ ПРОФИЛЯ
    ========================================================= */
 
-function renderProfilePage(root) {
+export function renderProfileMainPage(
+    root
+) {
+    if (!root) {
+        return
+    }
+
     root.innerHTML = `
         <section class="profile-page">
 
             <header class="profile-header">
+
                 <h1 class="profile-header__title">
                     Профиль
                 </h1>
+
             </header>
 
             ${renderProfileUserCard()}
