@@ -18,6 +18,10 @@ from backend.api.leaderboard import (
     router as leaderboard_router,
 )
 
+from backend.api.profile import (
+    router as profile_router,
+)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -59,6 +63,10 @@ app.include_router(
 
 app.include_router(
     leaderboard_router
+)
+
+app.include_router(
+    profile_router
 )
 
 

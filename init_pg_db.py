@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     telegram_id BIGINT NOT NULL UNIQUE,
     nickname VARCHAR(32) UNIQUE,
+    nickname_changed_at TIMESTAMPTZ,
     avatar_key VARCHAR(64) NOT NULL DEFAULT 'beginer_m',
     first_name VARCHAR(255),
     username VARCHAR(255),
