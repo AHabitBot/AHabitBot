@@ -202,14 +202,14 @@
 .profile-user-card__progress {
     flex: 1;
 
-    height: 6px;
+    height: 4px;
 
     overflow: hidden;
 
     border-radius: 999px;
 
     background:
-        rgba(120, 130, 104, 0.14);
+        rgba(47, 164, 66, 0.12);
 }
 
 
@@ -221,9 +221,17 @@
     background:
         linear-gradient(
             90deg,
-            #7d8b64,
-            #98a77b
+            #2fa442,
+            #55be64
         );
+
+    box-shadow:
+        0 0 8px rgba(47, 164, 66, 0.12);
+}
+
+
+.profile-user-card__xp-current {
+    color: #2fa442;
 }
 
 

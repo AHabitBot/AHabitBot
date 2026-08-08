@@ -237,18 +237,18 @@
    ========================================================= */
 
 .leaderboard-tabs__button--active {
-    color: #74764e;
+    color: #2fa442;
 
     background:
         linear-gradient(
-            180deg,
-            rgba(248, 248, 240, 0.99) 0%,
-            rgba(242, 243, 232, 0.99) 100%
+            90deg,
+            rgba(239, 247, 234, 0.98) 0%,
+            rgba(245, 248, 238, 0.96) 100%
         );
 
     box-shadow:
-        0 2px 8px rgba(65, 68, 45, 0.045),
-        inset 0 0 0 1px rgba(116, 118, 78, 0.04);
+        0 1px 5px rgba(47, 164, 66, 0.045),
+        inset 0 0 0 1px rgba(47, 164, 66, 0.025);
 }
 
 

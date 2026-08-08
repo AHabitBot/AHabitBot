@@ -1,7 +1,6 @@
 /* =========================================================
    HABITS V2 — СПИСОК ПРИВЫЧЕК
    ========================================================= */
-
 .habits-v2-list {
     position: relative;
 
@@ -12,7 +11,7 @@
     box-sizing: border-box;
 
     padding:
-        max(12px, env(safe-area-inset-top))
+        max(16px, env(safe-area-inset-top))
         16px
         calc(112px + env(safe-area-inset-bottom));
 
@@ -21,9 +20,9 @@
 
     background:
         radial-gradient(
-            circle at 50% 45%,
-            rgba(255, 255, 255, 0.99) 0%,
-            rgba(250, 251, 253, 0.97) 55%,
+            circle at 50% 18%,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(250, 251, 253, 0.98) 55%,
             rgba(247, 249, 252, 1) 100%
         );
 
