@@ -34,6 +34,10 @@ import {
     openProfileNicknameEditor
 } from "./nickname/profileNickname.js"
 
+import {
+    updateProfileNickname
+} from "./profileApi.js"
+
 
 /* =========================================================
    PROFILE V2 — СОБЫТИЯ
@@ -101,6 +105,54 @@ function handleProfileClick(
 ) {
 
     /* -----------------------------------------------------
+       Редактирование nickname
+       ----------------------------------------------------- */
+
+    const nicknameEditButton =
+        event.target.closest(
+            "[data-profile-edit-nickname]"
+        )
+
+    if (nicknameEditButton) {
+        const nicknameElement =
+            root.querySelector(
+                ".profile-user-card__name"
+            )
+
+        const currentNickname =
+            nicknameElement
+                ?.textContent
+                ?.trim()
+                || ""
+
+
+        openProfileNicknameEditor({
+            currentNickname,
+
+            onConfirm:
+                async (
+                    nickname
+                ) => {
+                    await updateProfileNickname(
+                        nickname
+                    )
+
+                    if (
+                        typeof renderMainPage ===
+                        "function"
+                    ) {
+                        await renderMainPage(
+                            root
+                        )
+                    }
+                }
+        })
+
+        return
+    }
+
+
+    /* -----------------------------------------------------
        Открытие внутреннего раздела
        ----------------------------------------------------- */
 
@@ -114,7 +166,9 @@ function handleProfileClick(
             pageButton.dataset.profilePage
 
         if (
-            !isProfileFeatureEnabled(page)
+            !isProfileFeatureEnabled(
+                page
+            )
         ) {
             showProfileDevelopmentMessage()
 
@@ -141,7 +195,8 @@ function handleProfileClick(
 
     if (
         backButton &&
-        typeof renderMainPage === "function"
+        typeof renderMainPage ===
+            "function"
     ) {
         renderMainPage(root)
     }
@@ -160,7 +215,8 @@ function openProfileSection(
         PROFILE_PAGES[page]
 
     if (
-        typeof renderer !== "function"
+        typeof renderer !==
+        "function"
     ) {
         console.warn(
             `Profile: неизвестный раздел "${page}"`
@@ -181,27 +237,24 @@ function showProfileDevelopmentMessage() {
     const message =
         "Раздел пока ещё находится на этапе разработки"
 
-    /*
-        В Telegram Mini App используем родной alert,
-        если он доступен.
-    */
-
     const telegramWebApp =
         window.Telegram?.WebApp
 
+
     if (
         telegramWebApp &&
-        typeof telegramWebApp.showAlert === "function"
+        typeof telegramWebApp.showAlert ===
+            "function"
     ) {
-        telegramWebApp.showAlert(message)
+        telegramWebApp.showAlert(
+            message
+        )
 
         return
     }
 
 
-    /*
-        Обычный браузер / локальная разработка.
-    */
-
-    window.alert(message)
+    window.alert(
+        message
+    )
 }
