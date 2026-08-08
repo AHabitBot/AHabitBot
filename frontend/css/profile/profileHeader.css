@@ -10,6 +10,8 @@
 
     margin: 0;
     padding: 0;
+
+    box-sizing: border-box;
 }
 
 
@@ -21,6 +23,15 @@
     margin: 0;
 
     color: #111216;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
 
     font-size: 28px;
     font-weight: 700;
