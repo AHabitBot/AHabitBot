@@ -13,77 +13,148 @@
        BACKGROUND
        --------------------------------------------------------- */
 
-    --app-bg: #f8f9fb;
-
-
-    /* ---------------------------------------------------------
-       TEXT
-       --------------------------------------------------------- */
-
-    /* Крупные заголовки страниц */
-    --app-text-title: #111216;
-
-    /* Основной текст */
-    --app-text-primary: #202126;
-
-    /* Вторичный текст */
-    --app-text-secondary: #92959d;
-
-
-    /* ---------------------------------------------------------
-       GREEN SYSTEM
-       --------------------------------------------------------- */
-
-    /*
-     * Активный игровой зелёный:
-     * активные состояния,
-     * XP progress,
-     * streak,
-     * подтверждение успеха.
-     */
-    --app-green-active: #2fa442;
-
-    /*
-     * Спокойный интерфейсный оливковый:
-     * навигация,
-     * профиль,
-     * декоративные UI-элементы.
-     */
-    --app-green-ui: #657e4b;
-
-
-    /* ---------------------------------------------------------
-       GAME COLORS
-       --------------------------------------------------------- */
-
-    /* XP / награды */
-    --app-xp: #f4b814;
+    --app-bg: #f8f9f7;
 
 
     /* ---------------------------------------------------------
        SURFACES
        --------------------------------------------------------- */
 
-    /*
-     * Эталон белой поверхности приложения.
-     * Основан на Profile Menu.
-     */
-    --app-surface: rgba(255, 255, 255, 0.92);
+    --app-surface: #ffffff;
 
-    --app-border: rgba(35, 36, 40, 0.08);
+    --app-surface-solid: #ffffff;
+
+    --app-surface-soft: #f3f5f1;
+
+    --app-surface-raised: #ffffff;
+
+
+    /* ---------------------------------------------------------
+       TEXT
+       --------------------------------------------------------- */
+
+    --app-text-title: #171b18;
+
+    --app-text-primary: #202420;
+
+    --app-text-secondary: #7f8781;
+
+    --app-text-muted: #a0a7a2;
+
+
+    /* ---------------------------------------------------------
+       GREEN SYSTEM
+       --------------------------------------------------------- */
+
+    --app-green-active: #4f9d45;
+
+    --app-green-ui: #668d50;
+
+
+    /* ---------------------------------------------------------
+       GAME COLORS
+       --------------------------------------------------------- */
+
+    --app-xp: #f4b814;
+
+
+    /* ---------------------------------------------------------
+       BORDERS / DIVIDERS
+       --------------------------------------------------------- */
+
+    --app-border:
+        rgba(
+            31,
+            35,
+            32,
+            0.08
+        );
+
+    --app-divider:
+        rgba(
+            31,
+            35,
+            32,
+            0.07
+        );
+
+
+    /* ---------------------------------------------------------
+       OVERLAY
+       --------------------------------------------------------- */
+
+    --app-overlay:
+        rgba(
+            255,
+            255,
+            255,
+            0.84
+        );
+
+
+    /* ---------------------------------------------------------
+       SHADOW
+       --------------------------------------------------------- */
 
     --app-shadow:
-        0 6px 18px rgba(35, 36, 40, 0.04);
+        0 6px 18px
+        rgba(
+            35,
+            36,
+            40,
+            0.04
+        );
+
+
+    /* ---------------------------------------------------------
+       NAVIGATION
+       --------------------------------------------------------- */
+
+    --nav-bg:
+        rgba(
+            255,
+            255,
+            255,
+            0.97
+        );
+
+    --nav-active-bg:
+        #f1f5ec;
+
+    --nav-active-border:
+        rgba(
+            102,
+            141,
+            80,
+            0.10
+        );
+
+    --nav-icon:
+        #929991;
+
+    --nav-fade-start:
+        rgba(
+            248,
+            249,
+            247,
+            0
+        );
+
+    --nav-fade-end:
+        rgba(
+            248,
+            249,
+            247,
+            1
+        );
 
 
     /* ---------------------------------------------------------
        RADIUS
        --------------------------------------------------------- */
 
-    /* Большие системные контейнеры */
     --app-radius-large: 22px;
 
-    /* Небольшие системные карточки */
     --app-radius-medium: 20px;
 }
 
@@ -118,9 +189,11 @@ body {
 
     overflow: hidden;
 
-    background: var(--app-bg);
+    background:
+        var(--app-bg);
 
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-primary);
 
     font-family:
         -apple-system,
@@ -131,8 +204,11 @@ body {
         Arial,
         sans-serif;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        geometricPrecision;
 }
 
 
@@ -145,6 +221,7 @@ input,
 textarea,
 select {
     font: inherit;
+    color: inherit;
 }
 
 
@@ -156,55 +233,86 @@ button {
     cursor: pointer;
 }
 
+
 /* =========================================================
-   APP BOOTSTRAP LOADER
+   APP BOOTSTRAP
    ========================================================= */
 
 #app {
     opacity: 0;
+
     pointer-events: none;
 }
 
+
 body.app-ready #app {
     opacity: 1;
+
     pointer-events: auto;
 }
 
+
+/* =========================================================
+   APP LOADER
+   ========================================================= */
+
 .app-loader {
     position: fixed;
+
     inset: 0;
+
     z-index: 9999;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     gap: 10px;
 
     padding: 24px;
-    background: var(--app-bg);
-    color: var(--app-text-primary);
+
+    background:
+        var(--app-bg);
+
+    color:
+        var(--app-text-primary);
 }
 
-body.app-ready .app-loader {
+
+body.app-ready
+.app-loader {
     display: none;
 }
 
+
 .app-loader__mark {
     margin-bottom: 8px;
-    color: var(--app-green-ui);
+
+    color:
+        var(--app-green-ui);
+
     font-size: 34px;
     line-height: 1;
 }
 
+
 .app-loader__title {
+    color:
+        var(--app-text-title);
+
     font-size: 16px;
     font-weight: 700;
+
     letter-spacing: 0.08em;
 }
 
+
 .app-loader__text {
-    color: var(--app-text-secondary);
+    color:
+        var(--app-text-secondary);
+
     font-size: 13px;
+
     text-align: center;
 }

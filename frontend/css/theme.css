@@ -1,250 +1,349 @@
 /* =========================================================
    AHABIT — LIGHT / DARK THEME
-   Единственная глобальная палитра. Геометрия страниц не меняется.
+
+   Здесь только палитра и минимальные
+   системные исключения.
+
+   Компоненты должны брать цвета
+   через переменные из app.css.
    ========================================================= */
 
-:root {
-    --app-surface-soft: #f3f5f1;
-    --app-surface-solid: #ffffff;
-    --app-divider: rgba(35, 36, 40, 0.08);
-    --app-overlay: rgba(255, 255, 255, 0.78);
-}
+
+/* =========================================================
+   DARK PALETTE
+   ========================================================= */
 
 :root[data-theme="dark"] {
-    --app-bg: #0d1214;
-    --app-text-title: #f3f5f2;
-    --app-text-primary: #e8ece8;
-    --app-text-secondary: #8f9994;
-    --app-green-active: #72bd4b;
-    --app-green-ui: #79a85a;
+
+    /* ---------------------------------------------------------
+       BACKGROUND
+       --------------------------------------------------------- */
+
+    --app-bg: #0d1213;
+
+
+    /* ---------------------------------------------------------
+       SURFACES
+       --------------------------------------------------------- */
+
+    --app-surface: #151b1c;
+
+    --app-surface-solid: #151b1c;
+
+    --app-surface-soft: #1a2122;
+
+    --app-surface-raised: #1d2526;
+
+
+    /* ---------------------------------------------------------
+       TEXT
+       --------------------------------------------------------- */
+
+    --app-text-title: #f4f5f2;
+
+    --app-text-primary: #edf0ec;
+
+    --app-text-secondary: #9ca59f;
+
+    --app-text-muted: #707b75;
+
+
+    /* ---------------------------------------------------------
+       GREEN
+       --------------------------------------------------------- */
+
+    --app-green-active: #76b852;
+
+    --app-green-ui: #78a95a;
+
+
+    /* ---------------------------------------------------------
+       XP
+       --------------------------------------------------------- */
+
     --app-xp: #f2b91c;
-    --app-surface: rgba(21, 27, 29, 0.96);
-    --app-surface-solid: #151b1d;
-    --app-surface-soft: #1b2325;
-    --app-border: rgba(255, 255, 255, 0.08);
-    --app-divider: rgba(255, 255, 255, 0.08);
-    --app-overlay: rgba(13, 18, 20, 0.84);
-    --app-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
 
-    --habits-v2-text: #e8ece8;
-    --habits-v2-muted: #8f9994;
-    --habits-v2-button-bg: #17251b;
 
-    --add-habit-bg: #0d1214;
-    --add-habit-primary: #e8ece8;
-    --add-habit-secondary: #9aa39e;
-    --add-habit-light: #707a75;
-    --add-habit-white: rgba(21, 27, 29, 0.96);
-    --add-habit-soft: #1b2325;
-    --add-habit-border: rgba(255, 255, 255, 0.09);
+    /* ---------------------------------------------------------
+       BORDER / DIVIDER
+       --------------------------------------------------------- */
 
-    --icon-picker-bg: #0d1214;
-    --icon-picker-surface: #151b1d;
-    --icon-picker-text: #e8ece8;
-    --icon-picker-muted: #8f9994;
-    --icon-picker-item-bg: rgba(27, 35, 37, 0.96);
-    --icon-picker-item-border: rgba(255, 255, 255, 0.08);
-    --icon-picker-selected-bg: #20292b;
-    --icon-picker-selected-border: #79a85a;
-    --icon-picker-button-border: rgba(255, 255, 255, 0.10);
-    --icon-picker-shadow: rgba(0, 0, 0, 0.25);
+    --app-border:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    --app-divider:
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+
+
+    /* ---------------------------------------------------------
+       OVERLAY
+       --------------------------------------------------------- */
+
+    --app-overlay:
+        rgba(
+            13,
+            18,
+            19,
+            0.88
+        );
+
+
+    /* ---------------------------------------------------------
+       SHADOW
+       --------------------------------------------------------- */
+
+    --app-shadow:
+        0 8px 24px
+        rgba(
+            0,
+            0,
+            0,
+            0.22
+        );
+
+
+    /* ---------------------------------------------------------
+       NAVIGATION
+       --------------------------------------------------------- */
+
+    --nav-bg:
+        rgba(
+            18,
+            24,
+            25,
+            0.96
+        );
+
+    --nav-active-bg:
+        rgba(
+            118,
+            184,
+            82,
+            0.14
+        );
+
+    --nav-active-border:
+        rgba(
+            118,
+            184,
+            82,
+            0.12
+        );
+
+    --nav-icon:
+        #8e9892;
+
+    --nav-fade-start:
+        rgba(
+            13,
+            18,
+            19,
+            0
+        );
+
+    --nav-fade-end:
+        rgba(
+            13,
+            18,
+            19,
+            1
+        );
+
+
+    /* ---------------------------------------------------------
+       HABITS
+       --------------------------------------------------------- */
+
+    --habits-v2-text:
+        var(--app-text-primary);
+
+    --habits-v2-muted:
+        var(--app-text-secondary);
+
+    --habits-v2-button-bg:
+        #17251b;
+
+
+    /* ---------------------------------------------------------
+       ADD HABIT
+       --------------------------------------------------------- */
+
+    --add-habit-bg:
+        var(--app-bg);
+
+    --add-habit-primary:
+        var(--app-text-primary);
+
+    --add-habit-secondary:
+        var(--app-text-secondary);
+
+    --add-habit-light:
+        var(--app-text-muted);
+
+    --add-habit-white:
+        var(--app-surface);
+
+    --add-habit-soft:
+        var(--app-surface-soft);
+
+    --add-habit-border:
+        var(--app-border);
+
+
+    /* ---------------------------------------------------------
+       ICON PICKER
+       --------------------------------------------------------- */
+
+    --icon-picker-bg:
+        var(--app-bg);
+
+    --icon-picker-surface:
+        var(--app-surface);
+
+    --icon-picker-text:
+        var(--app-text-primary);
+
+    --icon-picker-muted:
+        var(--app-text-secondary);
+
+    --icon-picker-item-bg:
+        var(--app-surface-soft);
+
+    --icon-picker-item-border:
+        var(--app-border);
+
+    --icon-picker-selected-bg:
+        var(--app-surface-raised);
+
+    --icon-picker-selected-border:
+        var(--app-green-ui);
+
+    --icon-picker-button-border:
+        var(--app-border);
+
+    --icon-picker-shadow:
+        rgba(
+            0,
+            0,
+            0,
+            0.25
+        );
 }
+
+
+/* =========================================================
+   SYSTEM BACKGROUND
+   ========================================================= */
 
 html,
 body,
 #app,
 .page,
 .page-content {
-    background-color: var(--app-bg);
+    background-color:
+        var(--app-bg);
 }
+
+
+/* =========================================================
+   DEFAULT TEXT
+   ========================================================= */
 
 body,
 button,
 input,
 textarea,
 select {
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-primary);
 }
 
-/* Основные страницы */
-:root[data-theme="dark"] :is(
-    .habits-v2-empty,
-    .habits-v2-list,
-    .leaderboard-page,
-    .profile-page,
-    .profile-stats-page,
-    .profile-achievements-page,
-    .profile-appearance-page,
-    .profile-archive-page,
-    .profile-support-page,
-    .profile-settings-page,
-    .profile-timezone-page,
-    .profile-theme-page,
-    .profile-referral-page,
-    .profile-nickname-page,
-    .add-habit-v2,
-    .habit-icon-picker,
-    .habit-details
-) {
-    background: var(--app-bg) !important;
-    color: var(--app-text-primary);
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+:root[data-theme="dark"]
+input,
+
+:root[data-theme="dark"]
+textarea {
+    background:
+        var(--app-surface-soft);
+
+    color:
+        var(--app-text-primary);
+
+    border-color:
+        var(--app-border);
 }
 
-/* Белые системные поверхности */
-:root[data-theme="dark"] :is(
-    .bottom-navigation,
-    .leaderboard-tabs,
-    .leaderboard-list,
-    .leaderboard-current-user,
-    .profile-menu,
-    .profile-settings-card,
-    .profile-timezone-card,
-    .profile-theme-card,
-    .profile-achievement-earned,
-    .profile-achievement-goal,
-    .profile-stats-activity,
-    .profile-stats-metric,
-    .profile-stats-dynamics,
-    .profile-support-card,
-    .profile-archive-card,
-    .habit-details__calendar,
-    .habit-details__stat,
-    .habit-delete-confirm__dialog,
-    .add-habit-v2__name-field,
-    .add-habit-v2__size-card
-) {
-    background: var(--app-surface) !important;
-    border-color: var(--app-border) !important;
-    box-shadow: var(--app-shadow);
+
+:root[data-theme="dark"]
+input::placeholder,
+
+:root[data-theme="dark"]
+textarea::placeholder {
+    color:
+        var(--app-text-muted);
 }
 
-/* Текст, который в старых модулях был захардкожен тёмным */
-:root[data-theme="dark"] :is(
-    .habits-v2-list__title,
-    .habits-v2-empty__title,
-    .leaderboard-header__title,
-    .leaderboard-list__name,
-    .leaderboard-current-user__name,
-    .leaderboard-top-card__name,
-    .profile-header__title,
-    .profile-section-header__title,
-    .profile-menu__title,
-    .profile-settings-row__title,
-    .profile-timezone-option__label,
-    .profile-theme-option__label,
-    .profile-achievements-title,
-    .profile-stats-title,
-    .habit-details__title,
-    .habit-details__stat-main,
-    .habit-calendar__month,
-    .add-habit-v2__title,
-    .add-habit-v2__size-title,
-    .habit-icon-picker__title
-) {
-    color: var(--app-text-primary) !important;
+
+/* =========================================================
+   DELETE BACKDROP
+   ========================================================= */
+
+:root[data-theme="dark"]
+.habit-delete-confirm__backdrop {
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.58
+        );
 }
 
-/* Подписи */
-:root[data-theme="dark"] :is(
-    .profile-settings-row__description,
-    .profile-settings-row__value,
-    .profile-timezone-option__value,
-    .leaderboard-season-heading__dates,
-    .leaderboard-list__rank,
-    .habits-v2-list__date,
-    .habits-v2-empty__date,
-    .habit-details__stat-label
-) {
-    color: var(--app-text-secondary) !important;
+
+/* =========================================================
+   QR CODE
+
+   Белое поле оставляем специально:
+   QR должен сохранять высокий контраст.
+   ========================================================= */
+
+:root[data-theme="dark"]
+.profile-referral-qr,
+
+:root[data-theme="dark"]
+.profile-referral-qr__canvas,
+
+:root[data-theme="dark"]
+.profile-referral-qr__frame {
+    background: #ffffff;
 }
 
-/* Settings */
-:root[data-theme="dark"] .profile-settings-divider,
-:root[data-theme="dark"] .profile-timezone-option,
-:root[data-theme="dark"] .profile-theme-option {
-    border-color: var(--app-divider) !important;
-}
 
-:root[data-theme="dark"] .profile-settings-row--button:active,
-:root[data-theme="dark"] .profile-timezone-option:active,
-:root[data-theme="dark"] .profile-theme-option:active,
-:root[data-theme="dark"] .profile-timezone-option.is-selected {
-    background: rgba(121, 168, 90, 0.10) !important;
-}
+/* =========================================================
+   TRANSITIONS
+   ========================================================= */
 
-/* Навигация */
-:root[data-theme="dark"] .bottom-navigation {
-    background: rgba(18, 24, 26, 0.94) !important;
-    border-color: var(--app-border) !important;
-}
-
-:root[data-theme="dark"] .bottom-navigation-fade {
-    background: linear-gradient(to bottom, transparent, var(--app-bg)) !important;
-}
-
-/* Leaderboard */
-:root[data-theme="dark"] .leaderboard-top-card {
-    background: linear-gradient(180deg, rgba(28, 34, 35, .98), rgba(19, 25, 27, .98)) !important;
-}
-
-:root[data-theme="dark"] .leaderboard-list__row {
-    border-color: var(--app-divider) !important;
-}
-
-:root[data-theme="dark"] .leaderboard-list__avatar {
-    background: var(--app-surface-soft) !important;
-}
-
-/* Профиль и подстраницы */
-:root[data-theme="dark"] .profile-menu,
-:root[data-theme="dark"] .profile-user-card {
-    border-color: var(--app-border) !important;
-}
-
-:root[data-theme="dark"] .profile-menu__item {
-    border-color: var(--app-divider) !important;
-}
-
-:root[data-theme="dark"] .profile-appearance-tabs,
-:root[data-theme="dark"] .profile-stats-switcher {
-    background: var(--app-surface-soft) !important;
-    border-color: var(--app-border) !important;
-}
-
-:root[data-theme="dark"] .profile-appearance-option {
-    background: var(--app-surface-solid) !important;
-    border-color: var(--app-border) !important;
-}
-
-/* Habit details / forms */
-:root[data-theme="dark"] .habit-details__header,
-:root[data-theme="dark"] .habit-icon-picker__header,
-:root[data-theme="dark"] .add-habit-v2__header {
-    background: var(--app-overlay) !important;
-    border-color: var(--app-border) !important;
-}
-
-:root[data-theme="dark"] input,
-:root[data-theme="dark"] textarea {
-    background: var(--app-surface-soft);
-    color: var(--app-text-primary);
-    border-color: var(--app-border);
-}
-
-:root[data-theme="dark"] input::placeholder,
-:root[data-theme="dark"] textarea::placeholder {
-    color: #6f7974;
-}
-
-/* Модальные затемнения */
-:root[data-theme="dark"] .habit-delete-confirm__backdrop {
-    background: rgba(0, 0, 0, .58) !important;
-}
-
-/* Плавность только после первой отрисовки, чтобы старт не мигал */
 body.app-ready,
 body.app-ready #app,
 body.app-ready .page,
 body.app-ready .bottom-navigation {
-    transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease;
 }

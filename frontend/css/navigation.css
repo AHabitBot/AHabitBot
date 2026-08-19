@@ -4,6 +4,7 @@
 
 .bottom-navigation-fade {
     position: fixed;
+
     z-index: 899;
 
     left: 0;
@@ -13,18 +14,56 @@
     height:
         calc(
             135px +
-            env(safe-area-inset-bottom)
+            env(
+                safe-area-inset-bottom
+            )
         );
 
     background:
         linear-gradient(
             180deg,
-            rgba(248, 249, 251, 0) 0%,
-            rgba(248, 249, 251, 0.12) 18%,
-            rgba(248, 249, 251, 0.34) 38%,
-            rgba(248, 249, 251, 0.68) 60%,
-            rgba(248, 249, 251, 0.92) 80%,
-            rgba(248, 249, 251, 1) 100%
+
+            var(
+                --nav-fade-start
+            )
+            0%,
+
+            color-mix(
+                in srgb,
+                var(--nav-fade-end)
+                12%,
+                transparent
+            )
+            18%,
+
+            color-mix(
+                in srgb,
+                var(--nav-fade-end)
+                34%,
+                transparent
+            )
+            38%,
+
+            color-mix(
+                in srgb,
+                var(--nav-fade-end)
+                68%,
+                transparent
+            )
+            60%,
+
+            color-mix(
+                in srgb,
+                var(--nav-fade-end)
+                92%,
+                transparent
+            )
+            80%,
+
+            var(
+                --nav-fade-end
+            )
+            100%
         );
 
     pointer-events: none;
@@ -37,6 +76,7 @@
 
 .bottom-navigation {
     position: fixed;
+
     z-index: 900;
 
     left: 16px;
@@ -45,7 +85,9 @@
     bottom:
         calc(
             10px +
-            env(safe-area-inset-bottom)
+            env(
+                safe-area-inset-bottom
+            )
         );
 
     height: 72px;
@@ -53,7 +95,13 @@
     display: grid;
 
     grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
 
     align-items: stretch;
 
@@ -65,22 +113,21 @@
 
     border:
         1px solid
-        rgba(35, 36, 40, 0.085);
+        var(
+            --app-border
+        );
 
     border-radius: 27px;
 
     background:
-        rgba(255, 255, 255, 0.97);
+        var(
+            --nav-bg
+        );
 
     box-shadow:
-        0 10px 30px
-        rgba(31, 38, 49, 0.07),
-
-        0 3px 10px
-        rgba(31, 38, 49, 0.035),
-
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.98);
+        var(
+            --app-shadow
+        );
 
     font-family:
         -apple-system,
@@ -107,6 +154,7 @@
 
 .bottom-navigation__item {
     min-width: 0;
+
     height: 100%;
 
     display: flex;
@@ -136,8 +184,7 @@
 
     color:
         var(
-            --app-text-secondary,
-            #92959d
+            --nav-icon
         );
 
     background:
@@ -182,7 +229,8 @@
     width: 25px;
     height: 25px;
 
-    color: currentColor;
+    color:
+        currentColor;
 
     font-size: 25px;
     line-height: 1;
@@ -206,11 +254,13 @@
 
 .bottom-navigation__label {
     min-width: 0;
+
     max-width: 100%;
 
     overflow: hidden;
 
-    color: currentColor;
+    color:
+        currentColor;
 
     font-family:
         -apple-system,
@@ -248,26 +298,30 @@
 .bottom-navigation__item.is-active {
     color:
         var(
-            --app-green-ui,
-            #657e4b
+            --app-green-ui
         );
 
     border-color:
-        rgba(101, 126, 75, 0.10);
+        var(
+            --nav-active-border
+        );
 
     background:
-        linear-gradient(
-            180deg,
-            rgba(249, 250, 242, 0.99) 0%,
-            rgba(241, 244, 231, 0.99) 100%
+        var(
+            --nav-active-bg
         );
 
     box-shadow:
-        0 4px 14px
-        rgba(31, 38, 49, 0.04),
-
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.96);
+        inset
+        0
+        1px
+        0
+        rgba(
+            255,
+            255,
+            255,
+            0.04
+        );
 }
 
 
@@ -293,9 +347,13 @@
 
 .bottom-navigation__item:active,
 .bottom-navigation__item.is-pressed {
-    transform: scale(0.97);
+    transform:
+        scale(
+            0.97
+        );
 
-    opacity: 0.80;
+    opacity:
+        0.80;
 }
 
 
@@ -310,8 +368,16 @@
 
 .bottom-navigation__item:focus-visible {
     box-shadow:
-        0 0 0 3px
-        rgba(101, 126, 75, 0.12);
+        0
+        0
+        0
+        3px
+        color-mix(
+            in srgb,
+            var(--app-green-ui)
+            15%,
+            transparent
+        );
 }
 
 
@@ -323,7 +389,9 @@
     padding-bottom:
         calc(
             105px +
-            env(safe-area-inset-bottom)
+            env(
+                safe-area-inset-bottom
+            )
         );
 }
 
@@ -332,13 +400,17 @@
    УЗКИЕ ЭКРАНЫ
    ========================================================= */
 
-@media (max-width: 370px) {
+@media (
+    max-width: 370px
+) {
 
     .bottom-navigation-fade {
         height:
             calc(
                 125px +
-                env(safe-area-inset-bottom)
+                env(
+                    safe-area-inset-bottom
+                )
             );
     }
 
@@ -390,7 +462,9 @@
         padding-bottom:
             calc(
                 98px +
-                env(safe-area-inset-bottom)
+                env(
+                    safe-area-inset-bottom
+                )
             );
     }
 }
@@ -400,7 +474,9 @@
    УМЕНЬШЕННАЯ АНИМАЦИЯ
    ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+@media (
+    prefers-reduced-motion: reduce
+) {
 
     .bottom-navigation__item,
     .bottom-navigation__icon {
