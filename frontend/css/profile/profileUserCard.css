@@ -6,7 +6,6 @@
     width: 100%;
 
     margin-top: 18px;
-
     padding: 18px;
 
     box-sizing: border-box;
@@ -96,16 +95,56 @@
 
 
 /* =========================================================
-   NAME
+   NICKNAME CONTAINER
    ========================================================= */
 
 .profile-user-card__name-row {
-    display: flex;
+    display: inline-flex;
     align-items: center;
 
+    width: fit-content;
+    max-width: 100%;
+
     gap: 6px;
+
+    padding:
+        6px
+        10px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        var(--app-border);
+
+    border-radius: 12px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            84%,
+            transparent
+        );
+
+    box-shadow:
+        var(--app-shadow);
+
+    backdrop-filter:
+        blur(
+            8px
+        );
+
+    -webkit-backdrop-filter:
+        blur(
+            8px
+        );
 }
 
+
+/* =========================================================
+   NICKNAME
+   ========================================================= */
 
 .profile-user-card__name {
     min-width: 0;
@@ -117,9 +156,9 @@
     color:
         var(--app-text-primary);
 
-    font-size: 19px;
+    font-size: 17px;
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.1;
 
     letter-spacing:
         -0.025em;
@@ -136,7 +175,7 @@
 
 
 /* =========================================================
-   EDIT
+   EDIT ICON
    ========================================================= */
 
 .profile-user-card__edit-icon {
@@ -145,14 +184,14 @@
     color:
         var(--app-text-secondary);
 
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1;
 
     font-variation-settings:
         "FILL" 0,
         "wght" 500,
         "GRAD" 0,
-        "opsz" 17;
+        "opsz" 16;
 }
 
 
@@ -361,10 +400,23 @@
 
 
 /* =========================================================
-   DARK MODE
+   DARK MODE — NICKNAME
+   ========================================================= */
 
-   На тёмном фоне пользовательского оформления
-   даём overlay-элементам более плотную поверхность.
+:root[data-theme="dark"]
+.profile-user-card__name-row {
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface-raised)
+            84%,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   DARK MODE — AVATAR
    ========================================================= */
 
 :root[data-theme="dark"]
@@ -378,6 +430,10 @@
         );
 }
 
+
+/* =========================================================
+   DARK MODE — XP ROW
+   ========================================================= */
 
 :root[data-theme="dark"]
 .profile-user-card__progress-row {
@@ -418,6 +474,25 @@
 
     .profile-user-card__avatar {
         border-radius: 19px;
+    }
+
+
+    .profile-user-card__name-row {
+        padding:
+            5px
+            9px;
+
+        border-radius: 11px;
+    }
+
+
+    .profile-user-card__name {
+        font-size: 16px;
+    }
+
+
+    .profile-user-card__edit-icon {
+        font-size: 15px;
     }
 
 
