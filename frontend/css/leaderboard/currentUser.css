@@ -2,19 +2,19 @@
    LEADERBOARD — CURRENT USER
    ========================================================= */
 
-
-/* =========================================================
-   FIXED SLOT
-   ========================================================= */
-
 .leaderboard-current-user-slot {
     position: absolute;
 
     right: 16px;
-    bottom: calc(
-        94px + env(safe-area-inset-bottom)
-    );
     left: 16px;
+
+    bottom:
+        calc(
+            94px +
+            env(
+                safe-area-inset-bottom
+            )
+        );
 
     z-index: 40;
 
@@ -28,13 +28,18 @@
 
 .leaderboard-current-user {
     display: grid;
+
     grid-template-columns:
         30px
         44px
-        minmax(0, 1fr)
+        minmax(
+            0,
+            1fr
+        )
         auto;
 
     align-items: center;
+
     column-gap: 10px;
 
     min-height: 66px;
@@ -48,25 +53,39 @@
     box-sizing: border-box;
 
     border:
-        1px solid rgba(64, 169, 75, 0.12);
+        1px solid
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            20%,
+            transparent
+        );
 
     border-radius: 18px;
 
     background:
-        linear-gradient(
-            90deg,
-            rgba(247, 251, 243, 0.98) 0%,
-            rgba(242, 249, 237, 0.98) 100%
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            91%,
+            var(--app-green-active)
+            9%
         );
 
     box-shadow:
-        0 8px 24px rgba(35, 36, 40, 0.08);
+        var(--app-shadow);
 
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter:
+        blur(
+            12px
+        );
+
+    -webkit-backdrop-filter:
+        blur(
+            12px
+        );
 
     pointer-events: auto;
-    touch-action: none;
 }
 
 
@@ -76,29 +95,15 @@
 
 .leaderboard-current-user__rank {
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    min-width: 0;
-
-    color: #232428;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        Inter,
-        Arial,
-        sans-serif;
+    color:
+        var(--app-text-primary);
 
     font-size: 16px;
     font-weight: 700;
-    line-height: 1;
-
-    text-align: center;
-
-    -webkit-font-smoothing: antialiased;
 }
 
 
@@ -107,17 +112,15 @@
    ========================================================= */
 
 .leaderboard-current-user__avatar {
-    display: block;
-
     width: 42px;
     height: 42px;
 
     border-radius: 50%;
 
     object-fit: cover;
-    object-position: center;
 
-    background: #eef1ec;
+    background:
+        var(--app-surface-soft);
 }
 
 
@@ -126,11 +129,11 @@
    ========================================================= */
 
 .leaderboard-current-user__info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
     min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
 }
 
 
@@ -139,32 +142,21 @@
    ========================================================= */
 
 .leaderboard-current-user__name {
-    display: block;
-
     min-width: 0;
 
     overflow: hidden;
 
-    color: var(--app-text-primary);
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        Inter,
-        Arial,
-        sans-serif;
+    color:
+        var(--app-text-primary);
 
     font-size: 15px;
     font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
 
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-overflow:
+        ellipsis;
 
-    -webkit-font-smoothing: antialiased;
+    white-space:
+        nowrap;
 }
 
 
@@ -174,45 +166,29 @@
 
 .leaderboard-current-user__streak {
     display: flex;
-    align-items: center;
-    gap: 2px;
 
-    min-width: 0;
+    align-items: center;
+
+    gap: 2px;
 
     margin-top: 4px;
 
-    color: #3caf55;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        Inter,
-        Arial,
-        sans-serif;
+    color:
+        var(--app-green-active);
 
     font-size: 12px;
     font-weight: 550;
-    line-height: 1;
 
-    white-space: nowrap;
-
-    -webkit-font-smoothing: antialiased;
+    white-space:
+        nowrap;
 }
 
 
 .leaderboard-current-user__streak-icon {
-    display: block;
-
-    flex: 0 0 auto;
-
-    overflow: visible;
-
-    color: currentColor;
+    color:
+        currentColor;
 
     font-size: 17px;
-    line-height: 1;
 
     font-variation-settings:
         "FILL" 1,
@@ -222,69 +198,31 @@
 }
 
 
-.leaderboard-current-user__streak-value {
-    min-width: 0;
-
-    overflow: hidden;
-
-    color: currentColor;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
 /* =========================================================
-   XP PILL
+   XP
    ========================================================= */
 
 .leaderboard-current-user__xp {
     display: flex;
+
     align-items: center;
     justify-content: flex-end;
+
     gap: 5px;
 
-    min-width: max-content;
-
-    padding: 0;
-
-    color: #2fa442;
-    background: transparent;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        Inter,
-        Arial,
-        sans-serif;
+    color:
+        var(--app-green-active);
 
     font-size: 17px;
     font-weight: 700;
-    line-height: 1;
-
-    white-space: nowrap;
-
-    -webkit-font-smoothing: antialiased;
 }
 
 
-/* =========================================================
-   XP ICON
-   ========================================================= */
-
 .leaderboard-current-user__xp-icon {
-    display: block;
-
-    flex: 0 0 auto;
-
-    overflow: visible;
-
-    color: #f4b814;
+    color:
+        var(--app-xp);
 
     font-size: 21px;
-    line-height: 1;
 
     font-variation-settings:
         "FILL" 1,
@@ -294,30 +232,34 @@
 }
 
 
-/* =========================================================
-   XP VALUE
-   ========================================================= */
-
 .leaderboard-current-user__xp-value {
-    color: #2fa442;
+    color:
+        var(--app-green-active);
 }
 
 
 /* =========================================================
-   SMALL PHONES
+   SMALL
    ========================================================= */
 
-@media (max-width: 380px) {
+@media (
+    max-width: 380px
+) {
+
     .leaderboard-current-user-slot {
         right: 14px;
         left: 14px;
     }
 
+
     .leaderboard-current-user {
         grid-template-columns:
             26px
             40px
-            minmax(0, 1fr)
+            minmax(
+                0,
+                1fr
+            )
             auto;
 
         column-gap: 8px;
@@ -329,94 +271,21 @@
             8px
             6px
             11px;
-
-        border-radius: 17px;
     }
 
-    .leaderboard-current-user__rank {
-        font-size: 15px;
-    }
 
     .leaderboard-current-user__avatar {
         width: 38px;
         height: 38px;
     }
 
-    .leaderboard-current-user__name {
-        font-size: 14px;
-    }
-
-    .leaderboard-current-user__streak {
-        margin-top: 3px;
-
-        font-size: 11px;
-    }
-
-    .leaderboard-current-user__streak-icon {
-        font-size: 16px;
-    }
-
-    .leaderboard-current-user__xp {
-        gap: 4px;
-        font-size: 15px;
-    }
-
-    .leaderboard-current-user__xp-icon {
-        font-size: 19px;
-    }
-}
-
-
-/* =========================================================
-   VERY SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 340px) {
-    .leaderboard-current-user {
-        grid-template-columns:
-            23px
-            36px
-            minmax(0, 1fr)
-            auto;
-
-        column-gap: 7px;
-
-        min-height: 58px;
-
-        padding:
-            5px
-            7px
-            5px
-            9px;
-    }
-
-    .leaderboard-current-user__rank {
-        font-size: 14px;
-    }
-
-    .leaderboard-current-user__avatar {
-        width: 34px;
-        height: 34px;
-    }
 
     .leaderboard-current-user__name {
-        font-size: 13px;
-    }
-
-    .leaderboard-current-user__streak {
-        font-size: 10px;
-    }
-
-    .leaderboard-current-user__streak-icon {
-        font-size: 15px;
-    }
-
-    .leaderboard-current-user__xp {
-        gap: 3px;
         font-size: 14px;
     }
 
-    .leaderboard-current-user__xp-icon {
-        font-size: 18px;
+
+    .leaderboard-current-user__xp {
+        font-size: 15px;
     }
 }

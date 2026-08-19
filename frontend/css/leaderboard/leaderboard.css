@@ -5,11 +5,7 @@
 
 
 /* =========================================================
-   LEADERBOARD V2 — ОБЩАЯ ОБОЛОЧКА РАЗДЕЛА
-   ========================================================= */
-
-/* =========================================================
-   ОСНОВНАЯ СТРАНИЦА LEADERBOARD V2
+   LEADERBOARD V2
    ========================================================= */
 
 #leaderboard-v2-page {
@@ -26,16 +22,12 @@
     overflow: hidden;
 
     background:
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(255, 255, 255, 0.99) 0%,
-            rgba(250, 251, 253, 0.97) 55%,
-            rgba(247, 249, 252, 1) 100%
-        );
+        var(--app-bg);
 }
 
 
-#leaderboard-v2-page .page-content {
+#leaderboard-v2-page
+.page-content {
     position: relative;
 
     width: 100%;
@@ -47,12 +39,13 @@
 
     overflow: hidden;
 
-    background: transparent;
+    background:
+        transparent;
 }
 
 
 /* =========================================================
-   ВНУТРЕННЯЯ СТРАНИЦА ЛИДЕРБОРДА
+   PAGE
    ========================================================= */
 
 .leaderboard-page {
@@ -64,30 +57,46 @@
 
     box-sizing: border-box;
 
-    /*
-     * Заголовок поднимается почти к верхней границе.
-     * Отступ сверху равен расстоянию между заголовком
-     * и переключателем.
-     */
     padding:
-        max(12px, env(safe-area-inset-top))
+        max(
+            12px,
+            env(
+                safe-area-inset-top
+            )
+        )
         16px
-        calc(112px + env(safe-area-inset-bottom));
+        calc(
+            112px +
+            env(
+                safe-area-inset-bottom
+            )
+        );
 
     overflow-x: hidden;
 
-    background: transparent;
+    background:
+        transparent;
 }
 
+
+/* =========================================================
+   SCROLL AREA
+   ========================================================= */
 
 .leaderboard-scroll-area {
     position: absolute;
 
     top: 92px;
     right: 8px;
-    bottom: calc(
-        166px + env(safe-area-inset-bottom)
-    );
+
+    bottom:
+        calc(
+            166px +
+            env(
+                safe-area-inset-bottom
+            )
+        );
+
     left: 16px;
 
     box-sizing: border-box;
@@ -98,12 +107,15 @@
     overflow-y: auto;
 
     scrollbar-gutter: stable;
+
     scrollbar-width: thin;
+
     scrollbar-color:
-        rgba(120, 120, 120, 0.35)
+        var(--app-text-muted)
         transparent;
 
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling:
+        touch;
 }
 
 
@@ -113,7 +125,8 @@
 
 
 .leaderboard-scroll-area::-webkit-scrollbar-track {
-    background: transparent;
+    background:
+        transparent;
 }
 
 
@@ -123,40 +136,46 @@
     border-radius: 999px;
 
     background:
-        rgba(120, 120, 120, 0.35);
+        var(--app-text-muted);
 }
 
 
 /* =========================================================
-   КОНТЕНТ ЛИДЕРБОРДА
+   CONTENT
    ========================================================= */
 
 .leaderboard-content {
     width: 100%;
+
     margin-top: 8px;
 }
 
 
-@media (max-width: 360px) {
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (
+    max-width: 360px
+) {
+
     .leaderboard-page {
         padding-right: 14px;
         padding-left: 14px;
     }
 }
 
-@media (max-width: 480px) {
+
+@media (
+    max-width: 480px
+) {
+
     .leaderboard-scroll-area {
         right: 4px;
         left: 16px;
 
         padding-right: 12px;
 
-        /*
-         * На iPhone системный scrollbar является overlay.
-         * Дополнительный padding не даёт ему заходить
-         * на Intro и список.
-         */
         scrollbar-gutter: stable;
     }
 }
-

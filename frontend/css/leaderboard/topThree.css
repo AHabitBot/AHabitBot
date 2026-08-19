@@ -1,176 +1,182 @@
 /* =========================================================
    LEADERBOARD — TOP 3
-   Референс: 2 место / 1 место / 3 место
    ========================================================= */
 
 
 /* =========================================================
-   ОБЩИЙ КОНТЕЙНЕР
+   WRAPPER
    ========================================================= */
 
 .leaderboard-top-three {
+    width: 100%;
+
     display: grid;
+
     grid-template-columns:
-        minmax(0, 1fr)
-        minmax(0, 1.08fr)
-        minmax(0, 1fr);
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
 
     align-items: end;
-    gap: 7px;
 
-    width: 100%;
-    margin: 0;
-    padding-top: 26px;
+    gap: 8px;
 
-    box-sizing: border-box;
+    margin-top: 18px;
+    margin-bottom: 14px;
 }
 
 
 /* =========================================================
-   ОБЩАЯ КАРТОЧКА
+   CARD
    ========================================================= */
 
 .leaderboard-top-card {
     position: relative;
 
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    min-width: 0;
-    height: 216px;
-
     padding:
-        20px
-        7px
+        18px
+        8px
         14px;
 
     box-sizing: border-box;
 
-    border: 1px solid rgba(35, 36, 40, 0.08);
-    border-radius: 18px;
+    border:
+        1px solid
+        var(--app-border);
 
-    background: rgba(255, 255, 255, 0.98);
+    border-radius: 20px;
+
+    background:
+        var(--app-surface);
 
     box-shadow:
-        0 4px 14px rgba(35, 36, 40, 0.03);
+        var(--app-shadow);
 
     overflow: visible;
 }
 
 
 /* =========================================================
-   ПЕРВОЕ МЕСТО
+   РАЗМЕРЫ ПО МЕСТАМ
    ========================================================= */
 
 .leaderboard-top-card--1 {
-    z-index: 3;
+    min-height: 252px;
 
-    height: 246px;
+    padding-top: 24px;
+}
 
-    padding-top: 22px;
 
-    border-color: rgba(229, 178, 25, 0.55);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255, 251, 222, 0.99) 0%,
-            rgba(255, 249, 227, 0.98) 100%
-        );
-
-    box-shadow:
-        0 6px 20px rgba(197, 147, 17, 0.08);
+.leaderboard-top-card--2,
+.leaderboard-top-card--3 {
+    min-height: 228px;
 }
 
 
 /* =========================================================
-   ВТОРОЕ МЕСТО
+   GOLD / SILVER / BRONZE BACKGROUNDS
    ========================================================= */
+
+.leaderboard-top-card--1 {
+    border-color:
+        rgba(
+            229,
+            178,
+            25,
+            0.48
+        );
+
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            91%,
+            #f2b807
+            9%
+        );
+}
+
 
 .leaderboard-top-card--2 {
-    border-color: rgba(74, 126, 208, 0.27);
+    border-color:
+        rgba(
+            74,
+            126,
+            208,
+            0.28
+        );
 
     background:
-        linear-gradient(
-            180deg,
-            rgba(250, 252, 255, 0.99) 0%,
-            rgba(247, 250, 255, 0.98) 100%
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            94%,
+            #4c82d0
+            6%
         );
 }
 
-
-/* =========================================================
-   ТРЕТЬЕ МЕСТО
-   ========================================================= */
 
 .leaderboard-top-card--3 {
-    border-color: rgba(224, 114, 56, 0.28);
+    border-color:
+        rgba(
+            224,
+            114,
+            56,
+            0.28
+        );
 
     background:
-        linear-gradient(
-            180deg,
-            rgba(255, 251, 247, 0.99) 0%,
-            rgba(255, 248, 243, 0.98) 100%
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            94%,
+            #df6c36
+            6%
         );
 }
 
 
 /* =========================================================
-   КОРОНА
+   CROWN
    ========================================================= */
 
 .leaderboard-top-card__crown {
     position: absolute;
-    top: 0;
+
+    top: -18px;
     left: 50%;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 44px;
-    height: 44px;
-
-    transform: translate(-50%, -50%);
-
-    z-index: 10;
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   ИКОНКА КОРОНЫ
-   ========================================================= */
-
-.leaderboard-top-card__crown-icon {
+    transform:
+        translateX(
+            -50%
+        );
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    overflow: visible;
+    width: 34px;
+    height: 34px;
 
-    color: currentColor;
-
+    font-size: 27px;
     line-height: 1;
 
-    font-variation-settings:
-        "FILL" 1,
-        "wght" 600,
-        "GRAD" 50,
-        "opsz" 48;
+    pointer-events: none;
 
-    filter:
-        drop-shadow(
-            0 2px 2px rgba(35, 36, 40, 0.13)
-        );
+    z-index: 2;
 }
 
-/* =========================================================
-   ЦВЕТА КОРОН
-   ========================================================= */
 
 .leaderboard-top-card--1
 .leaderboard-top-card__crown {
@@ -180,80 +186,87 @@
 
 .leaderboard-top-card--2
 .leaderboard-top-card__crown {
-    color: #6e91c8;
+    color: #5b88cf;
 }
 
 
 .leaderboard-top-card--3
 .leaderboard-top-card__crown {
-    color: #ed7941;
+    color: #e06d38;
 }
 
 
 /* =========================================================
-   ОБЁРТКА АВАТАРА
+   AVATAR WRAPPER
    ========================================================= */
 
 .leaderboard-top-card__avatar-wrap {
+    position: relative;
+
+    flex: 0 0 auto;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    flex: 0 0 auto;
-
-    width: 86px;
-    height: 86px;
-
-    padding: 2px;
-
-    box-sizing: border-box;
-
-    border: 2px solid currentColor;
     border-radius: 50%;
 
-    background: var(--app-surface-solid);
-
-    overflow: hidden;
+    background:
+        var(--app-surface-soft);
 }
 
 
 /* =========================================================
-   АВАТАР ПЕРВОГО МЕСТА
+   AVATAR SIZE
    ========================================================= */
 
 .leaderboard-top-card--1
 .leaderboard-top-card__avatar-wrap {
-    width: 102px;
-    height: 102px;
-
-    color: #e5ad0c;
-
-    background: var(--app-surface-solid);
+    width: 92px;
+    height: 92px;
 }
 
-
-/* =========================================================
-   АВАТАР ВТОРОГО МЕСТА
-   ========================================================= */
 
 .leaderboard-top-card--2
-.leaderboard-top-card__avatar-wrap {
-    color: #4c82d0;
-}
-
-
-/* =========================================================
-   АВАТАР ТРЕТЬЕГО МЕСТА
-   ========================================================= */
+.leaderboard-top-card__avatar-wrap,
 
 .leaderboard-top-card--3
 .leaderboard-top-card__avatar-wrap {
-    color: #df6c36;
+    width: 78px;
+    height: 78px;
 }
 
 
 /* =========================================================
-   ИЗОБРАЖЕНИЕ АВАТАРА
+   AVATAR BORDER
+   ========================================================= */
+
+.leaderboard-top-card--1
+.leaderboard-top-card__avatar-wrap {
+    border:
+        3px solid
+        #e8b20d;
+}
+
+
+.leaderboard-top-card--2
+.leaderboard-top-card__avatar-wrap {
+    border:
+        3px solid
+        #5b88cf;
+}
+
+
+.leaderboard-top-card--3
+.leaderboard-top-card__avatar-wrap {
+    border:
+        3px solid
+        #e06d38;
+}
+
+
+/* =========================================================
+   AVATAR
    ========================================================= */
 
 .leaderboard-top-card__avatar {
@@ -265,23 +278,25 @@
     border-radius: 50%;
 
     object-fit: cover;
-    object-position: center;
+
+    background:
+        var(--app-surface-soft);
 }
 
 
 /* =========================================================
-   ИМЯ
+   NAME
    ========================================================= */
 
 .leaderboard-top-card__name {
     width: 100%;
-    min-width: 0;
 
     margin-top: 12px;
 
     overflow: hidden;
 
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-primary);
 
     font-family:
         -apple-system,
@@ -293,28 +308,20 @@
         sans-serif;
 
     font-size: 15px;
-    font-weight: 650;
+    font-weight: 700;
     line-height: 1.15;
-    letter-spacing: -0.025em;
+
+    letter-spacing:
+        -0.025em;
 
     text-align: center;
+
     text-overflow: ellipsis;
+
     white-space: nowrap;
 
-    -webkit-font-smoothing: antialiased;
-}
-
-
-/* =========================================================
-   ИМЯ ПЕРВОГО МЕСТА
-   ========================================================= */
-
-.leaderboard-top-card--1
-.leaderboard-top-card__name {
-    margin-top: 13px;
-
-    font-size: 17px;
-    font-weight: 700;
+    -webkit-font-smoothing:
+        antialiased;
 }
 
 
@@ -326,335 +333,267 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     gap: 5px;
 
-    margin-top: 10px;
+    margin-top: 11px;
 
-    color: #34363c;
+    color:
+        var(--app-text-secondary);
 
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        Inter,
-        Arial,
-        sans-serif;
-
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
     line-height: 1;
-
-    white-space: nowrap;
-
-    -webkit-font-smoothing: antialiased;
 }
 
 
-/* =========================================================
-   ИКОНКА XP — AWARD STAR
-   ========================================================= */
-
 .leaderboard-top-card__xp-icon {
-    display: block;
-
     flex: 0 0 auto;
 
-    overflow: visible;
+    color:
+        var(--app-xp);
 
-    color: #f4b814;
-
-    font-size: 20px;
-    line-height: 1;
+    font-size: 19px;
 
     font-variation-settings:
         "FILL" 1,
-        "wght" 600,
+        "wght" 650,
         "GRAD" 0,
         "opsz" 20;
 }
 
 
-/* =========================================================
-   ЧИСЛО XP
-   ========================================================= */
-
 .leaderboard-top-card__xp-value {
-    color: #34363c;
+    color:
+        var(--app-text-secondary);
 }
 
 
 /* =========================================================
-   СТРИК
+   STREAK
    ========================================================= */
 
 .leaderboard-top-card__streak {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 3px;
 
-    margin-top: 10px;
+    gap: 4px;
 
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        Inter,
-        Arial,
-        sans-serif;
+    margin-top: 14px;
 
-    font-size: 13px;
-    font-weight: 550;
+    font-size: 12px;
+    font-weight: 650;
     line-height: 1;
 
     white-space: nowrap;
-
-    -webkit-font-smoothing: antialiased;
 }
 
 
 /* =========================================================
-   ИКОНКА СТРИКА
+   STREAK COLORS
+   ========================================================= */
+
+.leaderboard-top-card--1
+.leaderboard-top-card__streak {
+    color: #e99a00;
+}
+
+
+.leaderboard-top-card--2
+.leaderboard-top-card__streak {
+    color: #4d82d3;
+}
+
+
+.leaderboard-top-card--3
+.leaderboard-top-card__streak {
+    color: #e06432;
+}
+
+
+/* =========================================================
+   STREAK ICON
    ========================================================= */
 
 .leaderboard-top-card__streak-icon {
-    display: block;
-
     flex: 0 0 auto;
 
-    overflow: visible;
+    color:
+        currentColor;
 
-    color: currentColor;
-
-    font-size: 19px;
-    line-height: 1;
+    font-size: 18px;
 
     font-variation-settings:
         "FILL" 1,
-        "wght" 600,
+        "wght" 650,
         "GRAD" 0,
         "opsz" 20;
 }
 
 
 /* =========================================================
-   ЦВЕТ СТРИКА — ПЕРВОЕ МЕСТО
-   ========================================================= */
-
-.leaderboard-top-card--1
-.leaderboard-top-card__streak {
-    color: #d99800;
-}
-
-
-/* =========================================================
-   ЦВЕТ СТРИКА — ВТОРОЕ МЕСТО
-   ========================================================= */
-
-.leaderboard-top-card--2
-.leaderboard-top-card__streak {
-    color: #397edc;
-}
-
-
-/* =========================================================
-   ЦВЕТ СТРИКА — ТРЕТЬЕ МЕСТО
-   ========================================================= */
-
-.leaderboard-top-card--3
-.leaderboard-top-card__streak {
-    color: #e96c36;
-}
-
-
-/* =========================================================
-   ЗНАЧЕНИЕ СТРИКА
+   STREAK VALUE
    ========================================================= */
 
 .leaderboard-top-card__streak-value {
-    color: currentColor;
+    color:
+        currentColor;
 }
 
 
 /* =========================================================
-   ЭКРАНЫ ДО 380 PX
+   DARK — VERY SUBTLE CARD DEPTH
    ========================================================= */
 
-@media (max-width: 380px) {
-    .leaderboard-top-three {
-        gap: 5px;
-        padding-top: 24px;
-    }
-
+:root[data-theme="dark"]
 .leaderboard-top-card {
-    height: 204px;
-
-    padding:
-        18px
-        5px
-        13px;
-
-    border-radius: 17px;
-}
-
-.leaderboard-top-card--1 {
-    height: 232px;
-    padding-top: 20px;
-}
-
-.leaderboard-top-card__crown {
-    top: 0;
-
-    width: 42px;
-    height: 42px;
-}
-
-.leaderboard-top-card__crown-icon {
-    width: 42px;
-    height: 42px;
-
-    font-size: 42px;
-}
-
-    .leaderboard-top-card__avatar-wrap {
-        width: 78px;
-        height: 78px;
-    }
-
-    .leaderboard-top-card--1
-    .leaderboard-top-card__avatar-wrap {
-        width: 92px;
-        height: 92px;
-    }
-
-    .leaderboard-top-card__name {
-        margin-top: 10px;
-
-        font-size: 14px;
-    }
-
-    .leaderboard-top-card--1
-    .leaderboard-top-card__name {
-        margin-top: 11px;
-
-        font-size: 16px;
-    }
-
-    .leaderboard-top-card__xp {
-        gap: 4px;
-
-        margin-top: 9px;
-
-        font-size: 13px;
-    }
-
-    .leaderboard-top-card__xp-icon {
-
-        font-size: 18px;
-    }
-
-    .leaderboard-top-card__streak {
-        gap: 3px;
-
-        margin-top: 9px;
-
-        font-size: 12px;
-    }
-
-    .leaderboard-top-card__streak-icon {
-        font-size: 17px;
-    }
+    box-shadow:
+        0
+        10px
+        24px
+        rgba(
+            0,
+            0,
+            0,
+            0.18
+        );
 }
 
 
 /* =========================================================
-   ЭКРАНЫ ДО 340 PX
+   DARK — GOLD
    ========================================================= */
 
-@media (max-width: 340px) {
+:root[data-theme="dark"]
+.leaderboard-top-card--1 {
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            93%,
+            #f2b807
+            7%
+        );
+}
+
+
+/* =========================================================
+   DARK — SILVER / BLUE
+   ========================================================= */
+
+:root[data-theme="dark"]
+.leaderboard-top-card--2 {
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            95%,
+            #4c82d0
+            5%
+        );
+}
+
+
+/* =========================================================
+   DARK — BRONZE
+   ========================================================= */
+
+:root[data-theme="dark"]
+.leaderboard-top-card--3 {
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            95%,
+            #df6c36
+            5%
+        );
+}
+
+
+/* =========================================================
+   SMALL SCREENS
+   ========================================================= */
+
+@media (
+    max-width: 380px
+) {
+
     .leaderboard-top-three {
-        gap: 4px;
-        padding-top: 22px;
+        gap: 6px;
+
+        margin-top: 17px;
     }
 
-.leaderboard-top-card {
-    height: 194px;
 
-    padding:
-        16px
-        4px
-        11px;
+    .leaderboard-top-card {
+        padding-right: 6px;
+        padding-left: 6px;
 
-    border-radius: 15px;
-}
+        border-radius: 18px;
+    }
 
-.leaderboard-top-card--1 {
-    height: 220px;
-    padding-top: 18px;
-}
 
-.leaderboard-top-card__crown {
-    top: 0;
+    .leaderboard-top-card--1 {
+        min-height: 238px;
+    }
 
-    width: 40px;
-    height: 40px;
-}
 
-.leaderboard-top-card__crown-icon {
-    width: 40px;
-    height: 40px;
+    .leaderboard-top-card--2,
+    .leaderboard-top-card--3 {
+        min-height: 216px;
+    }
 
-    font-size: 40px;
-}
 
+    .leaderboard-top-card--1
+    .leaderboard-top-card__avatar-wrap {
+        width: 84px;
+        height: 84px;
+    }
+
+
+    .leaderboard-top-card--2
+    .leaderboard-top-card__avatar-wrap,
+
+    .leaderboard-top-card--3
     .leaderboard-top-card__avatar-wrap {
         width: 70px;
         height: 70px;
     }
 
-    .leaderboard-top-card--1
-    .leaderboard-top-card__avatar-wrap {
-        width: 82px;
-        height: 82px;
-    }
 
-    .leaderboard-top-card__name {
-        margin-top: 9px;
-
-        font-size: 13px;
-    }
-
-    .leaderboard-top-card--1
     .leaderboard-top-card__name {
         margin-top: 10px;
 
         font-size: 14px;
     }
 
-    .leaderboard-top-card__xp {
-        gap: 3px;
 
-        margin-top: 8px;
+    .leaderboard-top-card__xp {
+        margin-top: 9px;
+
+        gap: 4px;
+
+        font-size: 12px;
+    }
+
+
+    .leaderboard-top-card__xp-icon {
+        font-size: 18px;
+    }
+
+
+    .leaderboard-top-card__streak {
+        margin-top: 12px;
+
+        gap: 3px;
 
         font-size: 11px;
     }
 
-    .leaderboard-top-card__xp-icon {
-
-        font-size: 16px;
-    }
-
-    .leaderboard-top-card__streak {
-        gap: 2px;
-
-        margin-top: 8px;
-
-        font-size: 10px;
-    }
 
     .leaderboard-top-card__streak-icon {
-        font-size: 15px;
+        font-size: 17px;
     }
 }
