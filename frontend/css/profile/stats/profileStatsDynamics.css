@@ -1,0 +1,332 @@
+/* =========================================================
+   PROFILE STATS — DYNAMICS
+   ========================================================= */
+
+.profile-stats-dynamics {
+    padding:
+        16px
+        14px
+        14px;
+}
+
+
+/* =========================================================
+   CHART
+   ========================================================= */
+
+.profile-stats-chart {
+    width: 100%;
+
+    margin-top: 12px;
+}
+
+
+.profile-stats-chart__svg {
+    width: 100%;
+    height: 164px;
+
+    display: block;
+
+    overflow: visible;
+}
+
+
+.profile-stats-chart__baseline {
+    stroke:
+        rgba(
+            35,
+            36,
+            40,
+            0.10
+        );
+
+    stroke-width: 1;
+}
+
+
+.profile-stats-chart__area {
+    fill:
+        url(
+            #profileStatsAreaGradient
+        );
+}
+
+
+.profile-stats-chart__line {
+    fill: none;
+
+    stroke: #4f823c;
+    stroke-width: 2.4;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+.profile-stats-chart__point {
+    fill: #4f823c;
+
+    stroke: #ffffff;
+    stroke-width: 1.8;
+}
+
+
+/* =========================================================
+   ACHIEVEMENT MARKERS
+   ========================================================= */
+
+.profile-stats-chart__achievement-line {
+    stroke:
+        rgba(
+            218,
+            156,
+            45,
+            0.38
+        );
+
+    stroke-width: 1;
+
+    stroke-dasharray:
+        2
+        2;
+}
+
+
+.profile-stats-chart__achievement-medal {
+    fill: #eba91e;
+
+    stroke: #ffffff;
+    stroke-width: 1.4;
+}
+
+
+.profile-stats-chart__achievement-star {
+    fill: #ffffff;
+
+    font-size: 8px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   GRAPH LABELS
+   ========================================================= */
+
+.profile-stats-chart__labels {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: -23px;
+
+    padding:
+        0
+        5px;
+
+    box-sizing: border-box;
+
+    color: #7d827f;
+
+    font-size: 10px;
+    font-weight: 550;
+
+    pointer-events: none;
+}
+
+
+.profile-stats-chart__labels span {
+    flex: 1;
+
+    min-width: 0;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   EMPTY GRAPH
+   ========================================================= */
+
+.profile-stats-chart-empty {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    margin-top: 14px;
+
+    padding:
+        34px
+        12px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(
+            35,
+            36,
+            40,
+            0.025
+        );
+
+    color: #939894;
+
+    font-size: 13px;
+    line-height: 1.4;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   ACHIEVEMENTS LIST
+   ========================================================= */
+
+.profile-stats-achievements {
+    width: 100%;
+
+    margin-top: 18px;
+}
+
+
+.profile-stats-achievements__title {
+    margin-bottom: 9px;
+
+    color: #858a87;
+
+    font-size: 11px;
+    font-weight: 650;
+    line-height: 1.2;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.3px;
+}
+
+
+.profile-stats-achievements__list {
+    width: 100%;
+
+    display: flex;
+
+    gap: 8px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 2px;
+
+    scrollbar-width: none;
+
+    -webkit-overflow-scrolling:
+        touch;
+}
+
+
+.profile-stats-achievements__list::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================================
+   ACHIEVEMENT ITEM
+   ========================================================= */
+
+.profile-stats-achievement {
+    flex:
+        0
+        0
+        auto;
+
+    width: 74px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 4px;
+}
+
+
+.profile-stats-achievement__image,
+.profile-stats-achievement__fallback {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    object-fit: contain;
+}
+
+
+.profile-stats-achievement__image {
+    user-select: none;
+
+    -webkit-user-drag: none;
+}
+
+
+.profile-stats-achievement__fallback {
+    border-radius: 50%;
+
+    background:
+        rgba(
+            245,
+            173,
+            25,
+            0.10
+        );
+
+    color: #e6a21c;
+}
+
+
+.profile-stats-achievement__fallback
+.material-symbols-rounded {
+    font-size: 30px;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 550,
+        "GRAD" 0,
+        "opsz" 32;
+}
+
+
+.profile-stats-achievement__label {
+    width: 100%;
+
+    overflow: hidden;
+
+    color: #4f5551;
+
+    font-size: 10px;
+    font-weight: 650;
+    line-height: 1.15;
+
+    text-align: center;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   HINT
+   ========================================================= */
+
+.profile-stats-dynamics__hint {
+    margin:
+        15px
+        0
+        0;
+
+    color: #969b97;
+
+    font-size: 10.5px;
+    font-weight: 500;
+    line-height: 1.35;
+}

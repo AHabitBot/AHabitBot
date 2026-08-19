@@ -1,0 +1,162 @@
+@import url("./leaderboardHeader.css");
+@import url("./topThree.css");
+@import url("./leaderboardList.css");
+@import url("./currentUser.css");
+
+
+/* =========================================================
+   LEADERBOARD V2 — ОБЩАЯ ОБОЛОЧКА РАЗДЕЛА
+   ========================================================= */
+
+/* =========================================================
+   ОСНОВНАЯ СТРАНИЦА LEADERBOARD V2
+   ========================================================= */
+
+#leaderboard-v2-page {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100dvh;
+    min-height: 100vh;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(255, 255, 255, 0.99) 0%,
+            rgba(250, 251, 253, 0.97) 55%,
+            rgba(247, 249, 252, 1) 100%
+        );
+}
+
+
+#leaderboard-v2-page .page-content {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background: transparent;
+}
+
+
+/* =========================================================
+   ВНУТРЕННЯЯ СТРАНИЦА ЛИДЕРБОРДА
+   ========================================================= */
+
+.leaderboard-page {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+
+    box-sizing: border-box;
+
+    /*
+     * Заголовок поднимается почти к верхней границе.
+     * Отступ сверху равен расстоянию между заголовком
+     * и переключателем.
+     */
+    padding:
+        max(12px, env(safe-area-inset-top))
+        16px
+        calc(112px + env(safe-area-inset-bottom));
+
+    overflow-x: hidden;
+
+    background: transparent;
+}
+
+
+.leaderboard-scroll-area {
+    position: absolute;
+
+    top: 92px;
+    right: 8px;
+    bottom: calc(
+        166px + env(safe-area-inset-bottom)
+    );
+    left: 16px;
+
+    box-sizing: border-box;
+
+    padding-right: 8px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(120, 120, 120, 0.35)
+        transparent;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+.leaderboard-scroll-area::-webkit-scrollbar {
+    width: 4px;
+}
+
+
+.leaderboard-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+.leaderboard-scroll-area::-webkit-scrollbar-thumb {
+    min-height: 40px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(120, 120, 120, 0.35);
+}
+
+
+/* =========================================================
+   КОНТЕНТ ЛИДЕРБОРДА
+   ========================================================= */
+
+.leaderboard-content {
+    width: 100%;
+    margin-top: 8px;
+}
+
+
+@media (max-width: 360px) {
+    .leaderboard-page {
+        padding-right: 14px;
+        padding-left: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .leaderboard-scroll-area {
+        right: 4px;
+        left: 16px;
+
+        padding-right: 12px;
+
+        /*
+         * На iPhone системный scrollbar является overlay.
+         * Дополнительный padding не даёт ему заходить
+         * на Intro и список.
+         */
+        scrollbar-gutter: stable;
+    }
+}
+

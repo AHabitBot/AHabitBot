@@ -1,0 +1,75 @@
+/* =========================================================
+   PROFILE ARCHIVE ERROR
+   ========================================================= */
+
+.profile-archive-error {
+    min-height: 360px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
+    text-align: center;
+}
+
+
+.profile-archive-error__icon {
+    margin-bottom: 10px;
+
+    color: #8c9487;
+
+    font-size: 32px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 32;
+}
+
+
+.profile-archive-error__title {
+    margin: 0;
+
+    color: #2b3028;
+
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+
+.profile-archive-error__retry {
+    min-height: 40px;
+
+    margin-top: 14px;
+
+    padding:
+        0
+        18px;
+
+    border: 0;
+    border-radius: 12px;
+
+    background: #809765;
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+.profile-archive-error__retry:active {
+    transform: scale(0.97);
+}

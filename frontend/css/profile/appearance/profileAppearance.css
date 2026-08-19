@@ -1,0 +1,24 @@
+/* =========================================================
+   PROFILE APPEARANCE — PAGE
+   ========================================================= */
+
+.profile-appearance-page {
+    position: relative;
+
+    width: 100%;
+    height: 100dvh;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-top: max(
+        10px,
+        env(safe-area-inset-top)
+    );
+
+    padding-bottom: 110px;
+
+    -webkit-overflow-scrolling: touch;
+}

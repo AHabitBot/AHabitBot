@@ -1,0 +1,343 @@
+/* =========================================================
+   PROFILE STATS — METRICS
+   ========================================================= */
+
+.profile-stats-metrics {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 10px;
+}
+
+
+/* =========================================================
+   METRIC CARD
+   ========================================================= */
+
+.profile-stats-metric {
+    position: relative;
+
+    min-width: 0;
+    min-height: 152px;
+
+    display: grid;
+
+    grid-template-columns:
+        44px
+        minmax(
+            0,
+            1fr
+        );
+
+    grid-template-rows:
+        1fr
+        auto;
+
+    column-gap: 9px;
+
+    box-sizing: border-box;
+
+    padding:
+        14px
+        12px
+        11px;
+
+    border:
+        1px
+        solid
+        rgba(
+            35,
+            36,
+            40,
+            0.08
+        );
+
+    border-radius: 20px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.92
+        );
+
+    box-shadow:
+        0 8px 24px
+        rgba(
+            31,
+            38,
+            49,
+            0.035
+        ),
+        0 2px 6px
+        rgba(
+            31,
+            38,
+            49,
+            0.02
+        );
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.profile-stats-metric__icon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+}
+
+
+.profile-stats-metric__icon
+.material-symbols-rounded {
+    font-size: 27px;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 550,
+        "GRAD" 0,
+        "opsz" 28;
+}
+
+
+.profile-stats-metric__icon--confirmations {
+    background:
+        rgba(
+            80,
+            143,
+            62,
+            0.10
+        );
+
+    color: #4f8c3c;
+}
+
+
+.profile-stats-metric__icon--xp {
+    background:
+        rgba(
+            245,
+            173,
+            25,
+            0.11
+        );
+
+    color: #efa817;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.profile-stats-metric__content {
+    min-width: 0;
+}
+
+
+.profile-stats-metric__label {
+    overflow: hidden;
+
+    color: #858a87;
+
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.profile-stats-metric__value {
+    margin-top: 3px;
+
+    overflow: hidden;
+
+    color: #171b22;
+
+    font-size: 25px;
+    font-weight: 780;
+    line-height: 1.05;
+
+    letter-spacing: -0.65px;
+
+    white-space: nowrap;
+}
+
+
+.profile-stats-metric__value span {
+    font-size: 15px;
+    font-weight: 720;
+
+    letter-spacing: -0.2px;
+}
+
+
+.profile-stats-metric__period {
+    margin-top: 5px;
+
+    color: #8e9390;
+
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   CHANGE
+   ========================================================= */
+
+.profile-stats-change {
+    grid-column:
+        1 /
+        -1;
+
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 2px;
+
+    box-sizing: border-box;
+
+    margin-top: 10px;
+
+    padding:
+        6px
+        6px;
+
+    border-radius: 12px;
+
+    font-size: 10px;
+    font-weight: 650;
+    line-height: 1.15;
+
+    white-space: nowrap;
+}
+
+
+.profile-stats-change
+.material-symbols-rounded {
+    flex: 0 0 auto;
+
+    font-size: 14px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 650,
+        "GRAD" 0,
+        "opsz" 16;
+}
+
+
+.profile-stats-change--up {
+    background:
+        rgba(
+            79,
+            138,
+            59,
+            0.085
+        );
+
+    color: #4f8a3b;
+}
+
+
+.profile-stats-change--down {
+    background:
+        rgba(
+            196,
+            93,
+            79,
+            0.075
+        );
+
+    color: #b65c50;
+}
+
+
+.profile-stats-change--same {
+    background:
+        rgba(
+            35,
+            36,
+            40,
+            0.045
+        );
+
+    color: #858a87;
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (
+    max-width: 360px
+) {
+
+    .profile-stats-metrics {
+        gap: 7px;
+    }
+
+
+    .profile-stats-metric {
+        grid-template-columns:
+            38px
+            minmax(
+                0,
+                1fr
+            );
+
+        column-gap: 7px;
+
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
+
+    .profile-stats-metric__icon {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    .profile-stats-metric__icon
+    .material-symbols-rounded {
+        font-size: 24px;
+    }
+
+
+    .profile-stats-metric__value {
+        font-size: 22px;
+    }
+
+
+    .profile-stats-change {
+        font-size: 9px;
+    }
+
+}

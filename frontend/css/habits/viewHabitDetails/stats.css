@@ -1,0 +1,101 @@
+/* =========================================================
+   СТАТИСТИКА ПРИВЫЧКИ
+   ========================================================= */
+
+.habit-details__stats {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+
+/* =========================================================
+   КАРТОЧКА СТАТИСТИКИ
+   ========================================================= */
+
+.habit-details__stat {
+    min-width: 0;
+    min-height: 74px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border:
+        1px solid
+        rgba(var(--habit-accent-rgb), 0.11);
+
+    border-radius: 18px;
+
+    background:
+        rgba(255, 255, 255, 0.78);
+
+    box-shadow:
+        0 6px 16px rgba(42, 51, 70, 0.035);
+}
+
+
+/* =========================================================
+   ОСНОВНОЕ ЗНАЧЕНИЕ
+   ========================================================= */
+
+.habit-details__stat-main {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: var(--app-text-primary);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.1;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ПОДПИСЬ
+   ========================================================= */
+
+.habit-details__stat-label {
+    margin-top: 6px;
+
+    color:
+        rgba(var(--habit-accent-rgb), 0.66);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 520;
+    line-height: 1.1;
+
+    white-space: nowrap;
+}

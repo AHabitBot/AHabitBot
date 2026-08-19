@@ -1,0 +1,886 @@
+/* =========================================================
+   PROFILE ACHIEVEMENTS — PAGE
+   ========================================================= */
+
+.profile-achievements-page {
+    position: relative;
+
+    width: 100%;
+    height: 100dvh;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background:
+        var(
+            --app-background,
+            #f7f8f6
+        );
+
+    padding-top:
+        max(
+            10px,
+            env(safe-area-inset-top)
+        );
+
+    padding-bottom:
+        calc(
+            30px +
+            env(safe-area-inset-bottom)
+        );
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+}
+
+
+.profile-achievements-page::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.profile-achievements-page
+.profile-section-header {
+    width: 100%;
+    min-height: 54px;
+    box-sizing: border-box;
+
+    padding: 0 8px;
+
+    grid-template-columns:
+        44px
+        1fr
+        44px;
+}
+
+
+.profile-achievements-page
+.profile-section-header__back {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 12px;
+
+    color: #52783f;
+}
+
+
+.profile-achievements-page
+.profile-section-header__back
+.material-symbols-rounded {
+    font-size: 28px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 32;
+}
+
+
+.profile-achievements-page
+.profile-section-header__title {
+    color: #171b22;
+
+    font-family:
+        var(
+            --font-primary,
+            -apple-system,
+            BlinkMacSystemFont,
+            "SF Pro Display",
+            "SF Pro Text",
+            Arial,
+            sans-serif
+        );
+
+    font-size: 22px;
+    font-weight: 750;
+    line-height: 1.15;
+
+    letter-spacing: -0.4px;
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.profile-achievements-body {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding:
+        8px
+        16px
+        30px;
+
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.profile-achievements-summary {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    padding:
+        20px
+        16px
+        24px;
+
+    margin-bottom: 4px;
+}
+
+
+.profile-achievements-summary__medal {
+    width: 68px;
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 10px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            255,
+            183,
+            77,
+            0.14
+        );
+
+    color: #db9b3f;
+}
+
+
+.profile-achievements-summary__medal
+.material-symbols-rounded {
+    font-size: 42px;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 500,
+        "GRAD" 0,
+        "opsz" 48;
+}
+
+
+.profile-achievements-summary__value {
+    color: #171b22;
+
+    font-size: 24px;
+    font-weight: 780;
+    line-height: 1.1;
+
+    letter-spacing: -0.6px;
+}
+
+
+.profile-achievements-summary__label {
+    margin-top: 5px;
+
+    color: #858b86;
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+.profile-achievements-section {
+    width: 100%;
+
+    margin-top: 24px;
+}
+
+
+.profile-achievements-section__title {
+    margin:
+        0
+        0
+        14px
+        2px;
+
+    color: #202620;
+
+    font-size: 18px;
+    font-weight: 750;
+    line-height: 1.2;
+
+    letter-spacing: -0.3px;
+}
+
+
+/* =========================================================
+   EARNED — HORIZONTAL SCROLL
+   ========================================================= */
+
+.profile-achievements-earned-list {
+    width: 100%;
+
+    display: flex;
+
+    gap: 10px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    box-sizing: border-box;
+
+    padding:
+        2px
+        0
+        8px;
+
+    scroll-snap-type:
+        x proximity;
+
+    scrollbar-width: none;
+
+    -webkit-overflow-scrolling:
+        touch;
+
+    overscroll-behavior-x:
+        contain;
+}
+
+
+.profile-achievements-earned-list::-webkit-scrollbar {
+    display: none;
+}
+
+
+.profile-achievement-earned {
+    flex:
+        0
+        0
+        calc(
+            (100% - 20px) / 3
+        );
+
+    min-width: 0;
+    min-height: 177px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    padding:
+        10px
+        6px
+        12px;
+
+    border:
+        1px
+        solid
+        rgba(
+            35,
+            36,
+            40,
+            0.08
+        );
+
+    border-radius: 18px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.92
+        );
+
+    box-shadow:
+        0 8px 24px
+        rgba(
+            31,
+            38,
+            49,
+            0.035
+        ),
+        0 2px 6px
+        rgba(
+            31,
+            38,
+            49,
+            0.02
+        );
+
+    scroll-snap-align:
+        start;
+}
+
+
+.profile-achievement-earned__image-wrap {
+    width: 100%;
+    height: 108px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+
+.profile-achievement-earned__image {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    user-select: none;
+
+    -webkit-user-drag: none;
+}
+
+
+.profile-achievement-earned__label {
+    width: 100%;
+
+    margin-top: 3px;
+
+    overflow: hidden;
+
+    color: #202620;
+
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.2;
+
+    text-align: center;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.profile-achievement-earned__date {
+    width: 100%;
+
+    margin-top: 8px;
+
+    color: #4f8a3b;
+
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   GOALS
+   ========================================================= */
+
+.profile-achievements-goals {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+/* =========================================================
+   GOAL CARD
+   ========================================================= */
+
+.profile-achievement-goal {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        72px
+        minmax(
+            0,
+            1fr
+        )
+        76px;
+
+    align-items: center;
+
+    gap: 12px;
+
+    box-sizing: border-box;
+
+    padding:
+        12px
+        12px
+        12px
+        10px;
+
+    border:
+        1px
+        solid
+        rgba(
+            35,
+            36,
+            40,
+            0.08
+        );
+
+    border-radius: 20px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.92
+        );
+
+    box-shadow:
+        0 8px 24px
+        rgba(
+            31,
+            38,
+            49,
+            0.035
+        ),
+        0 2px 6px
+        rgba(
+            31,
+            38,
+            49,
+            0.02
+        );
+}
+
+
+/* =========================================================
+   GOAL — ICON
+   ========================================================= */
+
+.profile-achievement-goal__icon {
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    justify-self: center;
+
+    border-radius: 50%;
+}
+
+
+.profile-achievement-goal__icon
+.material-symbols-rounded {
+    font-size: 43px;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 520,
+        "GRAD" 0,
+        "opsz" 48;
+}
+
+
+/* =========================================================
+   GOAL — STREAK ICON
+   ========================================================= */
+
+.profile-achievement-goal__icon--streak {
+    background:
+        rgba(
+            255,
+            111,
+            35,
+            0.10
+        );
+
+    color: #ff6f23;
+}
+
+
+/* =========================================================
+   GOAL — CONFIRMATION ICON
+   ========================================================= */
+
+.profile-achievement-goal__icon--confirmation {
+    background:
+        rgba(
+            79,
+            138,
+            59,
+            0.10
+        );
+
+    color: #4f8a3b;
+}
+
+/* =========================================================
+   GOAL — INVITATION ICON
+   ========================================================= */
+
+.profile-achievement-goal__icon--invitation {
+    background:
+        rgba(
+            128,
+            92,
+            190,
+            0.10
+        );
+
+    color: #805cbe;
+}
+
+/* =========================================================
+   GOAL — CONTENT
+   ========================================================= */
+
+.profile-achievement-goal__content {
+    min-width: 0;
+}
+
+
+.profile-achievement-goal__top {
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 8px;
+}
+
+
+.profile-achievement-goal__text {
+    min-width: 0;
+}
+
+
+.profile-achievement-goal__eyebrow {
+    margin-bottom: 2px;
+
+    color: #9a9f9a;
+
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.2;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.35px;
+}
+
+
+.profile-achievement-goal__title {
+    color: #202620;
+
+    font-size: 16px;
+    font-weight: 720;
+    line-height: 1.2;
+
+    white-space: nowrap;
+}
+
+
+.profile-achievement-goal__counter {
+    flex: 0 0 auto;
+
+    padding-bottom: 1px;
+
+    color: #777e78;
+
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   GOAL — PROGRESS
+   ========================================================= */
+
+.profile-achievement-goal__progress {
+    position: relative;
+
+    width: 100%;
+    height: 7px;
+
+    margin-top: 12px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background:
+        rgba(
+            38,
+            49,
+            40,
+            0.08
+        );
+}
+
+
+.profile-achievement-goal__progress-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    transition:
+        width
+        220ms
+        ease;
+}
+
+
+/* =========================================================
+   GOAL — STREAK PROGRESS
+   ========================================================= */
+
+.profile-achievement-goal__progress-fill--streak {
+    background: #d9913f;
+}
+
+
+/* =========================================================
+   GOAL — CONFIRMATION PROGRESS
+   ========================================================= */
+
+.profile-achievement-goal__progress-fill--confirmation {
+    background: #5d9148;
+}
+
+/* =========================================================
+   GOAL — INVITATION PROGRESS
+   ========================================================= */
+
+.profile-achievement-goal__progress-fill--invitation {
+    background: #805cbe;
+}
+
+
+/* =========================================================
+   GOAL — XP REWARD
+   ========================================================= */
+
+.profile-achievement-goal__reward {
+    width: 76px;
+    min-height: 74px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    padding:
+        7px
+        5px;
+
+    border:
+        1px
+        solid
+        rgba(
+            35,
+            36,
+            40,
+            0.07
+        );
+
+    border-radius: 16px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.74
+        );
+}
+
+
+.profile-achievement-goal__xp-badge {
+    position: relative;
+
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.profile-achievement-goal__xp-shape {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #f5ad19;
+
+    font-size: 32px;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 650,
+        "GRAD" 0,
+        "opsz" 32;
+}
+
+
+.profile-achievement-goal__xp-value {
+    margin-top: 4px;
+
+    color: #4f8a3b;
+
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.1;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.profile-achievements-empty {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding:
+        20px
+        16px;
+
+    color: #8b918c;
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+
+    text-align: center;
+
+    border:
+        1px
+        solid
+        rgba(
+            35,
+            36,
+            40,
+            0.06
+        );
+
+    border-radius: 18px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.72
+        );
+}
+
+
+/* =========================================================
+   SMALL SCREENS
+   ========================================================= */
+
+@media (
+    max-width: 360px
+) {
+
+    .profile-achievements-body {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+
+    .profile-achievements-earned-list {
+        gap: 6px;
+    }
+
+
+    .profile-achievement-earned {
+        flex:
+            0
+            0
+            calc(
+                (100% - 12px) / 3
+            );
+
+        min-height: 165px;
+
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+
+    .profile-achievement-earned__image-wrap {
+        height: 100px;
+    }
+
+
+    .profile-achievement-goal {
+        grid-template-columns:
+            60px
+            minmax(
+                0,
+                1fr
+            )
+            66px;
+
+        gap: 9px;
+
+        padding-left: 8px;
+        padding-right: 9px;
+    }
+
+
+    .profile-achievement-goal__icon {
+        width: 54px;
+        height: 54px;
+    }
+
+
+    .profile-achievement-goal__icon
+    .material-symbols-rounded {
+        font-size: 38px;
+    }
+
+
+    .profile-achievement-goal__reward {
+        width: 66px;
+    }
+
+
+    .profile-achievement-goal__xp-value {
+        font-size: 13px;
+    }
+}

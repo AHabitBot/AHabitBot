@@ -1,0 +1,279 @@
+/* =========================================================
+   LEADERBOARD — LIST 4–100
+   ========================================================= */
+
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.leaderboard-list {
+    width: 100%;
+
+    margin-top: 14px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-large);
+
+    background: var(--app-surface);
+
+    box-shadow: var(--app-shadow);
+}
+
+
+/* =========================================================
+   ROW
+   ========================================================= */
+
+.leaderboard-list__row {
+    display: grid;
+
+    grid-template-columns:
+        26px
+        42px
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    column-gap: 10px;
+
+    min-height: 64px;
+
+    padding:
+        7px
+        14px;
+
+    box-sizing: border-box;
+
+    border-bottom:
+        1px solid rgba(35, 36, 40, 0.07);
+}
+
+
+.leaderboard-list__row:last-child {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   RANK
+   ========================================================= */
+
+.leaderboard-list__rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+
+    color: var(--app-text-primary);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1;
+
+    text-align: center;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.leaderboard-list__avatar {
+    display: block;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+    object-position: center;
+
+    background: #f2f3f5;
+}
+
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.leaderboard-list__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   NAME
+   ========================================================= */
+
+.leaderboard-list__name {
+    display: block;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: var(--app-text-primary);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================================================
+   STREAK
+   ========================================================= */
+
+.leaderboard-list__streak {
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+
+    gap: 2px;
+
+    margin-top: 4px;
+
+    color: var(--app-green-active);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 550;
+    line-height: 1;
+
+    white-space: nowrap;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+.leaderboard-list__streak-icon {
+    display: block;
+
+    flex: 0 0 auto;
+
+    color: currentColor;
+
+    font-size: 17px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 600,
+        "GRAD" 0,
+        "opsz" 20;
+}
+
+
+.leaderboard-list__streak-value {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: currentColor;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    transform: translateY(1px);
+}
+
+
+/* =========================================================
+   XP
+   ========================================================= */
+
+.leaderboard-list__xp {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    min-width: max-content;
+
+    gap: 5px;
+
+    color: var(--app-text-secondary);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+
+    white-space: nowrap;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+.leaderboard-list__xp-icon {
+    display: block;
+
+    flex: 0 0 auto;
+
+    overflow: visible;
+
+    color: var(--app-xp);
+
+    font-size: 18px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 600,
+        "GRAD" 0,
+        "opsz" 18;
+}

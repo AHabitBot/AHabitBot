@@ -1,0 +1,10 @@
+/* =========================================================
+   PROFILE APPEARANCE — ТОЧКА ВХОДА СТИЛЕЙ
+   ========================================================= */
+
+@import url("./profileAppearance.css");
+@import url("./profileAppearanceHero.css");
+@import url("./profileAppearanceTabs.css");
+@import url("./profileAppearanceOptions.css");
+@import url("./profileAppearanceButton.css");
+@import url("./profileAppearanceHeader.css");

@@ -1,0 +1,380 @@
+/* =========================================================
+   LEADERBOARD V2 — HEADER
+   ========================================================= */
+
+.leaderboard-header {
+    position: relative;
+    z-index: 10;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   СТРОКА ЗАГОЛОВКА
+   ========================================================= */
+
+.leaderboard-header__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    gap: 12px;
+
+    margin: 0 0 16px;
+}
+
+
+/* =========================================================
+   ЗАГОЛОВОК
+   ========================================================= */
+
+.leaderboard-header__title {
+    min-width: 0;
+
+    margin: 0;
+
+    color: var(--app-text-title);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+
+    text-align: left;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+}
+
+
+/* =========================================================
+   СЕЗОН СПРАВА
+   ========================================================= */
+
+.leaderboard-season-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    color: var(--app-green-ui);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    line-height: 1;
+
+    text-align: right;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+}
+
+
+.leaderboard-season-heading[hidden] {
+    display: none;
+}
+
+
+.leaderboard-season-heading__title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+
+    letter-spacing: -0.02em;
+
+    white-space: nowrap;
+}
+
+
+.leaderboard-season-heading__dates {
+    margin-top: 5px;
+
+    color: var(--app-text-secondary);
+
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+
+    letter-spacing: -0.01em;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ПЕРЕКЛЮЧАТЕЛЬ
+   ========================================================= */
+
+.leaderboard-tabs {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    width: 100%;
+    height: 38px;
+
+    padding: 3px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(35, 36, 40, 0.09);
+
+    border-radius: 16px;
+
+    background:
+        rgba(255, 255, 255, 0.78);
+
+    box-shadow:
+        0 2px 8px rgba(31, 38, 49, 0.025),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+
+    overflow: hidden;
+
+    touch-action: none;
+}
+
+
+/* =========================================================
+   КНОПКИ ПЕРЕКЛЮЧАТЕЛЯ
+   ========================================================= */
+
+.leaderboard-tabs__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    width: 100%;
+    min-width: 0;
+    height: 30px;
+
+    margin: 0;
+    padding: 0 6px;
+
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 13px;
+
+    color: var(--app-text-secondary);
+
+    background: transparent;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+
+    letter-spacing: -0.02em;
+
+    cursor: pointer;
+
+    outline: none;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        color 160ms ease,
+        background-color 160ms ease,
+        box-shadow 160ms ease,
+        transform 100ms ease;
+
+    touch-action: none;
+}
+
+
+.leaderboard-tabs__button:active {
+    transform: scale(0.985);
+}
+
+
+/* =========================================================
+   АКТИВНАЯ КНОПКА
+   ========================================================= */
+
+.leaderboard-tabs__button--active {
+    color: var(--app-green-active);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(239, 247, 234, 0.98) 0%,
+            rgba(245, 248, 238, 0.96) 100%
+        );
+
+    box-shadow:
+        0 1px 5px rgba(47, 164, 66, 0.045),
+        inset 0 0 0 1px rgba(47, 164, 66, 0.025);
+}
+
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+.leaderboard-tabs__button:focus-visible {
+    box-shadow:
+        inset 0 0 0 2px rgba(101, 126, 75, 0.14);
+}
+
+
+.leaderboard-tabs__button--active:focus-visible {
+    box-shadow:
+        0 2px 8px rgba(47, 164, 66, 0.045),
+        inset 0 0 0 2px rgba(47, 164, 66, 0.14);
+}
+
+
+/* =========================================================
+   ИКОНКИ
+   ========================================================= */
+
+.leaderboard-tabs__icon {
+    display: inline-block;
+
+    flex: 0 0 auto;
+
+    width: auto;
+    min-width: 18px;
+    height: auto;
+
+    overflow: visible;
+
+    color: currentColor;
+
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+
+    vertical-align: middle;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 18;
+}
+
+
+/* =========================================================
+   ТЕКСТ
+   ========================================================= */
+
+.leaderboard-tabs__label {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: currentColor;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   МАЛЕНЬКИЕ ЭКРАНЫ
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    .leaderboard-header__title-row {
+        margin-bottom: 13px;
+    }
+
+
+    .leaderboard-header__title {
+        font-size: 26px;
+    }
+
+
+    .leaderboard-season-heading__title {
+        font-size: 14px;
+    }
+
+
+    .leaderboard-season-heading__dates {
+        margin-top: 4px;
+
+        font-size: 11px;
+    }
+
+
+    .leaderboard-tabs {
+        height: 36px;
+
+        padding: 3px;
+
+        border-radius: 14px;
+    }
+
+
+    .leaderboard-tabs__button {
+        gap: 5px;
+
+        height: 28px;
+
+        padding: 0 4px;
+
+        border-radius: 11px;
+
+        font-size: 13px;
+    }
+
+
+    .leaderboard-tabs__icon {
+        min-width: 17px;
+
+        font-size: 17px;
+
+        font-variation-settings:
+            "FILL" 0,
+            "wght" 450,
+            "GRAD" 0,
+            "opsz" 17;
+    }
+}

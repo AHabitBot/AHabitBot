@@ -1,0 +1,684 @@
+/* =========================================================
+   PROFILE SUPPORT — PAGE
+   ========================================================= */
+
+.profile-support-page {
+    width: 100%;
+    height: 100dvh;
+
+    display: grid;
+
+    grid-template-rows:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    padding-top:
+        max(
+            10px,
+            env(safe-area-inset-top)
+        );
+
+    background:
+        var(
+            --app-background,
+            #f7f8f6
+        );
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.profile-support-header {
+    position: relative;
+
+    z-index: 5;
+
+    flex: 0 0 auto;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background:
+        var(
+            --app-background,
+            #f7f8f6
+        );
+}
+
+
+/* =========================================================
+   PROFILE SECTION HEADER
+   ========================================================= */
+
+.profile-support-page
+.profile-section-header {
+    width: 100%;
+    min-height: 54px;
+
+    padding:
+        0
+        8px;
+
+    box-sizing: border-box;
+
+    grid-template-columns:
+        44px
+        1fr
+        44px;
+}
+
+
+.profile-support-page
+.profile-section-header__back {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 12px;
+
+    color: #52783f;
+}
+
+
+.profile-support-page
+.profile-section-header__back
+.material-symbols-rounded {
+    font-size: 28px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 32;
+}
+
+
+.profile-support-page
+.profile-section-header__title {
+    color: #171b22;
+
+    font-family:
+        var(
+            --font-primary,
+            -apple-system,
+            BlinkMacSystemFont,
+            "SF Pro Display",
+            "SF Pro Text",
+            Arial,
+            sans-serif
+        );
+
+    font-size: 22px;
+    font-weight: 750;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.4px;
+}
+
+
+.profile-support-page
+.profile-section-header__spacer {
+    width: 40px;
+    height: 40px;
+}
+
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.profile-support-heading {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding:
+        5px
+        22px
+        15px;
+
+    text-align: center;
+}
+
+
+.profile-support-heading__title {
+    margin: 0;
+
+    color: #646b65;
+
+    font-family: inherit;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    line-height: 1.3;
+}
+
+
+.profile-support-heading__text {
+    margin:
+        5px
+        0
+        0;
+
+    color: #858b86;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 450;
+
+    line-height: 1.35;
+}
+
+
+/* =========================================================
+   BODY
+
+   ВАЖНО:
+   скролл находится только здесь.
+   Header и footer не двигаются.
+   ========================================================= */
+
+.profile-support-body {
+    min-height: 0;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding:
+        0
+        14px
+        14px;
+
+    overscroll-behavior: contain;
+
+    scrollbar-width: none;
+
+    -webkit-overflow-scrolling:
+        touch;
+}
+
+
+.profile-support-body::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================================================
+   FAQ CARD
+   ========================================================= */
+
+.profile-support-faq {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    padding:
+        0
+        20px;
+
+    border:
+        1px solid
+        rgba(35, 36, 40, 0.065);
+
+    border-radius: 24px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.92
+        );
+
+    box-shadow:
+        0 8px 24px
+        rgba(31, 38, 49, 0.035),
+
+        0 2px 6px
+        rgba(31, 38, 49, 0.02);
+}
+
+
+/* =========================================================
+   QUESTION
+   ========================================================= */
+
+.profile-support-question {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        42px
+        minmax(0, 1fr);
+
+    gap: 13px;
+
+    box-sizing: border-box;
+
+    padding:
+        22px
+        0;
+}
+
+
+.profile-support-question
++ .profile-support-question {
+    border-top:
+        1px solid
+        rgba(35, 36, 40, 0.07);
+}
+
+
+/* =========================================================
+   QUESTION ICON
+   ========================================================= */
+
+.profile-support-question__icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border:
+        2px solid
+        #619247;
+
+    border-radius: 50%;
+
+    color: #619247;
+}
+
+
+.profile-support-question__icon
+.material-symbols-rounded {
+    font-size: 22px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 500,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+
+/* =========================================================
+   QUESTION CONTENT
+   ========================================================= */
+
+.profile-support-question__content {
+    min-width: 0;
+
+    padding-top: 1px;
+}
+
+
+.profile-support-question__title {
+    margin: 0;
+
+    color: #171a1f;
+
+    font-family: inherit;
+
+    font-size: 16px;
+    font-weight: 720;
+
+    line-height: 1.25;
+
+    letter-spacing: -0.15px;
+}
+
+
+.profile-support-question__text {
+    margin:
+        9px
+        0
+        0;
+
+    color: #777d78;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 450;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   FOOTER
+
+   Это отдельная строка grid,
+   поэтому она физически не входит
+   в scroll-container.
+   ========================================================= */
+
+.profile-support-footer {
+    position: relative;
+
+    z-index: 10;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding:
+        0
+        14px
+        calc(
+            12px
+            + env(safe-area-inset-bottom)
+        );
+
+    background:
+        var(
+            --app-background,
+            #f7f8f6
+        );
+}
+
+
+/* лёгкое затухание над закреплённым блоком */
+
+.profile-support-footer::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: -14px;
+
+    height: 14px;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(247, 248, 246, 0),
+            rgba(247, 248, 246, 0.96)
+        );
+}
+
+
+/* =========================================================
+   FEEDBACK CARD
+   ========================================================= */
+
+.profile-support-feedback {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding:
+        14px;
+
+    border:
+        1px solid
+        rgba(82, 120, 63, 0.07);
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(240, 247, 236, 0.97),
+            rgba(247, 249, 242, 0.97)
+        );
+
+    box-shadow:
+        0 8px 24px
+        rgba(31, 38, 49, 0.025),
+
+        0 2px 6px
+        rgba(31, 38, 49, 0.018);
+}
+
+
+/* =========================================================
+   FEEDBACK TOP
+   ========================================================= */
+
+.profile-support-feedback__top {
+    display: grid;
+
+    grid-template-columns:
+        54px
+        minmax(0, 1fr);
+
+    gap: 12px;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+}
+
+
+/* =========================================================
+   FEEDBACK ICON
+   ========================================================= */
+
+.profile-support-feedback__icon {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    color: #4f8739;
+
+    background:
+        rgba(223, 239, 215, 0.96);
+}
+
+
+.profile-support-feedback__icon
+.material-symbols-rounded {
+    font-size: 30px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 32;
+}
+
+
+/* =========================================================
+   FEEDBACK TEXT
+   ========================================================= */
+
+.profile-support-feedback__content {
+    min-width: 0;
+}
+
+
+.profile-support-feedback__title {
+    color: #4f813d;
+
+    font-family: inherit;
+
+    font-size: 16px;
+    font-weight: 750;
+
+    line-height: 1.2;
+}
+
+
+.profile-support-feedback__text {
+    margin-top: 5px;
+
+    color: #737a73;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 450;
+
+    line-height: 1.35;
+}
+
+
+/* =========================================================
+   FEEDBACK BUTTON
+   ========================================================= */
+
+.profile-support-feedback__button {
+    width: 100%;
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding:
+        0
+        18px;
+
+    border: 0;
+
+    border-radius: 15px;
+
+    outline: none;
+
+    background: #527f3f;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 6px 16px
+        rgba(82, 120, 63, 0.14);
+
+    font-family: inherit;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+    transition:
+        transform 120ms ease,
+        opacity 120ms ease;
+}
+
+
+.profile-support-feedback__button-icon {
+    font-size: 23px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+
+.profile-support-feedback__button:active {
+    transform:
+        scale(0.98);
+
+    opacity: 0.92;
+}
+
+
+/* =========================================================
+   SMALL HEIGHT
+   ========================================================= */
+
+@media (
+    max-height: 720px
+) {
+
+    .profile-support-heading {
+        padding-top: 1px;
+        padding-bottom: 10px;
+    }
+
+
+    .profile-support-heading__text {
+        margin-top: 3px;
+    }
+
+
+    .profile-support-body {
+        padding-bottom: 10px;
+    }
+
+
+    .profile-support-question {
+        padding:
+            17px
+            0;
+    }
+
+
+    .profile-support-question__text {
+        margin-top: 6px;
+    }
+
+
+    .profile-support-feedback {
+        padding: 11px;
+    }
+
+
+    .profile-support-feedback__top {
+        grid-template-columns:
+            46px
+            minmax(0, 1fr);
+
+        margin-bottom: 9px;
+    }
+
+
+    .profile-support-feedback__icon {
+        width: 46px;
+        height: 46px;
+
+        border-radius: 15px;
+    }
+
+
+    .profile-support-feedback__button {
+        height: 48px;
+    }
+}

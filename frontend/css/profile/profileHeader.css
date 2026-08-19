@@ -1,0 +1,56 @@
+/* =========================================================
+   PROFILE V2 — HEADER
+   ========================================================= */
+
+.profile-header {
+    position: relative;
+    z-index: 10;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   ЗАГОЛОВОК
+   ========================================================= */
+
+.profile-header__title {
+    margin: 0;
+
+    color: var(--app-text-primary);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+
+    text-align: left;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+}
+
+
+/* =========================================================
+   МАЛЕНЬКИЕ ЭКРАНЫ
+   ========================================================= */
+
+@media (max-width: 360px) {
+    .profile-header__title {
+        font-size: 26px;
+    }
+}

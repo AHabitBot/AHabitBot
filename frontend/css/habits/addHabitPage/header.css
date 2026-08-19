@@ -1,0 +1,149 @@
+/* =========================================================
+   ADD HABIT V2
+   Общий экран и шапка
+   Mobile First
+========================================================= */
+
+
+/* =========================================================
+   ВЕРХНЯЯ ПАНЕЛЬ
+========================================================= */
+
+.add-habit-v2__header {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 50px minmax(0, 1fr) 50px;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 24px;
+}
+
+/* =========================================================
+   ЗАГОЛОВОК
+========================================================= */
+
+.add-habit-v2__title {
+    min-width: 0;
+
+    margin: 0;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    color: var(--add-habit-primary);
+
+    font-size: 23px;
+    font-weight: 650;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+}
+
+
+/* =========================================================
+   КНОПКА СОХРАНЕНИЯ
+========================================================= */
+
+.add-habit-v2__save-button {
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    justify-self: end;
+
+    margin: 0;
+    padding: 0 0 4px;
+
+    border: none;
+    border-radius: 50%;
+    outline: none;
+
+    color: var(--app-text-primary);
+
+    background:
+        radial-gradient(
+            circle at 35% 25%,
+            #f9fcff 0%,
+            #f0f6ff 62%,
+            #e9f1fd 100%
+        );
+
+    box-shadow:
+        0 10px 22px rgba(66, 112, 175, 0.11),
+        inset 0 1px 1px rgba(255, 255, 255, 0.96);
+
+    cursor: pointer;
+    user-select: none;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+
+    touch-action: manipulation;
+
+    transition:
+        transform 90ms ease,
+        opacity 90ms ease,
+        box-shadow 90ms ease;
+}
+
+.add-habit-v2__save-button:active,
+.add-habit-v2__save-button.is-pressed {
+    transform: scale(0.9);
+    opacity: 0.76;
+
+    box-shadow:
+        0 5px 12px rgba(66, 112, 175, 0.09),
+        inset 0 2px 4px rgba(55, 136, 245, 0.08);
+}
+
+
+/* =========================================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .add-habit-v2__header {
+        grid-template-columns: 46px minmax(0, 1fr) 46px;
+        margin-bottom: 28px;
+    }
+
+    .add-habit-v2__title {
+        font-size: 24px;
+    }
+
+    .add-habit-v2__save-button {
+        width: 46px;
+        height: 46px;
+    }
+}
+
+
+/* =========================================================
+   НИЗКИЕ ЭКРАНЫ
+========================================================= */
+
+@media (max-height: 720px) {
+
+    .add-habit-v2__header {
+        margin-bottom: 24px;
+    }
+}
+
+
+/* =========================================================
+   УСТРОЙСТВА С МЫШЬЮ
+========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+    .add-habit-v2__save-button:hover {
+        opacity: 0.8;
+    }
+}

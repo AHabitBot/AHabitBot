@@ -1,0 +1,210 @@
+/* =========================================================
+   V2 — ГЛАВНАЯ ТОЧКА ВХОДА СТИЛЕЙ
+   ========================================================= */
+
+
+/* =========================================================
+   ГЛОБАЛЬНАЯ ДИЗАЙН-СИСТЕМА
+   ========================================================= */
+
+:root {
+
+    /* ---------------------------------------------------------
+       BACKGROUND
+       --------------------------------------------------------- */
+
+    --app-bg: #f8f9fb;
+
+
+    /* ---------------------------------------------------------
+       TEXT
+       --------------------------------------------------------- */
+
+    /* Крупные заголовки страниц */
+    --app-text-title: #111216;
+
+    /* Основной текст */
+    --app-text-primary: #202126;
+
+    /* Вторичный текст */
+    --app-text-secondary: #92959d;
+
+
+    /* ---------------------------------------------------------
+       GREEN SYSTEM
+       --------------------------------------------------------- */
+
+    /*
+     * Активный игровой зелёный:
+     * активные состояния,
+     * XP progress,
+     * streak,
+     * подтверждение успеха.
+     */
+    --app-green-active: #2fa442;
+
+    /*
+     * Спокойный интерфейсный оливковый:
+     * навигация,
+     * профиль,
+     * декоративные UI-элементы.
+     */
+    --app-green-ui: #657e4b;
+
+
+    /* ---------------------------------------------------------
+       GAME COLORS
+       --------------------------------------------------------- */
+
+    /* XP / награды */
+    --app-xp: #f4b814;
+
+
+    /* ---------------------------------------------------------
+       SURFACES
+       --------------------------------------------------------- */
+
+    /*
+     * Эталон белой поверхности приложения.
+     * Основан на Profile Menu.
+     */
+    --app-surface: rgba(255, 255, 255, 0.92);
+
+    --app-border: rgba(35, 36, 40, 0.08);
+
+    --app-shadow:
+        0 6px 18px rgba(35, 36, 40, 0.04);
+
+
+    /* ---------------------------------------------------------
+       RADIUS
+       --------------------------------------------------------- */
+
+    /* Большие системные контейнеры */
+    --app-radius-large: 22px;
+
+    /* Небольшие системные карточки */
+    --app-radius-medium: 20px;
+}
+
+
+/* =========================================================
+   СБРОС
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+body {
+    min-height: 100dvh;
+
+    overflow: hidden;
+
+    background: var(--app-bg);
+
+    color: var(--app-text-primary);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+}
+
+
+/* =========================================================
+   FORM ELEMENTS
+   ========================================================= */
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+
+button {
+    padding: 0;
+
+    border: 0;
+
+    cursor: pointer;
+}
+
+/* =========================================================
+   APP BOOTSTRAP LOADER
+   ========================================================= */
+
+#app {
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.app-ready #app {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.app-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 24px;
+    background: var(--app-bg);
+    color: var(--app-text-primary);
+}
+
+body.app-ready .app-loader {
+    display: none;
+}
+
+.app-loader__mark {
+    margin-bottom: 8px;
+    color: var(--app-green-ui);
+    font-size: 34px;
+    line-height: 1;
+}
+
+.app-loader__title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.app-loader__text {
+    color: var(--app-text-secondary);
+    font-size: 13px;
+    text-align: center;
+}

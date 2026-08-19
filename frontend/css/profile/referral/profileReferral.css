@@ -1,0 +1,634 @@
+/* =========================================================
+   PROFILE REFERRAL — PAGE
+   ========================================================= */
+
+.profile-referral-page {
+    position: relative;
+
+    width: 100%;
+    height: 100dvh;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-top: max(
+        10px,
+        env(safe-area-inset-top)
+    );
+
+    padding-bottom:
+        calc(
+            28px
+            + env(safe-area-inset-bottom)
+        );
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.profile-referral-page .profile-section-header {
+    width: 100%;
+    min-height: 54px;
+
+    padding: 0 8px;
+
+    box-sizing: border-box;
+
+    grid-template-columns:
+        44px
+        1fr
+        44px;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.profile-referral-page
+.profile-section-header__back {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 12px;
+
+    color: #4f6f3d;
+}
+
+
+.profile-referral-page
+.profile-section-header__back
+.material-symbols-rounded {
+    font-size: 28px;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 32;
+}
+
+
+/* =========================================================
+   HEADER TITLE
+   ========================================================= */
+
+.profile-referral-page
+.profile-section-header__title {
+    font-size: 22px;
+    font-weight: 750;
+    line-height: 1.15;
+
+    letter-spacing: -0.4px;
+
+    color: #171b22;
+}
+
+
+.profile-referral-page
+.profile-section-header__spacer {
+    width: 40px;
+    height: 40px;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.profile-referral-content {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+
+    box-sizing: border-box;
+
+    padding:
+        4px
+        4px
+        0;
+}
+
+
+/* =========================================================
+   INTRO TEXT
+   ========================================================= */
+
+.profile-referral-intro {
+    width: 100%;
+
+    margin:
+        12px
+        0
+        18px;
+
+    padding:
+        0
+        18px;
+
+    box-sizing: border-box;
+
+    color: #6f756f;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.45;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   QR CARD
+   ========================================================= */
+
+.profile-referral-qr-card {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    padding: 18px;
+
+    border:
+        1px solid
+        rgba(35, 36, 40, 0.07);
+
+    border-radius: 26px;
+
+    background:
+        rgba(255, 255, 255, 0.92);
+
+    box-shadow:
+        0 8px 24px
+        rgba(31, 38, 49, 0.035),
+
+        0 2px 6px
+        rgba(31, 38, 49, 0.02),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.90);
+}
+
+
+/* =========================================================
+   QR
+   ========================================================= */
+
+.profile-referral-qr {
+    width: min(
+        100%,
+        320px
+    );
+
+    aspect-ratio: 1 / 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background: var(--app-surface-solid);
+}
+
+
+.profile-referral-qr svg,
+.profile-referral-qr canvas {
+    display: block;
+
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+/* =========================================================
+   STATS CARD
+   ========================================================= */
+
+.profile-referral-stats {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        1px
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    margin-top: 14px;
+
+    box-sizing: border-box;
+
+    padding:
+        17px
+        10px
+        16px;
+
+    border:
+        1px solid
+        rgba(35, 36, 40, 0.055);
+
+    border-radius: 20px;
+
+    background:
+        rgba(248, 250, 244, 0.94);
+
+    box-shadow:
+        0 8px 24px
+        rgba(31, 38, 49, 0.025),
+
+        0 2px 6px
+        rgba(31, 38, 49, 0.018),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.92);
+}
+
+
+/* =========================================================
+   STAT ITEM
+   ========================================================= */
+
+.profile-referral-stat {
+    min-width: 0;
+    min-height: 70px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   STAT HEADER
+   ========================================================= */
+
+.profile-referral-stat-header {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   STAT ICON
+   ========================================================= */
+
+.profile-referral-stat-icon {
+    flex: 0 0 auto;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 23px;
+    height: 23px;
+
+    font-size: 23px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+
+/* =========================================================
+   INVITED ICON
+   ========================================================= */
+
+.profile-referral-stat-icon--friends {
+    color: #6aa34f;
+}
+
+
+/* =========================================================
+   XP ICON
+   ========================================================= */
+
+.profile-referral-stat-icon--xp {
+    color: #f7b916;
+
+    font-size: 25px;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 600,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+
+/* =========================================================
+   STAT LABEL
+   ========================================================= */
+
+.profile-referral-stat-label {
+    min-width: 0;
+
+    margin: 0;
+
+    color: #777c78;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.15;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   STAT VALUE
+   ========================================================= */
+
+.profile-referral-stat-value {
+    margin-top: 9px;
+
+    color: #52783f;
+
+    font-family: inherit;
+    font-size: 25px;
+    font-weight: 750;
+    line-height: 1;
+
+    letter-spacing: -0.35px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   STAT DIVIDER
+   ========================================================= */
+
+.profile-referral-stat-divider {
+    align-self: center;
+
+    width: 1px;
+    height: 52px;
+
+    background:
+        rgba(35, 36, 40, 0.07);
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.profile-referral-actions {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    gap: 10px;
+
+    margin-top: 14px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BUTTON BASE
+   ========================================================= */
+
+.profile-referral-button {
+    width: 100%;
+    height: 54px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding:
+        0
+        24px;
+
+    border: 0;
+    border-radius: 18px;
+
+    outline: none;
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+    transition:
+        transform 0.12s ease,
+        opacity 0.12s ease,
+        background-color 0.18s ease,
+        color 0.18s ease;
+}
+
+
+/* =========================================================
+   BUTTON ICON
+   ========================================================= */
+
+.profile-referral-button-icon {
+    flex: 0 0 auto;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    font-size: 24px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 420,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+
+/* =========================================================
+   BUTTON TEXT
+   ========================================================= */
+
+.profile-referral-button-text {
+    display: inline-flex;
+
+    align-items: center;
+
+    font: inherit;
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SECONDARY BUTTON
+   ========================================================= */
+
+.profile-referral-button--secondary {
+    border:
+        1px solid
+        rgba(82, 120, 63, 0.16);
+
+    background:
+        rgba(255, 255, 255, 0.94);
+
+    color: #52783f;
+
+    box-shadow:
+        0 3px 10px
+        rgba(31, 38, 49, 0.025);
+}
+
+
+/* =========================================================
+   PRIMARY BUTTON
+   ========================================================= */
+
+.profile-referral-button--primary {
+    background: #52783f;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 6px 16px
+        rgba(82, 120, 63, 0.14);
+}
+
+
+/* =========================================================
+   COPY SUCCESS
+   ========================================================= */
+
+.profile-referral-button--success {
+    background: #edf4e9;
+
+    color: #52783f;
+}
+
+
+/* =========================================================
+   BUTTON PRESS
+   ========================================================= */
+
+.profile-referral-button:active {
+    transform: scale(0.975);
+
+    opacity: 0.92;
+}
+
+
+/* =========================================================
+   SMALL SCREENS
+   ========================================================= */
+
+@media (
+    max-height: 720px
+) {
+
+    .profile-referral-intro {
+        margin-top: 6px;
+        margin-bottom: 12px;
+
+        font-size: 14px;
+    }
+
+
+    .profile-referral-qr-card {
+        padding: 14px;
+    }
+
+
+    .profile-referral-qr {
+        width: min(
+            100%,
+            270px
+        );
+    }
+
+
+    .profile-referral-stats {
+        margin-top: 10px;
+
+        padding-top: 13px;
+        padding-bottom: 12px;
+    }
+
+
+    .profile-referral-stat {
+        min-height: 62px;
+    }
+
+
+    .profile-referral-stat-value {
+        margin-top: 7px;
+
+        font-size: 23px;
+    }
+
+
+    .profile-referral-stat-divider {
+        height: 46px;
+    }
+
+
+    .profile-referral-actions {
+        margin-top: 10px;
+    }
+
+
+    .profile-referral-button {
+        height: 50px;
+    }
+}

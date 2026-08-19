@@ -1,0 +1,84 @@
+/* =========================================================
+   PROFILE APPEARANCE — TABS
+   ========================================================= */
+
+.profile-appearance-tabs {
+    position: relative;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    width: 100%;
+
+    margin-top: 14px;
+
+    border-bottom: 1px solid rgba(35, 36, 40, 0.07);
+}
+
+
+/* =========================================================
+   TAB
+   ========================================================= */
+
+.profile-appearance-tabs__item {
+    position: relative;
+
+    height: 52px;
+
+    padding: 0 10px;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: #777c87;
+
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        color 0.18s ease,
+        opacity 0.18s ease;
+}
+
+
+/* =========================================================
+   ACTIVE TAB
+   ========================================================= */
+
+.profile-appearance-tabs__item.is-active {
+    color: #52783f;
+}
+
+
+.profile-appearance-tabs__item.is-active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 18%;
+    right: 18%;
+    bottom: -1px;
+
+    height: 3px;
+
+    border-radius: 999px 999px 0 0;
+
+    background: #52783f;
+}
+
+
+/* =========================================================
+   TAP STATE
+   ========================================================= */
+
+.profile-appearance-tabs__item:active {
+    opacity: 0.72;
+}

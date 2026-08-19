@@ -1,0 +1,317 @@
+/* =========================================================
+   PROFILE V2 — MENU
+   ========================================================= */
+
+.profile-menu {
+    width: 100%;
+
+    margin-top: 18px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--app-border);
+
+    border-radius:
+        var(--app-radius-large);
+
+    background:
+        var(--app-surface);
+
+    box-shadow:
+        var(--app-shadow);
+}
+
+
+/* =========================================================
+   ITEM
+   ========================================================= */
+
+.profile-menu__item {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    width: 100%;
+    min-height: 58px;
+
+    margin: 0;
+    padding: 0 16px;
+
+    border: 0;
+
+    background: transparent;
+
+    color:
+        var(--app-text-primary);
+
+    text-align: left;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.profile-menu__item:not(:last-child)::after {
+    content: "";
+
+    position: absolute;
+
+    left: 16px;
+    right: 16px;
+    bottom: 0;
+
+    height: 1px;
+
+    background:
+        rgba(35, 36, 40, 0.07);
+}
+
+
+/* =========================================================
+   LEFT
+   ========================================================= */
+
+.profile-menu__left {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   RIGHT
+   ========================================================= */
+
+.profile-menu__right {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.profile-menu__label {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color:
+        var(--app-text-primary);
+
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.profile-menu__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    width: 26px;
+    height: 26px;
+
+    font-size: 25px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+
+/* =========================================================
+   ICON COLORS
+   ========================================================= */
+
+.profile-menu__icon--stats {
+    color:
+        var(--app-green-ui);
+}
+
+
+.profile-menu__icon--achievements {
+    color:
+        #c99216;
+}
+
+
+.profile-menu__icon--appearance {
+    color:
+        #567da7;
+}
+
+
+.profile-menu__icon--settings {
+    color:
+        #777b86;
+}
+
+
+.profile-menu__icon--support {
+    color:
+        #6c6687;
+}
+
+
+.profile-menu__icon--invite {
+    color:
+        var(--app-green-ui);
+}
+
+
+.profile-menu__icon--archive {
+    color:
+        #7c7f88;
+}
+
+
+/* =========================================================
+   VALUE
+   ========================================================= */
+
+.profile-menu__value {
+    color:
+        rgba(35, 36, 40, 0.58);
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   REWARD
+   ========================================================= */
+
+.profile-menu__reward {
+    color:
+        var(--app-green-ui);
+
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ARROW
+   ========================================================= */
+
+.profile-menu__arrow {
+    flex: 0 0 auto;
+
+    color:
+        rgba(35, 36, 40, 0.48);
+
+    font-size: 22px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 500,
+        "GRAD" 0,
+        "opsz" 22;
+}
+
+
+/* =========================================================
+   ACTIVE
+   ========================================================= */
+
+.profile-menu__item:active {
+    background:
+        rgba(35, 36, 40, 0.025);
+}
+
+
+/* =========================================================
+   МАЛЕНЬКИЕ ЭКРАНЫ
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    .profile-menu {
+        margin-top: 16px;
+
+        border-radius: 20px;
+    }
+
+
+    .profile-menu__item {
+        min-height: 54px;
+
+        padding: 0 14px;
+    }
+
+
+    .profile-menu__item:not(:last-child)::after {
+        left: 14px;
+        right: 14px;
+    }
+
+
+    .profile-menu__left {
+        gap: 12px;
+    }
+
+
+    .profile-menu__icon {
+        width: 24px;
+        height: 24px;
+
+        font-size: 23px;
+    }
+
+
+    .profile-menu__label {
+        font-size: 14px;
+    }
+
+
+    .profile-menu__value,
+    .profile-menu__reward {
+        font-size: 13px;
+    }
+
+
+    .profile-menu__arrow {
+        font-size: 21px;
+    }
+}
