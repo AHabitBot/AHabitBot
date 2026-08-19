@@ -11,8 +11,11 @@
 
     box-sizing: border-box;
 
-    background: var(--app-bg);
-    color: var(--app-text-primary);
+    background:
+        var(--app-bg);
+
+    color:
+        var(--app-text-primary);
 
     overflow: hidden;
 }
@@ -36,7 +39,8 @@
 
     box-sizing: border-box;
 
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling:
+        touch;
 
     scrollbar-width: none;
 }
@@ -58,25 +62,16 @@
 
     border:
         1px solid
-        rgba(
-            111,
-            126,
-            98,
-            0.12
-        );
+        var(--app-border);
 
-    border-radius: 22px;
+    border-radius:
+        var(--app-radius-large);
 
-    background: var(--app-surface-solid);
+    background:
+        var(--app-surface);
 
     box-shadow:
-        0 7px 24px
-        rgba(
-            41,
-            49,
-            36,
-            0.05
-        );
+        var(--app-shadow);
 }
 
 
@@ -101,25 +96,29 @@
     box-sizing: border-box;
 
     border: 0;
+
     border-bottom:
         1px solid
-        rgba(
-            111,
-            123,
-            104,
-            0.10
-        );
+        var(--app-divider);
 
-    background: transparent;
+    background:
+        transparent;
 
-    color: inherit;
+    color:
+        var(--app-text-primary);
 
     font-family: inherit;
+
     text-align: left;
 
     cursor: pointer;
 
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:
+        transparent;
+
+    transition:
+        background-color
+        0.14s ease;
 }
 
 
@@ -130,12 +129,7 @@
 
 .profile-timezone-option:active {
     background:
-        rgba(
-            117,
-            139,
-            95,
-            0.055
-        );
+        var(--app-surface-soft);
 }
 
 
@@ -158,8 +152,13 @@
 }
 
 
+/* =========================================================
+   LABEL
+   ========================================================= */
+
 .profile-timezone-option__label {
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-primary);
 
     font-size: 16px;
     font-weight: 700;
@@ -167,10 +166,15 @@
 }
 
 
+/* =========================================================
+   VALUE
+   ========================================================= */
+
 .profile-timezone-option__value {
     margin-top: 4px;
 
-    color: #969d92;
+    color:
+        var(--app-text-secondary);
 
     font-size: 12px;
     font-weight: 500;
@@ -197,11 +201,12 @@
 
 
 /* =========================================================
-   SELECTED
+   SELECTED CHECK
    ========================================================= */
 
 .profile-timezone-option__check {
-    color: #6f9458;
+    color:
+        var(--app-green-active);
 
     font-size: 24px;
 
@@ -213,6 +218,10 @@
 }
 
 
+/* =========================================================
+   UNSELECTED CIRCLE
+   ========================================================= */
+
 .profile-timezone-option__circle {
     width: 18px;
     height: 18px;
@@ -223,19 +232,42 @@
 
     border:
         2px solid
-        #c6ccc2;
+        var(--app-text-muted);
 
     border-radius: 50%;
 }
 
 
+/* =========================================================
+   SELECTED ROW
+   ========================================================= */
+
 .profile-timezone-option.is-selected {
     background:
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            8%,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   DARK — CARD DEPTH
+   ========================================================= */
+
+:root[data-theme="dark"]
+.profile-timezone-card {
+    box-shadow:
+        0
+        8px
+        24px
         rgba(
-            111,
-            148,
-            88,
-            0.055
+            0,
+            0,
+            0,
+            0.16
         );
 }
 
