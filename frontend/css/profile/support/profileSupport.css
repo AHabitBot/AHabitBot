@@ -24,10 +24,10 @@
         );
 
     background:
-        var(
-            --app-background,
-            #f7f8f6
-        );
+        var(--app-bg);
+
+    color:
+        var(--app-text-primary);
 }
 
 
@@ -47,10 +47,7 @@
     box-sizing: border-box;
 
     background:
-        var(
-            --app-background,
-            #f7f8f6
-        );
+        var(--app-bg);
 }
 
 
@@ -83,7 +80,8 @@
 
     border-radius: 12px;
 
-    color: #52783f;
+    color:
+        var(--app-green-ui);
 }
 
 
@@ -102,7 +100,8 @@
 
 .profile-support-page
 .profile-section-header__title {
-    color: #171b22;
+    color:
+        var(--app-text-title);
 
     font-family:
         var(
@@ -152,7 +151,8 @@
 .profile-support-heading__title {
     margin: 0;
 
-    color: #646b65;
+    color:
+        var(--app-text-primary);
 
     font-family: inherit;
 
@@ -169,7 +169,8 @@
         0
         0;
 
-    color: #858b86;
+    color:
+        var(--app-text-secondary);
 
     font-family: inherit;
 
@@ -182,10 +183,6 @@
 
 /* =========================================================
    BODY
-
-   ВАЖНО:
-   скролл находится только здесь.
-   Header и footer не двигаются.
    ========================================================= */
 
 .profile-support-body {
@@ -234,24 +231,15 @@
 
     border:
         1px solid
-        rgba(35, 36, 40, 0.065);
+        var(--app-border);
 
     border-radius: 24px;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.92
-        );
+        var(--app-surface);
 
     box-shadow:
-        0 8px 24px
-        rgba(31, 38, 49, 0.035),
-
-        0 2px 6px
-        rgba(31, 38, 49, 0.02);
+        var(--app-shadow);
 }
 
 
@@ -282,7 +270,7 @@
 + .profile-support-question {
     border-top:
         1px solid
-        rgba(35, 36, 40, 0.07);
+        var(--app-divider);
 }
 
 
@@ -303,11 +291,12 @@
 
     border:
         2px solid
-        #619247;
+        var(--app-green-active);
 
     border-radius: 50%;
 
-    color: #619247;
+    color:
+        var(--app-green-active);
 }
 
 
@@ -337,7 +326,8 @@
 .profile-support-question__title {
     margin: 0;
 
-    color: #171a1f;
+    color:
+        var(--app-text-title);
 
     font-family: inherit;
 
@@ -356,7 +346,8 @@
         0
         0;
 
-    color: #777d78;
+    color:
+        var(--app-text-secondary);
 
     font-family: inherit;
 
@@ -369,10 +360,6 @@
 
 /* =========================================================
    FOOTER
-
-   Это отдельная строка grid,
-   поэтому она физически не входит
-   в scroll-container.
    ========================================================= */
 
 .profile-support-footer {
@@ -393,14 +380,13 @@
         );
 
     background:
-        var(
-            --app-background,
-            #f7f8f6
-        );
+        var(--app-bg);
 }
 
 
-/* лёгкое затухание над закреплённым блоком */
+/* =========================================================
+   FADE
+   ========================================================= */
 
 .profile-support-footer::before {
     content: "";
@@ -418,8 +404,8 @@
     background:
         linear-gradient(
             to bottom,
-            rgba(247, 248, 246, 0),
-            rgba(247, 248, 246, 0.96)
+            transparent,
+            var(--app-bg)
         );
 }
 
@@ -433,28 +419,30 @@
 
     box-sizing: border-box;
 
-    padding:
-        14px;
+    padding: 14px;
 
     border:
         1px solid
-        rgba(82, 120, 63, 0.07);
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            10%,
+            var(--app-border)
+        );
 
     border-radius: 22px;
 
     background:
-        linear-gradient(
-            135deg,
-            rgba(240, 247, 236, 0.97),
-            rgba(247, 249, 242, 0.97)
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            94%,
+            var(--app-green-active)
+            6%
         );
 
     box-shadow:
-        0 8px 24px
-        rgba(31, 38, 49, 0.025),
-
-        0 2px 6px
-        rgba(31, 38, 49, 0.018);
+        var(--app-shadow);
 }
 
 
@@ -492,10 +480,16 @@
 
     border-radius: 18px;
 
-    color: #4f8739;
+    color:
+        var(--app-green-active);
 
     background:
-        rgba(223, 239, 215, 0.96);
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            13%,
+            transparent
+        );
 }
 
 
@@ -521,7 +515,8 @@
 
 
 .profile-support-feedback__title {
-    color: #4f813d;
+    color:
+        var(--app-green-active);
 
     font-family: inherit;
 
@@ -535,7 +530,8 @@
 .profile-support-feedback__text {
     margin-top: 5px;
 
-    color: #737a73;
+    color:
+        var(--app-text-secondary);
 
     font-family: inherit;
 
@@ -569,19 +565,34 @@
         0
         18px;
 
-    border: 0;
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            18%,
+            transparent
+        );
 
     border-radius: 15px;
 
     outline: none;
 
-    background: #527f3f;
+    background:
+        var(--app-green-active);
 
     color: #ffffff;
 
     box-shadow:
-        0 6px 16px
-        rgba(82, 120, 63, 0.14);
+        0
+        6px
+        16px
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            18%,
+            transparent
+        );
 
     font-family: inherit;
 
@@ -634,8 +645,15 @@
     }
 
 
+    .profile-support-heading__title {
+        font-size: 14px;
+    }
+
+
     .profile-support-heading__text {
         margin-top: 3px;
+
+        font-size: 13px;
     }
 
 
@@ -644,20 +662,66 @@
     }
 
 
+    .profile-support-faq {
+        padding:
+            0
+            16px;
+
+        border-radius: 20px;
+    }
+
+
     .profile-support-question {
+        grid-template-columns:
+            38px
+            minmax(0, 1fr);
+
+        gap: 11px;
+
         padding:
             17px
             0;
     }
 
 
+    .profile-support-question__icon {
+        width: 34px;
+        height: 34px;
+    }
+
+
+    .profile-support-question__icon
+    .material-symbols-rounded {
+        font-size: 20px;
+    }
+
+
+    .profile-support-question__title {
+        font-size: 15px;
+    }
+
+
     .profile-support-question__text {
-        margin-top: 6px;
+        margin-top: 7px;
+
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+
+    .profile-support-footer {
+        padding-bottom:
+            calc(
+                9px
+                + env(safe-area-inset-bottom)
+            );
     }
 
 
     .profile-support-feedback {
         padding: 11px;
+
+        border-radius: 19px;
     }
 
 
@@ -665,6 +729,8 @@
         grid-template-columns:
             46px
             minmax(0, 1fr);
+
+        gap: 10px;
 
         margin-bottom: 9px;
     }

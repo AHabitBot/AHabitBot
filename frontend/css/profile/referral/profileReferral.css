@@ -13,10 +13,11 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    padding-top: max(
-        10px,
-        env(safe-area-inset-top)
-    );
+    padding-top:
+        max(
+            10px,
+            env(safe-area-inset-top)
+        );
 
     padding-bottom:
         calc(
@@ -24,7 +25,14 @@
             + env(safe-area-inset-bottom)
         );
 
-    -webkit-overflow-scrolling: touch;
+    background:
+        var(--app-bg);
+
+    color:
+        var(--app-text-primary);
+
+    -webkit-overflow-scrolling:
+        touch;
 }
 
 
@@ -32,11 +40,14 @@
    HEADER
    ========================================================= */
 
-.profile-referral-page .profile-section-header {
+.profile-referral-page
+.profile-section-header {
     width: 100%;
     min-height: 54px;
 
-    padding: 0 8px;
+    padding:
+        0
+        8px;
 
     box-sizing: border-box;
 
@@ -58,7 +69,8 @@
 
     border-radius: 12px;
 
-    color: #4f6f3d;
+    color:
+        var(--app-green-ui);
 }
 
 
@@ -87,7 +99,8 @@
 
     letter-spacing: -0.4px;
 
-    color: #171b22;
+    color:
+        var(--app-text-title);
 }
 
 
@@ -137,9 +150,11 @@
 
     box-sizing: border-box;
 
-    color: #6f756f;
+    color:
+        var(--app-text-secondary);
 
     font-family: inherit;
+
     font-size: 15px;
     font-weight: 500;
     line-height: 1.45;
@@ -165,22 +180,15 @@
 
     border:
         1px solid
-        rgba(35, 36, 40, 0.07);
+        var(--app-border);
 
     border-radius: 26px;
 
     background:
-        rgba(255, 255, 255, 0.92);
+        var(--app-surface);
 
     box-shadow:
-        0 8px 24px
-        rgba(31, 38, 49, 0.035),
-
-        0 2px 6px
-        rgba(31, 38, 49, 0.02),
-
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.90);
+        var(--app-shadow);
 }
 
 
@@ -189,12 +197,14 @@
    ========================================================= */
 
 .profile-referral-qr {
-    width: min(
-        100%,
-        320px
-    );
+    width:
+        min(
+            100%,
+            320px
+        );
 
-    aspect-ratio: 1 / 1;
+    aspect-ratio:
+        1 / 1;
 
     display: flex;
     align-items: center;
@@ -204,7 +214,12 @@
 
     border-radius: 22px;
 
-    background: var(--app-surface-solid);
+    /*
+     * Специально белый.
+     * QR не должен инвертироваться
+     * вместе с Dark Theme.
+     */
+    background: #ffffff;
 }
 
 
@@ -244,22 +259,15 @@
 
     border:
         1px solid
-        rgba(35, 36, 40, 0.055);
+        var(--app-border);
 
     border-radius: 20px;
 
     background:
-        rgba(248, 250, 244, 0.94);
+        var(--app-surface);
 
     box-shadow:
-        0 8px 24px
-        rgba(31, 38, 49, 0.025),
-
-        0 2px 6px
-        rgba(31, 38, 49, 0.018),
-
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.92);
+        var(--app-shadow);
 }
 
 
@@ -328,7 +336,8 @@
    ========================================================= */
 
 .profile-referral-stat-icon--friends {
-    color: #6aa34f;
+    color:
+        var(--app-green-active);
 }
 
 
@@ -337,7 +346,8 @@
    ========================================================= */
 
 .profile-referral-stat-icon--xp {
-    color: #f7b916;
+    color:
+        var(--app-xp);
 
     font-size: 25px;
 
@@ -358,9 +368,11 @@
 
     margin: 0;
 
-    color: #777c78;
+    color:
+        var(--app-text-secondary);
 
     font-family: inherit;
+
     font-size: 13px;
     font-weight: 500;
     line-height: 1.15;
@@ -378,9 +390,11 @@
 .profile-referral-stat-value {
     margin-top: 9px;
 
-    color: #52783f;
+    color:
+        var(--app-green-active);
 
     font-family: inherit;
+
     font-size: 25px;
     font-weight: 750;
     line-height: 1;
@@ -402,7 +416,7 @@
     height: 52px;
 
     background:
-        rgba(35, 36, 40, 0.07);
+        var(--app-divider);
 }
 
 
@@ -448,11 +462,13 @@
         24px;
 
     border: 0;
+
     border-radius: 18px;
 
     outline: none;
 
     font-family: inherit;
+
     font-size: 16px;
     font-weight: 700;
     line-height: 1;
@@ -466,7 +482,8 @@
         transform 0.12s ease,
         opacity 0.12s ease,
         background-color 0.18s ease,
-        color 0.18s ease;
+        color 0.18s ease,
+        border-color 0.18s ease;
 }
 
 
@@ -506,6 +523,7 @@
     align-items: center;
 
     font: inherit;
+
     line-height: 1;
 
     white-space: nowrap;
@@ -519,16 +537,21 @@
 .profile-referral-button--secondary {
     border:
         1px solid
-        rgba(82, 120, 63, 0.16);
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            18%,
+            var(--app-border)
+        );
 
     background:
-        rgba(255, 255, 255, 0.94);
+        var(--app-surface);
 
-    color: #52783f;
+    color:
+        var(--app-green-active);
 
     box-shadow:
-        0 3px 10px
-        rgba(31, 38, 49, 0.025);
+        var(--app-shadow);
 }
 
 
@@ -537,13 +560,21 @@
    ========================================================= */
 
 .profile-referral-button--primary {
-    background: #52783f;
+    background:
+        var(--app-green-active);
 
     color: #ffffff;
 
     box-shadow:
-        0 6px 16px
-        rgba(82, 120, 63, 0.14);
+        0
+        6px
+        16px
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            18%,
+            transparent
+        );
 }
 
 
@@ -552,9 +583,16 @@
    ========================================================= */
 
 .profile-referral-button--success {
-    background: #edf4e9;
+    background:
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            12%,
+            var(--app-surface)
+        );
 
-    color: #52783f;
+    color:
+        var(--app-green-active);
 }
 
 
@@ -563,9 +601,28 @@
    ========================================================= */
 
 .profile-referral-button:active {
-    transform: scale(0.975);
+    transform:
+        scale(0.975);
 
     opacity: 0.92;
+}
+
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+:root[data-theme="dark"]
+.profile-referral-qr-card {
+    background:
+        var(--app-surface);
+}
+
+
+:root[data-theme="dark"]
+.profile-referral-stats {
+    background:
+        var(--app-surface);
 }
 
 
@@ -591,10 +648,11 @@
 
 
     .profile-referral-qr {
-        width: min(
-            100%,
-            270px
-        );
+        width:
+            min(
+                100%,
+                270px
+            );
     }
 
 
