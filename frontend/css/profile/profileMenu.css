@@ -41,19 +41,31 @@
     min-height: 58px;
 
     margin: 0;
-    padding: 0 16px;
+
+    padding:
+        0
+        16px;
 
     border: 0;
 
-    background: transparent;
+    background:
+        transparent;
 
     color:
         var(--app-text-primary);
 
+    font-family: inherit;
+
     text-align: left;
+
+    cursor: pointer;
 
     -webkit-tap-highlight-color:
         transparent;
+
+    transition:
+        background-color
+        120ms ease;
 }
 
 
@@ -73,7 +85,7 @@
     height: 1px;
 
     background:
-        rgba(35, 36, 40, 0.07);
+        var(--app-divider);
 }
 
 
@@ -120,9 +132,12 @@
     font-size: 15px;
     font-weight: 500;
     line-height: 1.15;
-    letter-spacing: -0.02em;
+
+    letter-spacing:
+        -0.02em;
 
     text-overflow: ellipsis;
+
     white-space: nowrap;
 }
 
@@ -154,6 +169,8 @@
 
 /* =========================================================
    ICON COLORS
+
+   Эти цвета намеренно остаются продуктовыми.
    ========================================================= */
 
 .profile-menu__icon--stats {
@@ -163,26 +180,23 @@
 
 
 .profile-menu__icon--achievements {
-    color:
-        #c99216;
+    color: #c99216;
 }
 
 
 .profile-menu__icon--appearance {
-    color:
-        #567da7;
+    color: #567da7;
 }
 
 
 .profile-menu__icon--settings {
     color:
-        #777b86;
+        var(--app-text-secondary);
 }
 
 
 .profile-menu__icon--support {
-    color:
-        #6c6687;
+    color: #746d94;
 }
 
 
@@ -194,7 +208,7 @@
 
 .profile-menu__icon--archive {
     color:
-        #7c7f88;
+        var(--app-text-secondary);
 }
 
 
@@ -204,7 +218,7 @@
 
 .profile-menu__value {
     color:
-        rgba(35, 36, 40, 0.58);
+        var(--app-text-secondary);
 
     font-size: 14px;
     font-weight: 500;
@@ -238,7 +252,7 @@
     flex: 0 0 auto;
 
     color:
-        rgba(35, 36, 40, 0.48);
+        var(--app-text-muted);
 
     font-size: 22px;
     line-height: 1;
@@ -257,61 +271,5 @@
 
 .profile-menu__item:active {
     background:
-        rgba(35, 36, 40, 0.025);
-}
-
-
-/* =========================================================
-   МАЛЕНЬКИЕ ЭКРАНЫ
-   ========================================================= */
-
-@media (max-width: 360px) {
-
-    .profile-menu {
-        margin-top: 16px;
-
-        border-radius: 20px;
-    }
-
-
-    .profile-menu__item {
-        min-height: 54px;
-
-        padding: 0 14px;
-    }
-
-
-    .profile-menu__item:not(:last-child)::after {
-        left: 14px;
-        right: 14px;
-    }
-
-
-    .profile-menu__left {
-        gap: 12px;
-    }
-
-
-    .profile-menu__icon {
-        width: 24px;
-        height: 24px;
-
-        font-size: 23px;
-    }
-
-
-    .profile-menu__label {
-        font-size: 14px;
-    }
-
-
-    .profile-menu__value,
-    .profile-menu__reward {
-        font-size: 13px;
-    }
-
-
-    .profile-menu__arrow {
-        font-size: 21px;
-    }
+        var(--app-surface-soft);
 }

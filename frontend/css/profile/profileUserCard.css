@@ -6,11 +6,19 @@
     width: 100%;
 
     margin-top: 18px;
+
     padding: 18px;
+
+    box-sizing: border-box;
 
     border:
         1px solid
-        rgba(69, 91, 49, 0.16);
+        color-mix(
+            in srgb,
+            var(--app-green-ui)
+            18%,
+            var(--app-border)
+        );
 
     border-radius: 24px;
 
@@ -19,8 +27,7 @@
     background-size: cover;
 
     box-shadow:
-        0 7px 16px
-        rgba(35, 36, 40, 0.055);
+        var(--app-shadow);
 }
 
 
@@ -53,11 +60,15 @@
     border-radius: 24px;
 
     background:
-        rgba(255, 255, 255, 0.94);
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            94%,
+            transparent
+        );
 
     box-shadow:
-        0 2px 7px
-        rgba(35, 36, 40, 0.06);
+        var(--app-shadow);
 }
 
 
@@ -103,25 +114,36 @@
 
     overflow: hidden;
 
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-primary);
 
     font-size: 19px;
     font-weight: 700;
     line-height: 1.15;
-    letter-spacing: -0.025em;
 
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    letter-spacing:
+        -0.025em;
 
-    -webkit-font-smoothing: antialiased;
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    -webkit-font-smoothing:
+        antialiased;
 }
 
+
+/* =========================================================
+   EDIT
+   ========================================================= */
 
 .profile-user-card__edit-icon {
     flex: 0 0 auto;
 
     color:
-        rgba(35, 36, 40, 0.42);
+        var(--app-text-secondary);
 
     font-size: 17px;
     line-height: 1;
@@ -147,25 +169,40 @@
     width: fit-content;
 
     margin-top: 8px;
-    padding: 4px 8px;
+
+    padding:
+        4px
+        8px;
 
     border:
         1px solid
-        rgba(101, 126, 75, 0.08);
+        color-mix(
+            in srgb,
+            var(--app-green-ui)
+            12%,
+            transparent
+        );
 
     border-radius: 999px;
 
     background:
-        rgba(231, 239, 221, 0.68);
+        color-mix(
+            in srgb,
+            var(--app-green-ui)
+            13%,
+            var(--app-surface)
+        );
 
-    color: var(--app-green-ui);
+    color:
+        var(--app-green-ui);
 }
 
 
 .profile-user-card__level-icon {
     flex: 0 0 auto;
 
-    color: var(--app-green-ui);
+    color:
+        var(--app-green-ui);
 
     font-size: 14px;
     line-height: 1;
@@ -209,22 +246,35 @@
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.55);
+        color-mix(
+            in srgb,
+            var(--app-border)
+            75%,
+            transparent
+        );
 
     border-radius: 14px;
 
     background:
-        rgba(255, 255, 255, 0.62);
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            76%,
+            transparent
+        );
 
     box-shadow:
-        0 2px 8px
-        rgba(35, 36, 40, 0.04);
+        var(--app-shadow);
 
     backdrop-filter:
-        blur(7px);
+        blur(
+            8px
+        );
 
     -webkit-backdrop-filter:
-        blur(7px);
+        blur(
+            8px
+        );
 }
 
 
@@ -242,7 +292,12 @@
     border-radius: 999px;
 
     background:
-        rgba(47, 164, 66, 0.12);
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            14%,
+            transparent
+        );
 }
 
 
@@ -259,8 +314,15 @@
         );
 
     box-shadow:
-        0 0 8px
-        rgba(47, 164, 66, 0.12);
+        0
+        0
+        8px
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            16%,
+            transparent
+        );
 }
 
 
@@ -274,7 +336,7 @@
     min-width: 80px;
 
     color:
-        rgba(35, 36, 40, 0.44);
+        var(--app-text-secondary);
 
     font-size: 12px;
     font-weight: 600;
@@ -287,13 +349,45 @@
 
 
 .profile-user-card__xp-current {
-    color: var(--app-green-active);
+    color:
+        var(--app-green-active);
 }
 
 
 .profile-user-card__xp-total {
     color:
-        rgba(35, 36, 40, 0.44);
+        var(--app-text-secondary);
+}
+
+
+/* =========================================================
+   DARK MODE
+
+   На тёмном фоне пользовательского оформления
+   даём overlay-элементам более плотную поверхность.
+   ========================================================= */
+
+:root[data-theme="dark"]
+.profile-user-card__avatar-wrap {
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface-raised)
+            94%,
+            transparent
+        );
+}
+
+
+:root[data-theme="dark"]
+.profile-user-card__progress-row {
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface-raised)
+            82%,
+            transparent
+        );
 }
 
 
@@ -301,16 +395,14 @@
    МАЛЕНЬКИЕ ЭКРАНЫ
    ========================================================= */
 
-@media (max-width: 360px) {
+@media (
+    max-width: 360px
+) {
 
     .profile-user-card {
         padding: 16px;
 
         border-radius: 22px;
-
-        box-shadow:
-            0 6px 14px
-            rgba(35, 36, 40, 0.05);
     }
 
 

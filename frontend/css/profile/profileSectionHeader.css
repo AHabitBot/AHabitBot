@@ -1,15 +1,36 @@
+/* =========================================================
+   PROFILE — SECTION HEADER
+   ========================================================= */
+
 .profile-section-header {
     position: relative;
 
     display: grid;
-    grid-template-columns: 44px 1fr 44px;
+
+    grid-template-columns:
+        44px
+        1fr
+        44px;
+
     align-items: center;
 
+    width: 100%;
     min-height: 52px;
 
-    padding: 0 14px;
+    padding:
+        0
+        14px;
+
+    box-sizing: border-box;
+
+    background:
+        transparent;
 }
 
+
+/* =========================================================
+   BACK
+   ========================================================= */
 
 .profile-section-header__back {
     width: 40px;
@@ -25,18 +46,29 @@
     border: 0;
     border-radius: 12px;
 
-    background: transparent;
+    background:
+        transparent;
 
-    color: #263128;
+    color:
+        var(--app-text-primary);
 
     cursor: pointer;
 
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:
+        transparent;
+
+    transition:
+        transform
+        90ms ease,
+        background-color
+        120ms ease;
 }
 
 
-.profile-section-header__back .material-symbols-rounded {
+.profile-section-header__back
+.material-symbols-rounded {
     font-size: 22px;
+
     font-variation-settings:
         "FILL" 0,
         "wght" 500,
@@ -46,26 +78,48 @@
 
 
 .profile-section-header__back:active {
-    transform: scale(0.94);
+    transform:
+        scale(
+            0.94
+        );
+
+    background:
+        var(--app-surface-soft);
 }
 
+
+/* =========================================================
+   TITLE
+   ========================================================= */
 
 .profile-section-header__title {
     margin: 0;
 
-    text-align: center;
+    overflow: hidden;
+
+    color:
+        var(--app-text-title);
 
     font-size: 18px;
     font-weight: 700;
     line-height: 1.2;
 
-    color: #202620;
+    text-align: center;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    -webkit-font-smoothing:
+        antialiased;
 }
 
+
+/* =========================================================
+   SPACER
+   ========================================================= */
 
 .profile-section-header__spacer {
     width: 40px;

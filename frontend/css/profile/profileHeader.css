@@ -4,6 +4,7 @@
 
 .profile-header {
     position: relative;
+
     z-index: 10;
 
     width: 100%;
@@ -22,7 +23,8 @@
 .profile-header__title {
     margin: 0;
 
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-title);
 
     font-family:
         -apple-system,
@@ -36,12 +38,17 @@
     font-size: 28px;
     font-weight: 700;
     line-height: 1.05;
-    letter-spacing: -0.035em;
+
+    letter-spacing:
+        -0.035em;
 
     text-align: left;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        geometricPrecision;
 }
 
 
@@ -49,7 +56,10 @@
    МАЛЕНЬКИЕ ЭКРАНЫ
    ========================================================= */
 
-@media (max-width: 360px) {
+@media (
+    max-width: 360px
+) {
+
     .profile-header__title {
         font-size: 26px;
     }
