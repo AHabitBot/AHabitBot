@@ -13,10 +13,10 @@
     box-sizing: border-box;
 
     background:
-        var(
-            --app-background,
-            #f7f8f6
-        );
+        var(--app-bg);
+
+    color:
+        var(--app-text-primary);
 
     overflow: hidden;
 }
@@ -73,40 +73,16 @@
     box-sizing: border-box;
 
     border:
-        1px
-        solid
-        rgba(
-            35,
-            36,
-            40,
-            0.08
-        );
+        1px solid
+        var(--app-border);
 
     border-radius: 20px;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.92
-        );
+        var(--app-surface);
 
     box-shadow:
-        0 8px 24px
-        rgba(
-            31,
-            38,
-            49,
-            0.035
-        ),
-        0 2px 6px
-        rgba(
-            31,
-            38,
-            49,
-            0.02
-        );
+        var(--app-shadow);
 }
 
 
@@ -120,7 +96,8 @@
 .profile-stats-card__title {
     margin: 0;
 
-    color: #202620;
+    color:
+        var(--app-text-title);
 
     font-size: 17px;
     font-weight: 750;
@@ -144,7 +121,8 @@
 
     gap: 12px;
 
-    color: #898e8a;
+    color:
+        var(--app-text-secondary);
 
     font-size: 13px;
 }
@@ -157,17 +135,16 @@
     box-sizing: border-box;
 
     border:
-        3px
-        solid
-        rgba(
-            79,
-            130,
-            60,
-            0.14
+        3px solid
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            14%,
+            transparent
         );
 
     border-top-color:
-        #4f823c;
+        var(--app-green-active);
 
     border-radius: 50%;
 
@@ -183,9 +160,7 @@
 
     to {
         transform:
-            rotate(
-                360deg
-            );
+            rotate(360deg);
     }
 
 }
@@ -207,7 +182,8 @@
 
     padding: 24px;
 
-    color: #777d78;
+    color:
+        var(--app-text-secondary);
 
     text-align: center;
 }
@@ -217,14 +193,16 @@
 .material-symbols-rounded {
     margin-bottom: 8px;
 
-    color: #a5aaa6;
+    color:
+        var(--app-text-muted);
 
     font-size: 36px;
 }
 
 
 .profile-stats-error strong {
-    color: #313632;
+    color:
+        var(--app-text-primary);
 
     font-size: 15px;
 }
@@ -235,6 +213,9 @@
         5px
         0
         0;
+
+    color:
+        var(--app-text-secondary);
 
     font-size: 12px;
 }

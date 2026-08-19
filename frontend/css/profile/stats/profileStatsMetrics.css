@@ -53,40 +53,16 @@
         11px;
 
     border:
-        1px
-        solid
-        rgba(
-            35,
-            36,
-            40,
-            0.08
-        );
+        1px solid
+        var(--app-border);
 
     border-radius: 20px;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.92
-        );
+        var(--app-surface);
 
     box-shadow:
-        0 8px 24px
-        rgba(
-            31,
-            38,
-            49,
-            0.035
-        ),
-        0 2px 6px
-        rgba(
-            31,
-            38,
-            49,
-            0.02
-        );
+        var(--app-shadow);
 }
 
 
@@ -120,27 +96,29 @@
 
 .profile-stats-metric__icon--confirmations {
     background:
-        rgba(
-            80,
-            143,
-            62,
-            0.10
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            11%,
+            transparent
         );
 
-    color: #4f8c3c;
+    color:
+        var(--app-green-active);
 }
 
 
 .profile-stats-metric__icon--xp {
     background:
-        rgba(
-            245,
-            173,
-            25,
-            0.11
+        color-mix(
+            in srgb,
+            var(--app-xp)
+            12%,
+            transparent
         );
 
-    color: #efa817;
+    color:
+        var(--app-xp);
 }
 
 
@@ -156,14 +134,17 @@
 .profile-stats-metric__label {
     overflow: hidden;
 
-    color: #858a87;
+    color:
+        var(--app-text-secondary);
 
     font-size: 12px;
     font-weight: 600;
     line-height: 1.2;
 
     white-space: nowrap;
-    text-overflow: ellipsis;
+
+    text-overflow:
+        ellipsis;
 }
 
 
@@ -172,7 +153,8 @@
 
     overflow: hidden;
 
-    color: #171b22;
+    color:
+        var(--app-text-title);
 
     font-size: 25px;
     font-weight: 780;
@@ -185,6 +167,9 @@
 
 
 .profile-stats-metric__value span {
+    color:
+        inherit;
+
     font-size: 15px;
     font-weight: 720;
 
@@ -195,7 +180,8 @@
 .profile-stats-metric__period {
     margin-top: 5px;
 
-    color: #8e9390;
+    color:
+        var(--app-text-secondary);
 
     font-size: 11px;
     font-weight: 500;
@@ -225,7 +211,6 @@
     margin-top: 10px;
 
     padding:
-        6px
         6px;
 
     border-radius: 12px;
@@ -252,18 +237,27 @@
 }
 
 
+/* =========================================================
+   UP
+   ========================================================= */
+
 .profile-stats-change--up {
     background:
-        rgba(
-            79,
-            138,
-            59,
-            0.085
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            10%,
+            transparent
         );
 
-    color: #4f8a3b;
+    color:
+        var(--app-green-active);
 }
 
+
+/* =========================================================
+   DOWN
+   ========================================================= */
 
 .profile-stats-change--down {
     background:
@@ -271,23 +265,24 @@
             196,
             93,
             79,
-            0.075
+            0.10
         );
 
-    color: #b65c50;
+    color:
+        #c96b5f;
 }
 
 
+/* =========================================================
+   SAME
+   ========================================================= */
+
 .profile-stats-change--same {
     background:
-        rgba(
-            35,
-            36,
-            40,
-            0.045
-        );
+        var(--app-surface-soft);
 
-    color: #858a87;
+    color:
+        var(--app-text-secondary);
 }
 
 

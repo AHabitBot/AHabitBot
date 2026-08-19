@@ -22,24 +22,16 @@
     padding: 3px;
 
     border:
-        1px
-        solid
-        rgba(
-            35,
-            36,
-            40,
-            0.08
-        );
+        1px solid
+        var(--app-border);
 
     border-radius: 16px;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.92
-        );
+        var(--app-surface);
+
+    box-shadow:
+        var(--app-shadow);
 }
 
 
@@ -57,7 +49,8 @@
     background:
         transparent;
 
-    color: #8c9190;
+    color:
+        var(--app-text-secondary);
 
     font-family: inherit;
 
@@ -75,12 +68,13 @@
 
 .profile-stats-period.is-active {
     background:
-        rgba(
-            111,
-            145,
-            76,
-            0.11
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            13%,
+            transparent
         );
 
-    color: #527d40;
+    color:
+        var(--app-green-active);
 }

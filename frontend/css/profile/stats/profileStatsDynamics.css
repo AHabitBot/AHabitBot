@@ -33,12 +33,7 @@
 
 .profile-stats-chart__baseline {
     stroke:
-        rgba(
-            35,
-            36,
-            40,
-            0.10
-        );
+        var(--app-divider);
 
     stroke-width: 1;
 }
@@ -55,7 +50,9 @@
 .profile-stats-chart__line {
     fill: none;
 
-    stroke: #4f823c;
+    stroke:
+        var(--app-green-active);
+
     stroke-width: 2.4;
 
     stroke-linecap: round;
@@ -64,9 +61,12 @@
 
 
 .profile-stats-chart__point {
-    fill: #4f823c;
+    fill:
+        var(--app-green-active);
 
-    stroke: #ffffff;
+    stroke:
+        var(--app-surface);
+
     stroke-width: 1.8;
 }
 
@@ -93,15 +93,19 @@
 
 
 .profile-stats-chart__achievement-medal {
-    fill: #eba91e;
+    fill:
+        var(--app-xp);
 
-    stroke: #ffffff;
+    stroke:
+        var(--app-surface);
+
     stroke-width: 1.4;
 }
 
 
 .profile-stats-chart__achievement-star {
-    fill: #ffffff;
+    fill:
+        #ffffff;
 
     font-size: 8px;
     font-weight: 800;
@@ -127,7 +131,8 @@
 
     box-sizing: border-box;
 
-    color: #7d827f;
+    color:
+        var(--app-text-secondary);
 
     font-size: 10px;
     font-weight: 550;
@@ -160,17 +165,17 @@
         34px
         12px;
 
+    border:
+        1px solid
+        var(--app-border);
+
     border-radius: 16px;
 
     background:
-        rgba(
-            35,
-            36,
-            40,
-            0.025
-        );
+        var(--app-surface-soft);
 
-    color: #939894;
+    color:
+        var(--app-text-secondary);
 
     font-size: 13px;
     line-height: 1.4;
@@ -193,7 +198,8 @@
 .profile-stats-achievements__title {
     margin-bottom: 9px;
 
-    color: #858a87;
+    color:
+        var(--app-text-secondary);
 
     font-size: 11px;
     font-weight: 650;
@@ -273,14 +279,15 @@
     border-radius: 50%;
 
     background:
-        rgba(
-            245,
-            173,
-            25,
-            0.10
+        color-mix(
+            in srgb,
+            var(--app-xp)
+            11%,
+            transparent
         );
 
-    color: #e6a21c;
+    color:
+        var(--app-xp);
 }
 
 
@@ -301,7 +308,8 @@
 
     overflow: hidden;
 
-    color: #4f5551;
+    color:
+        var(--app-text-primary);
 
     font-size: 10px;
     font-weight: 650;
@@ -310,7 +318,9 @@
     text-align: center;
 
     white-space: nowrap;
-    text-overflow: ellipsis;
+
+    text-overflow:
+        ellipsis;
 }
 
 
@@ -324,7 +334,8 @@
         0
         0;
 
-    color: #969b97;
+    color:
+        var(--app-text-secondary);
 
     font-size: 10.5px;
     font-weight: 500;

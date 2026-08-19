@@ -29,7 +29,11 @@
 
     border-radius: 12px;
 
-    color: #52783f;
+    color:
+        var(--app-green-ui);
+
+    background:
+        transparent;
 }
 
 
@@ -48,7 +52,8 @@
 
 .profile-stats-page
 .profile-section-header__title {
-    color: #171b22;
+    color:
+        var(--app-text-title);
 
     font-family:
         var(

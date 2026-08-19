@@ -52,7 +52,8 @@
 
 
 .profile-stats-weekday__value {
-    color: #252a27;
+    color:
+        var(--app-text-primary);
 
     font-size: 13px;
     font-weight: 700;
@@ -82,11 +83,11 @@
         2px;
 
     background:
-        rgba(
-            82,
-            125,
-            64,
-            0.055
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            8%,
+            var(--app-surface-soft)
         );
 }
 
@@ -105,8 +106,14 @@
     background:
         linear-gradient(
             180deg,
-            #4d8438 0%,
-            #92b47f 100%
+            var(--app-green-active) 0%,
+            color-mix(
+                in srgb,
+                var(--app-green-active)
+                55%,
+                var(--app-surface)
+            )
+            100%
         );
 
     transition:
@@ -121,7 +128,8 @@
    ========================================================= */
 
 .profile-stats-weekday__label {
-    color: #777d79;
+    color:
+        var(--app-text-secondary);
 
     font-size: 12px;
     font-weight: 600;
@@ -131,9 +139,11 @@
 
 .profile-stats-weekday.is-best
 .profile-stats-weekday__value,
+
 .profile-stats-weekday.is-best
 .profile-stats-weekday__label {
-    color: #4f813c;
+    color:
+        var(--app-green-active);
 }
 
 
@@ -158,17 +168,27 @@
         8px
         10px;
 
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            8%,
+            transparent
+        );
+
     border-radius: 14px;
 
     background:
-        rgba(
-            111,
-            145,
-            76,
-            0.085
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            10%,
+            transparent
         );
 
-    color: #527d40;
+    color:
+        var(--app-green-active);
 
     font-size: 12px;
     font-weight: 620;
@@ -192,15 +212,14 @@
 
 
 .profile-stats-best-day--empty {
-    color: #969b97;
+    color:
+        var(--app-text-secondary);
 
     background:
-        rgba(
-            35,
-            36,
-            40,
-            0.035
-        );
+        var(--app-surface-soft);
+
+    border-color:
+        var(--app-border);
 }
 
 
