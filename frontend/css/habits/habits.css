@@ -3,10 +3,17 @@
    ========================================================= */
 
 :root {
-    --habits-v2-text: #232428;
-    --habits-v2-muted: #a5a7ad;
-    --habits-v2-blue: #2f7fe5;
-    --habits-v2-button-bg: #eef5ff;
+    --habits-v2-text:
+        var(--app-text-primary);
+
+    --habits-v2-muted:
+        var(--app-text-secondary);
+
+    --habits-v2-blue:
+        #2f7fe5;
+
+    --habits-v2-button-bg:
+        var(--app-surface-soft);
 }
 
 
@@ -28,16 +35,12 @@
     overflow: hidden;
 
     background:
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(255, 255, 255, 0.99) 0%,
-            rgba(250, 251, 253, 0.97) 55%,
-            rgba(247, 249, 252, 1) 100%
-        );
+        var(--app-bg);
 }
 
 
-#habits-v2-page .page-content {
+#habits-v2-page
+.page-content {
     position: relative;
 
     width: 100%;
@@ -49,5 +52,6 @@
 
     overflow: hidden;
 
-    background: transparent;
+    background:
+        transparent;
 }

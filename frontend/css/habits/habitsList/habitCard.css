@@ -7,6 +7,7 @@
 
     display: flex;
     flex-direction: column;
+
     gap: 14px;
 }
 
@@ -16,8 +17,16 @@
    ========================================================= */
 
 .habit-card {
-    --habit-accent: #65b85d;
-    --habit-accent-rgb: 101, 184, 93;
+    --habit-accent:
+        #65b85d;
+
+    --habit-accent-rgb:
+        101,
+        184,
+        93;
+
+    --habit-card-base:
+        var(--app-surface);
 
     position: relative;
 
@@ -25,13 +34,20 @@
     min-height: 168px;
 
     display: grid;
+
     grid-template-columns:
-        minmax(0, 1fr)
+        minmax(
+            0,
+            1fr
+        )
         46px;
 
     grid-template-rows:
         42px
-        minmax(48px, 1fr)
+        minmax(
+            48px,
+            1fr
+        )
         auto;
 
     column-gap: 14px;
@@ -46,28 +62,62 @@
 
     border:
         1px solid
-        rgba(var(--habit-accent-rgb), 0.22);
+        rgba(
+            var(--habit-accent-rgb),
+            0.22
+        );
 
     border-radius: 25px;
 
     background:
         linear-gradient(
             145deg,
-            rgba(var(--habit-accent-rgb), 0.13) 0%,
-            rgba(var(--habit-accent-rgb), 0.075) 52%,
-            rgba(var(--habit-accent-rgb), 0.025) 100%
+
+            color-mix(
+                in srgb,
+                var(--habit-card-base)
+                84%,
+                rgb(
+                    var(--habit-accent-rgb)
+                )
+                16%
+            )
+            0%,
+
+            color-mix(
+                in srgb,
+                var(--habit-card-base)
+                91%,
+                rgb(
+                    var(--habit-accent-rgb)
+                )
+                9%
+            )
+            52%,
+
+            color-mix(
+                in srgb,
+                var(--habit-card-base)
+                97%,
+                rgb(
+                    var(--habit-accent-rgb)
+                )
+                3%
+            )
+            100%
         );
 
     box-shadow:
-        0 12px 28px rgba(42, 51, 70, 0.055),
-        inset 0 1px 0 rgba(255, 255, 255, 0.88);
+        var(--app-shadow);
 
     overflow: hidden;
 
     cursor: pointer;
+
     user-select: none;
 
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:
+        transparent;
 
     transition:
         transform 100ms ease,
@@ -75,6 +125,10 @@
         box-shadow 100ms ease;
 }
 
+
+/* =========================================================
+   ДЕКОРАТИВНОЕ СВЕЧЕНИЕ
+   ========================================================= */
 
 .habit-card::before {
     content: "";
@@ -92,22 +146,40 @@
     background:
         radial-gradient(
             circle,
-            rgba(var(--habit-accent-rgb), 0.085) 0%,
-            rgba(var(--habit-accent-rgb), 0) 72%
+
+            rgba(
+                var(--habit-accent-rgb),
+                0.085
+            )
+            0%,
+
+            rgba(
+                var(--habit-accent-rgb),
+                0
+            )
+            72%
         );
 
     pointer-events: none;
 }
 
 
+/* =========================================================
+   PRESSED
+   ========================================================= */
+
 .habit-card.is-pressed,
 .habit-card:active {
-    transform: scale(0.987);
-    opacity: 0.94;
+    transform:
+        scale(
+            0.987
+        );
+
+    opacity:
+        0.94;
 
     box-shadow:
-        0 7px 17px rgba(42, 51, 70, 0.045),
-        inset 0 1px 0 rgba(255, 255, 255, 0.88);
+        var(--app-shadow);
 }
 
 
@@ -132,7 +204,8 @@
     align-self: start;
     justify-self: start;
 
-    color: var(--habit-accent);
+    color:
+        var(--habit-accent);
 
     font-family:
         -apple-system,
@@ -153,7 +226,8 @@
 
 
 .habit-card__icon.is-symbol {
-    color: var(--habit-accent);
+    color:
+        var(--habit-accent);
 
     font-family:
         -apple-system,
@@ -195,14 +269,22 @@
     padding: 0;
 
     border: none;
+
     border-radius: 50%;
+
     outline: none;
 
     color:
-        rgba(var(--habit-accent-rgb), 0.42);
+        rgba(
+            var(--habit-accent-rgb),
+            0.42
+        );
 
     background:
-        rgba(var(--habit-accent-rgb), 0.13);
+        rgba(
+            var(--habit-accent-rgb),
+            0.13
+        );
 
     font-family:
         -apple-system,
@@ -219,8 +301,12 @@
     cursor: pointer;
 
     appearance: none;
-    -webkit-appearance: none;
-    -webkit-tap-highlight-color: transparent;
+
+    -webkit-appearance:
+        none;
+
+    -webkit-tap-highlight-color:
+        transparent;
 
     transition:
         transform 100ms ease,
@@ -232,19 +318,28 @@
 
 .habit-card__check.is-pressed,
 .habit-card__check:active {
-    transform: scale(0.9);
+    transform:
+        scale(
+            0.9
+        );
 }
 
 
 .habit-card__check.is-completed {
-    color: #ffffff;
+    color:
+        #ffffff;
 
     background:
         var(--habit-accent);
 
     box-shadow:
-        0 5px 12px
-        rgba(var(--habit-accent-rgb), 0.22);
+        0
+        5px
+        12px
+        rgba(
+            var(--habit-accent-rgb),
+            0.22
+        );
 }
 
 
@@ -256,7 +351,9 @@
     position: relative;
     z-index: 1;
 
-    grid-column: 1 / 3;
+    grid-column:
+        1 / 3;
+
     grid-row: 2;
 
     min-width: 0;
@@ -273,12 +370,17 @@
 }
 
 
+/* =========================================================
+   НАЗВАНИЕ
+   ========================================================= */
+
 .habit-card__name {
     width: 100%;
 
     margin: 0;
 
-    color: var(--habit-accent);
+    color:
+        var(--habit-accent);
 
     font-family:
         -apple-system,
@@ -292,31 +394,42 @@
     font-size: 20px;
     font-weight: 650;
     line-height: 1.18;
+
     letter-spacing: -0.03em;
 
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        geometricPrecision;
 }
 
 
 /* =========================================================
-   СТАТУС ПРИВЫЧКИ
-
-   «В процессе» и «Выполнено +5 XP»
-   всегда имеют одинаковый цвет и насыщенность.
+   СТАТУС
    ========================================================= */
 
 .habit-card__description {
     width: 100%;
 
-    margin: 7px 0 0;
+    margin:
+        7px
+        0
+        0;
 
     color:
-        rgba(var(--habit-accent-rgb), 0.63);
+        rgba(
+            var(--habit-accent-rgb),
+            0.76
+        );
 
     font-family:
         -apple-system,
@@ -329,33 +442,44 @@
     font-size: 15px;
     font-weight: 550;
     line-height: 1.2;
+
     letter-spacing: -0.015em;
 
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 
-    -webkit-font-smoothing: antialiased;
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    -webkit-font-smoothing:
+        antialiased;
 }
 
 
 .habit-card__description.is-completed {
     color:
-        rgba(var(--habit-accent-rgb), 0.63);
+        rgba(
+            var(--habit-accent-rgb),
+            0.76
+        );
 
     font-weight: 550;
 }
 
 
 /* =========================================================
-   НИЖНЯЯ ЧАСТЬ КАРТОЧКИ
+   FOOTER
    ========================================================= */
 
 .habit-card__footer {
     position: relative;
     z-index: 1;
 
-    grid-column: 1 / 3;
+    grid-column:
+        1 / 3;
+
     grid-row: 3;
 
     width: 100%;
@@ -364,9 +488,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     gap: 14px;
 
-    margin: 8px 0 0;
+    margin:
+        8px
+        0
+        0;
 }
 
 
@@ -376,11 +504,22 @@
 
 .habit-card__progress {
     min-width: 0;
-    flex: 1 1 auto;
+
+    flex:
+        1
+        1
+        auto;
 
     display: grid;
+
     grid-template-columns:
-        repeat(7, minmax(12px, 1fr));
+        repeat(
+            7,
+            minmax(
+                12px,
+                1fr
+            )
+        );
 
     gap: 7px;
 }
@@ -393,11 +532,20 @@
     border-radius: 999px;
 
     background:
-        rgba(var(--habit-accent-rgb), 0.14);
+        rgba(
+            var(--habit-accent-rgb),
+            0.16
+        );
 
     box-shadow:
-        inset 0 1px 2px
-        rgba(var(--habit-accent-rgb), 0.045);
+        inset
+        0
+        1px
+        2px
+        rgba(
+            var(--habit-accent-rgb),
+            0.045
+        );
 }
 
 
@@ -405,13 +553,25 @@
     background:
         linear-gradient(
             90deg,
-            rgba(var(--habit-accent-rgb), 0.72) 0%,
-            var(--habit-accent) 100%
+
+            rgba(
+                var(--habit-accent-rgb),
+                0.72
+            )
+            0%,
+
+            var(--habit-accent)
+            100%
         );
 
     box-shadow:
-        0 2px 5px
-        rgba(var(--habit-accent-rgb), 0.16);
+        0
+        2px
+        5px
+        rgba(
+            var(--habit-accent-rgb),
+            0.16
+        );
 }
 
 
@@ -420,13 +580,18 @@
    ========================================================= */
 
 .habit-card__streak {
-    flex: 0 0 auto;
+    flex:
+        0
+        0
+        auto;
 
     display: flex;
     align-items: center;
+
     gap: 5px;
 
-    color: var(--habit-accent);
+    color:
+        var(--habit-accent);
 
     font-family:
         -apple-system,
@@ -442,7 +607,8 @@
 
     white-space: nowrap;
 
-    -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing:
+        antialiased;
 }
 
 
@@ -464,11 +630,27 @@
 
 
 .habit-card__streak-value {
-    color: var(--habit-accent);
+    color:
+        var(--habit-accent);
 }
 
+
 /* =========================================================
-   РАЗМЕР КАРТОЧКИ
+   DARK MODE
+
+   На тёмной теме базовая поверхность карточки
+   остаётся тёмной, а цвет привычки только тонирует её.
+   ========================================================= */
+
+:root[data-theme="dark"]
+.habit-card {
+    --habit-card-base:
+        var(--app-surface);
+}
+
+
+/* =========================================================
+   РАЗМЕРЫ
    ========================================================= */
 
 .habit-card--large {
@@ -480,5 +662,6 @@
     min-height: 138px;
 
     padding-top: 15px;
+
     padding-bottom: 14px;
 }

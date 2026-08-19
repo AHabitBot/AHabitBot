@@ -1,6 +1,7 @@
 /* =========================================================
    HABITS V2 — СПИСОК ПРИВЫЧЕК
    ========================================================= */
+
 .habits-v2-list {
     position: relative;
 
@@ -11,23 +12,30 @@
     box-sizing: border-box;
 
     padding:
-        max(16px, env(safe-area-inset-top))
+        max(
+            16px,
+            env(
+                safe-area-inset-top
+            )
+        )
         16px
-        calc(112px + env(safe-area-inset-bottom));
+        calc(
+            112px +
+            env(
+                safe-area-inset-bottom
+            )
+        );
 
     overflow-x: hidden;
     overflow-y: auto;
 
     background:
-        radial-gradient(
-            circle at 50% 18%,
-            rgba(255, 255, 255, 1) 0%,
-            rgba(250, 251, 253, 0.98) 55%,
-            rgba(247, 249, 252, 1) 100%
-        );
+        var(--app-bg);
 
     scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+
+    -webkit-overflow-scrolling:
+        touch;
 }
 
 
@@ -43,7 +51,11 @@
 .habits-v2-list__header {
     width: 100%;
 
-    margin: 0 0 24px;
+    margin:
+        0
+        0
+        24px;
+
     padding: 0;
 
     box-sizing: border-box;
@@ -69,9 +81,13 @@
    ========================================================= */
 
 .habits-v2-list__date {
-    margin: 0 0 8px;
+    margin:
+        0
+        0
+        8px;
 
-    color: #92959d;
+    color:
+        var(--app-text-secondary);
 
     font-family:
         -apple-system,
@@ -85,12 +101,16 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 1.2;
+
     letter-spacing: -0.02em;
 
     text-transform: uppercase;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        geometricPrecision;
 }
 
 
@@ -101,7 +121,8 @@
 .habits-v2-list__title {
     margin: 0;
 
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-title);
 
     font-family:
         -apple-system,
@@ -115,10 +136,14 @@
     font-size: 28px;
     font-weight: 700;
     line-height: 1.05;
+
     letter-spacing: -0.035em;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        geometricPrecision;
 }
 
 
@@ -136,6 +161,10 @@
 }
 
 
+/* =========================================================
+   КНОПКА +
+   ========================================================= */
+
 .habits-v2-list__add-button {
     display: flex;
     align-items: center;
@@ -147,19 +176,23 @@
     height: 48px;
 
     margin: 0;
-    padding: 0 0 3px;
 
-    border: 1px solid rgba(35, 36, 40, 0.06);
+    padding:
+        0
+        0
+        3px;
+
+    border:
+        1px solid
+        var(--app-border);
+
     border-radius: 50%;
 
-    color: #347ee8;
+    color:
+        var(--habits-v2-blue);
 
     background:
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.99) 0%,
-            rgba(252, 252, 253, 0.98) 100%
-        );
+        var(--app-surface);
 
     font-family:
         -apple-system,
@@ -175,42 +208,67 @@
     line-height: 1;
 
     box-shadow:
-        0 8px 20px rgba(31, 38, 49, 0.07),
-        0 2px 6px rgba(31, 38, 49, 0.035),
-        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        var(--app-shadow);
 
     cursor: pointer;
 
     outline: none;
 
     appearance: none;
-    -webkit-appearance: none;
 
-    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance:
+        none;
+
+    -webkit-tap-highlight-color:
+        transparent;
 
     transition:
         transform 100ms ease,
         opacity 100ms ease,
+        background-color 180ms ease,
+        border-color 180ms ease,
         box-shadow 100ms ease;
 }
 
 
 .habits-v2-list__add-button.is-pressed,
 .habits-v2-list__add-button:active {
-    transform: scale(0.93);
+    transform:
+        scale(
+            0.93
+        );
 
-    opacity: 0.88;
-
-    box-shadow:
-        0 4px 12px rgba(31, 38, 49, 0.055),
-        inset 0 2px 4px rgba(52, 126, 232, 0.06);
+    opacity:
+        0.88;
 }
 
 
 .habits-v2-list__add-button:focus-visible {
     box-shadow:
-        0 8px 20px rgba(31, 38, 49, 0.07),
-        inset 0 0 0 2px rgba(52, 126, 232, 0.16);
+        0
+        0
+        0
+        3px
+        color-mix(
+            in srgb,
+            var(--habits-v2-blue)
+            18%,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   DARK — КНОПКА +
+   ========================================================= */
+
+:root[data-theme="dark"]
+.habits-v2-list__add-button {
+    color:
+        var(--app-green-active);
+
+    background:
+        var(--app-surface-raised);
 }
 
 
@@ -218,7 +276,10 @@
    МАЛЕНЬКИЕ ЭКРАНЫ
    ========================================================= */
 
-@media (max-width: 360px) {
+@media (
+    max-width: 360px
+) {
+
     .habits-v2-list {
         padding-right: 14px;
         padding-left: 14px;
