@@ -8,31 +8,24 @@
     display: flex;
     flex-direction: column;
 
-    padding: 15px 15px 14px;
+    padding:
+        15px
+        15px
+        14px;
 
     box-sizing: border-box;
 
     border:
         1px solid
-        rgba(
-            112,
-            126,
-            99,
-            0.13
-        );
+        var(--app-border);
 
     border-radius: 20px;
 
-    background: var(--app-surface-solid);
+    background:
+        var(--app-surface);
 
     box-shadow:
-        0 7px 22px
-        rgba(
-            41,
-            49,
-            36,
-            0.05
-        );
+        var(--app-shadow);
 }
 
 
@@ -73,7 +66,13 @@
 
     border-radius: 14px;
 
-    background: #edf3e9;
+    background:
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            10%,
+            var(--app-surface-soft)
+        );
 
     font-size: 22px;
     line-height: 1;
@@ -90,14 +89,17 @@
 
     overflow: hidden;
 
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-primary);
 
     font-size: 16px;
     font-weight: 750;
     line-height: 1.2;
 
     white-space: nowrap;
-    text-overflow: ellipsis;
+
+    text-overflow:
+        ellipsis;
 }
 
 
@@ -107,7 +109,8 @@
         0
         0;
 
-    color: #9aa197;
+    color:
+        var(--app-text-secondary);
 
     font-size: 11px;
     font-weight: 500;
@@ -138,18 +141,25 @@
 
     border:
         1px solid
-        rgba(
-            111,
-            132,
-            85,
-            0.14
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            14%,
+            var(--app-border)
         );
 
     border-radius: 14px;
 
-    background: #eef3e8;
+    background:
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            11%,
+            var(--app-surface)
+        );
 
-    color: #567a41;
+    color:
+        var(--app-green-active);
 
     font-family: inherit;
 
@@ -164,12 +174,14 @@
         opacity 0.12s ease,
         background-color 0.12s ease;
 
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:
+        transparent;
 }
 
 
 .profile-archive-card__restore:active {
-    transform: scale(0.97);
+    transform:
+        scale(0.97);
 }
 
 
@@ -217,12 +229,7 @@
 
     border-top:
         1px solid
-        rgba(
-            115,
-            126,
-            105,
-            0.10
-        );
+        var(--app-divider);
 }
 
 
@@ -250,12 +257,14 @@
 
 
 .profile-archive-card__stat-icon--confirmations {
-    color: #6f9458;
+    color:
+        var(--app-green-active);
 }
 
 
 .profile-archive-card__stat-icon--streak {
-    color: #e58d27;
+    color:
+        #e58d27;
 }
 
 
@@ -270,14 +279,17 @@
 .profile-archive-card__stat-value {
     overflow: hidden;
 
-    color: #252a22;
+    color:
+        var(--app-text-primary);
 
     font-size: 15px;
     font-weight: 750;
     line-height: 1.15;
 
     white-space: nowrap;
-    text-overflow: ellipsis;
+
+    text-overflow:
+        ellipsis;
 }
 
 
@@ -286,14 +298,17 @@
 
     overflow: hidden;
 
-    color: #969d92;
+    color:
+        var(--app-text-secondary);
 
     font-size: 10px;
     font-weight: 500;
     line-height: 1.15;
 
     white-space: nowrap;
-    text-overflow: ellipsis;
+
+    text-overflow:
+        ellipsis;
 }
 
 
@@ -302,12 +317,7 @@
     height: 32px;
 
     background:
-        rgba(
-            116,
-            129,
-            106,
-            0.12
-        );
+        var(--app-divider);
 }
 
 

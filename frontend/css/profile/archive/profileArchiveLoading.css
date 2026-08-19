@@ -16,17 +16,29 @@
     width: 100%;
     height: 132px;
 
+    border:
+        1px solid
+        var(--app-border);
+
     border-radius: 20px;
 
     background:
         linear-gradient(
             90deg,
-            #edf1ea 0%,
-            #f7f9f5 48%,
-            #edf1ea 100%
+
+            var(--app-surface-soft)
+            0%,
+
+            var(--app-surface-raised)
+            48%,
+
+            var(--app-surface-soft)
+            100%
         );
 
-    background-size: 220% 100%;
+    background-size:
+        220%
+        100%;
 
     animation:
         profile-archive-skeleton
@@ -39,10 +51,14 @@
 @keyframes profile-archive-skeleton {
 
     0% {
-        background-position: 200% 0;
+        background-position:
+            200%
+            0;
     }
 
     100% {
-        background-position: -20% 0;
+        background-position:
+            -20%
+            0;
     }
 }

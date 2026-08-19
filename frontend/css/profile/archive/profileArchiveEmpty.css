@@ -44,11 +44,17 @@
     width: 96px;
     height: 72px;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     border:
         3px solid
-        #9eae88;
+        color-mix(
+            in srgb,
+            var(--app-green-ui)
+            55%,
+            var(--app-text-muted)
+        );
 
     border-radius:
         15px
@@ -56,7 +62,13 @@
         18px
         18px;
 
-    background: #eaf0e4;
+    background:
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            10%,
+            var(--app-surface-soft)
+        );
 }
 
 
@@ -73,7 +85,12 @@
 
     border:
         3px solid
-        #9eae88;
+        color-mix(
+            in srgb,
+            var(--app-green-ui)
+            55%,
+            var(--app-text-muted)
+        );
 
     border-bottom: 0;
 
@@ -83,7 +100,8 @@
         4px
         4px;
 
-    background: var(--app-bg);
+    background:
+        var(--app-bg);
 }
 
 
@@ -98,11 +116,11 @@
     border-radius: 20px;
 
     background:
-        rgba(
-            122,
-            145,
-            101,
-            0.45
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            45%,
+            transparent
         );
 }
 
@@ -138,9 +156,15 @@
         100%
         0;
 
-    background: #c8d4b8;
+    background:
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            34%,
+            var(--app-surface-soft)
+        );
 
-    opacity: 0.75;
+    opacity: 0.8;
 }
 
 
@@ -148,7 +172,8 @@
     left: 4px;
     bottom: 19px;
 
-    transform: rotate(24deg);
+    transform:
+        rotate(24deg);
 }
 
 
@@ -169,7 +194,8 @@
 .profile-archive-empty__title {
     margin: 0;
 
-    color: #252a22;
+    color:
+        var(--app-text-title);
 
     font-size: 20px;
     font-weight: 750;
@@ -183,7 +209,8 @@
         0
         0;
 
-    color: #9ba294;
+    color:
+        var(--app-text-secondary);
 
     font-size: 14px;
     font-weight: 500;
