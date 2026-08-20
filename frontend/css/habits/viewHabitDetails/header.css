@@ -1,21 +1,47 @@
 /* =========================================================
-   ШАПКА ДЕТАЛЬНОЙ СТРАНИЦЫ
+   HABIT DETAILS — HEADER
    ========================================================= */
 
-.habit-details__header {
+.habit-details-header {
+    flex: 0 0 auto;
+
     width: 100%;
 
-    display: flex;
+    display: grid;
+
+    grid-template-columns:
+        44px
+        minmax(
+            0,
+            1fr
+        )
+        44px;
+
     align-items: center;
-    justify-content: space-between;
+
+    box-sizing: border-box;
+
+    min-height: 58px;
+
+    padding:
+        max(
+            8px,
+            env(safe-area-inset-top)
+        )
+        12px
+        4px;
+
+    background:
+        var(--app-bg);
 }
 
 
 /* =========================================================
-   КНОПКА МЕНЮ
+   BACK / ACTION
    ========================================================= */
 
-.habit-details__menu-button {
+.habit-details-header__back,
+.habit-details-header__action {
     width: 40px;
     height: 40px;
 
@@ -24,283 +50,82 @@
     justify-content: center;
 
     margin: 0;
-    padding: 0 0 8px;
+    padding: 0;
 
-    border: none;
-    border-radius: 50%;
-    outline: none;
+    border: 0;
 
-    color: var(--app-text-primary);
+    border-radius: 12px;
 
-    background: rgba(255,255,255,.9);
+    background:
+        transparent;
 
-    box-shadow:
-        0 8px 20px rgba(42,51,70,.065);
+    color:
+        var(--app-green-ui);
 
     cursor: pointer;
 
-    appearance: none;
-    -webkit-appearance: none;
-    -webkit-tap-highlight-color: transparent;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        Inter,
-        Arial,
-        sans-serif;
-
-    font-size: 27px;
-    font-weight: 600;
-    line-height: 1;
+    -webkit-tap-highlight-color:
+        transparent;
 
     transition:
-        transform .12s ease,
-        opacity .12s ease,
-        visibility .12s ease,
-        box-shadow .12s ease;
-}
-
-.habit-details__menu-button.is-pressed,
-.habit-details__menu-button:active {
-    transform: scale(.91);
-    opacity: .86;
+        transform 90ms ease,
+        background-color 120ms ease;
 }
 
 
-/* =========================================================
-   ОБЁРТКА
-   ========================================================= */
-
-.habit-details__menu-wrapper {
-    position: relative;
-
-    width: 40px;
-    height: 40px;
-
-    flex: 0 0 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-/* =========================================================
-   МЕНЮ
-   ========================================================= */
-
-.habit-details__menu {
-    position: absolute;
-    z-index: 20;
-
-    top: 0;
-    right: 0;
-
-    width: 210px;
-
-    display: flex;
-    flex-direction: column;
-
-    padding: 8px;
-
-    border: 1px solid rgba(255,255,255,.74);
-    border-radius: 22px;
-
-    background:
-        rgba(31,33,29,.94);
-
-    box-shadow:
-        0 18px 45px rgba(24,28,22,.22),
-        inset 0 1px 0 rgba(255,255,255,.08);
-
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-
-    opacity: 0;
-    visibility: hidden;
-
+.habit-details-header__back:active,
+.habit-details-header__action:active {
     transform:
-        scale(.82);
-
-    transform-origin: top right;
-
-    pointer-events: none;
-
-    transition:
-        opacity .18s ease,
-        visibility .18s ease,
-        transform .18s ease;
-}
-
-
-/* =========================================================
-   ОТКРЫТО
-   ========================================================= */
-
-.habit-details__menu.is-open {
-    opacity: 1;
-    visibility: visible;
-
-    transform: scale(1);
-
-    pointer-events: auto;
-}
-
-
-/* =========================================================
-   КНОПКА ПРОПАДАЕТ
-   ========================================================= */
-
-.habit-details__menu-wrapper:has(
-    .habit-details__menu.is-open
-)
-.habit-details__menu-button {
-
-    opacity: 0;
-    visibility: hidden;
-
-    transform: scale(.7);
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   ПУНКТ МЕНЮ
-   ========================================================= */
-
-.habit-details__menu-item {
-    width: 100%;
-    min-height: 48px;
-
-    display: flex;
-    align-items: center;
-    gap: 13px;
-
-    margin: 0;
-    padding: 10px 12px;
-
-    border: none;
-    border-radius: 15px;
-    outline: none;
-
-    color: rgba(255,255,255,.92);
-
-    background: transparent;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        Inter,
-        Arial,
-        sans-serif;
-
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1.25;
-    text-align: left;
-
-    cursor: pointer;
-    user-select: none;
-
-    appearance: none;
-    -webkit-appearance: none;
-    -webkit-tap-highlight-color: transparent;
-
-    transition:
-        background .1s ease,
-        transform .1s ease,
-        opacity .1s ease;
-}
-
-.habit-details__menu-item:active {
-    transform: scale(.97);
+        scale(0.94);
 
     background:
-        rgba(255,255,255,.09);
+        var(--app-surface-soft);
 }
 
 
 /* =========================================================
-   ИКОНКИ
+   ICONS
    ========================================================= */
 
-.habit-details__menu-icon {
-    width: 24px;
-    height: 24px;
-
-    flex: 0 0 24px;
-
-    font-size: 22px;
-
-    color: currentColor;
+.habit-details-header__back
+.material-symbols-rounded,
+.habit-details-header__action
+.material-symbols-rounded {
+    font-size: 26px;
 
     font-variation-settings:
         "FILL" 0,
         "wght" 450,
         "GRAD" 0,
-        "opsz" 24;
+        "opsz" 28;
 }
 
 
 /* =========================================================
-   УДАЛЕНИЕ
+   TITLE
    ========================================================= */
 
-.habit-details__menu-item--danger {
-    color: #ff6969;
-}
+.habit-details-header__title {
+    min-width: 0;
 
+    margin: 0;
 
-/* =========================================================
-   HOVER
-   ========================================================= */
+    overflow: hidden;
 
-@media (hover:hover) and (pointer:fine){
+    color:
+        var(--app-text-title);
 
-    .habit-details__menu-item:hover{
-        background:
-            rgba(255,255,255,.08);
-    }
+    font-size: 21px;
+    font-weight: 750;
+    line-height: 1.15;
 
-    .habit-details__menu-item--danger:hover{
-        background:
-            rgba(255,84,84,.1);
-    }
-}
+    letter-spacing:
+        -0.35px;
 
+    text-align: center;
 
-/* =========================================================
-   МОБИЛЬНЫЕ
-   ========================================================= */
+    text-overflow:
+        ellipsis;
 
-@media (max-width:380px){
-
-    .habit-details__menu{
-        width:200px;
-        border-radius:20px;
-    }
-
-    .habit-details__menu-item{
-        min-height:46px;
-        font-size:15px;
-    }
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion:reduce){
-
-    .habit-details__menu,
-    .habit-details__menu-item,
-    .habit-details__menu-button{
-        transition:none;
-    }
-
+    white-space: nowrap;
 }

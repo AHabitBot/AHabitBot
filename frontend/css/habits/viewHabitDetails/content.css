@@ -1,210 +1,328 @@
 /* =========================================================
-   ДЕТАЛЬНАЯ СТРАНИЦА ПРИВЫЧКИ
+   HABIT DETAILS — MAIN CONTENT
    ========================================================= */
 
-.habit-details {
-    --habit-accent: #65b85d;
-    --habit-accent-rgb: 101, 184, 93;
-
-    width: 100%;
-    height: 100%;
-    min-height: 100dvh;
-
-    box-sizing: border-box;
-
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    padding:
-        max(26px, env(safe-area-inset-top))
-        18px
-        calc(22px + env(safe-area-inset-bottom));
-
-    background:
-        radial-gradient(
-            circle at 50% 12%,
-            rgba(var(--habit-accent-rgb), 0.09) 0%,
-            rgba(255, 255, 255, 0.99) 38%,
-            rgba(248, 249, 251, 1) 100%
-        );
-
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-}
-
-
-.habit-details::-webkit-scrollbar {
-    display: none;
-}
-
-
-/* =========================================================
-   ЦВЕТА
-   ========================================================= */
-
-.habit-details--blue {
-    --habit-accent: #4d8ff0;
-    --habit-accent-rgb: 77, 143, 240;
-}
-
-
-.habit-details--green {
-    --habit-accent: #65b85d;
-    --habit-accent-rgb: 101, 184, 93;
-}
-
-
-.habit-details--purple {
-    --habit-accent: #9872df;
-    --habit-accent-rgb: 152, 114, 223;
-}
-
-
-.habit-details--orange {
-    --habit-accent: #df9557;
-    --habit-accent-rgb: 223, 149, 87;
-}
-
-
-.habit-details--red {
-    --habit-accent: #df7470;
-    --habit-accent-rgb: 223, 116, 112;
-}
-
-
-.habit-details--graphite {
-    --habit-accent: #676a70;
-    --habit-accent-rgb: 103, 106, 112;
-}
-
-
-.habit-details--cyan {
-    --habit-accent: #42aebd;
-    --habit-accent-rgb: 66, 174, 189;
-}
-
-
-.habit-details--brown {
-    --habit-accent: #916b4f;
-    --habit-accent-rgb: 145, 107, 79;
-}
-
-
-.habit-details--pink {
-    --habit-accent: #d66e9d;
-    --habit-accent-rgb: 214, 110, 157;
-}
-
-
-.habit-details--silver {
-    --habit-accent: #858b94;
-    --habit-accent-rgb: 133, 139, 148;
-}
-
-
-.habit-details--yellow {
-    --habit-accent: #c49c28;
-    --habit-accent-rgb: 196, 156, 40;
-}
-
-
-/* =========================================================
-   ОСНОВНОЙ КОНТЕНТ
-   ========================================================= */
-
-.habit-details__content {
+.habit-details-main {
     width: 100%;
 
     display: flex;
     flex-direction: column;
-    align-items: center;
 
-    padding-top: 10px;
+    gap: 14px;
 }
 
 
 /* =========================================================
-   ИКОНКА
+   HERO CARD
    ========================================================= */
 
-.habit-details__icon {
-    width: 62px;
-    height: 62px;
+.habit-details-hero {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    box-sizing: border-box;
+
+    padding: 16px;
+
+    border:
+        1px solid
+        var(--app-border);
+
+    border-radius: 22px;
+
+    background:
+        var(--app-surface);
+
+    box-shadow:
+        var(--app-shadow);
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.habit-details-hero__icon {
+    flex: 0 0 auto;
+
+    width: 54px;
+    height: 54px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 20px;
+    border-radius: 18px;
 
     background:
-        rgba(var(--habit-accent-rgb), 0.11);
+        color-mix(
+            in srgb,
+            var(--habit-accent, var(--app-green-active))
+            13%,
+            var(--app-surface-soft)
+        );
 
-    font-family:
-        "Apple Color Emoji",
-        "Segoe UI Emoji",
-        "Noto Color Emoji",
-        sans-serif;
+    color:
+        var(
+            --habit-accent,
+            var(--app-green-active)
+        );
 
-    font-size: 32px;
+    font-size: 28px;
     line-height: 1;
 }
 
+
 /* =========================================================
-   НАЗВАНИЕ
+   COPY
    ========================================================= */
 
-.habit-details__title {
-    max-width: 100%;
+.habit-details-hero__content {
+    min-width: 0;
 
-    margin: 14px 0 0;
-
-    color: var(--app-text-primary);
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        Inter,
-        Arial,
-        sans-serif;
-
-    font-size: 25px;
-    font-weight: 680;
-    line-height: 1.12;
-    letter-spacing: -0.035em;
-
-    text-align: center;
+    flex: 1;
 }
 
 
 /* =========================================================
-   СТАТУС
+   TITLE
    ========================================================= */
 
-.habit-details__status {
-    margin-top: 6px;
+.habit-details-hero__title {
+    margin: 0;
+
+    overflow: hidden;
 
     color:
-        rgba(var(--habit-accent-rgb), 0.72);
+        var(--app-text-primary);
 
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Text",
-        Inter,
-        Arial,
-        sans-serif;
+    font-size: 19px;
+    font-weight: 750;
+    line-height: 1.2;
 
-    font-size: 15px;
-    font-weight: 550;
-    line-height: 1.15;
+    letter-spacing:
+        -0.3px;
+
+    white-space: nowrap;
+
+    text-overflow:
+        ellipsis;
 }
 
+
 /* =========================================================
-   СКРЫВАЕМ НИЖНЮЮ НАВИГАЦИЮ
+   SUBTITLE
    ========================================================= */
 
-body:has(.habit-details) .bottom-navigation {
-    display: none !important;
+.habit-details-hero__subtitle {
+    margin:
+        5px
+        0
+        0;
+
+    color:
+        var(--app-text-secondary);
+
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+
+/* =========================================================
+   CONFIRM BUTTON
+   ========================================================= */
+
+.habit-details-confirm {
+    width: 100%;
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    box-sizing: border-box;
+
+    padding:
+        0
+        18px;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            22%,
+            transparent
+        );
+
+    border-radius: 18px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            12%,
+            var(--app-surface)
+        );
+
+    color:
+        var(--app-green-active);
+
+    font-family: inherit;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+    transition:
+        transform 0.12s ease,
+        background-color 0.16s ease,
+        color 0.16s ease;
+}
+
+
+.habit-details-confirm.is-confirmed {
+    background:
+        var(--app-green-active);
+
+    color:
+        #ffffff;
+}
+
+
+.habit-details-confirm:active {
+    transform:
+        scale(0.98);
+}
+
+
+/* =========================================================
+   SECTION TITLE
+   ========================================================= */
+
+.habit-details-section-title {
+    margin:
+        4px
+        0
+        10px
+        2px;
+
+    color:
+        var(--app-text-title);
+
+    font-size: 16px;
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   EDIT / ARCHIVE ACTIONS
+   ========================================================= */
+
+.habit-details-actions {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 4px;
+}
+
+
+.habit-details-action {
+    width: 100%;
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding:
+        0
+        15px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        var(--app-border);
+
+    border-radius: 16px;
+
+    background:
+        var(--app-surface);
+
+    color:
+        var(--app-text-primary);
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+.habit-details-action
+.material-symbols-rounded {
+    color:
+        var(--app-text-secondary);
+
+    font-size: 21px;
+}
+
+
+.habit-details-action:active {
+    background:
+        var(--app-surface-soft);
+}
+
+
+/* =========================================================
+   DANGER ACTION
+   ========================================================= */
+
+.habit-details-action--danger {
+    color:
+        #c35d51;
+
+    border-color:
+        rgba(
+            195,
+            93,
+            81,
+            0.18
+        );
+
+    background:
+        rgba(
+            195,
+            93,
+            81,
+            0.06
+        );
+}
+
+
+.habit-details-action--danger
+.material-symbols-rounded {
+    color:
+        #c35d51;
 }
