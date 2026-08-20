@@ -1,23 +1,32 @@
 /* =========================================================
    ADD HABIT V2
    Выбор цвета карточки
-   Mobile First
-========================================================= */
+   ========================================================= */
 
 
 /* =========================================================
-   КОНТЕЙНЕР ЦВЕТОВ
-========================================================= */
+   КОНТЕЙНЕР
+   ========================================================= */
 
 .add-habit-v2__colors {
-    width: calc(100% + 18px);
+    width:
+        calc(
+            100% +
+            18px
+        );
 
     display: flex;
     align-items: center;
+
     gap: 11px;
 
     margin-right: -18px;
-    padding: 11px 15px 11px 4px;
+
+    padding:
+        11px
+        15px
+        11px
+        4px;
 
     box-sizing: border-box;
 
@@ -25,9 +34,14 @@
     overflow-y: hidden;
 
     scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
+
+    -webkit-overflow-scrolling:
+        touch;
+
+    overscroll-behavior-x:
+        contain;
 }
+
 
 .add-habit-v2__colors::-webkit-scrollbar {
     display: none;
@@ -35,23 +49,31 @@
 
 
 /* =========================================================
-   КНОПКА ЦВЕТА
-========================================================= */
+   COLOR BUTTON
+   ========================================================= */
 
 .add-habit-v2__color {
     position: relative;
+
     isolation: isolate;
 
     width: 52px;
     height: 52px;
 
-    flex: 0 0 52px;
+    flex:
+        0
+        0
+        52px;
 
     margin: 0;
     padding: 0;
 
-    border: 2px solid transparent;
+    border:
+        2px solid
+        transparent;
+
     border-radius: 19px;
+
     outline: none;
 
     background:
@@ -62,17 +84,28 @@
         );
 
     box-shadow:
-        inset 0 1px 1px rgba(255, 255, 255, 0.75),
-        0 3px 8px rgba(28, 31, 38, 0.04);
+        0
+        3px
+        8px
+        rgba(
+            0,
+            0,
+            0,
+            0.06
+        );
 
     cursor: pointer;
+
     user-select: none;
 
     appearance: none;
     -webkit-appearance: none;
-    -webkit-tap-highlight-color: transparent;
 
-    touch-action: manipulation;
+    -webkit-tap-highlight-color:
+        transparent;
+
+    touch-action:
+        manipulation;
 
     transition:
         transform 180ms ease,
@@ -86,13 +119,15 @@
 
 /* =========================================================
    ГРАДИЕНТНЫЙ КОНТУР
-========================================================= */
+   ========================================================= */
 
 .add-habit-v2__color::before {
     content: "";
 
     position: absolute;
+
     z-index: -1;
+
     inset: -3px;
 
     padding: 2px;
@@ -108,7 +143,9 @@
         );
 
     opacity: 0;
-    transform: scale(0.95);
+
+    transform:
+        scale(0.95);
 
     pointer-events: none;
 
@@ -117,20 +154,30 @@
         transform 220ms ease;
 
     -webkit-mask:
-        linear-gradient(#ffffff 0 0) content-box,
-        linear-gradient(#ffffff 0 0);
+        linear-gradient(
+            #ffffff
+            0
+            0
+        )
+        content-box,
 
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
+        linear-gradient(
+            #ffffff
+            0
+            0
+        );
+
+    -webkit-mask-composite:
+        xor;
+
+    mask-composite:
+        exclude;
 }
 
 
 /* =========================================================
-   ЦВЕТОВЫЕ ВАРИАНТЫ
-========================================================= */
-
-
-/* Голубой */
+   BLUE
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="blue"] {
     --color-soft-start: #edf5ff;
@@ -144,11 +191,19 @@
     --color-border-middle: #5c9cff;
     --color-border-end: #2f7df1;
 
-    --color-shadow: rgba(47, 125, 241, 0.38);
+    --color-shadow:
+        rgba(
+            47,
+            125,
+            241,
+            0.38
+        );
 }
 
 
-/* Зелёный */
+/* =========================================================
+   GREEN
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="green"] {
     --color-soft-start: #ebfae9;
@@ -162,11 +217,19 @@
     --color-border-middle: #62c84d;
     --color-border-end: #399c2a;
 
-    --color-shadow: rgba(74, 184, 54, 0.36);
+    --color-shadow:
+        rgba(
+            74,
+            184,
+            54,
+            0.36
+        );
 }
 
 
-/* Фиолетовый */
+/* =========================================================
+   PURPLE
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="purple"] {
     --color-soft-start: #f2e9ff;
@@ -180,11 +243,19 @@
     --color-border-middle: #9d68e7;
     --color-border-end: #7340bd;
 
-    --color-shadow: rgba(133, 77, 207, 0.36);
+    --color-shadow:
+        rgba(
+            133,
+            77,
+            207,
+            0.36
+        );
 }
 
 
-/* Оранжевый */
+/* =========================================================
+   ORANGE
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="orange"] {
     --color-soft-start: #fff0e2;
@@ -198,11 +269,19 @@
     --color-border-middle: #f58b3d;
     --color-border-end: #d86418;
 
-    --color-shadow: rgba(235, 112, 29, 0.36);
+    --color-shadow:
+        rgba(
+            235,
+            112,
+            29,
+            0.36
+        );
 }
 
 
-/* Красный */
+/* =========================================================
+   RED
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="red"] {
     --color-soft-start: #ffeceb;
@@ -216,11 +295,19 @@
     --color-border-middle: #e85e55;
     --color-border-end: #be312b;
 
-    --color-shadow: rgba(215, 65, 57, 0.36);
+    --color-shadow:
+        rgba(
+            215,
+            65,
+            57,
+            0.36
+        );
 }
 
 
-/* Графитовый */
+/* =========================================================
+   GRAPHITE
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="graphite"] {
     --color-soft-start: #e9eaec;
@@ -234,11 +321,19 @@
     --color-border-middle: #676a70;
     --color-border-end: #292b2f;
 
-    --color-shadow: rgba(41, 43, 47, 0.34);
+    --color-shadow:
+        rgba(
+            41,
+            43,
+            47,
+            0.34
+        );
 }
 
 
-/* Бирюзовый */
+/* =========================================================
+   CYAN
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="cyan"] {
     --color-soft-start: #e4faff;
@@ -252,11 +347,19 @@
     --color-border-middle: #42bfd0;
     --color-border-end: #188a9d;
 
-    --color-shadow: rgba(40, 172, 192, 0.36);
+    --color-shadow:
+        rgba(
+            40,
+            172,
+            192,
+            0.36
+        );
 }
 
 
-/* Кофейный */
+/* =========================================================
+   BROWN
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="brown"] {
     --color-soft-start: #f3ebe4;
@@ -270,11 +373,19 @@
     --color-border-middle: #9c704e;
     --color-border-end: #68472f;
 
-    --color-shadow: rgba(127, 86, 55, 0.34);
+    --color-shadow:
+        rgba(
+            127,
+            86,
+            55,
+            0.34
+        );
 }
 
 
-/* Розовый */
+/* =========================================================
+   PINK
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="pink"] {
     --color-soft-start: #ffe9f4;
@@ -288,11 +399,19 @@
     --color-border-middle: #dc6399;
     --color-border-end: #b73370;
 
-    --color-shadow: rgba(210, 76, 137, 0.35);
+    --color-shadow:
+        rgba(
+            210,
+            76,
+            137,
+            0.35
+        );
 }
 
 
-/* Серебристый */
+/* =========================================================
+   SILVER
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="silver"] {
     --color-soft-start: #f8f9fa;
@@ -306,11 +425,19 @@
     --color-border-middle: #b5bbc3;
     --color-border-end: #777e88;
 
-    --color-shadow: rgba(125, 133, 144, 0.34);
+    --color-shadow:
+        rgba(
+            125,
+            133,
+            144,
+            0.34
+        );
 }
 
 
-/* Жёлтый */
+/* =========================================================
+   YELLOW
+   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="yellow"] {
     --color-soft-start: #fff8df;
@@ -324,127 +451,213 @@
     --color-border-middle: #dfb52e;
     --color-border-end: #ae8010;
 
-    --color-shadow: rgba(212, 165, 28, 0.36);
+    --color-shadow:
+        rgba(
+            212,
+            165,
+            28,
+            0.36
+        );
 }
 
 
 /* =========================================================
-   ВЫБРАННЫЙ ЦВЕТ
-========================================================= */
+   SELECTED
+   ========================================================= */
 
 .add-habit-v2__color.is-selected {
-    border-color: transparent;
+    border-color:
+        transparent;
 
     background:
         linear-gradient(
             145deg,
-            var(--color-selected-start) 0%,
-            var(--color-selected-middle) 52%,
-            var(--color-selected-end) 100%
+            var(--color-selected-start)
+            0%,
+            var(--color-selected-middle)
+            52%,
+            var(--color-selected-end)
+            100%
         );
 
-    transform: translateY(-1px) scale(1.035);
+    transform:
+        translateY(-1px)
+        scale(1.035);
 
     filter:
         saturate(1.14)
         brightness(1.035);
 
     box-shadow:
-        0 5px 8px var(--color-shadow),
-        0 0 7px var(--color-shadow),
-        inset 0 1px 2px rgba(255, 255, 255, 0.88);
+        0
+        5px
+        8px
+        var(--color-shadow),
+
+        0
+        0
+        7px
+        var(--color-shadow);
 }
+
 
 .add-habit-v2__color.is-selected::before {
     opacity: 1;
-    transform: scale(1);
+
+    transform:
+        scale(1);
 }
 
 
 /* =========================================================
-   НАЖАТИЕ
-========================================================= */
+   PRESS
+   ========================================================= */
 
 .add-habit-v2__color:active,
 .add-habit-v2__color.is-pressed {
-    transform: scale(0.94);
+    transform:
+        scale(0.94);
 }
+
 
 .add-habit-v2__color.is-selected:active,
 .add-habit-v2__color.is-selected.is-pressed {
-    transform: translateY(-1px) scale(0.98);
+    transform:
+        translateY(-1px)
+        scale(0.98);
 }
 
 
 /* =========================================================
-   ЗАБЛОКИРОВАННЫЕ ЦВЕТА
-========================================================= */
+   LOCKED
+   ========================================================= */
 
 .add-habit-v2__color.is-locked {
     cursor: default;
 }
 
+
 .add-habit-v2__color.is-locked::after {
     content: "";
 
     position: absolute;
+
     inset: 0;
 
     border-radius: inherit;
 
-    background: rgba(255, 255, 255, 0.08);
+    background:
+        color-mix(
+            in srgb,
+            var(--app-bg)
+            14%,
+            transparent
+        );
 
     pointer-events: none;
 }
 
+
 .add-habit-v2__lock {
     position: absolute;
+
     z-index: 2;
+
     inset: 0;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    filter: grayscale(1);
-    opacity: 0.55;
+    filter:
+        grayscale(1);
 
-    font-size: 18px;
+    opacity:
+        0.55;
+
+    font-size:
+        18px;
+
     line-height: 1;
 
-    pointer-events: none;
+    pointer-events:
+        none;
 }
 
 
 /* =========================================================
-   УСТРОЙСТВА С МЫШЬЮ
-========================================================= */
+   DARK
 
-@media (hover: hover) and (pointer: fine) {
+   Цвета сами не инвертируем.
+   Чуть снижаем яркость невыбранных,
+   чтобы они не светились на графитовом фоне.
+   ========================================================= */
 
-    .add-habit-v2__color:not(.is-locked):not(.is-selected):hover {
-        transform: translateY(-2px);
+:root[data-theme="dark"]
+.add-habit-v2__color:not(.is-selected) {
+    filter:
+        brightness(0.88)
+        saturate(0.92);
+}
+
+
+:root[data-theme="dark"]
+.add-habit-v2__color.is-selected {
+    filter:
+        brightness(0.98)
+        saturate(1.08);
+}
+
+
+/* =========================================================
+   MOUSE
+   ========================================================= */
+
+@media (
+    hover: hover
+)
+and
+(
+    pointer: fine
+) {
+
+    .add-habit-v2__color:not(
+        .is-locked
+    ):not(
+        .is-selected
+    ):hover {
+        transform:
+            translateY(-2px);
 
         filter:
-            saturate(1.06)
-            brightness(1.02);
+            saturate(1.04);
 
         box-shadow:
-            0 6px 13px rgba(28, 31, 38, 0.08),
-            inset 0 1px 1px rgba(255, 255, 255, 0.82);
+            0
+            6px
+            13px
+            rgba(
+                0,
+                0,
+                0,
+                0.10
+            );
     }
 }
 
 
 /* =========================================================
-   МАЛЕНЬКИЕ ЭКРАНЫ
-========================================================= */
+   SMALL
+   ========================================================= */
 
-@media (max-width: 380px) {
+@media (
+    max-width: 380px
+) {
 
     .add-habit-v2__colors {
         gap: 9px;
     }
+
 
     .add-habit-v2__color {
         width: 50px;
@@ -455,6 +668,7 @@
         border-radius: 18px;
     }
 
+
     .add-habit-v2__color::before {
         border-radius: 20px;
     }
@@ -462,10 +676,12 @@
 
 
 /* =========================================================
-   ОТКЛЮЧЕНИЕ АНИМАЦИЙ
-========================================================= */
+   REDUCED MOTION
+   ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+@media (
+    prefers-reduced-motion: reduce
+) {
 
     .add-habit-v2__color,
     .add-habit-v2__color::before {

@@ -1,12 +1,12 @@
 /* =========================================================
    ADD HABIT V2
    Главный файл экрана добавления привычки
-========================================================= */
+   ========================================================= */
 
 
 /* =========================================================
    ИМПОРТЫ
-========================================================= */
+   ========================================================= */
 
 @import url("./header.css");
 @import url("./name.css");
@@ -15,26 +15,42 @@
 
 
 /* =========================================================
-   ОБЩИЕ ПЕРЕМЕННЫЕ
-========================================================= */
+   ЛОКАЛЬНЫЕ ТОКЕНЫ
+
+   Экран больше не имеет собственной Light-палитры.
+   Он использует общую дизайн-систему приложения.
+   ========================================================= */
 
 :root {
-    --add-habit-bg: #F8F9FB;
+    --add-habit-bg:
+        var(--app-bg);
 
-    --add-habit-primary: #24262B;
-    --add-habit-secondary: #676C75;
-    --add-habit-light: #B8BDC5;
+    --add-habit-primary:
+        var(--app-text-primary);
 
-    --add-habit-border: #E4E6EA;
-    --add-habit-soft: #F6F7F9;
+    --add-habit-secondary:
+        var(--app-text-secondary);
 
-    --add-habit-white: rgba(255, 255, 255, 0.94);
+    --add-habit-light:
+        var(--app-text-muted);
+
+    --add-habit-border:
+        var(--app-border);
+
+    --add-habit-soft:
+        var(--app-surface-soft);
+
+    --add-habit-white:
+        var(--app-surface);
+
+    --add-habit-blue:
+        var(--app-green-ui);
 }
 
 
 /* =========================================================
    ОБЩИЙ ЭКРАН
-========================================================= */
+   ========================================================= */
 
 .add-habit-v2 {
     position: relative;
@@ -45,22 +61,24 @@
     box-sizing: border-box;
 
     padding:
-        calc(22px + env(safe-area-inset-top))
+        calc(
+            22px +
+            env(safe-area-inset-top)
+        )
         18px
-        calc(32px + env(safe-area-inset-bottom));
+        calc(
+            32px +
+            env(safe-area-inset-bottom)
+        );
 
     overflow-x: hidden;
     overflow-y: auto;
 
-    color: var(--add-habit-primary);
+    color:
+        var(--add-habit-primary);
 
     background:
-        radial-gradient(
-            circle at 50% 12%,
-            rgba(255, 255, 255, 1) 0%,
-            rgba(250, 251, 253, 0.98) 48%,
-            rgba(247, 249, 252, 1) 100%
-        );
+        var(--add-habit-bg);
 
     font-family:
         -apple-system,
@@ -71,10 +89,14 @@
         Arial,
         sans-serif;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    -webkit-font-smoothing:
+        antialiased;
 
-    overscroll-behavior: contain;
+    text-rendering:
+        geometricPrecision;
+
+    overscroll-behavior:
+        contain;
 }
 
 
@@ -82,16 +104,30 @@
    СКРЫВАЕМ НИЖНЮЮ НАВИГАЦИЮ
    ========================================================= */
 
-body:has(.add-habit-v2) .bottom-navigation {
+body:has(.add-habit-v2)
+.bottom-navigation {
     display: none !important;
 }
 
 
 /* =========================================================
-   АДАПТАЦИЯ ОБЩЕГО ЭКРАНА
-========================================================= */
+   DARK
+   ========================================================= */
 
-@media (max-width: 380px) {
+:root[data-theme="dark"]
+.add-habit-v2 {
+    background:
+        var(--app-bg);
+}
+
+
+/* =========================================================
+   АДАПТАЦИЯ ОБЩЕГО ЭКРАНА
+   ========================================================= */
+
+@media (
+    max-width: 380px
+) {
 
     .add-habit-v2 {
         padding-left: 14px;
@@ -100,9 +136,15 @@ body:has(.add-habit-v2) .bottom-navigation {
 }
 
 
-@media (max-height: 720px) {
+@media (
+    max-height: 720px
+) {
 
     .add-habit-v2 {
-        padding-top: calc(14px + env(safe-area-inset-top));
+        padding-top:
+            calc(
+                14px +
+                env(safe-area-inset-top)
+            );
     }
 }
