@@ -11,15 +11,21 @@
    HEADER LAYOUT
    ========================================================= */
 
-.profile-appearance-header .profile-section-header {
+.profile-appearance-header
+.profile-section-header {
     width: 100%;
     min-height: 54px;
 
-    padding: 0 8px;
+    padding:
+        0
+        8px;
 
     box-sizing: border-box;
 
-    grid-template-columns: 44px 1fr 44px;
+    grid-template-columns:
+        44px
+        1fr
+        44px;
 }
 
 
@@ -27,13 +33,18 @@
    BACK BUTTON
    ========================================================= */
 
-.profile-appearance-header .profile-section-header__back {
+.profile-appearance-header
+.profile-section-header__back {
     width: 40px;
     height: 40px;
 
     border-radius: 12px;
 
-    color: #4f6f3d;
+    color:
+        var(--app-green-ui);
+
+    background:
+        transparent;
 }
 
 
@@ -54,14 +65,17 @@
    TITLE
    ========================================================= */
 
-.profile-appearance-header .profile-section-header__title {
+.profile-appearance-header
+.profile-section-header__title {
+    color:
+        var(--app-text-title);
+
     font-size: 22px;
     font-weight: 750;
     line-height: 1.15;
 
-    letter-spacing: -0.4px;
-
-    color: #171b22;
+    letter-spacing:
+        -0.4px;
 }
 
 
@@ -69,7 +83,8 @@
    RIGHT SPACER
    ========================================================= */
 
-.profile-appearance-header .profile-section-header__spacer {
+.profile-appearance-header
+.profile-section-header__spacer {
     width: 40px;
     height: 40px;
 }

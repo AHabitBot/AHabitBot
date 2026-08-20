@@ -6,13 +6,18 @@
     position: relative;
 
     display: grid;
-    grid-template-columns: 1fr 1fr;
+
+    grid-template-columns:
+        1fr
+        1fr;
 
     width: 100%;
 
     margin-top: 14px;
 
-    border-bottom: 1px solid rgba(35, 36, 40, 0.07);
+    border-bottom:
+        1px solid
+        var(--app-divider);
 }
 
 
@@ -25,23 +30,29 @@
 
     height: 52px;
 
-    padding: 0 10px;
+    padding:
+        0
+        10px;
 
     border: 0;
     outline: 0;
 
-    background: transparent;
+    background:
+        transparent;
 
-    color: #777c87;
+    color:
+        var(--app-text-secondary);
 
     font-family: inherit;
+
     font-size: 17px;
     font-weight: 600;
     line-height: 1;
 
     cursor: pointer;
 
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:
+        transparent;
 
     transition:
         color 0.18s ease,
@@ -54,7 +65,8 @@
    ========================================================= */
 
 .profile-appearance-tabs__item.is-active {
-    color: #52783f;
+    color:
+        var(--app-green-active);
 }
 
 
@@ -69,9 +81,14 @@
 
     height: 3px;
 
-    border-radius: 999px 999px 0 0;
+    border-radius:
+        999px
+        999px
+        0
+        0;
 
-    background: #52783f;
+    background:
+        var(--app-green-active);
 }
 
 

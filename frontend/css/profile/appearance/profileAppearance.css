@@ -13,12 +13,28 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    padding-top: max(
-        10px,
-        env(safe-area-inset-top)
-    );
+    padding-top:
+        max(
+            10px,
+            env(safe-area-inset-top)
+        );
 
-    padding-bottom: 110px;
+    padding-bottom:
+        110px;
 
-    -webkit-overflow-scrolling: touch;
+    background:
+        var(--app-bg);
+
+    color:
+        var(--app-text-primary);
+
+    -webkit-overflow-scrolling:
+        touch;
+
+    scrollbar-width: none;
+}
+
+
+.profile-appearance-page::-webkit-scrollbar {
+    display: none;
 }

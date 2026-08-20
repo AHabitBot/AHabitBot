@@ -12,9 +12,19 @@
 
     overflow: hidden;
 
+    border:
+        1px solid
+        var(--app-border);
+
     border-radius: 26px;
 
     box-sizing: border-box;
+
+    background:
+        var(--app-surface);
+
+    box-shadow:
+        var(--app-shadow);
 }
 
 
@@ -35,9 +45,10 @@
     object-fit: cover;
     object-position: center;
 
-    opacity: 0.92;
+    opacity: 0.94;
 
     pointer-events: none;
+
     user-select: none;
 }
 
@@ -58,9 +69,30 @@
     background:
         linear-gradient(
             180deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.30) 45%,
-            rgba(255, 255, 255, 0.68) 100%
+
+            color-mix(
+                in srgb,
+                var(--app-surface)
+                0%,
+                transparent
+            )
+            0%,
+
+            color-mix(
+                in srgb,
+                var(--app-surface)
+                28%,
+                transparent
+            )
+            45%,
+
+            color-mix(
+                in srgb,
+                var(--app-surface)
+                68%,
+                transparent
+            )
+            100%
         );
 
     pointer-events: none;
@@ -84,14 +116,25 @@
 
     overflow: hidden;
 
+    border:
+        1px solid
+        var(--app-border);
+
     border-radius: 50%;
 
-    background: rgba(255, 255, 255, 0.98);
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface)
+            96%,
+            transparent
+        );
 
     box-shadow:
-        0 6px 18px rgba(35, 36, 40, 0.09);
+        var(--app-shadow);
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     box-sizing: border-box;
 }
@@ -108,8 +151,26 @@
     object-fit: cover;
     object-position: center;
 
-    background: #f4f3ec;
+    background:
+        var(--app-surface-soft);
 
     user-select: none;
+
     pointer-events: none;
+}
+
+
+/* =========================================================
+   DARK — AVATAR SURFACE
+   ========================================================= */
+
+:root[data-theme="dark"]
+.profile-appearance-hero__avatar-wrap {
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface-raised)
+            96%,
+            transparent
+        );
 }

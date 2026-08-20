@@ -6,7 +6,13 @@
     display: grid;
 
     grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
 
     gap: 12px;
 
@@ -29,7 +35,9 @@
     position: relative;
 
     width: 100%;
-    aspect-ratio: 1 / 1;
+
+    aspect-ratio:
+        1 / 1;
 
     padding: 0;
 
@@ -37,18 +45,17 @@
 
     border:
         1px solid
-        rgba(35, 36, 40, 0.07);
+        var(--app-border);
 
     border-radius: 18px;
 
     outline: none;
 
     background:
-        rgba(248, 247, 242, 0.72);
+        var(--app-surface);
 
     box-shadow:
-        0 3px 10px
-        rgba(31, 38, 49, 0.025);
+        var(--app-shadow);
 
     cursor: pointer;
 
@@ -58,7 +65,8 @@
     transition:
         border-color 0.18s ease,
         box-shadow 0.18s ease,
-        transform 0.12s ease;
+        transform 0.12s ease,
+        background-color 0.18s ease;
 }
 
 
@@ -76,6 +84,7 @@
     object-position: center;
 
     pointer-events: none;
+
     user-select: none;
 }
 
@@ -87,11 +96,18 @@
 .profile-appearance-option.is-selected {
     border:
         2px solid
-        #52783f;
+        var(--app-green-active);
 
     box-shadow:
-        0 4px 14px
-        rgba(82, 120, 63, 0.10);
+        0
+        4px
+        14px
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            14%,
+            transparent
+        );
 }
 
 
@@ -112,17 +128,34 @@
     width: 25px;
     height: 25px;
 
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            32%,
+            transparent
+        );
+
     border-radius: 50%;
 
-    background: #52783f;
+    background:
+        var(--app-green-active);
 
     color: #ffffff;
 
     font-size: 18px;
 
     box-shadow:
-        0 2px 6px
-        rgba(35, 36, 40, 0.10);
+        0
+        2px
+        6px
+        rgba(
+            0,
+            0,
+            0,
+            0.14
+        );
 
     font-variation-settings:
         "FILL" 0,
@@ -185,7 +218,12 @@
     z-index: 1;
 
     background:
-        rgba(20, 24, 20, 0.10);
+        rgba(
+            20,
+            24,
+            20,
+            0.18
+        );
 
     pointer-events: none;
 }
@@ -203,11 +241,21 @@
 
     z-index: 3;
 
-    width: calc(100% - 16px);
+    width:
+        calc(
+            100% - 16px
+        );
 
-    color: rgba(255, 255, 255, 0.96);
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.96
+        );
 
     font-family: inherit;
+
     font-size: 11px;
     font-weight: 700;
     line-height: 1.25;
@@ -215,10 +263,21 @@
     text-align: center;
 
     text-shadow:
-        0 1px 4px rgba(0, 0, 0, 0.38);
+        0
+        1px
+        4px
+        rgba(
+            0,
+            0,
+            0,
+            0.46
+        );
 
     transform:
-        translate(-50%, -50%);
+        translate(
+            -50%,
+            -50%
+        );
 
     pointer-events: none;
 }
@@ -230,4 +289,15 @@
 
 .profile-appearance-option.is-locked:active {
     transform: none;
+}
+
+
+/* =========================================================
+   DARK
+   ========================================================= */
+
+:root[data-theme="dark"]
+.profile-appearance-option {
+    background:
+        var(--app-surface);
 }
