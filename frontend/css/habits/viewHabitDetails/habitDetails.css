@@ -1,45 +1,23 @@
-@import url("./header.css");
 @import url("./content.css");
-@import url("./calendar.css");
+@import url("./header.css");
 @import url("./stats.css");
+@import url("./calendar.css");
+@import url("./menu.css");
 @import url("./habitDeleteConfirm.css");
 
 
 /* =========================================================
-   HABIT DETAILS — PAGE
+   ДЕТАЛЬНАЯ СТРАНИЦА ПРИВЫЧКИ
    ========================================================= */
 
-.habit-details-page {
-    position: fixed;
-    inset: 0;
+
+.habit-details {
+    --habit-accent: #65b85d;
+    --habit-accent-rgb: 101, 184, 93;
 
     width: 100%;
-    height: 100dvh;
-
-    display: flex;
-    flex-direction: column;
-
-    box-sizing: border-box;
-
-    overflow: hidden;
-
-    background:
-        var(--app-bg);
-
-    color:
-        var(--app-text-primary);
-}
-
-
-/* =========================================================
-   SCROLL BODY
-   ========================================================= */
-
-.habit-details-body {
-    flex: 1;
-    min-height: 0;
-
-    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
 
     box-sizing: border-box;
 
@@ -47,81 +25,120 @@
     overflow-y: auto;
 
     padding:
-        8px
-        16px
+        max(
+            26px,
+            env(safe-area-inset-top)
+        )
+        18px
         calc(
-            34px +
+            22px +
             env(safe-area-inset-bottom)
         );
 
-    overscroll-behavior-y:
-        contain;
+    background:
+        radial-gradient(
+            circle at 50% 12%,
+            rgba(
+                var(--habit-accent-rgb),
+                0.09
+            )
+            0%,
+            var(--app-bg)
+            40%,
+            var(--app-bg)
+            100%
+        );
+
+    color:
+        var(--app-text-primary);
+
+    scrollbar-width: none;
 
     -webkit-overflow-scrolling:
         touch;
-
-    scrollbar-width: none;
 }
 
 
-.habit-details-body::-webkit-scrollbar {
+.habit-details::-webkit-scrollbar {
     display: none;
 }
 
 
 /* =========================================================
-   COMMON CARD
+   ЦВЕТА
    ========================================================= */
 
-.habit-details-card {
-    width: 100%;
+.habit-details--blue {
+    --habit-accent: #4d8ff0;
+    --habit-accent-rgb: 77, 143, 240;
+}
 
-    box-sizing: border-box;
 
-    border:
-        1px solid
-        var(--app-border);
+.habit-details--green {
+    --habit-accent: #65b85d;
+    --habit-accent-rgb: 101, 184, 93;
+}
 
-    border-radius:
-        var(--app-radius-large);
 
-    background:
-        var(--app-surface);
+.habit-details--purple {
+    --habit-accent: #9872df;
+    --habit-accent-rgb: 152, 114, 223;
+}
 
-    box-shadow:
-        var(--app-shadow);
+
+.habit-details--orange {
+    --habit-accent: #df9557;
+    --habit-accent-rgb: 223, 149, 87;
+}
+
+
+.habit-details--red {
+    --habit-accent: #df7470;
+    --habit-accent-rgb: 223, 116, 112;
+}
+
+
+.habit-details--graphite {
+    --habit-accent: #676a70;
+    --habit-accent-rgb: 103, 106, 112;
+}
+
+
+.habit-details--cyan {
+    --habit-accent: #42aebd;
+    --habit-accent-rgb: 66, 174, 189;
+}
+
+
+.habit-details--brown {
+    --habit-accent: #916b4f;
+    --habit-accent-rgb: 145, 107, 79;
+}
+
+
+.habit-details--pink {
+    --habit-accent: #d66e9d;
+    --habit-accent-rgb: 214, 110, 157;
+}
+
+
+.habit-details--silver {
+    --habit-accent: #858b94;
+    --habit-accent-rgb: 133, 139, 148;
+}
+
+
+.habit-details--yellow {
+    --habit-accent: #c49c28;
+    --habit-accent-rgb: 196, 156, 40;
 }
 
 
 /* =========================================================
-   DARK
+   СКРЫВАЕМ НИЖНЮЮ НАВИГАЦИЮ
    ========================================================= */
 
-:root[data-theme="dark"]
-.habit-details-card {
-    box-shadow:
-        0
-        8px
-        24px
-        rgba(
-            0,
-            0,
-            0,
-            0.16
-        );
-}
-
-
-/* =========================================================
-   SMALL
-   ========================================================= */
-
-@media (
-    max-width: 380px
-) {
-
-    .habit-details-body {
-        padding-left: 13px;
-        padding-right: 13px;
-    }
+body:has(.habit-details)
+.bottom-navigation {
+    display: none !important;
 }

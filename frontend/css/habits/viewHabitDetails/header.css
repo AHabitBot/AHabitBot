@@ -1,131 +1,143 @@
+@import url("./content.css");
+@import url("./header.css");
+@import url("./stats.css");
+@import url("./calendar.css");
+@import url("./menu.css");
+@import url("./habitDeleteConfirm.css");
+
+
 /* =========================================================
-   HABIT DETAILS — HEADER
+   ДЕТАЛЬНАЯ СТРАНИЦА ПРИВЫЧКИ
    ========================================================= */
 
-.habit-details-header {
-    flex: 0 0 auto;
+.habit-details {
+    --habit-accent: #65b85d;
+    --habit-accent-rgb: 101, 184, 93;
 
     width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-        44px
-        minmax(
-            0,
-            1fr
-        )
-        44px;
-
-    align-items: center;
+    height: 100%;
+    min-height: 100dvh;
 
     box-sizing: border-box;
 
-    min-height: 58px;
+    overflow-x: hidden;
+    overflow-y: auto;
 
     padding:
         max(
-            8px,
+            26px,
             env(safe-area-inset-top)
         )
-        12px
-        4px;
+        18px
+        calc(
+            22px +
+            env(safe-area-inset-bottom)
+        );
 
     background:
-        var(--app-bg);
-}
-
-
-/* =========================================================
-   BACK / ACTION
-   ========================================================= */
-
-.habit-details-header__back,
-.habit-details-header__action {
-    width: 40px;
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin: 0;
-    padding: 0;
-
-    border: 0;
-
-    border-radius: 12px;
-
-    background:
-        transparent;
+        radial-gradient(
+            circle at 50% 12%,
+            rgba(
+                var(--habit-accent-rgb),
+                0.09
+            )
+            0%,
+            var(--app-bg)
+            40%,
+            var(--app-bg)
+            100%
+        );
 
     color:
-        var(--app-green-ui);
+        var(--app-text-primary);
 
-    cursor: pointer;
+    scrollbar-width: none;
 
-    -webkit-tap-highlight-color:
-        transparent;
-
-    transition:
-        transform 90ms ease,
-        background-color 120ms ease;
+    -webkit-overflow-scrolling:
+        touch;
 }
 
 
-.habit-details-header__back:active,
-.habit-details-header__action:active {
-    transform:
-        scale(0.94);
-
-    background:
-        var(--app-surface-soft);
+.habit-details::-webkit-scrollbar {
+    display: none;
 }
 
 
 /* =========================================================
-   ICONS
+   ЦВЕТА
    ========================================================= */
 
-.habit-details-header__back
-.material-symbols-rounded,
-.habit-details-header__action
-.material-symbols-rounded {
-    font-size: 26px;
+.habit-details--blue {
+    --habit-accent: #4d8ff0;
+    --habit-accent-rgb: 77, 143, 240;
+}
 
-    font-variation-settings:
-        "FILL" 0,
-        "wght" 450,
-        "GRAD" 0,
-        "opsz" 28;
+
+.habit-details--green {
+    --habit-accent: #65b85d;
+    --habit-accent-rgb: 101, 184, 93;
+}
+
+
+.habit-details--purple {
+    --habit-accent: #9872df;
+    --habit-accent-rgb: 152, 114, 223;
+}
+
+
+.habit-details--orange {
+    --habit-accent: #df9557;
+    --habit-accent-rgb: 223, 149, 87;
+}
+
+
+.habit-details--red {
+    --habit-accent: #df7470;
+    --habit-accent-rgb: 223, 116, 112;
+}
+
+
+.habit-details--graphite {
+    --habit-accent: #676a70;
+    --habit-accent-rgb: 103, 106, 112;
+}
+
+
+.habit-details--cyan {
+    --habit-accent: #42aebd;
+    --habit-accent-rgb: 66, 174, 189;
+}
+
+
+.habit-details--brown {
+    --habit-accent: #916b4f;
+    --habit-accent-rgb: 145, 107, 79;
+}
+
+
+.habit-details--pink {
+    --habit-accent: #d66e9d;
+    --habit-accent-rgb: 214, 110, 157;
+}
+
+
+.habit-details--silver {
+    --habit-accent: #858b94;
+    --habit-accent-rgb: 133, 139, 148;
+}
+
+
+.habit-details--yellow {
+    --habit-accent: #c49c28;
+    --habit-accent-rgb: 196, 156, 40;
 }
 
 
 /* =========================================================
-   TITLE
+   СКРЫВАЕМ НИЖНЮЮ НАВИГАЦИЮ
    ========================================================= */
 
-.habit-details-header__title {
-    min-width: 0;
-
-    margin: 0;
-
-    overflow: hidden;
-
-    color:
-        var(--app-text-title);
-
-    font-size: 21px;
-    font-weight: 750;
-    line-height: 1.15;
-
-    letter-spacing:
-        -0.35px;
-
-    text-align: center;
-
-    text-overflow:
-        ellipsis;
-
-    white-space: nowrap;
+body:has(.habit-details)
+.bottom-navigation {
+    display: none !important;
 }

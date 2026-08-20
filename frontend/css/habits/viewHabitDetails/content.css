@@ -1,328 +1,117 @@
 /* =========================================================
-   HABIT DETAILS — MAIN CONTENT
+   ОСНОВНОЙ КОНТЕНТ
    ========================================================= */
 
-.habit-details-main {
+.habit-details__content {
     width: 100%;
 
     display: flex;
     flex-direction: column;
-
-    gap: 14px;
-}
-
-
-/* =========================================================
-   HERO CARD
-   ========================================================= */
-
-.habit-details-hero {
-    width: 100%;
-
-    display: flex;
     align-items: center;
 
-    gap: 14px;
-
-    box-sizing: border-box;
-
-    padding: 16px;
-
-    border:
-        1px solid
-        var(--app-border);
-
-    border-radius: 22px;
-
-    background:
-        var(--app-surface);
-
-    box-shadow:
-        var(--app-shadow);
+    padding-top: 10px;
 }
 
 
 /* =========================================================
-   ICON
+   ИКОНКА
    ========================================================= */
 
-.habit-details-hero__icon {
-    flex: 0 0 auto;
-
-    width: 54px;
-    height: 54px;
+.habit-details__icon {
+    width: 62px;
+    height: 62px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 18px;
+    border:
+        1px solid
+        rgba(
+            var(--habit-accent-rgb),
+            0.10
+        );
+
+    border-radius: 20px;
 
     background:
         color-mix(
             in srgb,
-            var(--habit-accent, var(--app-green-active))
-            13%,
-            var(--app-surface-soft)
+            var(--app-surface)
+            88%,
+            rgb(
+                var(--habit-accent-rgb)
+            )
+            12%
         );
 
-    color:
-        var(
-            --habit-accent,
-            var(--app-green-active)
-        );
+    box-shadow:
+        var(--app-shadow);
 
-    font-size: 28px;
+    font-family:
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+
+    font-size: 32px;
     line-height: 1;
 }
 
 
 /* =========================================================
-   COPY
+   НАЗВАНИЕ
    ========================================================= */
 
-.habit-details-hero__content {
-    min-width: 0;
+.habit-details__title {
+    max-width: 100%;
 
-    flex: 1;
-}
-
-
-/* =========================================================
-   TITLE
-   ========================================================= */
-
-.habit-details-hero__title {
-    margin: 0;
-
-    overflow: hidden;
-
-    color:
-        var(--app-text-primary);
-
-    font-size: 19px;
-    font-weight: 750;
-    line-height: 1.2;
-
-    letter-spacing:
-        -0.3px;
-
-    white-space: nowrap;
-
-    text-overflow:
-        ellipsis;
-}
-
-
-/* =========================================================
-   SUBTITLE
-   ========================================================= */
-
-.habit-details-hero__subtitle {
     margin:
-        5px
+        14px
         0
         0;
 
     color:
-        var(--app-text-secondary);
-
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.35;
-}
-
-
-/* =========================================================
-   CONFIRM BUTTON
-   ========================================================= */
-
-.habit-details-confirm {
-    width: 100%;
-    min-height: 52px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    box-sizing: border-box;
-
-    padding:
-        0
-        18px;
-
-    border:
-        1px solid
-        color-mix(
-            in srgb,
-            var(--app-green-active)
-            22%,
-            transparent
-        );
-
-    border-radius: 18px;
-
-    background:
-        color-mix(
-            in srgb,
-            var(--app-green-active)
-            12%,
-            var(--app-surface)
-        );
-
-    color:
-        var(--app-green-active);
-
-    font-family: inherit;
-
-    font-size: 15px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    -webkit-tap-highlight-color:
-        transparent;
-
-    transition:
-        transform 0.12s ease,
-        background-color 0.16s ease,
-        color 0.16s ease;
-}
-
-
-.habit-details-confirm.is-confirmed {
-    background:
-        var(--app-green-active);
-
-    color:
-        #ffffff;
-}
-
-
-.habit-details-confirm:active {
-    transform:
-        scale(0.98);
-}
-
-
-/* =========================================================
-   SECTION TITLE
-   ========================================================= */
-
-.habit-details-section-title {
-    margin:
-        4px
-        0
-        10px
-        2px;
-
-    color:
         var(--app-text-title);
 
-    font-size: 16px;
-    font-weight: 750;
-    line-height: 1.2;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 25px;
+    font-weight: 680;
+    line-height: 1.12;
+
+    letter-spacing:
+        -0.035em;
+
+    text-align: center;
 }
 
 
 /* =========================================================
-   EDIT / ARCHIVE ACTIONS
+   СТАТУС
    ========================================================= */
 
-.habit-details-actions {
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
-
-    margin-top: 4px;
-}
-
-
-.habit-details-action {
-    width: 100%;
-    min-height: 50px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 11px;
-
-    padding:
-        0
-        15px;
-
-    box-sizing: border-box;
-
-    border:
-        1px solid
-        var(--app-border);
-
-    border-radius: 16px;
-
-    background:
-        var(--app-surface);
+.habit-details__status {
+    margin-top: 6px;
 
     color:
-        var(--app-text-primary);
+        var(--habit-accent);
 
-    font-family: inherit;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
 
-    font-size: 14px;
-    font-weight: 650;
-
-    cursor: pointer;
-
-    -webkit-tap-highlight-color:
-        transparent;
-}
-
-
-.habit-details-action
-.material-symbols-rounded {
-    color:
-        var(--app-text-secondary);
-
-    font-size: 21px;
-}
-
-
-.habit-details-action:active {
-    background:
-        var(--app-surface-soft);
-}
-
-
-/* =========================================================
-   DANGER ACTION
-   ========================================================= */
-
-.habit-details-action--danger {
-    color:
-        #c35d51;
-
-    border-color:
-        rgba(
-            195,
-            93,
-            81,
-            0.18
-        );
-
-    background:
-        rgba(
-            195,
-            93,
-            81,
-            0.06
-        );
-}
-
-
-.habit-details-action--danger
-.material-symbols-rounded {
-    color:
-        #c35d51;
+    font-size: 15px;
+    font-weight: 550;
+    line-height: 1.15;
 }

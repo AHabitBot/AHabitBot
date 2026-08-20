@@ -1,11 +1,5 @@
 /* =========================================================
    DELETE HABIT CONFIRMATION
-   Модальное окно удаления привычки
-   ========================================================= */
-
-
-/* =========================================================
-   БЛОКИРОВКА СТРАНИЦЫ
    ========================================================= */
 
 .habit-delete-modal-open {
@@ -19,7 +13,9 @@
 
 .habit-delete-confirm {
     position: fixed;
+
     inset: 0;
+
     z-index: 1000;
 
     display: flex;
@@ -27,11 +23,18 @@
     justify-content: center;
 
     padding:
-        max(20px, env(safe-area-inset-top))
+        max(
+            20px,
+            env(safe-area-inset-top)
+        )
         16px
-        max(20px, env(safe-area-inset-bottom));
+        max(
+            20px,
+            env(safe-area-inset-bottom)
+        );
 
     visibility: hidden;
+
     opacity: 0;
 
     font-family:
@@ -47,22 +50,30 @@
         visibility 0.2s ease;
 }
 
+
 .habit-delete-confirm.is-visible {
     visibility: visible;
+
     opacity: 1;
 }
 
 
 /* =========================================================
-   ЗАТЕМНЁННЫЙ ФОН
+   BACKDROP
    ========================================================= */
 
 .habit-delete-confirm__backdrop {
     position: absolute;
+
     inset: 0;
 
     background:
-        rgba(31, 33, 29, 0.28);
+        rgba(
+            0,
+            0,
+            0,
+            0.42
+        );
 
     backdrop-filter:
         blur(5px);
@@ -72,15 +83,32 @@
 }
 
 
+:root[data-theme="dark"]
+.habit-delete-confirm__backdrop {
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.62
+        );
+}
+
+
 /* =========================================================
-   МОДАЛЬНОЕ ОКНО
+   DIALOG
    ========================================================= */
 
 .habit-delete-confirm__dialog {
     position: relative;
+
     z-index: 1;
 
-    width: min(100%, 420px);
+    width:
+        min(
+            100%,
+            420px
+        );
 
     padding:
         30px
@@ -89,16 +117,23 @@
 
     border:
         1px solid
-        rgba(126, 117, 164, 0.1);
+        var(--app-border);
 
     border-radius: 30px;
 
     background:
-        rgba(255, 255, 253, 0.98);
+        var(--app-surface-raised);
 
     box-shadow:
-        0 22px 60px
-        rgba(35, 36, 41, 0.16);
+        0
+        22px
+        60px
+        rgba(
+            0,
+            0,
+            0,
+            0.22
+        );
 
     text-align: center;
 
@@ -113,6 +148,7 @@
         transform 0.22s ease;
 }
 
+
 .habit-delete-confirm.is-visible
 .habit-delete-confirm__dialog {
     transform:
@@ -122,29 +158,36 @@
 
 
 /* =========================================================
-   ИКОНКА УДАЛЕНИЯ
+   ICON
    ========================================================= */
 
 .habit-delete-confirm__icon {
+    width: 54px;
+    height: 54px;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 54px;
-    height: 54px;
-
     margin:
-        0 auto
+        0
+        auto
         22px;
 
     border-radius: 18px;
 
     background:
-        #f7ece9;
+        rgba(
+            166,
+            78,
+            70,
+            0.11
+        );
 
     color:
-        #a44e46;
+        #b75b51;
 }
+
 
 .habit-delete-confirm__icon
 .material-symbols-rounded {
@@ -162,25 +205,19 @@
 
 
 /* =========================================================
-   ЗАГОЛОВОК
+   TITLE
    ========================================================= */
 
 .habit-delete-confirm__title {
     max-width: 340px;
 
     margin:
-        0 auto
+        0
+        auto
         28px;
 
-    color: var(--app-text-primary);
-
-    font-family:
-        Inter,
-        Manrope,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+    color:
+        var(--app-text-title);
 
     font-size: 22px;
     font-weight: 500;
@@ -189,51 +226,49 @@
     letter-spacing:
         -0.025em;
 
-    text-wrap: balance;
+    text-wrap:
+        balance;
 }
 
 
 /* =========================================================
-   КОНТЕЙНЕР КНОПОК
+   BUTTONS
    ========================================================= */
 
 .habit-delete-confirm__actions {
     display: grid;
 
     grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
 
     gap: 12px;
 }
 
 
-/* =========================================================
-   ОБЩИЙ СТИЛЬ КНОПОК
-   ========================================================= */
-
 .habit-delete-confirm__button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     width: 100%;
     min-width: 0;
     min-height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     padding:
         14px
         18px;
 
     border: 0;
+
     border-radius: 19px;
 
-    font-family:
-        Inter,
-        Manrope,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+    font-family: inherit;
 
     font-size: 16px;
     font-weight: 700;
@@ -243,6 +278,7 @@
         -0.015em;
 
     cursor: pointer;
+
     user-select: none;
 
     -webkit-user-select: none;
@@ -256,6 +292,7 @@
         box-shadow 0.14s ease;
 }
 
+
 .habit-delete-confirm__button:active {
     transform:
         scale(0.97);
@@ -263,7 +300,7 @@
 
 
 /* =========================================================
-   КНОПКА УДАЛИТЬ
+   ARCHIVE
    ========================================================= */
 
 .habit-delete-confirm__button--delete {
@@ -274,50 +311,53 @@
         #ffffff;
 
     box-shadow:
-        0 8px 20px
-        rgba(166, 78, 70, 0.18);
-}
-
-@media (hover: hover) {
-    .habit-delete-confirm__button--delete:hover {
-        background:
-            #98463f;
-    }
+        0
+        8px
+        20px
+        rgba(
+            166,
+            78,
+            70,
+            0.18
+        );
 }
 
 
 /* =========================================================
-   КНОПКА ОСТАВИТЬ
+   KEEP
    ========================================================= */
 
 .habit-delete-confirm__button--keep {
+    border:
+        1px solid
+        var(--app-border);
+
     background:
-        #f0f2eb;
+        var(--app-surface-soft);
 
     color:
-        #30312e;
-}
-
-@media (hover: hover) {
-    .habit-delete-confirm__button--keep:hover {
-        background:
-            #e8ebe1;
-    }
+        var(--app-text-primary);
 }
 
 
 /* =========================================================
-   ДОСТУПНЫЙ ФОКУС
+   FOCUS
    ========================================================= */
 
 .habit-delete-confirm__button:focus {
     outline: none;
 }
 
+
 .habit-delete-confirm__button:focus-visible {
     outline:
         3px solid
-        rgba(177, 143, 232, 0.25);
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            20%,
+            transparent
+        );
 
     outline-offset:
         3px;
@@ -325,19 +365,26 @@
 
 
 /* =========================================================
-   ПЛАНШЕТЫ И БОЛЬШИЕ ЭКРАНЫ
+   DESKTOP
    ========================================================= */
 
-@media (min-width: 600px) {
+@media (
+    min-width: 600px
+) {
+
     .habit-delete-confirm__dialog {
         width:
-            min(100%, 460px);
+            min(
+                100%,
+                460px
+            );
 
         padding:
             32px
             26px
             24px;
     }
+
 
     .habit-delete-confirm__title {
         font-size: 23px;
@@ -346,16 +393,26 @@
 
 
 /* =========================================================
-   МАЛЕНЬКИЕ ЭКРАНЫ
+   SMALL
    ========================================================= */
 
-@media (max-width: 380px) {
+@media (
+    max-width: 380px
+) {
+
     .habit-delete-confirm {
         padding:
-            max(16px, env(safe-area-inset-top))
+            max(
+                16px,
+                env(safe-area-inset-top)
+            )
             12px
-            max(16px, env(safe-area-inset-bottom));
+            max(
+                16px,
+                env(safe-area-inset-bottom)
+            );
     }
+
 
     .habit-delete-confirm__dialog {
         padding:
@@ -363,79 +420,76 @@
             16px
             16px;
 
-        border-radius:
-            25px;
+        border-radius: 25px;
     }
+
 
     .habit-delete-confirm__icon {
         width: 50px;
         height: 50px;
 
-        margin-bottom:
-            18px;
+        margin-bottom: 18px;
 
-        border-radius:
-            16px;
+        border-radius: 16px;
     }
+
 
     .habit-delete-confirm__title {
-        max-width:
-            290px;
+        max-width: 290px;
 
-        margin-bottom:
-            22px;
+        margin-bottom: 22px;
 
-        font-size:
-            19px;
-
-        letter-spacing:
-            -0.025em;
+        font-size: 19px;
     }
+
 
     .habit-delete-confirm__actions {
-        gap:
-            8px;
+        gap: 8px;
     }
 
+
     .habit-delete-confirm__button {
-        min-height:
-            52px;
+        min-height: 52px;
 
         padding:
             12px
             10px;
 
-        border-radius:
-            16px;
+        border-radius: 16px;
 
-        font-size:
-            15px;
+        font-size: 15px;
     }
 }
 
 
 /* =========================================================
-   ОЧЕНЬ УЗКИЕ ЭКРАНЫ
+   VERY SMALL
    ========================================================= */
 
-@media (max-width: 310px) {
+@media (
+    max-width: 310px
+) {
+
     .habit-delete-confirm__actions {
         grid-template-columns:
             1fr;
     }
 
+
     .habit-delete-confirm__button--keep {
-        order:
-            -1;
+        order: -1;
     }
 }
 
 
 /* =========================================================
-   УМЕНЬШЕННЫЕ АНИМАЦИИ
+   REDUCED MOTION
    ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+@media (
+    prefers-reduced-motion: reduce
+) {
+
     .habit-delete-confirm,
     .habit-delete-confirm__dialog,
     .habit-delete-confirm__button {
