@@ -1,12 +1,12 @@
 /* =========================================================
    ПРОКРУЧИВАЕМАЯ ОБЛАСТЬ
-   Содержит сетку эмодзи и отвечает за вертикальную прокрутку
    ========================================================= */
 
 .habit-icon-picker__body {
     position: relative;
 
     flex: 1 1 auto;
+
     min-height: 0;
 
     width: 100%;
@@ -21,14 +21,18 @@
         23px
         190px;
 
-    overscroll-behavior-y: contain;
-    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y:
+        contain;
+
+    -webkit-overflow-scrolling:
+        touch;
 
     scrollbar-width: none;
+
+    background:
+        transparent;
 }
 
-
-/* Убираем видимую полосу прокрутки */
 
 .habit-icon-picker__body::-webkit-scrollbar {
     display: none;
@@ -36,17 +40,25 @@
 
 
 /* =========================================================
-   СЕТКА ЭМОДЗИ
-   Отображает ровно 6 элементов в одной строке
+   GRID
    ========================================================= */
 
 .habit-icon-picker__grid {
     width: 100%;
 
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+
+    grid-template-columns:
+        repeat(
+            6,
+            minmax(
+                0,
+                1fr
+            )
+        );
 
     align-items: start;
+
     justify-items: center;
 
     column-gap: 12px;
@@ -57,17 +69,20 @@
 
 
 /* =========================================================
-   КНОПКА ЭМОДЗИ
-   Круглый интерактивный элемент для выбора значка
+   ITEM
    ========================================================= */
 
 .habit-icon-picker__item {
     position: relative;
 
     width: 100%;
+
     height: auto;
+
     min-width: 0;
-    aspect-ratio: 1 / 1;
+
+    aspect-ratio:
+        1 / 1;
 
     justify-self: center;
     align-self: start;
@@ -79,31 +94,43 @@
     margin: 0;
     padding: 0;
 
-    border: 1.5px solid transparent;
+    border:
+        1px solid
+        var(--app-border);
+
     border-radius: 999px;
+
     outline: none;
 
-    color: var(--icon-picker-muted);
+    color:
+        var(--icon-picker-muted);
 
     background:
-        linear-gradient(
-            145deg,
-            rgba(250, 250, 251, 0.98) 0%,
-            rgba(246, 246, 248, 0.98) 100%
-        );
+        var(--app-surface-soft);
 
     box-shadow:
-        inset 0 1px 1px rgba(255, 255, 255, 0.95),
-        0 2px 8px rgba(32, 38, 48, 0.018);
+        0
+        3px
+        9px
+        rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
 
     cursor: pointer;
+
     user-select: none;
 
     appearance: none;
     -webkit-appearance: none;
-    -webkit-tap-highlight-color: transparent;
 
-    touch-action: manipulation;
+    -webkit-tap-highlight-color:
+        transparent;
+
+    touch-action:
+        manipulation;
 
     transition:
         transform 90ms ease,
@@ -115,8 +142,7 @@
 
 
 /* =========================================================
-   САМО ЭМОДЗИ
-   Центрирует значок внутри круглой кнопки
+   EMOJI
    ========================================================= */
 
 .habit-icon-picker__emoji {
@@ -135,11 +161,19 @@
         "Noto Color Emoji",
         sans-serif;
 
-    font-size: clamp(29px, 7.7vw, 38px);
+    font-size:
+        clamp(
+            29px,
+            7.7vw,
+            38px
+        );
+
     font-weight: 400;
+
     line-height: 1;
 
-    transform: translateZ(0);
+    transform:
+        translateZ(0);
 
     transition:
         transform 120ms ease,
@@ -148,83 +182,176 @@
 
 
 /* =========================================================
-   ВЫБРАННЫЙ ЭМОДЗИ
-   Добавляет тёмную обводку выбранному элементу
+   SELECTED
    ========================================================= */
 
 .habit-icon-picker__item.is-selected {
-    border-color: var(--icon-picker-selected-border);
+    border-color:
+        var(--app-green-active);
 
     background:
-        linear-gradient(
-            145deg,
-            rgba(255, 255, 255, 1) 0%,
-            rgba(251, 251, 252, 1) 100%
+        color-mix(
+            in srgb,
+            var(--app-surface-raised)
+            90%,
+            var(--app-green-active)
+            10%
         );
 
     box-shadow:
-        0 3px 10px rgba(29, 34, 42, 0.045),
-        inset 0 1px 1px rgba(255, 255, 255, 1);
+        0
+        0
+        0
+        2px
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            12%,
+            transparent
+        ),
+
+        0
+        5px
+        14px
+        rgba(
+            0,
+            0,
+            0,
+            0.12
+        );
 }
+
 
 .habit-icon-picker__item.is-selected
 .habit-icon-picker__emoji {
-    transform: scale(1.04);
+    transform:
+        scale(1.04);
 }
 
 
 /* =========================================================
-   НАЖАТИЕ НА ЭМОДЗИ
-   Немного уменьшает элемент при нажатии
+   PRESS
    ========================================================= */
 
 .habit-icon-picker__item:active,
 .habit-icon-picker__item.is-pressed {
-    transform: scale(0.88);
-    opacity: 0.76;
+    transform:
+        scale(0.88);
+
+    opacity:
+        0.76;
 }
 
 
 /* =========================================================
-   ФОКУС С КЛАВИАТУРЫ
-   Показывает обводку при навигации клавишей Tab
+   FOCUS
    ========================================================= */
 
 .habit-icon-picker__item:focus {
     outline: none;
 }
 
+
 .habit-icon-picker__item:focus-visible {
     box-shadow:
-        0 0 0 3px rgba(55, 136, 245, 0.12);
+        0
+        0
+        0
+        3px
+        color-mix(
+            in srgb,
+            var(--app-green-active)
+            15%,
+            transparent
+        );
 }
 
 
 /* =========================================================
-   СТАНДАРТНЫЕ ТЕЛЕФОНЫ
-   Ширина экрана от 390 до 430 пикселей
+   DARK
    ========================================================= */
 
-@media (min-width: 390px) and (max-width: 430px) {
+:root[data-theme="dark"]
+.habit-icon-picker__item {
+    background:
+        var(--app-surface-soft);
+
+    border-color:
+        var(--app-border);
+
+    box-shadow:
+        inset
+        0
+        1px
+        0
+        rgba(
+            255,
+            255,
+            255,
+            0.025
+        ),
+
+        0
+        3px
+        10px
+        rgba(
+            0,
+            0,
+            0,
+            0.14
+        );
+}
+
+
+:root[data-theme="dark"]
+.habit-icon-picker__item.is-selected {
+    border-color:
+        var(--app-green-active);
+
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface-raised)
+            88%,
+            var(--app-green-active)
+            12%
+        );
+}
+
+
+/* =========================================================
+   390–430
+   ========================================================= */
+
+@media (
+    min-width: 390px
+)
+and
+(
+    max-width: 430px
+) {
 
     .habit-icon-picker__body {
         padding-left: 22px;
         padding-right: 22px;
     }
 
+
     .habit-icon-picker__grid {
         column-gap: 13px;
+
         row-gap: 25px;
     }
 }
 
 
 /* =========================================================
-   УЗКИЕ ТЕЛЕФОНЫ
-   Ширина экрана до 380 пикселей
+   <=380
    ========================================================= */
 
-@media (max-width: 380px) {
+@media (
+    max-width: 380px
+) {
 
     .habit-icon-picker__body {
         padding:
@@ -233,111 +360,148 @@
             170px;
     }
 
+
     .habit-icon-picker__grid {
         column-gap: 9px;
+
         row-gap: 20px;
     }
 
+
     .habit-icon-picker__emoji {
-        font-size: clamp(26px, 7.8vw, 32px);
+        font-size:
+            clamp(
+                26px,
+                7.8vw,
+                32px
+            );
     }
 }
 
 
 /* =========================================================
-   БОЛЬШИЕ ТЕЛЕФОНЫ
-   Ширина экрана от 431 пикселя
+   >=431
    ========================================================= */
 
-@media (min-width: 431px) {
+@media (
+    min-width: 431px
+) {
 
     .habit-icon-picker__body {
         padding-left: 26px;
         padding-right: 26px;
     }
 
+
     .habit-icon-picker__grid {
         column-gap: 14px;
+
         row-gap: 26px;
     }
 
+
     .habit-icon-picker__emoji {
-        font-size: clamp(32px, 7vw, 41px);
+        font-size:
+            clamp(
+                32px,
+                7vw,
+                41px
+            );
     }
 }
 
 
 /* =========================================================
-   НИЗКИЕ ЭКРАНЫ TELEGRAM
-   Уменьшает отступы и эмодзи при высоте до 720 пикселей
+   LOW HEIGHT
    ========================================================= */
 
-@media (max-height: 720px) {
+@media (
+    max-height: 720px
+) {
 
     .habit-icon-picker__body {
         padding-top: 4px;
+
         padding-bottom: 160px;
     }
+
 
     .habit-icon-picker__grid {
         row-gap: 16px;
     }
 
+
     .habit-icon-picker__emoji {
-        font-size: clamp(25px, 6.8vw, 33px);
+        font-size:
+            clamp(
+                25px,
+                6.8vw,
+                33px
+            );
     }
 }
 
 
 /* =========================================================
-   ОЧЕНЬ НИЗКИЕ ЭКРАНЫ
-   Дополнительно сжимает сетку при высоте до 620 пикселей
+   VERY LOW HEIGHT
    ========================================================= */
 
-@media (max-height: 620px) {
+@media (
+    max-height: 620px
+) {
 
     .habit-icon-picker__body {
         padding-top: 2px;
+
         padding-bottom: 150px;
     }
+
 
     .habit-icon-picker__grid {
         row-gap: 12px;
     }
 
+
     .habit-icon-picker__emoji {
-        font-size: clamp(23px, 6.4vw, 30px);
+        font-size:
+            clamp(
+                23px,
+                6.4vw,
+                30px
+            );
     }
 }
 
 
 /* =========================================================
-   УСТРОЙСТВА С МЫШЬЮ
-   Добавляет эффект наведения только там, где доступен hover
+   HOVER
    ========================================================= */
 
-@media (hover: hover) and (pointer: fine) {
+@media (
+    hover: hover
+)
+and
+(
+    pointer: fine
+) {
 
     .habit-icon-picker__item:hover {
-        transform: translateY(-2px);
+        transform:
+            translateY(-2px);
 
         box-shadow:
-            0 5px 14px rgba(31, 38, 49, 0.045),
-            inset 0 1px 1px rgba(255, 255, 255, 0.98);
-    }
-
-    .habit-icon-picker__item.is-selected:hover {
-        border-color: var(--icon-picker-selected-border);
+            var(--app-shadow);
     }
 }
 
 
 /* =========================================================
-   УМЕНЬШЕННАЯ АНИМАЦИЯ
-   Отключает переходы, если это выбрано в настройках устройства
+   REDUCED MOTION
    ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+@media (
+    prefers-reduced-motion: reduce
+) {
 
     .habit-icon-picker__item,
     .habit-icon-picker__emoji {

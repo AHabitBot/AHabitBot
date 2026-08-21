@@ -2,27 +2,49 @@
 @import "./emoji.css";
 @import "./button.css";
 
+
 /* =========================================================
    ICON PICKER PAGE V2
-   Светлый полноэкранный выбор эмодзи
-   Оформление по референсу
    ========================================================= */
 
 :root {
-    --icon-picker-bg: #f4f5f7;
-    --icon-picker-surface: #ffffff;
+    --icon-picker-bg:
+        var(--app-bg);
 
-    --icon-picker-text: #292b2f;
-    --icon-picker-muted: #6c6f75;
+    --icon-picker-surface:
+        var(--app-surface);
 
-    --icon-picker-item-bg: rgba(248, 248, 249, 0.96);
-    --icon-picker-item-border: rgba(45, 47, 52, 0.08);
+    --icon-picker-surface-soft:
+        var(--app-surface-soft);
 
-    --icon-picker-selected-border: #3f4146;
-    --icon-picker-selected-bg: #ffffff;
+    --icon-picker-text:
+        var(--app-text-primary);
 
-    --icon-picker-button-border: rgba(50, 53, 59, 0.11);
-    --icon-picker-shadow: rgba(31, 38, 49, 0.06);
+    --icon-picker-muted:
+        var(--app-text-secondary);
+
+    --icon-picker-item-bg:
+        var(--app-surface-soft);
+
+    --icon-picker-item-border:
+        var(--app-border);
+
+    --icon-picker-selected-border:
+        var(--app-green-active);
+
+    --icon-picker-selected-bg:
+        var(--app-surface-raised);
+
+    --icon-picker-button-border:
+        var(--app-border);
+
+    --icon-picker-shadow:
+        rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
 }
 
 
@@ -33,6 +55,7 @@
 .habit-icon-picker {
     position: fixed;
     inset: 0;
+
     z-index: 1000;
 
     width: 100%;
@@ -48,16 +71,12 @@
     overflow: hidden;
 
     background:
-        linear-gradient(
-            180deg,
-            #f1f2f4 0%,
-            #f5f6f8 100%
-        );
+        var(--icon-picker-bg);
 }
 
 
 /* =========================================================
-   ОСНОВНОЙ БЕЛЫЙ ЭКРАН
+   ОСНОВНОЙ ЭКРАН
    ========================================================= */
 
 .habit-icon-picker__sheet {
@@ -65,6 +84,7 @@
 
     width: 100%;
     height: 100%;
+
     min-height: 0;
 
     display: flex;
@@ -74,15 +94,11 @@
 
     overflow: hidden;
 
-    color: var(--icon-picker-text);
+    color:
+        var(--icon-picker-text);
 
     background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(255, 255, 255, 1) 0%,
-            rgba(253, 253, 254, 1) 42%,
-            rgba(250, 250, 251, 1) 100%
-        );
+        var(--icon-picker-bg);
 
     font-family:
         -apple-system,
@@ -93,17 +109,19 @@
         Arial,
         sans-serif;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        geometricPrecision;
 }
-
-
 
 
 /* =========================================================
    СКРЫВАЕМ НИЖНЮЮ НАВИГАЦИЮ
    ========================================================= */
 
-body:has(.habit-icon-picker) .bottom-navigation {
+body:has(.habit-icon-picker)
+.bottom-navigation {
     display: none !important;
 }

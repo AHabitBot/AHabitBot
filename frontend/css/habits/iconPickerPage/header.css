@@ -1,11 +1,11 @@
-
 /* =========================================================
-   HEADER
+   ICON PICKER — HEADER
    ========================================================= */
 
 .habit-icon-picker__header {
     position: relative;
-    z-index: 5;
+
+    z-index: 20;
 
     flex: 0 0 auto;
 
@@ -13,26 +13,104 @@
     min-height: 104px;
 
     display: grid;
-    grid-template-columns: 44px minmax(0, 1fr) 44px;
+
+    grid-template-columns:
+        44px
+        minmax(0, 1fr)
+        44px;
+
     align-items: end;
+
     gap: 8px;
 
     box-sizing: border-box;
 
     padding:
-        calc(14px + env(safe-area-inset-top))
+        calc(
+            14px +
+            env(safe-area-inset-top)
+        )
         22px
         14px;
 
     background:
         linear-gradient(
             180deg,
-            rgba(255, 255, 255, 1) 0%,
-            rgba(255, 255, 255, 0.97) 72%,
-            rgba(255, 255, 255, 0.88) 100%
+
+            var(--app-bg)
+            0%,
+
+            color-mix(
+                in srgb,
+                var(--app-bg)
+                96%,
+                transparent
+            )
+            72%,
+
+            color-mix(
+                in srgb,
+                var(--app-bg)
+                86%,
+                transparent
+            )
+            100%
         );
 }
 
+
+/* =========================================================
+   BACK
+   ========================================================= */
+
+.habit-icon-picker__back-button {
+    grid-column: 1;
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    justify-self: start;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    outline: 0;
+
+    background:
+        transparent;
+
+    color:
+        var(--app-green-ui);
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+.habit-icon-picker__back-button
+.back-icon {
+    color:
+        currentColor;
+
+    font-size: 27px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 28;
+}
 
 
 /* =========================================================
@@ -45,9 +123,13 @@
     min-width: 0;
 
     margin: 0;
+
     padding-bottom: 8px;
 
-    color: var(--app-text-primary);
+    overflow: hidden;
+
+    color:
+        var(--app-text-title);
 
     font-family:
         -apple-system,
@@ -61,16 +143,37 @@
     font-size: 23px;
     font-weight: 650;
     line-height: 1.1;
-    letter-spacing: -0.035em;
+
+    letter-spacing:
+        -0.035em;
 
     text-align: center;
 
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-overflow:
+        ellipsis;
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+    white-space:
+        nowrap;
+
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        geometricPrecision;
+}
+
+
+/* =========================================================
+   PRESS
+   ========================================================= */
+
+.habit-icon-picker__back-button:active,
+.habit-icon-picker__back-button.is-pressed {
+    transform:
+        scale(0.91);
+
+    opacity:
+        0.78;
 }
 
 
@@ -78,7 +181,9 @@
    RESPONSIVE
    ========================================================= */
 
-@media (max-width: 380px) {
+@media (
+    max-width: 380px
+) {
 
     .habit-icon-picker__header {
         min-height: 92px;
@@ -90,16 +195,28 @@
 
         padding-left: 17px;
         padding-right: 17px;
+
         padding-bottom: 11px;
     }
 
+
+    .habit-icon-picker__back-button {
+        width: 46px;
+        height: 46px;
+    }
+
+
     .habit-icon-picker__title {
         padding-bottom: 9px;
+
         font-size: 21px;
     }
 }
 
-@media (min-width: 431px) {
+
+@media (
+    min-width: 431px
+) {
 
     .habit-icon-picker__header {
         padding-left: 26px;
@@ -107,18 +224,28 @@
     }
 }
 
-@media (max-height: 720px) {
+
+@media (
+    max-height: 720px
+) {
 
     .habit-icon-picker__header {
         min-height: 80px;
 
         padding-top:
-            calc(8px + env(safe-area-inset-top));
+            calc(
+                8px +
+                env(safe-area-inset-top)
+            );
+
         padding-bottom: 8px;
     }
 }
 
-@media (max-height: 620px) {
+
+@media (
+    max-height: 620px
+) {
 
     .habit-icon-picker__header {
         min-height: 70px;
