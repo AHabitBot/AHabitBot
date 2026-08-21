@@ -586,26 +586,63 @@
 
 
 /* =========================================================
-   DARK
+   DARK — БОЛЕЕ ЯРКИЕ ЦВЕТА
 
-   Цвета сами не инвертируем.
-   Чуть снижаем яркость невыбранных,
-   чтобы они не светились на графитовом фоне.
+   Цвета становятся ближе по насыщенности
+   к цветным карточкам привычек.
    ========================================================= */
 
 :root[data-theme="dark"]
 .add-habit-v2__color:not(.is-selected) {
+    background:
+        linear-gradient(
+            145deg,
+            var(--color-selected-start) 0%,
+            var(--color-selected-middle) 58%,
+            var(--color-selected-end) 100%
+        );
+
     filter:
-        brightness(0.88)
-        saturate(0.92);
+        brightness(0.96)
+        saturate(1.10);
+
+    box-shadow:
+        0
+        4px
+        10px
+        rgba(
+            0,
+            0,
+            0,
+            0.14
+        );
 }
 
 
 :root[data-theme="dark"]
 .add-habit-v2__color.is-selected {
+    background:
+        linear-gradient(
+            145deg,
+            var(--color-selected-start) 0%,
+            var(--color-selected-middle) 50%,
+            var(--color-selected-end) 100%
+        );
+
     filter:
-        brightness(0.98)
-        saturate(1.08);
+        brightness(1.06)
+        saturate(1.18);
+
+    box-shadow:
+        0
+        6px
+        12px
+        var(--color-shadow),
+
+        0
+        0
+        9px
+        var(--color-shadow);
 }
 
 
