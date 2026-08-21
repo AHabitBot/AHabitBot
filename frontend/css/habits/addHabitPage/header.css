@@ -1,112 +1,194 @@
 /* =========================================================
-   ADD HABIT V2
-   Главный файл экрана добавления привычки
+   ADD HABIT V2 — HEADER
    ========================================================= */
 
 
 /* =========================================================
-   ИМПОРТЫ
+   HEADER
    ========================================================= */
 
-@import url("./header.css");
-@import url("./name.css");
-@import url("./colors.css");
-@import url("./size.css");
-
-
-/* =========================================================
-   ЛОКАЛЬНЫЕ ТОКЕНЫ
-
-   Экран больше не имеет собственной Light-палитры.
-   Он использует общую дизайн-систему приложения.
-   ========================================================= */
-
-:root {
-    --add-habit-bg:
-        var(--app-bg);
-
-    --add-habit-primary:
-        var(--app-text-primary);
-
-    --add-habit-secondary:
-        var(--app-text-secondary);
-
-    --add-habit-light:
-        var(--app-text-muted);
-
-    --add-habit-border:
-        var(--app-border);
-
-    --add-habit-soft:
-        var(--app-surface-soft);
-
-    --add-habit-white:
-        var(--app-surface);
-
-    --add-habit-blue:
-        var(--app-green-ui);
-}
-
-
-/* =========================================================
-   ОБЩИЙ ЭКРАН
-   ========================================================= */
-
-.add-habit-v2 {
-    position: relative;
-
+.add-habit-v2__header {
     width: 100%;
-    min-height: 100dvh;
+
+    display: grid;
+
+    grid-template-columns:
+        50px
+        minmax(0, 1fr)
+        50px;
+
+    align-items: center;
+
+    gap: 8px;
 
     box-sizing: border-box;
 
-    padding:
-        calc(
-            22px +
-            env(safe-area-inset-top)
-        )
-        18px
-        calc(
-            32px +
-            env(safe-area-inset-bottom)
-        );
-
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    color:
-        var(--add-habit-primary);
-
-    background:
-        var(--add-habit-bg);
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        Inter,
-        Arial,
-        sans-serif;
-
-    -webkit-font-smoothing:
-        antialiased;
-
-    text-rendering:
-        geometricPrecision;
-
-    overscroll-behavior:
-        contain;
+    margin-bottom: 24px;
 }
 
 
 /* =========================================================
-   СКРЫВАЕМ НИЖНЮЮ НАВИГАЦИЮ
+   BACK BUTTON
    ========================================================= */
 
-body:has(.add-habit-v2)
-.bottom-navigation {
-    display: none !important;
+.add-habit-v2__back-button {
+    grid-column: 1;
+
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    justify-self: start;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: var(--app-green-ui);
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   BACK ICON
+   ========================================================= */
+
+.add-habit-v2__back-button .back-icon {
+    display: block;
+
+    color: currentColor;
+
+    font-size: 27px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 450,
+        "GRAD" 0,
+        "opsz" 28;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.add-habit-v2__title {
+    grid-column: 2;
+
+    min-width: 0;
+
+    justify-self: center;
+
+    margin: 0;
+
+    color: var(--add-habit-primary);
+
+    font-size: 23px;
+    font-weight: 650;
+    line-height: 1.1;
+
+    letter-spacing: -0.035em;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SAVE BUTTON
+   ========================================================= */
+
+.add-habit-v2__save-button {
+    grid-column: 3;
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    justify-self: end;
+
+    margin: 0;
+    padding: 0;
+
+    border:
+        1px solid
+        var(--app-border);
+
+    border-radius: 50%;
+
+    outline: 0;
+
+    background:
+        var(--app-surface);
+
+    color:
+        var(--app-green-active);
+
+    box-shadow:
+        var(--app-shadow);
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+        transform 90ms ease,
+        opacity 90ms ease;
+}
+
+
+/* =========================================================
+   SAVE ICON
+   ========================================================= */
+
+.add-habit-v2__save-button .save-icon {
+    display: block;
+
+    color: currentColor;
+
+    font-size: 27px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 550,
+        "GRAD" 0,
+        "opsz" 28;
+}
+
+
+/* =========================================================
+   PRESS
+   ========================================================= */
+
+.add-habit-v2__back-button:active,
+.add-habit-v2__back-button.is-pressed,
+.add-habit-v2__save-button:active,
+.add-habit-v2__save-button.is-pressed {
+    transform: scale(0.91);
+
+    opacity: 0.78;
 }
 
 
@@ -115,36 +197,41 @@ body:has(.add-habit-v2)
    ========================================================= */
 
 :root[data-theme="dark"]
-.add-habit-v2 {
+.add-habit-v2__save-button {
     background:
-        var(--app-bg);
+        var(--app-surface-raised);
 }
 
 
 /* =========================================================
-   АДАПТАЦИЯ ОБЩЕГО ЭКРАНА
+   SMALL SCREENS
    ========================================================= */
 
-@media (
-    max-width: 380px
-) {
+@media (max-width: 380px) {
 
-    .add-habit-v2 {
-        padding-left: 14px;
-        padding-right: 14px;
+    .add-habit-v2__header {
+        grid-template-columns:
+            46px
+            minmax(0, 1fr)
+            46px;
+
+        gap: 6px;
     }
-}
 
 
-@media (
-    max-height: 720px
-) {
+    .add-habit-v2__back-button {
+        width: 46px;
+        height: 46px;
+    }
 
-    .add-habit-v2 {
-        padding-top:
-            calc(
-                14px +
-                env(safe-area-inset-top)
-            );
+
+    .add-habit-v2__save-button {
+        width: 44px;
+        height: 44px;
+    }
+
+
+    .add-habit-v2__title {
+        font-size: 22px;
     }
 }
