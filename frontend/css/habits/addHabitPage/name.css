@@ -212,15 +212,22 @@
     margin: 0;
     padding: 0;
 
-    border: none;
-
-    outline: none;
+    /* Убираем любое внутреннее оформление input */
+    border: 0 !important;
+    border-radius: 0 !important;
+    outline: 0 !important;
 
     color:
         var(--app-text-primary);
 
     background:
-        transparent;
+        transparent !important;
+
+    background-color:
+        transparent !important;
+
+    box-shadow:
+        none !important;
 
     font: inherit;
 
@@ -233,8 +240,34 @@
 
     appearance: none;
     -webkit-appearance: none;
+
+    -webkit-box-shadow:
+        none !important;
+
+    -webkit-tap-highlight-color:
+        transparent;
 }
 
+
+.add-habit-v2__name-input:hover,
+.add-habit-v2__name-input:focus,
+.add-habit-v2__name-input:focus-visible,
+.add-habit-v2__name-input:active {
+    border: 0 !important;
+    outline: 0 !important;
+
+    background:
+        transparent !important;
+
+    background-color:
+        transparent !important;
+
+    box-shadow:
+        none !important;
+
+    -webkit-box-shadow:
+        none !important;
+}
 
 /* =========================================================
    PLACEHOLDER
