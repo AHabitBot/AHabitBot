@@ -17,6 +17,10 @@ import {
     peekResource
 } from "../core/resourceCache.js"
 
+import {
+    t
+} from "../../i18n/core/i18n.js"
+
 
 /* =========================================================
    PROFILE RESOURCE
@@ -148,7 +152,7 @@ export function renderProfileMainPage(
             <header class="profile-header">
 
                 <h1 class="profile-header__title">
-                    Профиль
+                    ${t("profile.main.title")}
                 </h1>
 
             </header>

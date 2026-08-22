@@ -12,6 +12,10 @@ import {
     isProfileFeatureEnabled
 } from "./profileFeatures.js"
 
+import {
+    t
+} from "../../i18n/core/i18n.js"
+
 
 /* =========================================================
    PROFILE V2 — КОМПОНЕНТЫ
@@ -150,7 +154,7 @@ export function renderProfileUserCard(
                     <img
                         class="profile-user-card__avatar"
                         src="${avatar.image}"
-                        alt="Аватар пользователя"
+                        alt="${t("profile.main.avatarAlt")}"
                     >
 
                 </div>
@@ -175,7 +179,7 @@ export function renderProfileUserCard(
                                         data-profile-edit-nickname
                                         role="button"
                                         tabindex="0"
-                                        aria-label="Изменить никнейм"
+                                        aria-label="${t("profile.main.editNicknameAria")}"
                                     >
                                         edit
                                     </span>
@@ -199,7 +203,12 @@ export function renderProfileUserCard(
                         </span>
 
                         <span class="profile-user-card__level-text">
-                            Уровень ${level}
+                            ${t(
+                                "profile.main.level",
+                                {
+                                    level
+                                }
+                            )}
                         </span>
 
                     </div>
@@ -213,11 +222,13 @@ export function renderProfileUserCard(
 
                 <div
                     class="profile-user-card__progress"
-                    aria-label="
-                        Прогресс уровня:
-                        ${levelXp} из
-                        ${levelXpRequired} XP
-                    "
+                    aria-label="${t(
+                        "profile.main.levelProgressAria",
+                        {
+                            current: levelXp,
+                            required: levelXpRequired
+                        }
+                    )}"
                 >
                     <div
                         class="profile-user-card__progress-fill"
@@ -361,7 +372,7 @@ export function renderProfileMenu(
                     </span>
 
                     <span class="profile-menu__label">
-                        Игровые показатели
+                        ${t("profile.main.menu.stats")}
                     </span>
 
                 </div>
@@ -390,7 +401,7 @@ export function renderProfileMenu(
                     </span>
 
                     <span class="profile-menu__label">
-                        Достижения
+                        ${t("profile.main.menu.achievements")}
                     </span>
 
                 </div>
@@ -432,7 +443,7 @@ export function renderProfileMenu(
                     </span>
 
                     <span class="profile-menu__label">
-                        Внешний вид
+                        ${t("profile.main.menu.appearance")}
                     </span>
 
                 </div>
@@ -463,7 +474,7 @@ export function renderProfileMenu(
                     </span>
 
                     <span class="profile-menu__label">
-                        Данные и настройки
+                        ${t("profile.main.menu.settings")}
                     </span>
 
                 </div>
@@ -494,7 +505,7 @@ export function renderProfileMenu(
                     </span>
 
                     <span class="profile-menu__label">
-                        Поддержка
+                        ${t("profile.main.menu.support")}
                     </span>
 
                 </div>
@@ -525,7 +536,7 @@ export function renderProfileMenu(
                     </span>
 
                     <span class="profile-menu__label">
-                        Пригласить друга
+                        ${t("profile.main.menu.referral")}
                     </span>
 
                 </div>
@@ -564,7 +575,7 @@ export function renderProfileMenu(
                     </span>
 
                     <span class="profile-menu__label">
-                        Архив привычек
+                        ${t("profile.main.menu.archive")}
                     </span>
 
                 </div>
@@ -593,7 +604,7 @@ export function renderProfileSectionHeader(
                 type="button"
                 class="profile-section-header__back"
                 data-profile-back
-                aria-label="Назад"
+                aria-label="${t("profile.main.sectionBackAria")}"
             >
                 <span
                     class="material-symbols-rounded"

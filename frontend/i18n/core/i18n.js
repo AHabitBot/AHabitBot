@@ -26,6 +26,10 @@ import leaderboardSeasonRu from "../leaderboard/season/ru.js";
 import leaderboardSeasonUk from "../leaderboard/season/uk.js";
 import leaderboardSeasonEn from "../leaderboard/season/en.js";
 
+import profileMainRu from "../profile/main/ru.js";
+import profileMainUk from "../profile/main/uk.js";
+import profileMainEn from "../profile/main/en.js";
+
 import navigationRu from "../common/navigation/ru.js";
 import navigationUk from "../common/navigation/uk.js";
 import navigationEn from "../common/navigation/en.js";
@@ -55,6 +59,7 @@ const dictionaries = Object.freeze({
         emojiRu,
         leaderboardGlobalRu,
         leaderboardSeasonRu,
+        profileMainRu,
         navigationRu,
     ),
     uk: mergeDictionaries(
@@ -67,6 +72,7 @@ const dictionaries = Object.freeze({
         emojiUk,
         leaderboardGlobalUk,
         leaderboardSeasonUk,
+        profileMainUk,
         navigationUk,
     ),
     en: mergeDictionaries(
@@ -79,6 +85,7 @@ const dictionaries = Object.freeze({
         emojiEn,
         leaderboardGlobalEn,
         leaderboardSeasonEn,
+        profileMainEn,
         navigationEn,
     ),
 });

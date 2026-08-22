@@ -47,6 +47,10 @@ import {
     removeBottomNavigation
 } from "../navigation.js"
 
+import {
+    t
+} from "../../i18n/core/i18n.js"
+
 
 /* =========================================================
    PROFILE V2 — СОБЫТИЯ
@@ -336,7 +340,7 @@ function openProfileSection(
 
 function showProfileDevelopmentMessage() {
     const message =
-        "Раздел пока ещё находится на этапе разработки"
+        t("profile.main.development")
 
 
     const telegramWebApp =
