@@ -1,3 +1,5 @@
+import { t } from "../i18n/core/i18n.js";
+
 const NAVIGATION_ID = "bottom-navigation";
 const NAVIGATION_FADE_ID = "bottom-navigation-fade";
 
@@ -35,7 +37,7 @@ export function renderBottomNavigation(
                         }
                     "
                     data-navigation-page="profile"
-                    aria-label="Открыть профиль"
+                    aria-label="${t("common.navigation.profile.aria")}"
                     ${
                         activePage === "profile"
                             ? 'aria-current="page"'
@@ -69,7 +71,7 @@ export function renderBottomNavigation(
         <nav
             id="${NAVIGATION_ID}"
             class="bottom-navigation"
-            aria-label="Основная навигация"
+            aria-label="${t("common.navigation.aria")}"
         >
 
             <button
@@ -83,7 +85,7 @@ export function renderBottomNavigation(
                     }
                 "
                 data-navigation-page="habits"
-                aria-label="Открыть привычки"
+                aria-label="${t("common.navigation.habits.aria")}"
                 ${
                     activePage === "habits"
                         ? 'aria-current="page"'
@@ -117,7 +119,7 @@ export function renderBottomNavigation(
                     }
                 "
                 data-navigation-page="leaderboard"
-                aria-label="Открыть лидерборд"
+                aria-label="${t("common.navigation.leaderboard.aria")}"
                 ${
                     activePage === "leaderboard"
                         ? 'aria-current="page"'

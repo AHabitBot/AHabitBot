@@ -1,4 +1,36 @@
-import { formatCurrentDate } from "../habitsUtils.js"
+import {
+    getLanguage,
+    t
+} from "../../../i18n/core/i18n.js";
+
+
+function formatEmptyPageDate() {
+    const language = getLanguage();
+
+    const localeByLanguage = {
+        ru: "ru-RU",
+        uk: "uk-UA",
+        en: "en-US"
+    };
+
+    const locale =
+        localeByLanguage[language]
+        || localeByLanguage.ru;
+
+    const formatted =
+        new Intl.DateTimeFormat(
+            locale,
+            {
+                weekday: "short",
+                day: "numeric",
+                month: "long"
+            }
+        ).format(new Date());
+
+    return formatted.charAt(0).toUpperCase()
+        + formatted.slice(1);
+}
+
 
 export function renderHabitsEmpty() {
     return `
@@ -6,21 +38,21 @@ export function renderHabitsEmpty() {
             <div class="habits-v2-empty__content">
 
                 <div class="habits-v2-empty__date">
-                    ${formatCurrentDate()}
+                    ${formatEmptyPageDate()}
                 </div>
 
                 <h1 class="habits-v2-empty__title">
-                    Начните свой путь.
+                    ${t("habits.empty.title")}
                 </h1>
 
                 <div class="habits-v2-empty__subtitle">
-                    Создайте привычку
+                    ${t("habits.empty.subtitle")}
                 </div>
 
                 <button
                     class="habits-v2-empty__add-button"
                     type="button"
-                    aria-label="Создать привычку"
+                    aria-label="${t("habits.empty.createAria")}"
                     data-action="open-add-habit"
                 >
                     +
@@ -28,5 +60,5 @@ export function renderHabitsEmpty() {
 
             </div>
         </section>
-    `
+    `;
 }
