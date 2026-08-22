@@ -201,7 +201,7 @@ function renderProfileAppearanceHero() {
     return `
         <section
             class="profile-appearance-hero"
-            aria-label=t("profile.appearance.previewAria")
+            aria-label="${t("profile.appearance.previewAria")}"
         >
 
             <img
@@ -223,7 +223,7 @@ function renderProfileAppearanceHero() {
                 <img
                     class="profile-appearance-hero__avatar"
                     src="${avatar?.image || ""}"
-                    alt=t("profile.appearance.characterAlt")
+                    alt="${t("profile.appearance.characterAlt")}"
                 >
 
             </div>
