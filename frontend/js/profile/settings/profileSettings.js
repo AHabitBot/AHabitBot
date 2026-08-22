@@ -8,6 +8,7 @@ import {
 } from "./profileSettingsApi.js";
 
 import {
+    getTimezoneLabel,
     renderProfileTimezonePage
 } from "./profileTimezone.js";
 
@@ -131,7 +132,9 @@ function renderTimezoneRow(timezone = "Europe/Kyiv") {
             </div>
 
             <div class="profile-settings-row__right">
-                <span class="profile-settings-row__value">${timezone}</span>
+                <span class="profile-settings-row__value">
+                    ${getTimezoneLabel(timezone)}
+                </span>
                 <span
                     class="material-symbols-rounded profile-settings-row__chevron"
                     aria-hidden="true"

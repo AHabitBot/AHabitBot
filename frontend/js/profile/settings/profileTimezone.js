@@ -7,6 +7,11 @@ import {
 } from "./profileSettingsApi.js";
 
 
+import {
+    t
+} from "../../../i18n/core/i18n.js";
+
+
 /* =========================================================
    PROFILE TIMEZONE
 
@@ -22,30 +27,45 @@ import {
 
 const TIMEZONE_OPTIONS = [
     {
-        label: "Берлин",
+        labelKey: "profile.settings.timezone.city.berlin",
         value: "Europe/Berlin",
     },
     {
-        label: "Варшава",
+        labelKey: "profile.settings.timezone.city.warsaw",
         value: "Europe/Warsaw",
     },
     {
-        label: "Киев",
+        labelKey: "profile.settings.timezone.city.kyiv",
         value: "Europe/Kyiv",
     },
     {
-        label: "Москва",
+        labelKey: "profile.settings.timezone.city.moscow",
         value: "Europe/Moscow",
     },
     {
-        label: "Осло",
+        labelKey: "profile.settings.timezone.city.oslo",
         value: "Europe/Oslo",
     },
     {
-        label: "Нью-Йорк",
+        labelKey: "profile.settings.timezone.city.newYork",
         value: "America/New_York",
     },
 ];
+
+
+export function getTimezoneLabel(
+    timezone = "Europe/Kyiv"
+) {
+    const option =
+        TIMEZONE_OPTIONS.find(
+            (item) =>
+                item.value === timezone
+        );
+
+    return option
+        ? t(option.labelKey)
+        : timezone;
+}
 
 
 /* =========================================================
@@ -81,7 +101,7 @@ function renderTimezoneOption(
             <div class="profile-timezone-option__content">
 
                 <div class="profile-timezone-option__label">
-                    ${option.label}
+                    ${t(option.labelKey)}
                 </div>
 
                 <div class="profile-timezone-option__value">
@@ -407,7 +427,7 @@ export function renderProfileTimezonePage(
         <section class="profile-timezone-page">
 
             ${renderProfileSectionHeader(
-                "Часовой пояс"
+                t("profile.settings.timezone.page.title")
             )}
 
 

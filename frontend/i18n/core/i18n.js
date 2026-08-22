@@ -58,6 +58,14 @@ import settingsLanguageRu from "../profile/settings/language/ru.js";
 import settingsLanguageUk from "../profile/settings/language/uk.js";
 import settingsLanguageEn from "../profile/settings/language/en.js";
 
+import settingsTimezoneRu from "../profile/settings/timezone/ru.js";
+import settingsTimezoneUk from "../profile/settings/timezone/uk.js";
+import settingsTimezoneEn from "../profile/settings/timezone/en.js";
+
+import settingsThemeRu from "../profile/settings/theme/ru.js";
+import settingsThemeUk from "../profile/settings/theme/uk.js";
+import settingsThemeEn from "../profile/settings/theme/en.js";
+
 export const SUPPORTED_LANGUAGES = Object.freeze(["ru", "uk", "en"]);
 
 function mergeDictionaries(...parts) {
@@ -68,6 +76,8 @@ const dictionaries = Object.freeze({
     ru: mergeDictionaries(
         settingsMainRu,
         settingsLanguageRu,
+        settingsTimezoneRu,
+        settingsThemeRu,
         habitsEmptyRu,
         habitsListRu,
         habitDetailsRu,
@@ -85,6 +95,8 @@ const dictionaries = Object.freeze({
     uk: mergeDictionaries(
         settingsMainUk,
         settingsLanguageUk,
+        settingsTimezoneUk,
+        settingsThemeUk,
         habitsEmptyUk,
         habitsListUk,
         habitDetailsUk,
@@ -102,6 +114,8 @@ const dictionaries = Object.freeze({
     en: mergeDictionaries(
         settingsMainEn,
         settingsLanguageEn,
+        settingsTimezoneEn,
+        settingsThemeEn,
         habitsEmptyEn,
         habitsListEn,
         habitDetailsEn,

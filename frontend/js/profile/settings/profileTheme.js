@@ -1,10 +1,19 @@
 import { renderProfileSectionHeader } from "../profileComponents.js";
 import { updateTheme } from "./profileSettingsApi.js";
 import { applyTheme } from "../../core/theme.js";
+import { t } from "../../../i18n/core/i18n.js";
 
 const THEME_OPTIONS = [
-    { label: "Светлая", value: "light", icon: "light_mode" },
-    { label: "Тёмная", value: "dark", icon: "dark_mode" },
+    {
+        labelKey: "profile.settings.theme.option.light",
+        value: "light",
+        icon: "light_mode"
+    },
+    {
+        labelKey: "profile.settings.theme.option.dark",
+        value: "dark",
+        icon: "dark_mode"
+    },
 ];
 
 let requestInProgress = false;
@@ -17,7 +26,7 @@ function renderOptions(currentTheme) {
                 class="profile-theme-option ${selected ? "is-selected" : ""}"
                 data-theme-value="${option.value}">
                 <span class="material-symbols-rounded profile-theme-option__icon">${option.icon}</span>
-                <span class="profile-theme-option__label">${option.label}</span>
+                <span class="profile-theme-option__label">${t(option.labelKey)}</span>
                 <span class="material-symbols-rounded profile-theme-option__check">
                     ${selected ? "check_circle" : "radio_button_unchecked"}
                 </span>
@@ -32,7 +41,7 @@ export function renderProfileThemePage(
 ) {
     root.innerHTML = `
         <section class="profile-theme-page">
-            ${renderProfileSectionHeader("Тема")}
+            ${renderProfileSectionHeader(t("profile.settings.theme.page.title"))}
             <main class="profile-theme-body">
                 <div class="profile-theme-card">
                     ${renderOptions(currentTheme)}
