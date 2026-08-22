@@ -14,6 +14,10 @@ import addHabitRu from "../habits/addHabit/ru.js";
 import addHabitUk from "../habits/addHabit/uk.js";
 import addHabitEn from "../habits/addHabit/en.js";
 
+import emojiRu from "../habits/emoji/ru.js";
+import emojiUk from "../habits/emoji/uk.js";
+import emojiEn from "../habits/emoji/en.js";
+
 import navigationRu from "../common/navigation/ru.js";
 import navigationUk from "../common/navigation/uk.js";
 import navigationEn from "../common/navigation/en.js";
@@ -40,6 +44,7 @@ const dictionaries = Object.freeze({
         habitsListRu,
         habitDetailsRu,
         addHabitRu,
+        emojiRu,
         navigationRu,
     ),
     uk: mergeDictionaries(
@@ -49,6 +54,7 @@ const dictionaries = Object.freeze({
         habitsListUk,
         habitDetailsUk,
         addHabitUk,
+        emojiUk,
         navigationUk,
     ),
     en: mergeDictionaries(
@@ -58,6 +64,7 @@ const dictionaries = Object.freeze({
         habitsListEn,
         habitDetailsEn,
         addHabitEn,
+        emojiEn,
         navigationEn,
     ),
 });

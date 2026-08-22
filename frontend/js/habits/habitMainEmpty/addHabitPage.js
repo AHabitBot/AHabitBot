@@ -1429,7 +1429,14 @@ function createIconMarkup(icon, selectedIcon) {
             }"
             type="button"
             data-habit-icon="${escapeAttribute(icon)}"
-            aria-label="Выбрать значок ${escapeAttribute(icon)}"
+            aria-label="${escapeAttribute(
+        t(
+            "habits.emoji.itemAria",
+            {
+                emoji: icon
+            }
+        )
+    )}"
             aria-pressed="${String(isSelected)}"
         >
             <span
@@ -1485,7 +1492,7 @@ export function renderIconPickerPage(
                 class="habit-icon-picker__sheet"
                 role="dialog"
                 aria-modal="true"
-                aria-label="Выбор значка привычки"
+                aria-label="${t("habits.emoji.screenAria")}"
             >
 
 <!-- Верхняя панель -->
@@ -1496,7 +1503,7 @@ export function renderIconPickerPage(
         class="habit-icon-picker__back-button back-button"
         type="button"
         data-action="close-icon-picker"
-        aria-label="Вернуться к созданию привычки"
+        aria-label="${t("habits.emoji.backAria")}"
     >
 <span
     class="material-symbols-rounded back-icon"
@@ -1520,7 +1527,7 @@ export function renderIconPickerPage(
                     <div
                         class="habit-icon-picker__grid"
                         role="list"
-                        aria-label="Доступные значки привычки"
+                        aria-label="${t("habits.emoji.gridAria")}"
                     >
                         ${iconsMarkup}
                     </div>
@@ -1537,7 +1544,7 @@ export function renderIconPickerPage(
                         type="button"
                         data-action="confirm-habit-icon"
                     >
-                        Выбрать
+                        ${t("habits.emoji.confirm")}
                     </button>
 
                 </footer>
