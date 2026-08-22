@@ -13,12 +13,6 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    padding-top:
-        max(
-            10px,
-            env(safe-area-inset-top)
-        );
-
     padding-bottom:
         110px;
 

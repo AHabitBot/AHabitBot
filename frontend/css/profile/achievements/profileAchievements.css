@@ -19,12 +19,6 @@
     color:
         var(--app-text-primary);
 
-    padding-top:
-        max(
-            10px,
-            env(safe-area-inset-top)
-        );
-
     padding-bottom:
         calc(
             30px +
@@ -41,76 +35,6 @@
     display: none;
 }
 
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.profile-achievements-page
-.profile-section-header {
-    width: 100%;
-    min-height: 54px;
-
-    box-sizing: border-box;
-
-    padding:
-        0
-        8px;
-
-    grid-template-columns:
-        44px
-        1fr
-        44px;
-}
-
-
-.profile-achievements-page
-.profile-section-header__back {
-    width: 40px;
-    height: 40px;
-
-    border-radius: 12px;
-
-    color:
-        var(--app-green-ui);
-}
-
-
-.profile-achievements-page
-.profile-section-header__back
-.material-symbols-rounded {
-    font-size: 28px;
-
-    font-variation-settings:
-        "FILL" 0,
-        "wght" 450,
-        "GRAD" 0,
-        "opsz" 32;
-}
-
-
-.profile-achievements-page
-.profile-section-header__title {
-    color:
-        var(--app-text-title);
-
-    font-family:
-        var(
-            --font-primary,
-            -apple-system,
-            BlinkMacSystemFont,
-            "SF Pro Display",
-            "SF Pro Text",
-            Arial,
-            sans-serif
-        );
-
-    font-size: 22px;
-    font-weight: 750;
-    line-height: 1.15;
-
-    letter-spacing: -0.4px;
-}
 
 
 /* =========================================================

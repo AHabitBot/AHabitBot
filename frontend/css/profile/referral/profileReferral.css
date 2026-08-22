@@ -13,12 +13,6 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    padding-top:
-        max(
-            10px,
-            env(safe-area-inset-top)
-        );
-
     padding-bottom:
         calc(
             28px
@@ -35,80 +29,6 @@
         touch;
 }
 
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.profile-referral-page
-.profile-section-header {
-    width: 100%;
-    min-height: 54px;
-
-    padding:
-        0
-        8px;
-
-    box-sizing: border-box;
-
-    grid-template-columns:
-        44px
-        1fr
-        44px;
-}
-
-
-/* =========================================================
-   BACK BUTTON
-   ========================================================= */
-
-.profile-referral-page
-.profile-section-header__back {
-    width: 40px;
-    height: 40px;
-
-    border-radius: 12px;
-
-    color:
-        var(--app-green-ui);
-}
-
-
-.profile-referral-page
-.profile-section-header__back
-.material-symbols-rounded {
-    font-size: 28px;
-
-    font-variation-settings:
-        "FILL" 0,
-        "wght" 450,
-        "GRAD" 0,
-        "opsz" 32;
-}
-
-
-/* =========================================================
-   HEADER TITLE
-   ========================================================= */
-
-.profile-referral-page
-.profile-section-header__title {
-    font-size: 22px;
-    font-weight: 750;
-    line-height: 1.15;
-
-    letter-spacing: -0.4px;
-
-    color:
-        var(--app-text-title);
-}
-
-
-.profile-referral-page
-.profile-section-header__spacer {
-    width: 40px;
-    height: 40px;
-}
 
 
 /* =========================================================
