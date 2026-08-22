@@ -17,7 +17,16 @@
     color:
         var(--app-text-primary);
 
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.profile-archive-page::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -56,11 +65,10 @@
    ========================================================= */
 
 .profile-archive-body {
-    flex: 1;
+    flex: 0 0 auto;
     min-height: 0;
 
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: visible;
 
     padding:
         0
@@ -69,16 +77,6 @@
 
     box-sizing: border-box;
 
-    overscroll-behavior-y: contain;
-
-    -webkit-overflow-scrolling: touch;
-
-    scrollbar-width: none;
-}
-
-
-.profile-archive-body::-webkit-scrollbar {
-    display: none;
 }
 
 

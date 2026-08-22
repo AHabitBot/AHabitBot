@@ -9,7 +9,6 @@
     display: grid;
 
     grid-template-rows:
-        auto
         minmax(0, 1fr)
         auto;
 
@@ -22,6 +21,31 @@
 
     color:
         var(--app-text-primary);
+}
+
+
+
+
+/* =========================================================
+   SCROLL AREA — HEADER + CONTENT
+   ========================================================= */
+
+.profile-support-scroll {
+    min-height: 0;
+    width: 100%;
+
+    box-sizing: border-box;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.profile-support-scroll::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -102,31 +126,17 @@
    ========================================================= */
 
 .profile-support-body {
-    min-height: 0;
-
     width: 100%;
 
     box-sizing: border-box;
 
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: visible;
 
     padding:
         0
         14px
         14px;
 
-    overscroll-behavior: contain;
-
-    scrollbar-width: none;
-
-    -webkit-overflow-scrolling:
-        touch;
-}
-
-
-.profile-support-body::-webkit-scrollbar {
-    display: none;
 }
 
 

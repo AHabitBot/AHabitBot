@@ -151,6 +151,8 @@ export function renderProfileSupportPage(
     root.innerHTML = `
         <section class="profile-support-page">
 
+            <div class="profile-support-scroll">
+
             <!-- =============================================
                  HEADER
                  ============================================= -->
@@ -192,6 +194,8 @@ export function renderProfileSupportPage(
                 </section>
 
             </main>
+
+            </div>
 
 
             <!-- =============================================

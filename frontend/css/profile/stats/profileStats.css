@@ -18,7 +18,15 @@
     color:
         var(--app-text-primary);
 
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.profile-stats-page::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -30,7 +38,7 @@
     width: 100%;
     min-height: 0;
 
-    flex: 1 1 auto;
+    flex: 0 0 auto;
 
     display: flex;
     flex-direction: column;
@@ -47,19 +55,7 @@
             env(safe-area-inset-bottom)
         );
 
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    overscroll-behavior-y: contain;
-
-    -webkit-overflow-scrolling: touch;
-
-    scrollbar-width: none;
-}
-
-
-.profile-stats-body::-webkit-scrollbar {
-    display: none;
+    overflow: visible;
 }
 
 
