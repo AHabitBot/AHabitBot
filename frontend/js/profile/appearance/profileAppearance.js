@@ -1,3 +1,5 @@
+import { t } from "../../../i18n/core/i18n.js";
+
 import {
     renderProfileSectionHeader
 } from "../profileComponents.js"
@@ -199,7 +201,7 @@ function renderProfileAppearanceHero() {
     return `
         <section
             class="profile-appearance-hero"
-            aria-label="Предпросмотр внешнего вида"
+            aria-label=t("profile.appearance.previewAria")
         >
 
             <img
@@ -221,7 +223,7 @@ function renderProfileAppearanceHero() {
                 <img
                     class="profile-appearance-hero__avatar"
                     src="${avatar?.image || ""}"
-                    alt="Предпросмотр персонажа"
+                    alt=t("profile.appearance.characterAlt")
                 >
 
             </div>
@@ -624,7 +626,7 @@ function renderProfileAppearanceContent(
                 class="profile-appearance-header"
             >
                 ${renderProfileSectionHeader(
-                    "Внешний вид"
+                    t("profile.appearance.title")
                 )}
             </div>
 
@@ -917,7 +919,7 @@ function bindProfileAppearanceEvents(
 
                 window.alert(
                     error?.message ||
-                    "Не удалось сохранить внешний вид"
+                    t("profile.appearance.error.saveGeneric")
                 )
             }
 

@@ -34,6 +34,18 @@ import profileNicknameRu from "../profile/nickname/ru.js";
 import profileNicknameUk from "../profile/nickname/uk.js";
 import profileNicknameEn from "../profile/nickname/en.js";
 
+import profileStatsRu from "../profile/stats/ru.js";
+import profileStatsUk from "../profile/stats/uk.js";
+import profileStatsEn from "../profile/stats/en.js";
+
+import profileAchievementsRu from "../profile/achievements/ru.js";
+import profileAchievementsUk from "../profile/achievements/uk.js";
+import profileAchievementsEn from "../profile/achievements/en.js";
+
+import profileAppearanceRu from "../profile/appearance/ru.js";
+import profileAppearanceUk from "../profile/appearance/uk.js";
+import profileAppearanceEn from "../profile/appearance/en.js";
+
 import navigationRu from "../common/navigation/ru.js";
 import navigationUk from "../common/navigation/uk.js";
 import navigationEn from "../common/navigation/en.js";
@@ -65,6 +77,9 @@ const dictionaries = Object.freeze({
         leaderboardSeasonRu,
         profileMainRu,
         profileNicknameRu,
+        profileStatsRu,
+        profileAchievementsRu,
+        profileAppearanceRu,
         navigationRu,
     ),
     uk: mergeDictionaries(
@@ -79,6 +94,9 @@ const dictionaries = Object.freeze({
         leaderboardSeasonUk,
         profileMainUk,
         profileNicknameUk,
+        profileStatsUk,
+        profileAchievementsUk,
+        profileAppearanceUk,
         navigationUk,
     ),
     en: mergeDictionaries(
@@ -93,6 +111,9 @@ const dictionaries = Object.freeze({
         leaderboardSeasonEn,
         profileMainEn,
         profileNicknameEn,
+        profileStatsEn,
+        profileAchievementsEn,
+        profileAppearanceEn,
         navigationEn,
     ),
 });

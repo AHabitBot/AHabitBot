@@ -12,6 +12,16 @@ import {
     peekResource
 } from "../../core/resourceCache.js"
 
+
+import {
+    getLanguage,
+    t
+} from "../../../i18n/core/i18n.js"
+
+import {
+    getPluralForm
+} from "../../../i18n/core/plural.js"
+
 registerResource(
     RESOURCE_KEYS.ACHIEVEMENTS,
     fetchProfileAchievements
@@ -27,36 +37,23 @@ registerResource(
    ДНИ
    ========================================================= */
 
-function getDaysLabel(value) {
-    const lastTwo =
-        value % 100
+function formatDays(value) {
+    const count =
+        Math.abs(
+            Math.trunc(
+                Number(value) || 0
+            )
+        )
 
-    const last =
-        value % 10
+    const form =
+        getPluralForm(count)
 
-
-    if (
-        lastTwo >= 11 &&
-        lastTwo <= 14
-    ) {
-        return "дней"
-    }
-
-
-    if (last === 1) {
-        return "день"
-    }
-
-
-    if (
-        last >= 2 &&
-        last <= 4
-    ) {
-        return "дня"
-    }
-
-
-    return "дней"
+    return t(
+        `profile.achievements.days.${form}`,
+        {
+            count
+        }
+    )
 }
 
 
@@ -64,36 +61,43 @@ function getDaysLabel(value) {
    ДРУЗЬЯ
    ========================================================= */
 
-function getFriendsLabel(value) {
-    const lastTwo =
-        value % 100
+function formatFriends(value) {
+    const count =
+        Math.abs(
+            Math.trunc(
+                Number(value) || 0
+            )
+        )
 
-    const last =
-        value % 10
+    const form =
+        getPluralForm(count)
 
-
-    if (
-        lastTwo >= 11 &&
-        lastTwo <= 14
-    ) {
-        return "друзей"
-    }
-
-
-    if (last === 1) {
-        return "друг"
-    }
-
-
-    if (
-        last >= 2 &&
-        last <= 4
-    ) {
-        return "друга"
-    }
+    return t(
+        `profile.achievements.friends.${form}`,
+        {
+            count
+        }
+    )
+}
 
 
-    return "друзей"
+function formatConfirmations(value) {
+    const count =
+        Math.abs(
+            Math.trunc(
+                Number(value) || 0
+            )
+        )
+
+    const form =
+        getPluralForm(count)
+
+    return t(
+        `profile.achievements.confirmations.${form}`,
+        {
+            count
+        }
+    )
 }
 
 
@@ -122,8 +126,18 @@ function formatAchievementDate(
     }
 
 
+    const localeByLanguage = {
+        ru: "ru-RU",
+        uk: "uk-UA",
+        en: "en-US"
+    }
+
+    const locale =
+        localeByLanguage[getLanguage()]
+        || localeByLanguage.ru
+
     return date.toLocaleDateString(
-        "ru-RU",
+        locale,
         {
             day: "2-digit",
             month: "2-digit",
@@ -211,7 +225,7 @@ function getAchievementLabel(
         "confirmation"
     ) {
         return (
-            `${target} галочек`
+            formatConfirmations(target)
         )
     }
 
@@ -225,7 +239,7 @@ function getAchievementLabel(
         "invitation"
     ) {
         return (
-            `${target} ${getFriendsLabel(target)}`
+            formatFriends(target)
         )
     }
 
@@ -235,7 +249,7 @@ function getAchievementLabel(
     // =====================================================
 
     return (
-        `${target} ${getDaysLabel(target)}`
+        formatDays(target)
     )
 }
 
@@ -258,7 +272,12 @@ function getAchievementAlt(
         "confirmation"
     ) {
         return (
-            `Подтверждения ${target}`
+            t(
+                "profile.achievements.alt.confirmation",
+                {
+                    target
+                }
+            )
         )
     }
 
@@ -268,13 +287,23 @@ function getAchievementAlt(
         "invitation"
     ) {
         return (
-            `Приглашения ${target}`
+            t(
+                "profile.achievements.alt.invitation",
+                {
+                    target
+                }
+            )
         )
     }
 
 
     return (
-        `Серия ${target} ${getDaysLabel(target)}`
+        t(
+            "profile.achievements.alt.streak",
+            {
+                target
+            }
+        )
     )
 }
 
@@ -292,7 +321,7 @@ function renderReceivedAchievements(
     ) {
         return `
             <div class="profile-achievements-empty">
-                Пока нет полученных достижений
+                ${t("profile.achievements.received.empty")}
             </div>
         `
     }
@@ -423,10 +452,10 @@ function renderNextAchievement(
         "local_fire_department"
 
     let eyebrow =
-        "Серия"
+        t("profile.achievements.type.streak")
 
     let title =
-        `${target} ${getDaysLabel(target)}`
+        formatDays(target)
 
     let modifier =
         "streak"
@@ -444,10 +473,10 @@ function renderNextAchievement(
             "check_circle"
 
         eyebrow =
-            "Подтверждения"
+            t("profile.achievements.type.confirmation")
 
         title =
-            `${target} галочек`
+            formatConfirmations(target)
 
         modifier =
             "confirmation"
@@ -466,10 +495,10 @@ function renderNextAchievement(
             "group"
 
         eyebrow =
-            "Приглашения"
+            t("profile.achievements.type.invitation")
 
         title =
-            `${target} ${getFriendsLabel(target)}`
+            formatFriends(target)
 
         modifier =
             "invitation"
@@ -553,7 +582,13 @@ function renderNextAchievement(
 
                 <div
                     class="profile-achievement-goal__progress"
-                    aria-label="Прогресс ${current} из ${target}"
+                    aria-label="${t(
+                        "profile.achievements.progressAria",
+                        {
+                            current,
+                            target
+                        }
+                    )}"
                 >
 
                     <div
@@ -619,7 +654,7 @@ function renderNextAchievements(
     ) {
         return `
             <div class="profile-achievements-empty">
-                Все доступные достижения получены
+                ${t("profile.achievements.next.empty")}
             </div>
         `
     }
@@ -644,7 +679,7 @@ function renderAchievementsLayout(
         <section class="profile-achievements-page">
 
             ${renderProfileSectionHeader(
-                "Достижения"
+                t("profile.achievements.title")
             )}
 
 
@@ -678,7 +713,7 @@ function renderAchievementsLayout(
 
 
                     <div class="profile-achievements-summary__label">
-                        достижений получено
+                        ${t("profile.achievements.summary.label")}
                     </div>
 
                 </section>
@@ -691,7 +726,7 @@ function renderAchievementsLayout(
                 <section class="profile-achievements-section">
 
                     <h2 class="profile-achievements-section__title">
-                        Полученные
+                        ${t("profile.achievements.received.title")}
                     </h2>
 
 
@@ -711,7 +746,7 @@ function renderAchievementsLayout(
                 <section class="profile-achievements-section">
 
                     <h2 class="profile-achievements-section__title">
-                        Ближайшие цели
+                        ${t("profile.achievements.next.title")}
                     </h2>
 
 
@@ -763,7 +798,13 @@ function renderAchievementsData(
 
     if (summaryElement) {
         summaryElement.textContent =
-            `${data.earned_count} из ${data.total_count}`
+            t(
+                "profile.achievements.summary.value",
+                {
+                    earned: data.earned_count,
+                    total: data.total_count
+                }
+            )
     }
 
 
@@ -814,7 +855,7 @@ function renderAchievementsError(
     if (earnedElement) {
         earnedElement.innerHTML = `
             <div class="profile-achievements-empty">
-                Не удалось загрузить достижения
+                ${t("profile.achievements.error")}
             </div>
         `
     }

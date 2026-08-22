@@ -14,63 +14,42 @@ import {
 } from "../../core/resourceCache.js";
 
 
+import {
+    t
+} from "../../../i18n/core/i18n.js";
+
+import {
+    getPluralForm
+} from "../../../i18n/core/plural.js";
+
+
 /* =========================================================
    PROFILE STATS
    ========================================================= */
 
 
 const PERIODS = [
-    {
-        key: "week",
-        label: "Неделя",
-    },
-    {
-        key: "month",
-        label: "Месяц",
-    },
-    {
-        key: "year",
-        label: "Год",
-    },
+    "week",
+    "month",
+    "year",
 ];
 
 
-const WEEKDAY_LABELS = {
-    mon: "Пн",
-    tue: "Вт",
-    wed: "Ср",
-    thu: "Чт",
-    fri: "Пт",
-    sat: "Сб",
-    sun: "Вс",
-};
-
-
-const WEEKDAY_NAMES = {
-    mon: "понедельник",
-    tue: "вторник",
-    wed: "среду",
-    thu: "четверг",
-    fri: "пятницу",
-    sat: "субботу",
-    sun: "воскресенье",
-};
-
-
-const MONTH_LABELS = [
-    "Янв",
-    "Фев",
-    "Мар",
-    "Апр",
-    "Май",
-    "Июн",
-    "Июл",
-    "Авг",
-    "Сен",
-    "Окт",
-    "Ноя",
-    "Дек",
+const WEEKDAY_KEYS = [
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun",
 ];
+
+
+
+
+
+
 
 
 let currentPeriod = "week";
@@ -86,10 +65,10 @@ const STATS_RESOURCE_KEYS = {
 };
 
 
-PERIODS.forEach((item) => {
+PERIODS.forEach((period) => {
     registerResource(
-        STATS_RESOURCE_KEYS[item.key],
-        () => fetchProfileStats(item.key),
+        STATS_RESOURCE_KEYS[period],
+        () => fetchProfileStats(period),
     );
 });
 
@@ -132,48 +111,24 @@ function getCachedStats(
    PERIOD HELPERS
    ========================================================= */
 
-function getPreviousPeriodLabel(
-    period,
-) {
-    if (period === "month") {
-        return "прошлый месяц";
-    }
-
-    if (period === "year") {
-        return "прошлый год";
-    }
-
-    return "прошлая неделя";
+function getPreviousPeriodLabel(period) {
+    return t(
+        `profile.stats.previous.${period}`
+    );
 }
 
 
-function getCurrentPeriodLabel(
-    period,
-) {
-    if (period === "month") {
-        return "за этот месяц";
-    }
-
-    if (period === "year") {
-        return "за этот год";
-    }
-
-    return "за эту неделю";
+function getCurrentPeriodLabel(period) {
+    return t(
+        `profile.stats.current.${period}`
+    );
 }
 
 
-function getAchievementsPeriodLabel(
-    period,
-) {
-    if (period === "month") {
-        return "Получено за месяц";
-    }
-
-    if (period === "year") {
-        return "Получено за год";
-    }
-
-    return "Получено за неделю";
+function getAchievementsPeriodLabel(period) {
+    return t(
+        `profile.stats.achievements.${period}`
+    );
 }
 
 
@@ -181,75 +136,63 @@ function getAchievementsPeriodLabel(
    WORD FORMS
    ========================================================= */
 
-function getConfirmationWord(
-    value,
-) {
-    const number =
+function formatConfirmations(value) {
+    const count =
         Math.abs(
-            Number(value) || 0,
+            Math.trunc(
+                Number(value) || 0
+            )
         );
 
-    const lastTwo =
-        number % 100;
+    const form =
+        getPluralForm(count);
 
-    const last =
-        number % 10;
-
-    if (
-        lastTwo >= 11 &&
-        lastTwo <= 14
-    ) {
-        return "подтверждений";
-    }
-
-    if (last === 1) {
-        return "подтверждение";
-    }
-
-    if (
-        last >= 2 &&
-        last <= 4
-    ) {
-        return "подтверждения";
-    }
-
-    return "подтверждений";
+    return t(
+        `profile.stats.confirmations.${form}`,
+        {
+            count
+        }
+    );
 }
 
 
-function getDaysWord(
-    value,
-) {
-    const number =
+function formatDays(value) {
+    const count =
         Math.abs(
-            Number(value) || 0,
+            Math.trunc(
+                Number(value) || 0
+            )
         );
 
-    const lastTwo =
-        number % 100;
+    const form =
+        getPluralForm(count);
 
-    const last =
-        number % 10;
+    return t(
+        `profile.stats.days.${form}`,
+        {
+            count
+        }
+    );
+}
 
-    if (
-        lastTwo >= 11 &&
-        lastTwo <= 14
-    ) {
-        return "дней";
-    }
 
-    if (last === 1) {
-        return "день";
-    }
+function formatInvitations(value) {
+    const count =
+        Math.abs(
+            Math.trunc(
+                Number(value) || 0
+            )
+        );
 
-    if (
-        last >= 2 &&
-        last <= 4
-    ) {
-        return "дня";
-    }
+    const form =
+        getPluralForm(count);
 
-    return "дней";
+    return t(
+        `profile.stats.invitations.${form}`,
+        {
+            count
+        }
+    );
 }
 
 
@@ -288,7 +231,7 @@ function renderChange(
                 </span>
 
                 <span>
-                    новый результат
+                    ${t("profile.stats.change.new")}
                 </span>
             </div>
         `;
@@ -374,15 +317,15 @@ function renderPeriodSwitcher(
                             class="
                                 profile-stats-period
                                 ${
-                                    period.key ===
+                                    period ===
                                     activePeriod
                                         ? "is-active"
                                         : ""
                                 }
                             "
-                            data-profile-stats-period="${period.key}"
+                            data-profile-stats-period="${period}"
                         >
-                            ${period.label}
+                            ${t(`profile.stats.period.${period}`)}
                         </button>
                     `
                 )
@@ -440,7 +383,7 @@ function renderWeekdayActivity(
             <div class="profile-stats-card__header">
 
                 <h2 class="profile-stats-card__title">
-                    Активность по дням
+                    ${t("profile.stats.activity.title")}
                 </h2>
 
             </div>
@@ -502,12 +445,9 @@ function renderWeekdayActivity(
                                     <div
                                         class="profile-stats-weekday__label"
                                     >
-                                        ${
-                                            WEEKDAY_LABELS[
-                                                item.key
-                                            ] ||
-                                            item.key
-                                        }
+                                        ${t(
+                                            `profile.stats.weekday.short.${item.key}`
+                                        )}
                                     </div>
 
                                 </div>
@@ -538,17 +478,17 @@ function renderWeekdayActivity(
                             </span>
 
                             <span>
-                                Ты самый активный в
-                                ${
-                                    WEEKDAY_NAMES[
-                                        bestKey
-                                    ] ||
-                                    bestKey
-                                }
-                                ·
-                                ${bestValue}
-                                ${getConfirmationWord(
-                                    bestValue,
+                                ${t(
+                                    "profile.stats.activity.best",
+                                    {
+                                        weekday: t(
+                                            `profile.stats.weekday.best.${bestKey}`
+                                        ),
+                                        confirmations:
+                                            formatConfirmations(
+                                                bestValue
+                                            )
+                                    }
                                 )}
                             </span>
                         </div>
@@ -560,8 +500,7 @@ function renderWeekdayActivity(
                                 profile-stats-best-day--empty
                             "
                         >
-                            Здесь появится твой самый
-                            активный день
+                            ${t("profile.stats.activity.empty")}
                         </div>
                     `
             }
@@ -598,7 +537,7 @@ function renderMainStats(
                 <div class="profile-stats-metric__content">
 
                     <div class="profile-stats-metric__label">
-                        Подтверждения
+                        ${t("profile.stats.metric.confirmations")}
                     </div>
 
                     <div class="profile-stats-metric__value">
@@ -639,7 +578,7 @@ function renderMainStats(
                 <div class="profile-stats-metric__content">
 
                     <div class="profile-stats-metric__label">
-                        Заработано XP
+                        ${t("profile.stats.metric.xp")}
                     </div>
 
                     <div class="profile-stats-metric__value">
@@ -807,16 +746,18 @@ function getGraphLabel(
             source.getDay();
 
         const mapping = [
-            "Вс",
-            "Пн",
-            "Вт",
-            "Ср",
-            "Чт",
-            "Пт",
-            "Сб",
+            "sun",
+            "mon",
+            "tue",
+            "wed",
+            "thu",
+            "fri",
+            "sat",
         ];
 
-        return mapping[day];
+        return t(
+            `profile.stats.weekday.short.${mapping[day]}`
+        );
     }
 
     if (period === "year") {
@@ -826,11 +767,8 @@ function getGraphLabel(
                     point.month.split("-")[1],
                 ) - 1;
 
-            return (
-                MONTH_LABELS[
-                    monthIndex
-                ] ||
-                ""
+            return t(
+                `profile.stats.month.${monthIndex}`
             );
         }
 
@@ -881,8 +819,7 @@ function renderDynamicsGraph(
     if (!sourcePoints.length) {
         return `
             <div class="profile-stats-chart-empty">
-                Пока недостаточно данных
-                для построения графика
+                ${t("profile.stats.chart.empty")}
             </div>
         `;
     }
@@ -1159,32 +1096,17 @@ function getAchievementLabel(
         achievement?.type ===
         "streak"
     ) {
-        return `
-            ${target}
-            ${getDaysWord(target)}
-        `;
+        return formatDays(target);
     }
 
     if (
         achievement?.type ===
         "invitation"
     ) {
-        return `
-            ${target}
-            ${
-                target === 1
-                    ? "приглашение"
-                    : "приглашений"
-            }
-        `;
+        return formatInvitations(target);
     }
 
-    return `
-        ${target}
-        ${getConfirmationWord(
-            target,
-        )}
-    `;
+    return formatConfirmations(target);
 }
 
 
@@ -1303,7 +1225,7 @@ function renderDynamics(
             <div class="profile-stats-card__header">
 
                 <h2 class="profile-stats-card__title">
-                    Динамика активности
+                    ${t("profile.stats.dynamics.title")}
                 </h2>
 
             </div>
@@ -1320,8 +1242,7 @@ function renderDynamics(
 
 
             <p class="profile-stats-dynamics__hint">
-                Медали отмечают дни,
-                когда ты получил достижение.
+                ${t("profile.stats.dynamics.hint")}
             </p>
 
         </section>
@@ -1340,7 +1261,7 @@ function renderLoading(
         <section class="profile-stats-page">
 
             ${renderProfileSectionHeader(
-                "Игровые показатели"
+                t("profile.stats.title")
             )}
 
             <main class="profile-stats-body">
@@ -1357,7 +1278,7 @@ function renderLoading(
                     ></div>
 
                     <span>
-                        Загружаем показатели...
+                        ${t("profile.stats.loading")}
                     </span>
                 </div>
 
@@ -1385,7 +1306,7 @@ function renderError(
         <section class="profile-stats-page">
 
             ${renderProfileSectionHeader(
-                "Игровые показатели"
+                t("profile.stats.title")
             )}
 
             <main class="profile-stats-body">
@@ -1400,11 +1321,11 @@ function renderError(
                     </span>
 
                     <strong>
-                        Не удалось загрузить статистику
+                        ${t("profile.stats.error.title")}
                     </strong>
 
                     <p>
-                        Попробуй открыть раздел ещё раз.
+                        ${t("profile.stats.error.text")}
                     </p>
                 </div>
 
@@ -1427,7 +1348,7 @@ function renderStatsContent(
         <section class="profile-stats-page">
 
             ${renderProfileSectionHeader(
-                "Игровые показатели"
+                t("profile.stats.title")
             )}
 
             <main class="profile-stats-body">
