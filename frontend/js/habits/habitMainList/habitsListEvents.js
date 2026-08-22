@@ -77,6 +77,10 @@ import {
 } from "./habitsListPage.js"
 
 
+import {
+    t
+} from "../../../i18n/core/i18n.js"
+
 /* =========================================================
    СОХРАНЁННАЯ ПОЗИЦИЯ СПИСКА
 
@@ -885,8 +889,8 @@ function updateHabitCardVisualState(
     confirmButton?.setAttribute(
         "aria-label",
         completedToday
-            ? "Привычка выполнена"
-            : "Подтвердить выполнение привычки"
+            ? t("habits.list.card.confirm.completedAria")
+            : t("habits.list.card.confirm.actionAria")
     )
 
     if (description) {
@@ -897,8 +901,13 @@ function updateHabitCardVisualState(
 
         description.textContent =
             completedToday
-                ? `Выполнено +${xpReward} XP`
-                : "В процессе"
+                ? t(
+                    "habits.list.card.status.completed",
+                    {
+                        xp: xpReward
+                    }
+                )
+                : t("habits.list.card.status.inProgress")
     }
 
     progressItems.forEach(
@@ -924,7 +933,12 @@ function updateHabitCardVisualState(
 
     streakContainer?.setAttribute(
         "aria-label",
-        `Текущая серия: ${streak}`
+        t(
+            "habits.list.card.currentStreakAria",
+            {
+                count: streak
+            }
+        )
     )
 }
 

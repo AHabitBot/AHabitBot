@@ -1,4 +1,6 @@
 import { formatCurrentDate } from "../habitsUtils.js"
+import { t } from "../../../i18n/core/i18n.js"
+import { getPluralForm } from "../../../i18n/core/plural.js"
 
 
 export function renderHabitsList(
@@ -19,7 +21,7 @@ export function renderHabitsList(
                         </div>
 
                         <h1 class="habits-v2-list__title">
-                            Главная
+                            ${t("habits.list.title")}
                         </h1>
 
                     </div>
@@ -30,7 +32,7 @@ export function renderHabitsList(
                             class="habits-v2-list__add-button"
                             type="button"
                             data-action="open-add-habit"
-                            aria-label="Создать привычку"
+                            aria-label="${t("habits.list.createAria")}"
                         >
                             +
                         </button>
@@ -90,30 +92,15 @@ function normalizeStatValue(value) {
    ========================================================= */
 
 function formatDays(value) {
-    const days = normalizeStatValue(value)
+    const days = normalizeStatValue(value);
+    const form = getPluralForm(days);
 
-    const lastTwoDigits = days % 100
-    const lastDigit = days % 10
-
-    if (
-        lastTwoDigits >= 11 &&
-        lastTwoDigits <= 14
-    ) {
-        return `${days} дней`
-    }
-
-    if (lastDigit === 1) {
-        return `${days} день`
-    }
-
-    if (
-        lastDigit >= 2 &&
-        lastDigit <= 4
-    ) {
-        return `${days} дня`
-    }
-
-    return `${days} дней`
+    return t(
+        `habits.list.days.${form}`,
+        {
+            count: days
+        }
+    );
 }
 
 
@@ -137,7 +124,7 @@ export function renderHabitsStats(
     return `
         <section
             class="habits-stats"
-            aria-label="Статистика привычек"
+            aria-label="${t("habits.list.stats.aria")}"
         >
 
             <article class="habits-stats__card">
@@ -162,7 +149,7 @@ export function renderHabitsStats(
                 </div>
 
                 <div class="habits-stats__label">
-                    Текущая серия
+                    ${t("habits.list.stats.currentStreak")}
                 </div>
 
             </article>
@@ -190,7 +177,7 @@ export function renderHabitsStats(
                 </div>
 
                 <div class="habits-stats__label">
-                    Максимальная серия
+                    ${t("habits.list.stats.maxStreak")}
                 </div>
 
             </article>
@@ -269,7 +256,7 @@ function renderWeekProgress(progress) {
 export function renderHabitCard(habit = {}) {
     const {
         id = "",
-        name = "Без названия",
+        name = "",
         icon = "✱",
         color = "green",
         size = "large",
@@ -280,7 +267,9 @@ export function renderHabitCard(habit = {}) {
     } = habit
 
     const safeId = escapeHtml(id)
-    const safeName = escapeHtml(name)
+    const safeName = escapeHtml(
+        name || t("habits.list.card.unnamed")
+    )
     const safeIcon = escapeHtml(icon)
 
     const normalizedStreak = Math.max(
@@ -294,8 +283,13 @@ export function renderHabitCard(habit = {}) {
     )
 
     const statusText = completedToday
-        ? `Выполнено +${normalizedXpReward} XP`
-        : "В процессе"
+        ? t(
+            "habits.list.card.status.completed",
+            {
+                xp: normalizedXpReward
+            }
+        )
+        : t("habits.list.card.status.inProgress")
 
     return `
         <article
@@ -326,8 +320,8 @@ export function renderHabitCard(habit = {}) {
                 data-habit-id="${safeId}"
                 aria-label="${
                     completedToday
-                        ? "Привычка выполнена"
-                        : "Подтвердить выполнение привычки"
+                        ? t("habits.list.card.confirm.completedAria")
+                        : t("habits.list.card.confirm.actionAria")
                 }"
                 aria-pressed="${String(completedToday)}"
             >
@@ -357,14 +351,19 @@ export function renderHabitCard(habit = {}) {
 
                 <div
                     class="habit-card__progress"
-                    aria-label="Прогресс за неделю"
+                    aria-label="${t("habits.list.card.weekProgressAria")}"
                 >
                     ${renderWeekProgress(weekProgress)}
                 </div>
 
                 <div
                     class="habit-card__streak"
-                    aria-label="Текущая серия: ${normalizedStreak}"
+                    aria-label="${t(
+                        "habits.list.card.currentStreakAria",
+                        {
+                            count: normalizedStreak
+                        }
+                    )}"
                 >
                     <span
                         class="habit-card__streak-icon"

@@ -2,6 +2,10 @@ import habitsEmptyRu from "../habits/habitsEmpty/ru.js";
 import habitsEmptyUk from "../habits/habitsEmpty/uk.js";
 import habitsEmptyEn from "../habits/habitsEmpty/en.js";
 
+import habitsListRu from "../habits/habitsList/ru.js";
+import habitsListUk from "../habits/habitsList/uk.js";
+import habitsListEn from "../habits/habitsList/en.js";
+
 import navigationRu from "../common/navigation/ru.js";
 import navigationUk from "../common/navigation/uk.js";
 import navigationEn from "../common/navigation/en.js";
@@ -25,18 +29,21 @@ const dictionaries = Object.freeze({
         settingsMainRu,
         settingsLanguageRu,
         habitsEmptyRu,
+        habitsListRu,
         navigationRu,
     ),
     uk: mergeDictionaries(
         settingsMainUk,
         settingsLanguageUk,
         habitsEmptyUk,
+        habitsListUk,
         navigationUk,
     ),
     en: mergeDictionaries(
         settingsMainEn,
         settingsLanguageEn,
         habitsEmptyEn,
+        habitsListEn,
         navigationEn,
     ),
 });

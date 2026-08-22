@@ -1,3 +1,5 @@
+import { getLanguage } from "../../i18n/core/i18n.js";
+
 /* =========================================================
    HABITS UTILS
 
@@ -184,32 +186,26 @@ export function addPressAnimation(element) {
    ========================================================= */
 
 export function formatCurrentDate() {
-    const date = new Date()
+    const localeByLanguage = {
+        ru: "ru-RU",
+        uk: "uk-UA",
+        en: "en-US"
+    };
 
-    const weekdays = [
-        "Вс",
-        "Пн",
-        "Вт",
-        "Ср",
-        "Чт",
-        "Пт",
-        "Сб"
-    ]
+    const locale =
+        localeByLanguage[getLanguage()]
+        || localeByLanguage.ru;
 
-    const months = [
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря"
-    ]
+    const formatted =
+        new Intl.DateTimeFormat(
+            locale,
+            {
+                weekday: "short",
+                day: "numeric",
+                month: "long"
+            }
+        ).format(new Date());
 
-    return `${weekdays[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]}`
+    return formatted.charAt(0).toUpperCase()
+        + formatted.slice(1);
 }
