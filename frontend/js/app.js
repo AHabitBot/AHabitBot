@@ -12,7 +12,6 @@ import {
 } from "./profile/profileMain.js"
 
 import {
-    mountBottomNavigation,
     setActiveNavigationPage,
     canAccessProfile
 } from "./navigation.js"
@@ -271,10 +270,6 @@ async function initV2() {
         initHabitsEvents({
             useStore: true
         })
-
-        mountBottomNavigation(
-            "habits"
-        )
 
         document.body.classList.add(
             "app-ready"

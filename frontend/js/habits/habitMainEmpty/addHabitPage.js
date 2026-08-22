@@ -32,6 +32,10 @@ import {
     addPressAnimation
 } from "../habitsUtils.js"
 
+import {
+    removeBottomNavigation
+} from "../../navigation.js"
+
 
 /* =========================================================
    РЕНДЕР СТРАНИЦЫ СОЗДАНИЯ / РЕДАКТИРОВАНИЯ
@@ -802,6 +806,13 @@ export function openAddHabitPage({
     onHabitSaved = null,
     onCancel = null
 } = {}) {
+    /*
+     * Создание и редактирование — внутренние экраны.
+     * Основная нижняя навигация и её глобальный fade
+     * здесь не должны присутствовать.
+     */
+    removeBottomNavigation()
+
     if (resetDraft) {
         startNewHabitDraft()
     }
@@ -1437,6 +1448,13 @@ function createIconMarkup(icon, selectedIcon) {
 export function renderIconPickerPage(
     selectedIcon = "✱"
 ) {
+    /*
+     * У Icon Picker есть собственный footer/fade.
+     * Глобальный fade нижней навигации поверх него
+     * создавать нельзя.
+     */
+    removeBottomNavigation()
+
     const root = document.getElementById(
         "habits-v2-root"
     )

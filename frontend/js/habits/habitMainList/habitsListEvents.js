@@ -69,6 +69,10 @@ import {
 } from "../habitsUtils.js"
 
 import {
+    removeBottomNavigation
+} from "../../navigation.js"
+
+import {
     renderHabitsStats
 } from "./habitsListPage.js"
 
@@ -731,6 +735,13 @@ export function openHabitDetails(
         onOpenHabitsPage = null
     } = {}
 ) {
+    /*
+     * Детальная страница — внутренний экран привычек.
+     * Убираем одновременно и navigation, и связанный
+     * с ней глобальный fade.
+     */
+    removeBottomNavigation()
+
     const selectedHabit = selectHabit(
         habitId
     )

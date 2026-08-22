@@ -46,6 +46,11 @@ import {
     fetchHabits
 } from "./habitsApi.js"
 
+import {
+    mountBottomNavigation,
+    removeBottomNavigation
+} from "../navigation.js"
+
 
 /* =========================================================
    ПОЛУЧИТЬ КОРНЕВОЙ КОНТЕЙНЕР
@@ -144,6 +149,14 @@ export function openHabitsPageFromStore({
     )
 
     initHabitsPageEvents()
+
+    /*
+     * Главная страница привычек — один из трёх основных
+     * экранов приложения. Нижняя навигация и её fade
+     * должны существовать только здесь, а не на внутренних
+     * экранах раздела.
+     */
+    mountBottomNavigation("habits")
 
     if (!preserveScroll) {
         return
@@ -371,6 +384,8 @@ export function initHabitsEvents({
     )
 
     if (habitDetailsPage) {
+        removeBottomNavigation()
+
         initOpenedHabitDetailsEvents({
             onOpenHabitsPage:
                 openHabitsPageFromStore
@@ -392,6 +407,8 @@ export function initHabitsEvents({
     )
 
     if (iconPickerPage) {
+        removeBottomNavigation()
+
         initIconPickerEvents({
             onBackToAddHabitPage:
                 openAddHabitPageFromIconPicker
@@ -410,6 +427,8 @@ export function initHabitsEvents({
     )
 
     if (addHabitPage) {
+        removeBottomNavigation()
+
         restoreDraftToAddHabitPage()
 
         initAddHabitPageEvents({
