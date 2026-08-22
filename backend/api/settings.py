@@ -15,6 +15,7 @@ from backend.repositories.settings import (
     set_reminders_enabled,
     set_user_timezone,
     set_user_theme,
+    set_user_language,
 )
 
 
@@ -58,6 +59,12 @@ class ThemeUpdateRequest(
     BaseModel
 ):
     theme: str
+
+
+class LanguageUpdateRequest(
+    BaseModel
+):
+    language: str
 
 
 # =========================================================
@@ -145,4 +152,31 @@ async def update_theme(
     return await set_user_theme(
         user_id=user["id"],
         theme=theme,
+    )
+
+
+# =========================================================
+# ИЗМЕНИТЬ ЯЗЫК
+# =========================================================
+
+@router.patch("/language")
+async def update_language(
+    payload: LanguageUpdateRequest,
+    user: CurrentUser,
+):
+    language = (
+        payload.language
+        .strip()
+        .lower()
+    )
+
+    if language not in {"ru", "uk", "en"}:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Недоступный язык",
+        )
+
+    return await set_user_language(
+        user_id=user["id"],
+        language=language,
     )
