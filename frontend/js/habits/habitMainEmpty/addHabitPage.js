@@ -36,6 +36,10 @@ import {
     removeBottomNavigation
 } from "../../navigation.js"
 
+import {
+    t
+} from "../../../i18n/core/i18n.js"
+
 
 /* =========================================================
    РЕНДЕР СТРАНИЦЫ СОЗДАНИЯ / РЕДАКТИРОВАНИЯ
@@ -63,16 +67,16 @@ export function renderAddHabitPage() {
         isHabitDraftEditing()
 
     const pageTitle = isEditing
-        ? "Редактирование привычки"
-        : "Новая привычка"
+        ? t("habits.addHabit.edit.title")
+        : t("habits.addHabit.create.title")
 
     const backButtonLabel = isEditing
-        ? "Вернуться к привычке"
-        : "Вернуться к привычкам"
+        ? t("habits.addHabit.edit.backAria")
+        : t("habits.addHabit.create.backAria")
 
     const saveButtonLabel = isEditing
-        ? "Сохранить изменения"
-        : "Сохранить привычку"
+        ? t("habits.addHabit.edit.saveAria")
+        : t("habits.addHabit.create.saveAria")
 
 
     /* =====================================================
@@ -133,7 +137,7 @@ export function renderAddHabitPage() {
                         class="add-habit-v2__section-label"
                         for="add-habit-name"
                     >
-                        Название
+                        ${t("habits.addHabit.name.label")}
                     </label>
 
                     <div class="add-habit-v2__name-field">
@@ -142,7 +146,7 @@ export function renderAddHabitPage() {
                             class="add-habit-v2__name-icon"
                             type="button"
                             data-action="open-icon-picker"
-                            aria-label="Выбрать значок привычки"
+                            aria-label="${t("habits.addHabit.name.iconAria")}"
                         >
                             <span
                                 class="add-habit-v2__selected-icon"
@@ -158,7 +162,7 @@ export function renderAddHabitPage() {
                             name="habitName"
                             type="text"
                             maxlength="60"
-                            placeholder="Назовите привычку"
+                            placeholder="${t("habits.addHabit.name.placeholder")}"
                             autocomplete="off"
                             autocapitalize="sentences"
                             enterkeyhint="done"
@@ -173,9 +177,9 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="Не тратить на фигню"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.noWaste")}"
                         >
-                            Не тратить на фигню
+                            ${t("habits.addHabit.suggestions.noWaste")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -185,9 +189,9 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="Откладывать деньги"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.saveMoney")}"
                         >
-                            Откладывать деньги
+                            ${t("habits.addHabit.suggestions.saveMoney")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -197,9 +201,9 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="Планировать бюджет"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.planBudget")}"
                         >
-                            Планировать бюджет
+                            ${t("habits.addHabit.suggestions.planBudget")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -209,9 +213,9 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="Читать книгу"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.readBook")}"
                         >
-                            Читать книгу
+                            ${t("habits.addHabit.suggestions.readBook")}
                         </button>
 
                     </div>
@@ -223,13 +227,13 @@ export function renderAddHabitPage() {
                 <section class="add-habit-v2__section">
 
                     <div class="add-habit-v2__section-label">
-                        Цвет
+                        ${t("habits.addHabit.color.label")}
                     </div>
 
                     <div
                         class="add-habit-v2__colors"
                         role="radiogroup"
-                        aria-label="Цвет карточки привычки"
+                        aria-label="${t("habits.addHabit.color.groupAria")}"
                     >
 
                         <!-- 1. Доступен -->
@@ -239,7 +243,7 @@ export function renderAddHabitPage() {
                             data-habit-color="blue"
                             role="radio"
                             aria-checked="true"
-                            aria-label="Голубой цвет"
+                            aria-label="${t("habits.addHabit.color.blue")}"
                         ></button>
 
                         <!-- 2. Доступен -->
@@ -249,7 +253,7 @@ export function renderAddHabitPage() {
                             data-habit-color="green"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Зелёный цвет"
+                            aria-label="${t("habits.addHabit.color.green")}"
                         ></button>
 
                         <!-- 3. Доступен -->
@@ -259,7 +263,7 @@ export function renderAddHabitPage() {
                             data-habit-color="purple"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Фиолетовый цвет"
+                            aria-label="${t("habits.addHabit.color.purple")}"
                         ></button>
 
                         <!-- 4. Закрыт -->
@@ -270,7 +274,7 @@ export function renderAddHabitPage() {
                             data-locked="true"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Оранжевый цвет, доступен с Premium"
+                            aria-label="${t("habits.addHabit.color.orangePremium")}"
                         >
                             <span
                                 class="add-habit-v2__lock"
@@ -287,7 +291,7 @@ export function renderAddHabitPage() {
                             data-habit-color="red"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Красный цвет"
+                            aria-label="${t("habits.addHabit.color.red")}"
                         ></button>
 
                         <!-- 6. Доступен -->
@@ -297,7 +301,7 @@ export function renderAddHabitPage() {
                             data-habit-color="graphite"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Графитовый цвет"
+                            aria-label="${t("habits.addHabit.color.graphite")}"
                         ></button>
 
                         <!-- 7. Закрыт -->
@@ -308,7 +312,7 @@ export function renderAddHabitPage() {
                             data-locked="true"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Бирюзовый цвет, доступен с Premium"
+                            aria-label="${t("habits.addHabit.color.cyanPremium")}"
                         >
                             <span
                                 class="add-habit-v2__lock"
@@ -325,7 +329,7 @@ export function renderAddHabitPage() {
                             data-habit-color="brown"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Кофейный цвет"
+                            aria-label="${t("habits.addHabit.color.brown")}"
                         ></button>
 
                         <!-- 9. Закрыт -->
@@ -336,7 +340,7 @@ export function renderAddHabitPage() {
                             data-locked="true"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Розовый цвет, доступен с Premium"
+                            aria-label="${t("habits.addHabit.color.pinkPremium")}"
                         >
                             <span
                                 class="add-habit-v2__lock"
@@ -353,7 +357,7 @@ export function renderAddHabitPage() {
                             data-habit-color="silver"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Серебристый цвет"
+                            aria-label="${t("habits.addHabit.color.silver")}"
                         ></button>
 
                         <!-- 11. Закрыт -->
@@ -364,7 +368,7 @@ export function renderAddHabitPage() {
                             data-locked="true"
                             role="radio"
                             aria-checked="false"
-                            aria-label="Жёлтый цвет, доступен с Premium"
+                            aria-label="${t("habits.addHabit.color.yellowPremium")}"
                         >
                             <span
                                 class="add-habit-v2__lock"
@@ -383,7 +387,7 @@ export function renderAddHabitPage() {
                 <section class="add-habit-v2__section">
 
                     <div class="add-habit-v2__section-label">
-                        Размер карточки
+                        ${t("habits.addHabit.size.label")}
                     </div>
 
                     <button
@@ -403,12 +407,11 @@ export function renderAddHabitPage() {
                         <div class="add-habit-v2__size-copy">
 
                             <div class="add-habit-v2__size-title">
-                                Большая
+                                ${t("habits.addHabit.size.large.title")}
                             </div>
 
                             <div class="add-habit-v2__size-description">
-                                Подходит для подробного описания<br>
-                                и мотивации
+                                ${t("habits.addHabit.size.large.description")}
                             </div>
 
                         </div>
@@ -1323,8 +1326,7 @@ saveButton?.addEventListener(
             )
 
             window.alert(
-                error?.message ||
-                "Не удалось сохранить привычку"
+                t("habits.addHabit.error.save")
             )
         } finally {
             saveButton.disabled = false
