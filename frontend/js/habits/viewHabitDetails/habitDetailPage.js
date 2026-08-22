@@ -2,6 +2,14 @@ import {
     addPressAnimation
 } from "../habitsUtils.js"
 
+import {
+    t
+} from "../../../i18n/core/i18n.js"
+
+import {
+    getPluralForm
+} from "../../../i18n/core/plural.js"
+
 
 /* =========================================================
    HABIT DETAIL PAGE
@@ -63,28 +71,15 @@ function formatHabitDetailsDays(value) {
     const days =
         normalizeHabitDetailsNumber(value)
 
-    const lastTwoDigits = days % 100
-    const lastDigit = days % 10
+    const form =
+        getPluralForm(days)
 
-    if (
-        lastTwoDigits >= 11 &&
-        lastTwoDigits <= 14
-    ) {
-        return `${days} дней`
-    }
-
-    if (lastDigit === 1) {
-        return `${days} день`
-    }
-
-    if (
-        lastDigit >= 2 &&
-        lastDigit <= 4
-    ) {
-        return `${days} дня`
-    }
-
-    return `${days} дней`
+    return t(
+        `habits.details.days.${form}`,
+        {
+            count: days
+        }
+    )
 }
 
 
@@ -267,33 +262,11 @@ function getHabitDuration(createdAt) {
    НАЗВАНИЯ МЕСЯЦЕВ
    ========================================================= */
 
-const HABIT_DETAILS_MONTH_NAMES = [
-    "Январь",
-    "Февраль",
-    "Март",
-    "Апрель",
-    "Май",
-    "Июнь",
-    "Июль",
-    "Август",
-    "Сентябрь",
-    "Октябрь",
-    "Ноябрь",
-    "Декабрь"
-]
-
-
-/* =========================================================
-   НАЗВАНИЕ МЕСЯЦА
-   ========================================================= */
-
 function getHabitDetailsMonthName(
     monthIndex
 ) {
-    return (
-        HABIT_DETAILS_MONTH_NAMES[
-            monthIndex
-        ] ?? ""
+    return t(
+        `habits.details.calendar.month.${monthIndex}`
     )
 }
 
@@ -468,13 +441,13 @@ function createHabitDetailsCalendar({
    ========================================================= */
 
 const HABIT_DETAILS_WEEK_DAYS = [
-    "Пн",
-    "Вт",
-    "Ср",
-    "Чт",
-    "Пт",
-    "Сб",
-    "Вс"
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
 ]
 
 
@@ -490,7 +463,9 @@ function renderHabitCalendarWeekDays() {
                     class="habit-calendar__weekday"
                     aria-hidden="true"
                 >
-                    ${dayName}
+                    ${t(
+                        `habits.details.calendar.weekday.${dayName}`
+                    )}
                 </div>
             `
         )
@@ -546,21 +521,21 @@ function renderHabitCalendarCell(cell) {
     const stateLabel = []
 
     if (cell.isCompleted) {
-        stateLabel.push("выполнено")
+        stateLabel.push(t("habits.details.calendar.state.completed"))
     }
 
     if (cell.isToday) {
-        stateLabel.push("сегодня")
+        stateLabel.push(t("habits.details.calendar.state.today"))
     }
 
     if (cell.isBeforeCreated) {
         stateLabel.push(
-            "до создания привычки"
+            t("habits.details.calendar.state.beforeCreated")
         )
     }
 
     if (cell.isFuture) {
-        stateLabel.push("будущий день")
+        stateLabel.push(t("habits.details.calendar.state.future"))
     }
 
     const ariaLabel = stateLabel.length
@@ -614,7 +589,7 @@ function renderHabitCalendar({
     return `
         <section
             class="habit-details__calendar"
-            aria-label="Календарь привычки"
+            aria-label="${t("habits.details.calendar.aria")}"
         >
 
             <h2 class="habit-calendar__month">
@@ -651,7 +626,7 @@ export function renderHabitDetailsPage(habit = {}) {
 
     const {
         id = "",
-        name = "Без названия",
+        name = "",
         icon = "✱",
         color = "green",
         completedToday = false,
@@ -673,7 +648,9 @@ export function renderHabitDetailsPage(habit = {}) {
         escapeHabitDetailsHtml(id)
 
     const safeName =
-        escapeHabitDetailsHtml(name)
+        escapeHabitDetailsHtml(
+            name || t("habits.details.unnamed")
+        )
 
     const safeIcon =
         escapeHabitDetailsHtml(icon)
@@ -691,8 +668,13 @@ export function renderHabitDetailsPage(habit = {}) {
         getHabitDuration(createdAt)
 
     const statusText = completedToday
-        ? `Выполнено +${normalizedXpReward} XP`
-        : "В процессе"
+        ? t(
+            "habits.details.status.completed",
+            {
+                xp: normalizedXpReward
+            }
+        )
+        : t("habits.details.status.inProgress")
 
 /*
    Пока API нет.
@@ -723,7 +705,7 @@ const calendarHtml =
     class="habit-details__back-button back-button"
     type="button"
     data-action="close-habit-details"
-    aria-label="Вернуться к привычкам"
+    aria-label="${t("habits.details.backAria")}"
 >
     <span
         class="material-symbols-rounded back-icon"
@@ -739,7 +721,7 @@ const calendarHtml =
         class="habit-details__menu-button"
         type="button"
         data-action="toggle-habit-menu"
-        aria-label="Открыть меню привычки"
+        aria-label="${t("habits.details.menu.openAria")}"
         aria-expanded="false"
         aria-controls="habit-details-menu"
     >
@@ -767,7 +749,7 @@ const calendarHtml =
             </span>
 
             <span>
-                Подтвердить
+                ${t("habits.details.menu.confirm")}
             </span>
         </button>
 
@@ -785,7 +767,7 @@ const calendarHtml =
             </span>
 
             <span>
-                Редактировать
+                ${t("habits.details.menu.edit")}
             </span>
         </button>
 
@@ -806,7 +788,7 @@ const calendarHtml =
             </span>
 
             <span>
-                Архивировать
+                ${t("habits.details.menu.archive")}
             </span>
         </button>
 
@@ -837,7 +819,7 @@ const calendarHtml =
 
                 <section
                     class="habit-details__stats"
-                    aria-label="Статистика привычки"
+                    aria-label="${t("habits.details.stats.aria")}"
                 >
 
                     <article class="habit-details__stat">
@@ -857,7 +839,7 @@ const calendarHtml =
                         </div>
 
                         <div class="habit-details__stat-label">
-                            Текущая серия
+                            ${t("habits.details.stats.currentStreak")}
                         </div>
 
                     </article>
@@ -880,7 +862,7 @@ const calendarHtml =
                         </div>
 
                         <div class="habit-details__stat-label">
-                            Длительность
+                            ${t("habits.details.stats.duration")}
                         </div>
 
                     </article>
@@ -1301,7 +1283,7 @@ export function openHabitArchiveConfirm({
                 class="habit-delete-confirm__title"
                 id="habit-delete-confirm-title"
             >
-                Переместить привычку в архив?
+                ${t("habits.details.archive.title")}
             </h2>
 
             <div class="habit-delete-confirm__actions">
@@ -1314,7 +1296,7 @@ export function openHabitArchiveConfirm({
                     type="button"
                     data-action="confirm-archive-habit"
                 >
-                    Архивировать
+                    ${t("habits.details.menu.archive")}
                 </button>
 
                 <button
@@ -1325,7 +1307,7 @@ export function openHabitArchiveConfirm({
                     type="button"
                     data-action="keep-habit"
                 >
-                    Оставить
+                    ${t("habits.details.archive.keep")}
                 </button>
 
             </div>
