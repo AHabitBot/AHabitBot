@@ -1,3 +1,5 @@
+import { t } from "../../../i18n/core/i18n.js";
+
 /* =========================================================
    PROFILE V2 — РЕДАКТИРОВАНИЕ NICKNAME
    ========================================================= */
@@ -76,7 +78,7 @@ export function openProfileNicknameEditor({
         "profile-nickname-modal__title"
 
     title.textContent =
-        "Изменить никнейм"
+        t("profile.nickname.title")
 
 
     const closeButton =
@@ -90,7 +92,7 @@ export function openProfileNicknameEditor({
 
     closeButton.setAttribute(
         "aria-label",
-        "Закрыть"
+        t("profile.nickname.closeAria")
     )
 
     closeButton.innerHTML = `
@@ -120,7 +122,7 @@ export function openProfileNicknameEditor({
         "profile-nickname-modal__description"
 
     description.textContent =
-        "Выберите новый никнейм. Изменить его можно только один раз."
+        t("profile.nickname.description")
 
 
     /* =====================================================
@@ -147,7 +149,7 @@ export function openProfileNicknameEditor({
         String(currentNickname || "")
 
     input.placeholder =
-        "Введите никнейм"
+        t("profile.nickname.placeholder")
 
     input.autocomplete =
         "off"
@@ -160,7 +162,7 @@ export function openProfileNicknameEditor({
 
     input.setAttribute(
         "aria-label",
-        "Новый никнейм"
+        t("profile.nickname.inputAria")
     )
 
 
@@ -188,7 +190,7 @@ export function openProfileNicknameEditor({
         "profile-nickname-modal__rules"
 
     rules.textContent =
-        "3–20 символов: буквы, цифры и _"
+        t("profile.nickname.rulesFull")
 
 
     /* =====================================================
@@ -218,7 +220,7 @@ export function openProfileNicknameEditor({
         "profile-nickname-modal__save"
 
     saveButton.textContent =
-        "Продолжить"
+        t("profile.nickname.continue")
 
 
     /* =====================================================
@@ -263,7 +265,7 @@ export function openProfileNicknameEditor({
         error.textContent =
             String(
                 message ||
-                "Произошла ошибка"
+                t("profile.nickname.error.generic")
             )
 
         error.hidden = false
@@ -297,7 +299,7 @@ export function openProfileNicknameEditor({
             return {
                 valid: false,
                 message:
-                    "Никнейм должен содержать от 3 до 20 символов"
+                    t("profile.nickname.validation.length")
             }
         }
 
@@ -309,7 +311,7 @@ export function openProfileNicknameEditor({
             return {
                 valid: false,
                 message:
-                    "Используйте только буквы, цифры и символ _"
+                    t("profile.nickname.validation.characters")
             }
         }
 
@@ -322,7 +324,7 @@ export function openProfileNicknameEditor({
             return {
                 valid: false,
                 message:
-                    "Введите новый никнейм"
+                    t("profile.nickname.validation.same")
             }
         }
 
@@ -344,7 +346,7 @@ export function openProfileNicknameEditor({
             window.Telegram?.WebApp
 
         const message =
-            `Изменить никнейм на «${nickname}»?\n\nПосле сохранения изменить его повторно будет нельзя.`
+            t("profile.nickname.confirm", { nickname })
 
 
         if (
@@ -409,7 +411,7 @@ export function openProfileNicknameEditor({
             "function"
         ) {
             showError(
-                "Не удалось сохранить никнейм"
+                t("profile.nickname.error.save")
             )
 
             return
@@ -420,7 +422,7 @@ export function openProfileNicknameEditor({
         input.disabled = true
 
         saveButton.textContent =
-            "Сохраняем..."
+            t("profile.nickname.saving")
 
 
         try {
@@ -448,7 +450,7 @@ export function openProfileNicknameEditor({
             input.disabled = false
 
             saveButton.textContent =
-                "Продолжить"
+                t("profile.nickname.continue")
 
             input.focus()
         }
@@ -574,7 +576,7 @@ export function closeProfileNicknameEditor() {
 
 function getNicknameErrorMessage(error) {
     if (!error) {
-        return "Не удалось изменить никнейм"
+        return t("profile.nickname.error.change")
     }
 
 
@@ -593,5 +595,5 @@ function getNicknameErrorMessage(error) {
     }
 
 
-    return "Не удалось изменить никнейм"
+    return t("profile.nickname.error.change")
 }
