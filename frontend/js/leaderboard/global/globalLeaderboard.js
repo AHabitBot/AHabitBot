@@ -50,33 +50,7 @@ async function fetchAndBuildGlobalLeaderboard() {
 }
 
 
-export function buildGlobalLeaderboardResource(response) {
-    const leaderboardUsers =
-        response.users.map(
-            normalizeLeaderboardUser
-        );
-
-    const currentUser =
-        normalizeCurrentUser(
-            response.current_user
-        );
-
-    return {
-        content:
-            renderGlobalLeaderboard(
-                leaderboardUsers
-            ),
-
-        currentUser
-    };
-}
-
-
-/* =========================================================
-   ОТРЕНДЕРИТЬ ГЛОБАЛЬНЫЙ РЕЙТИНГ
-   ========================================================= */
-
-function renderGlobalLeaderboard(
+export function renderGlobalLeaderboard(
     users = []
 ) {
     const topUsers =
@@ -91,6 +65,24 @@ function renderGlobalLeaderboard(
         topUsers,
         users: listUsers
     });
+}
+
+
+export function buildGlobalLeaderboardResource(response) {
+    const leaderboardUsers =
+        response.users.map(
+            normalizeLeaderboardUser
+        );
+
+    const currentUser =
+        normalizeCurrentUser(
+            response.current_user
+        );
+
+    return {
+        users: leaderboardUsers,
+        currentUser
+    };
 }
 
 
@@ -141,7 +133,7 @@ function normalizeLeaderboardUser(
             ),
 
         xp:
-            formatXp(
+            normalizeNonNegativeInteger(
                 user?.total_xp
             ),
 
@@ -175,10 +167,11 @@ function normalizeCurrentUser(
                 user.rank
             ),
 
-        name: "Вы",
+        name: "",
+        isCurrentUser: true,
 
         xp:
-            formatXp(
+            normalizeNonNegativeInteger(
                 user.total_xp
             ),
 
@@ -234,33 +227,6 @@ function normalizeAvatarKey(
 
 
 /* =========================================================
-   ФОРМАТ XP
-   ========================================================= */
-
-function formatXp(
-    value
-) {
-    const xp =
-        normalizeNonNegativeInteger(
-            value
-        );
-
-    return new Intl.NumberFormat(
-        "ru-RU"
-    )
-        .format(xp)
-        .replaceAll(
-            "\u00A0",
-            " "
-        )
-        .replaceAll(
-            "\u202F",
-            " "
-        );
-}
-
-
-/* =========================================================
    ЧИСЛА
    ========================================================= */
 
@@ -310,5 +276,5 @@ function normalizeName(
             value || ""
         ).trim();
 
-    return name || "Пользователь";
+    return name;
 }

@@ -18,6 +18,14 @@ import emojiRu from "../habits/emoji/ru.js";
 import emojiUk from "../habits/emoji/uk.js";
 import emojiEn from "../habits/emoji/en.js";
 
+import leaderboardGlobalRu from "../leaderboard/global/ru.js";
+import leaderboardGlobalUk from "../leaderboard/global/uk.js";
+import leaderboardGlobalEn from "../leaderboard/global/en.js";
+
+import leaderboardSeasonRu from "../leaderboard/season/ru.js";
+import leaderboardSeasonUk from "../leaderboard/season/uk.js";
+import leaderboardSeasonEn from "../leaderboard/season/en.js";
+
 import navigationRu from "../common/navigation/ru.js";
 import navigationUk from "../common/navigation/uk.js";
 import navigationEn from "../common/navigation/en.js";
@@ -45,6 +53,8 @@ const dictionaries = Object.freeze({
         habitDetailsRu,
         addHabitRu,
         emojiRu,
+        leaderboardGlobalRu,
+        leaderboardSeasonRu,
         navigationRu,
     ),
     uk: mergeDictionaries(
@@ -55,6 +65,8 @@ const dictionaries = Object.freeze({
         habitDetailsUk,
         addHabitUk,
         emojiUk,
+        leaderboardGlobalUk,
+        leaderboardSeasonUk,
         navigationUk,
     ),
     en: mergeDictionaries(
@@ -65,6 +77,8 @@ const dictionaries = Object.freeze({
         habitDetailsEn,
         addHabitEn,
         emojiEn,
+        leaderboardGlobalEn,
+        leaderboardSeasonEn,
         navigationEn,
     ),
 });

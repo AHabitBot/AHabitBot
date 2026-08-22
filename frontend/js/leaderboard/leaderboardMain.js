@@ -18,13 +18,19 @@ import {
 } from "./leaderboardEvents.js";
 
 import {
-    loadGlobalLeaderboard
+    loadGlobalLeaderboard,
+    renderGlobalLeaderboard
 } from "./global/globalLeaderboard.js";
 
 import {
-    loadSeasonLeaderboard
+    loadSeasonLeaderboard,
+    renderSeasonLeaderboard
 }
 from "./season/seasonLeaderboard.js";
+
+import {
+    t
+} from "../../i18n/core/i18n.js";
 
 let leaderboardRoot = null;
 
@@ -182,7 +188,9 @@ async function renderGlobalLeaderboardContent({
         }
 
         content.innerHTML =
-            result.content;
+            renderGlobalLeaderboard(
+                result.users
+            );
 
         hideSeasonHeading();
 
@@ -212,8 +220,7 @@ async function renderGlobalLeaderboardContent({
             content,
             currentUserSlot,
             message:
-                error?.message
-                || "Не удалось загрузить рейтинг"
+                t("leaderboard.global.loadError")
         });
     }
 }
@@ -253,7 +260,9 @@ async function renderSeasonLeaderboardContent({
         }
 
         content.innerHTML =
-            result.content;
+            renderSeasonLeaderboard(
+                result.users
+            );
 
         renderSeasonHeading(
             result.season
@@ -285,8 +294,7 @@ async function renderSeasonLeaderboardContent({
             content,
             currentUserSlot,
             message:
-                error?.message
-                || "Не удалось загрузить сезонный рейтинг"
+                t("leaderboard.season.loadError")
         });
     }
 }
@@ -321,7 +329,12 @@ function renderSeasonHeading(
 
     if (title) {
         title.textContent =
-            season.title;
+            t(
+                "leaderboard.season.title",
+                {
+                    number: season.number
+                }
+            );
     }
 
     if (dates) {
@@ -395,7 +408,7 @@ function setLeaderboardLoading({
             role="status"
             aria-live="polite"
         >
-            Загрузка рейтинга…
+            ${t("leaderboard.common.loading")}
         </div>
     `;
 

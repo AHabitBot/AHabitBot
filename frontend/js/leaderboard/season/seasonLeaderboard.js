@@ -1,16 +1,20 @@
 import {
+    t
+} from "../../../i18n/core/i18n.js";
+
+import {
     fetchSeasonLeaderboard
 } from "../leaderboardApi.js";
+
+import {
+    renderLeaderboardSection
+} from "../leaderboardSection.js";
 
 import {
     RESOURCE_KEYS,
     registerResource,
     getResource
 } from "../../core/resourceCache.js";
-
-import {
-    renderLeaderboardSection
-} from "../leaderboardSection.js";
 
 
 const DEFAULT_AVATAR_KEY =
@@ -76,13 +80,8 @@ export function buildSeasonLeaderboardResource(response) {
         );
 
     return {
-        content:
-            renderSeasonLeaderboard(
-                leaderboardUsers
-            ),
-
+        users: leaderboardUsers,
         currentUser,
-
         season
     };
 }
@@ -92,7 +91,7 @@ export function buildSeasonLeaderboardResource(response) {
    ОТРЕНДЕРИТЬ СЕЗОННЫЙ РЕЙТИНГ
    ========================================================= */
 
-function renderSeasonLeaderboard(
+export function renderSeasonLeaderboard(
     users = []
 ) {
     if (!users.length) {
@@ -141,7 +140,7 @@ function renderEmptySeason() {
                     leaderboard-state__title
                 "
             >
-                В этом сезоне пока нет участников
+                ${t("leaderboard.season.emptyTitle")}
             </div>
 
             <div
@@ -149,9 +148,7 @@ function renderEmptySeason() {
                     leaderboard-state__text
                 "
             >
-                Подтверждай привычки,
-                зарабатывай XP и займи
-                своё место в рейтинге.
+                ${t("leaderboard.season.emptyText")}
             </div>
         </div>
     `;
@@ -205,7 +202,7 @@ function normalizeLeaderboardUser(
             ),
 
         xp:
-            formatXp(
+            normalizeNonNegativeInteger(
                 getSeasonXp(user)
             ),
 
@@ -271,10 +268,11 @@ function normalizeCurrentUser(
                 user.rank
             ),
 
-        name: "Вы",
+        name: "",
+        isCurrentUser: true,
 
         xp:
-            formatXp(
+            normalizeNonNegativeInteger(
                 getSeasonXp(user)
             ),
 
@@ -309,12 +307,6 @@ function normalizeSeason(
             ?? 1
         );
 
-    const title =
-        normalizeSeasonTitle(
-            season.title,
-            number
-        );
-
     const startDate =
         normalizeDate(
             season.start_date
@@ -329,31 +321,9 @@ function normalizeSeason(
 
     return {
         number,
-        title,
         startDate,
         endDate
     };
-}
-
-
-/* =========================================================
-   НАЗВАНИЕ СЕЗОНА
-   ========================================================= */
-
-function normalizeSeasonTitle(
-    value,
-    number
-) {
-    const title =
-        String(
-            value || ""
-        ).trim();
-
-    if (title) {
-        return title;
-    }
-
-    return `Сезон ${number}`;
 }
 
 
@@ -425,33 +395,6 @@ function normalizeAvatarKey(
 
 
 /* =========================================================
-   XP
-   ========================================================= */
-
-function formatXp(
-    value
-) {
-    const xp =
-        normalizeNonNegativeInteger(
-            value
-        );
-
-    return new Intl.NumberFormat(
-        "ru-RU"
-    )
-        .format(xp)
-        .replaceAll(
-            "\u00A0",
-            " "
-        )
-        .replaceAll(
-            "\u202F",
-            " "
-        );
-}
-
-
-/* =========================================================
    ПОЛОЖИТЕЛЬНОЕ ЧИСЛО
    ========================================================= */
 
@@ -505,5 +448,5 @@ function normalizeName(
             value || ""
         ).trim();
 
-    return name || "Пользователь";
+    return name;
 }

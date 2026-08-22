@@ -1,4 +1,13 @@
 import {
+    getLanguage,
+    t
+} from "../../i18n/core/i18n.js";
+
+import {
+    getPluralForm
+} from "../../i18n/core/plural.js";
+
+import {
     getActiveLeaderboardTab,
 } from "./leaderboardStore.js";
 
@@ -45,7 +54,7 @@ export function renderLeaderboardHeader() {
 <div class="leaderboard-header__title-row">
 
     <h1 class="leaderboard-header__title">
-        Лидерборд
+        ${t("leaderboard.common.title")}
     </h1>
 
     <div
@@ -69,7 +78,7 @@ export function renderLeaderboardHeader() {
             <div
                 class="leaderboard-tabs"
                 role="tablist"
-                aria-label="Тип рейтинга"
+                aria-label="${t("leaderboard.common.tabsAria")}"
             >
 
                 <button
@@ -93,7 +102,7 @@ export function renderLeaderboardHeader() {
                     )}
 
                     <span class="leaderboard-tabs__label">
-                        Глобальный
+                        ${t("leaderboard.common.globalTab")}
                     </span>
                 </button>
 
@@ -119,7 +128,7 @@ export function renderLeaderboardHeader() {
                     )}
 
                     <span class="leaderboard-tabs__label">
-                        Сезонный
+                        ${t("leaderboard.common.seasonTab")}
                     </span>
                 </button>
 
@@ -164,7 +173,7 @@ export function renderTopThree(users = []) {
     return `
         <section
             class="leaderboard-top-three"
-            aria-label="Три лучших участника"
+            aria-label="${t("leaderboard.common.topThreeAria")}"
         >
             ${users.map((user) => `
                 <article
@@ -175,7 +184,7 @@ export function renderTopThree(users = []) {
                 >
                     <div
                         class="leaderboard-top-card__crown"
-                        aria-label="${user.rank} место"
+                        aria-label="${t("leaderboard.common.placeAria", { rank: user.rank })}"
                     >
                         ${renderMaterialIcon(
                             "crown",
@@ -187,17 +196,17 @@ export function renderTopThree(users = []) {
                         <img
                             class="leaderboard-top-card__avatar"
                             src="${user.avatar}"
-                            alt="${escapeHtml(user.name)}"
+                            alt="${escapeHtml(getDisplayName(user))}"
                         >
                     </div>
 
                     <div class="leaderboard-top-card__name">
-                        ${escapeHtml(user.name)}
+                        ${escapeHtml(getDisplayName(user))}
                     </div>
 
                     <div
                         class="leaderboard-top-card__xp"
-                        aria-label="${user.xp} очков опыта"
+                        aria-label="${t("leaderboard.common.xpAria", { xp: formatNumber(user.xp) })}"
                     >
                         ${renderMaterialIcon(
                             "award_star",
@@ -205,7 +214,7 @@ export function renderTopThree(users = []) {
                         )}
 
                         <span class="leaderboard-top-card__xp-value">
-                            ${user.xp}
+                            ${formatNumber(user.xp)}
                         </span>
                     </div>
 
@@ -238,7 +247,7 @@ export function renderLeaderboardList(users = []) {
     return `
         <section
             class="leaderboard-list"
-            aria-label="Участники рейтинга"
+            aria-label="${t("leaderboard.common.participantsAria")}"
         >
             ${users.map((user) => `
                 <article class="leaderboard-list__row">
@@ -250,13 +259,13 @@ export function renderLeaderboardList(users = []) {
                     <img
                         class="leaderboard-list__avatar"
                         src="${user.avatar}"
-                        alt="${escapeHtml(user.name)}"
+                        alt="${escapeHtml(getDisplayName(user))}"
                     >
 
                     <div class="leaderboard-list__info">
 
                         <span class="leaderboard-list__name">
-                            ${escapeHtml(user.name)}
+                            ${escapeHtml(getDisplayName(user))}
                         </span>
 
                         <div class="leaderboard-list__streak">
@@ -274,7 +283,7 @@ export function renderLeaderboardList(users = []) {
 
                     <div
                         class="leaderboard-list__xp"
-                        aria-label="${user.xp} очков опыта"
+                        aria-label="${t("leaderboard.common.xpAria", { xp: formatNumber(user.xp) })}"
                     >
                         ${renderMaterialIcon(
                             "award_star",
@@ -282,7 +291,7 @@ export function renderLeaderboardList(users = []) {
                         )}
 
                         <span class="leaderboard-list__xp-value">
-                            ${user.xp}
+                            ${formatNumber(user.xp)}
                         </span>
                     </div>
 
@@ -305,7 +314,7 @@ export function renderCurrentUser(user = null) {
     return `
         <section
             class="leaderboard-current-user"
-            aria-label="Ваше место в рейтинге"
+            aria-label="${t("leaderboard.common.currentUserAria")}"
         >
             <span class="leaderboard-current-user__rank">
                 ${user.rank}
@@ -314,13 +323,13 @@ export function renderCurrentUser(user = null) {
             <img
                 class="leaderboard-current-user__avatar"
                 src="${user.avatar}"
-                alt="${escapeHtml(user.name)}"
+                alt="${escapeHtml(getDisplayName(user))}"
             >
 
             <div class="leaderboard-current-user__info">
 
                 <span class="leaderboard-current-user__name">
-                    ${escapeHtml(user.name)}
+                    ${escapeHtml(getDisplayName(user))}
                 </span>
 
                 <div class="leaderboard-current-user__streak">
@@ -338,7 +347,7 @@ export function renderCurrentUser(user = null) {
 
             <div
                 class="leaderboard-current-user__xp"
-                aria-label="${user.xp} очков опыта"
+                aria-label="${t("leaderboard.common.xpAria", { xp: formatNumber(user.xp) })}"
             >
                 ${renderMaterialIcon(
                     "award_star",
@@ -367,31 +376,61 @@ function formatStreak(value) {
             ? Math.max(0, Math.floor(numericValue))
             : 0;
 
-    const lastTwoDigits =
-        streak % 100;
+    const form =
+        getPluralForm(streak);
 
-    const lastDigit =
-        streak % 10;
+    return t(
+        `leaderboard.common.days.${form}`,
+        {
+            count: streak
+        }
+    );
+}
 
-    if (
-        lastTwoDigits >= 11
-        && lastTwoDigits <= 14
-    ) {
-        return `${streak} дней`;
+
+/* =========================================================
+   DISPLAY NAME
+   ========================================================= */
+
+function getDisplayName(user) {
+    if (user?.isCurrentUser) {
+        return t("leaderboard.common.you");
     }
 
-    if (lastDigit === 1) {
-        return `${streak} день`;
-    }
+    const name =
+        String(user?.name || "").trim();
 
-    if (
-        lastDigit >= 2
-        && lastDigit <= 4
-    ) {
-        return `${streak} дня`;
-    }
+    return (
+        name
+        || t("leaderboard.common.userFallback")
+    );
+}
 
-    return `${streak} дней`;
+
+/* =========================================================
+   NUMBER FORMAT
+   ========================================================= */
+
+function formatNumber(value) {
+    const localeByLanguage = {
+        ru: "ru-RU",
+        uk: "uk-UA",
+        en: "en-US"
+    };
+
+    const locale =
+        localeByLanguage[getLanguage()]
+        || localeByLanguage.ru;
+
+    const number =
+        Number.isFinite(Number(value))
+            ? Math.max(0, Math.floor(Number(value)))
+            : 0;
+
+    return new Intl.NumberFormat(locale)
+        .format(number)
+        .replaceAll("\u00A0", " ")
+        .replaceAll("\u202F", " ");
 }
 
 

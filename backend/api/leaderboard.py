@@ -102,8 +102,6 @@ async def read_season_leaderboard(
             "number":
                 season_number,
 
-            "title":
-                f"Сезон {season_number}",
 
             "start_date":
                 season_start_date.isoformat(),
