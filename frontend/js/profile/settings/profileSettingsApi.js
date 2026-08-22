@@ -161,3 +161,34 @@ export async function updateTheme(theme) {
 
     return data;
 }
+
+
+/* =========================================================
+   ИЗМЕНИТЬ ЯЗЫК
+   ========================================================= */
+
+export async function updateLanguage(language) {
+    const normalizedLanguage = String(language || "").trim().toLowerCase();
+
+    if (!["ru", "uk", "en"].includes(normalizedLanguage)) {
+        throw new Error("Некорректный язык");
+    }
+
+    const data = await apiRequest(
+        "/api/settings/language",
+        {
+            method: "PATCH",
+            body: { language: normalizedLanguage },
+        }
+    );
+
+    if (
+        !data ||
+        typeof data !== "object" ||
+        !["ru", "uk", "en"].includes(data.language)
+    ) {
+        throw new Error("Сервер не вернул язык");
+    }
+
+    return data;
+}

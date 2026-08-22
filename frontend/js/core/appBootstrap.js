@@ -24,6 +24,10 @@ import {
     syncThemeFromSettings
 } from "./theme.js"
 
+import {
+    setLanguage
+} from "../../i18n/core/i18n.js"
+
 
 function normalizeHabit(habit = {}) {
     return {
@@ -199,6 +203,11 @@ export async function bootstrapApp() {
     /*
      * Один раз наполняем всё состояние приложения.
      */
+    setLanguage(
+        data.settings?.language || "ru",
+        { emit: false }
+    )
+
     syncThemeFromSettings(data.settings || {})
 
     hydrateResources(data)
