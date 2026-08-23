@@ -7,87 +7,43 @@ import {
 } from "./profileSupportEvents.js";
 
 
+import {
+    t,
+} from "../../../i18n/core/i18n.js";
+
+
 // =========================================================
 // FAQ
 // =========================================================
 
 const SUPPORT_QUESTIONS = [
     {
-        title:
-            "Как отменить подтверждение привычки?",
-
-        text:
-            "Нажмите на галочку подтверждённой "
-            + "привычки ещё раз — подтверждение "
-            + "за сегодняшний день будет отменено.",
+        titleKey: "profile.support.q1.title",
+        textKey: "profile.support.q1.text",
     },
-
     {
-        title:
-            "Как работают серии?",
-
-        text:
-            "Есть две серии: общая и серия отдельной "
-            + "привычки. Общая серия показывает, "
-            + "сколько дней подряд вы подтверждали "
-            + "хотя бы одну привычку. Серия привычки "
-            + "считается отдельно для каждой привычки.",
+        titleKey: "profile.support.q2.title",
+        textKey: "profile.support.q2.text",
     },
-
     {
-        title:
-            "Что происходит при пропуске дня?",
-
-        text:
-            "Если привычка не подтверждена "
-            + "в нужный день, её текущая серия "
-            + "прерывается.",
+        titleKey: "profile.support.q3.title",
+        textKey: "profile.support.q3.text",
     },
-
     {
-        title:
-            "Как начисляется XP?",
-
-        text:
-            "За подтверждение привычки вы получаете "
-            + "+5 XP. XP начисляется максимум "
-            + "за 3 подтверждения в день — до "
-            + "15 XP в сутки. Остальные привычки "
-            + "можно подтверждать, но дополнительный "
-            + "XP за них не начисляется.",
+        titleKey: "profile.support.q4.title",
+        textKey: "profile.support.q4.text",
     },
-
     {
-        title:
-            "Как определяется место в лидерборде?",
-
-        text:
-            "Место зависит от количества заработанного "
-            + "XP. Чем больше XP — тем выше позиция. "
-            + "В сезонном лидерборде учитывается "
-            + "результат текущего сезона.",
+        titleKey: "profile.support.q5.title",
+        textKey: "profile.support.q5.text",
     },
-
     {
-        title:
-            "Как получить новые аватары и оформления?",
-
-        text:
-            "Новые аватары и оформления открываются "
-            + "за прогресс в AHabit: достижение новых "
-            + "уровней, получение достижений и высокие "
-            + "места по итогам сезона.",
+        titleKey: "profile.support.q6.title",
+        textKey: "profile.support.q6.text",
     },
-
     {
-        title:
-            "Зачем архивировать привычку?",
-
-        text:
-            "Если привычка больше не актуальна, "
-            + "её можно перенести в архив. Она исчезнет "
-            + "из активных привычек, но сохранится "
-            + "в вашей истории.",
+        titleKey: "profile.support.q7.title",
+        textKey: "profile.support.q7.text",
     },
 ];
 
@@ -114,11 +70,11 @@ function renderSupportQuestion(
             <div class="profile-support-question__content">
 
                 <h3 class="profile-support-question__title">
-                    ${question.title}
+                    ${t(question.titleKey)}
                 </h3>
 
                 <p class="profile-support-question__text">
-                    ${question.text}
+                    ${t(question.textKey)}
                 </p>
 
             </div>
@@ -160,18 +116,17 @@ export function renderProfileSupportPage(
             <header class="profile-support-header">
 
                 ${renderProfileSectionHeader(
-                    "Поддержка"
+                    t("profile.support.title")
                 )}
 
                 <div class="profile-support-heading">
 
                     <p class="profile-support-heading__title">
-                        Чем можем помочь?
+                        ${t("profile.support.heading.title")}
                     </p>
 
                     <p class="profile-support-heading__text">
-                        Найдите ответ на вопрос
-                        или напишите нам.
+                        ${t("profile.support.heading.text")}
                     </p>
 
                 </div>
@@ -188,7 +143,7 @@ export function renderProfileSupportPage(
 
                 <section
                     class="profile-support-faq"
-                    aria-label="Часто задаваемые вопросы"
+                    aria-label="${t("profile.support.faqAria")}"
                 >
                     ${renderSupportQuestions()}
                 </section>
@@ -222,12 +177,11 @@ export function renderProfileSupportPage(
                         <div class="profile-support-feedback__content">
 
                             <div class="profile-support-feedback__title">
-                                Остались вопросы?
+                                ${t("profile.support.feedback.title")}
                             </div>
 
                             <div class="profile-support-feedback__text">
-                                Напишите нам — сообщение
-                                получит команда AHabit.
+                                ${t("profile.support.feedback.text")}
                             </div>
 
                         </div>
@@ -252,7 +206,7 @@ export function renderProfileSupportPage(
                         </span>
 
                         <span>
-                            Задать вопрос
+                            ${t("profile.support.feedback.button")}
                         </span>
 
                     </button>

@@ -1,3 +1,5 @@
+import { t } from "../../../i18n/core/i18n.js";
+
 import {
     renderProfileSectionHeader,
 } from "../profileComponents.js";
@@ -315,15 +317,13 @@ export async function renderProfileReferralPage(
         <section class="profile-page profile-referral-page">
 
             ${renderProfileSectionHeader(
-                "Пригласи друга"
+                t("profile.referral.title")
             )}
 
             <div class="profile-referral-content">
 
                 <p class="profile-referral-intro">
-                    Поделись ссылкой или QR-кодом
-                    и получи бонусы за каждого
-                    приглашённого друга
+                    ${t("profile.referral.description")}
                 </p>
 
                 <div class="profile-referral-qr-card">
@@ -355,7 +355,7 @@ export async function renderProfileReferralPage(
                             </span>
 
                             <span class="profile-referral-stat-label">
-                                Приглашено
+                                ${t("profile.referral.stats.invited")}
                             </span>
 
                         </div>
@@ -390,7 +390,7 @@ export async function renderProfileReferralPage(
                             </span>
 
                             <span class="profile-referral-stat-label">
-                                Заработано XP
+                                ${t("profile.referral.stats.xp")}
                             </span>
 
                         </div>
@@ -434,7 +434,7 @@ export async function renderProfileReferralPage(
                         <span
                             class="profile-referral-button-text"
                         >
-                            Скопировать ссылку
+                            ${t("profile.referral.copy")}
                         </span>
 
                     </button>
@@ -461,7 +461,7 @@ export async function renderProfileReferralPage(
                         <span
                             class="profile-referral-button-text"
                         >
-                            Пригласить друга
+                            ${t("profile.referral.share")}
                         </span>
 
                     </button>

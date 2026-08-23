@@ -1,3 +1,5 @@
+import { t } from "../../../i18n/core/i18n.js";
+
 // =========================================================
 // СКОПИРОВАТЬ РЕФЕРАЛЬНУЮ ССЫЛКУ
 // =========================================================
@@ -28,7 +30,7 @@ async function copyReferralLink(
         );
 
         textElement.textContent =
-            "Ссылка скопирована";
+            t("profile.referral.copied");
 
         button.classList.add(
             "profile-referral-button--success"
@@ -67,7 +69,7 @@ function shareReferralLink(
     }
 
     const text =
-        "Присоединяйся ко мне в AHabitBot!";
+        t("profile.referral.shareText");
 
     const shareUrl =
         "https://t.me/share/url"
