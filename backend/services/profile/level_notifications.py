@@ -1,6 +1,7 @@
 from aiogram import Bot
 
 from config import BOT_TOKEN
+from backend.i18n.notifications import level_text, normalize_language
 
 
 # =========================================================
@@ -12,6 +13,7 @@ async def send_level_up_notification(
     telegram_id: int,
     level: int,
     unlocked_avatars_count: int = 0,
+    language: str = "ru",
 ) -> bool:
     """
     Отправляет сообщение о новом максимальном уровне.
@@ -26,23 +28,7 @@ async def send_level_up_notification(
         int(unlocked_avatars_count),
     )
 
-    text = (
-        "🥳 <b>Новый уровень!</b>\n\n"
-        f"Ты достиг <b>{level} уровня</b>"
-    )
-
-    if unlocked_avatars_count > 0:
-        text += (
-            "\n\n"
-            f"🔓 <b>Открыто новых аватаров: "
-            f"{unlocked_avatars_count}</b>\n"
-            "Загляни в Профиль → Внешний вид."
-        )
-    else:
-        text += (
-            "\n\n"
-            "⭐ Продолжай в том же темпе!"
-        )
+    text = level_text(level, unlocked_avatars_count, normalize_language(language))
 
     bot = Bot(token=BOT_TOKEN)
 

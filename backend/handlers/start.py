@@ -6,9 +6,26 @@ from aiogram.filters import (
 from aiogram.types import Message
 
 from backend.services.users import register_user
+from backend.database.database import get_connection
+from backend.i18n.notifications import referral_text
 from backend.services.profile.level_progression_service import (
     sync_user_level_progression,
 )
+
+
+async def _get_user_language_by_telegram_id(telegram_id: int) -> str:
+    async with get_connection() as connection:
+        value = await connection.fetchval(
+            """
+            SELECT COALESCE(us.language, 'ru')
+            FROM users AS u
+            LEFT JOIN user_settings AS us ON us.user_id = u.id
+            WHERE u.telegram_id = $1
+            LIMIT 1
+            """,
+            telegram_id,
+        )
+    return str(value or "ru")
 
 
 router = Router()
@@ -78,14 +95,16 @@ async def start_handler(
                 referral["xp_amount"]
             )
 
+            inviter_language = await _get_user_language_by_telegram_id(
+                inviter_telegram_id
+            )
+
             await message.bot.send_message(
                 chat_id=inviter_telegram_id,
-                text=(
-                    "🎉 <b>Новый друг!</b>\n\n"
-                    f"<b>{first_name}</b> "
-                    "зарегистрировался по вашей "
-                    "реферальной ссылке.\n\n"
-                    f"✨ <b>+{xp_amount} XP</b> начислено"
+                text=referral_text(
+                    first_name=first_name,
+                    xp=xp_amount,
+                    language=inviter_language,
                 ),
                 parse_mode="HTML",
             )

@@ -51,6 +51,7 @@ async def _get_user_achievement_state(
             """
             SELECT
                 u.telegram_id,
+                COALESCE(settings.language, 'ru') AS language,
 
                 COALESCE(
                     us.current_streak,
@@ -83,6 +84,8 @@ async def _get_user_achievement_state(
 
             LEFT JOIN user_stats AS us
                 ON us.user_id = u.id
+            LEFT JOIN user_settings AS settings
+                ON settings.user_id = u.id
 
             WHERE u.id = $1
             """,
@@ -250,6 +253,10 @@ async def sync_achievements(
     telegram_id = int(
         state["telegram_id"]
     )
+    language = str(
+        state.get("language")
+        or "ru"
+    )
 
     max_streak = int(
         state["max_streak"]
@@ -364,6 +371,7 @@ async def sync_achievements(
                 streak_xp,
             next_target=
                 next_streak_target,
+            language=language,
         )
 
     # =====================================================
@@ -405,6 +413,7 @@ async def sync_achievements(
                 confirmation_xp,
             next_target=
                 next_confirmation_target,
+            language=language,
         )
 
     newly_earned.sort(
@@ -506,6 +515,7 @@ async def sync_streak_achievements(
 
         next_target=
             next_target,
+        language=str(state.get("language") or "ru"),
     )
 
     return newly_earned
@@ -597,6 +607,7 @@ async def sync_confirmation_achievements(
 
         next_target=
             next_target,
+        language=str(state.get("language") or "ru"),
     )
 
     return newly_earned
@@ -714,6 +725,7 @@ async def sync_invitation_achievements(
 
         next_target=
             next_invitation_target,
+        language=str(state.get("language") or "ru"),
     )
 
     newly_earned.sort(

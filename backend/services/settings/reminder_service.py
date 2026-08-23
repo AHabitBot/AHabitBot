@@ -9,6 +9,7 @@ from zoneinfo import (
 from backend.database.database import (
     get_connection,
 )
+from backend.i18n.notifications import reminder_text, normalize_language
 
 
 logger = logging.getLogger(
@@ -25,18 +26,6 @@ REMINDER_MINUTE = 00
 CHECK_INTERVAL_SECONDS = 60
 
 DEFAULT_TIMEZONE = "Europe/Kyiv"
-
-
-# =========================================================
-# ТЕКСТ НАПОМИНАНИЯ
-# =========================================================
-
-REMINDER_TEXT = (
-    "🔔 <b>Не забудь о своих привычках!</b>\n"
-    "\n"
-    "День ещё не закончен — отметь выполненные "
-    "привычки и продолжай свою серию 💪"
-)
 
 
 # =========================================================
@@ -74,6 +63,7 @@ async def get_reminder_users():
                 u.id AS user_id,
                 u.telegram_id,
                 us.timezone,
+                us.language,
                 us.last_reminder_date
 
             FROM user_settings AS us
@@ -174,7 +164,7 @@ async def process_reminder_user(
     try:
         await bot.send_message(
             chat_id=telegram_id,
-            text=REMINDER_TEXT,
+            text=reminder_text(normalize_language(row["language"])),
             parse_mode="HTML",
         )
 

@@ -97,6 +97,10 @@ async def sync_user_level_progression(
         unlocked_avatars_count=len(
             newly_unlocked_avatars
         ),
+        language=str(
+            state.get("language")
+            or "ru"
+        ),
     )
 
     return {

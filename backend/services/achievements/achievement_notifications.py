@@ -1,6 +1,7 @@
 from aiogram import Bot
 
 from config import BOT_TOKEN
+from backend.i18n.notifications import achievement_text, normalize_language
 
 
 # =========================================================
@@ -125,7 +126,7 @@ async def _send_achievement_message(
 
 
 # =========================================================
-# STREAK — УВЕДОМЛЕНИЕ
+# STREAK — NOTIFICATION
 # =========================================================
 
 async def send_streak_achievement_notification(
@@ -133,241 +134,50 @@ async def send_streak_achievement_notification(
     earned_targets: list[int],
     total_xp_reward: int,
     next_target: int | None = None,
+    language: str = "ru",
 ) -> bool:
-    """
-    Уведомление о streak-достижениях.
-    """
-
-    normalized_targets = sorted(
-        {
-            int(target)
-            for target in earned_targets
-            if int(target) > 0
-        }
-    )
-
+    normalized_targets = sorted({int(x) for x in earned_targets if int(x) > 0})
     if not normalized_targets:
         return False
-
-    # =====================================================
-    # ОДНО ДОСТИЖЕНИЕ
-    # =====================================================
-
-    if len(normalized_targets) == 1:
-        target = normalized_targets[0]
-
-        text = (
-            "🏆 <b>Новое достижение!</b>\n\n"
-            "🔥 Серия — "
-            f"<b>{target} "
-            f"{get_days_label(target)}</b>\n"
-            f"⭐ <b>+{total_xp_reward} XP</b>"
-        )
-
-    # =====================================================
-    # НЕСКОЛЬКО ДОСТИЖЕНИЙ
-    # =====================================================
-
-    else:
-        achievements_text = "\n".join(
-            (
-                "🔥 Серия — "
-                f"<b>{target} "
-                f"{get_days_label(target)}</b>"
-            )
-            for target in normalized_targets
-        )
-
-        text = (
-            "🏆 <b>Получены достижения!</b>\n\n"
-            f"{achievements_text}\n\n"
-            f"⭐ <b>+{total_xp_reward} XP</b> начислено"
-        )
-
-    # =====================================================
-    # СЛЕДУЮЩАЯ ЦЕЛЬ
-    # =====================================================
-
-    if next_target is not None:
-        text += (
-            "\n\n"
-            "Следующая цель — "
-            f"<b>{next_target} "
-            f"{get_days_label(next_target)}</b>"
-        )
-
+    text = achievement_text("streak", normalized_targets, total_xp_reward, next_target, normalize_language(language))
     return await _send_achievement_message(
         telegram_id=telegram_id,
         text=text,
-        log_label=(
-            f"Streak targets: "
-            f"{normalized_targets} | "
-            f"+{total_xp_reward} XP"
-        ),
+        log_label=f"Streak targets: {normalized_targets} | +{total_xp_reward} XP",
     )
 
-
-# =========================================================
-# CONFIRMATIONS — УВЕДОМЛЕНИЕ
-# =========================================================
 
 async def send_confirmation_achievement_notification(
     telegram_id: int,
     earned_targets: list[int],
     total_xp_reward: int,
     next_target: int | None = None,
+    language: str = "ru",
 ) -> bool:
-    """
-    Уведомление о достижениях
-    за количество подтверждений привычек.
-    """
-
-    normalized_targets = sorted(
-        {
-            int(target)
-            for target in earned_targets
-            if int(target) > 0
-        }
-    )
-
+    normalized_targets = sorted({int(x) for x in earned_targets if int(x) > 0})
     if not normalized_targets:
         return False
-
-    # =====================================================
-    # ОДНО ДОСТИЖЕНИЕ
-    # =====================================================
-
-    if len(normalized_targets) == 1:
-        target = normalized_targets[0]
-
-        text = (
-            "🏆 <b>Новое достижение!</b>\n\n"
-            "✅ Подтверждения — "
-            f"<b>{target}</b>\n"
-            f"⭐ <b>+{total_xp_reward} XP</b>"
-        )
-
-    # =====================================================
-    # НЕСКОЛЬКО ДОСТИЖЕНИЙ
-    # =====================================================
-
-    else:
-        achievements_text = "\n".join(
-            (
-                "✅ Подтверждения — "
-                f"<b>{target}</b>"
-            )
-            for target in normalized_targets
-        )
-
-        text = (
-            "🏆 <b>Получены достижения!</b>\n\n"
-            f"{achievements_text}\n\n"
-            f"⭐ <b>+{total_xp_reward} XP</b> начислено"
-        )
-
-    # =====================================================
-    # СЛЕДУЮЩАЯ ЦЕЛЬ
-    # =====================================================
-
-    if next_target is not None:
-        text += (
-            "\n\n"
-            "Следующая цель — "
-            f"<b>{next_target} "
-            f"{get_confirmations_label(next_target)}</b>"
-        )
-
+    text = achievement_text("confirmation", normalized_targets, total_xp_reward, next_target, normalize_language(language))
     return await _send_achievement_message(
         telegram_id=telegram_id,
         text=text,
-        log_label=(
-            f"Confirmation targets: "
-            f"{normalized_targets} | "
-            f"+{total_xp_reward} XP"
-        ),
+        log_label=f"Confirmation targets: {normalized_targets} | +{total_xp_reward} XP",
     )
 
-
-# =========================================================
-# INVITATIONS — УВЕДОМЛЕНИЕ
-# =========================================================
 
 async def send_invitation_achievement_notification(
     telegram_id: int,
     earned_targets: list[int],
     total_xp_reward: int,
     next_target: int | None = None,
+    language: str = "ru",
 ) -> bool:
-    """
-    Уведомление о достижениях
-    за количество приглашённых друзей.
-    """
-
-    normalized_targets = sorted(
-        {
-            int(target)
-            for target in earned_targets
-            if int(target) > 0
-        }
-    )
-
+    normalized_targets = sorted({int(x) for x in earned_targets if int(x) > 0})
     if not normalized_targets:
         return False
-
-    # =====================================================
-    # ОДНО ДОСТИЖЕНИЕ
-    # =====================================================
-
-    if len(normalized_targets) == 1:
-        target = normalized_targets[0]
-
-        text = (
-            "🏆 <b>Новое достижение!</b>\n\n"
-            "👥 Приглашения — "
-            f"<b>{target} "
-            f"{get_friends_label(target)}</b>\n"
-            f"⭐ <b>+{total_xp_reward} XP</b>"
-        )
-
-    # =====================================================
-    # НЕСКОЛЬКО ДОСТИЖЕНИЙ
-    # =====================================================
-
-    else:
-        achievements_text = "\n".join(
-            (
-                "👥 Приглашения — "
-                f"<b>{target} "
-                f"{get_friends_label(target)}</b>"
-            )
-            for target in normalized_targets
-        )
-
-        text = (
-            "🏆 <b>Получены достижения!</b>\n\n"
-            f"{achievements_text}\n\n"
-            f"⭐ <b>+{total_xp_reward} XP</b> начислено"
-        )
-
-    # =====================================================
-    # СЛЕДУЮЩАЯ ЦЕЛЬ
-    # =====================================================
-
-    if next_target is not None:
-        text += (
-            "\n\n"
-            "Следующая цель — "
-            f"<b>{next_target} "
-            f"{get_friends_label(next_target)}</b>"
-        )
-
+    text = achievement_text("invitation", normalized_targets, total_xp_reward, next_target, normalize_language(language))
     return await _send_achievement_message(
         telegram_id=telegram_id,
         text=text,
-        log_label=(
-            f"Invitation targets: "
-            f"{normalized_targets} | "
-            f"+{total_xp_reward} XP"
-        ),
+        log_label=f"Invitation targets: {normalized_targets} | +{total_xp_reward} XP",
     )
