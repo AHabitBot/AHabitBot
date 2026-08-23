@@ -23,7 +23,7 @@ export function normalizeHabit(
         name:
             habit.title ||
             habit.name ||
-            "Без названия",
+            "",
 
         icon:
             habit.emoji ||

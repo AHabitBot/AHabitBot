@@ -62,6 +62,10 @@ import navigationRu from "../common/navigation/ru.js";
 import navigationUk from "../common/navigation/uk.js";
 import navigationEn from "../common/navigation/en.js";
 
+import commonAppRu from "../common/app/ru.js";
+import commonAppUk from "../common/app/uk.js";
+import commonAppEn from "../common/app/en.js";
+
 import settingsMainRu from "../profile/settings/main/ru.js";
 import settingsMainUk from "../profile/settings/main/uk.js";
 import settingsMainEn from "../profile/settings/main/en.js";
@@ -106,6 +110,7 @@ const dictionaries = Object.freeze({
         profileReferralRu,
         profileArchiveRu,
         navigationRu,
+        commonAppRu,
     ),
     uk: mergeDictionaries(
         settingsMainUk,
@@ -128,6 +133,7 @@ const dictionaries = Object.freeze({
         profileReferralUk,
         profileArchiveUk,
         navigationUk,
+        commonAppUk,
     ),
     en: mergeDictionaries(
         settingsMainEn,
@@ -150,6 +156,7 @@ const dictionaries = Object.freeze({
         profileReferralEn,
         profileArchiveEn,
         navigationEn,
+        commonAppEn,
     ),
 });
 

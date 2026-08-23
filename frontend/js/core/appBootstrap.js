@@ -32,7 +32,7 @@ import {
 function normalizeHabit(habit = {}) {
     return {
         id: String(habit.id),
-        name: habit.title || "Без названия",
+        name: habit.title || "",
         icon: habit.emoji || "✱",
         color: habit.color || "green",
         size: habit.size || "large",

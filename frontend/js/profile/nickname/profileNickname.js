@@ -575,25 +575,33 @@ export function closeProfileNicknameEditor() {
    ========================================================= */
 
 function getNicknameErrorMessage(error) {
-    if (!error) {
-        return t("profile.nickname.error.change")
-    }
-
-
-    if (
-        typeof error.detail === "string"
-    ) {
-        return error.detail
-    }
-
+    const rawMessage = String(
+        error?.detail
+        || error?.message
+        || ""
+    ).trim();
 
     if (
-        typeof error.message === "string" &&
-        error.message.trim()
+        rawMessage.includes(
+            "Этот никнейм уже занят"
+        )
     ) {
-        return error.message
+        return t(
+            "profile.nickname.error.taken"
+        );
     }
 
+    if (
+        rawMessage.includes(
+            "использовали возможность"
+        )
+    ) {
+        return t(
+            "profile.nickname.error.used"
+        );
+    }
 
-    return t("profile.nickname.error.change")
+    return t(
+        "profile.nickname.error.change"
+    );
 }

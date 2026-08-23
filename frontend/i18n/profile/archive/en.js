@@ -12,5 +12,9 @@ export default Object.freeze({
     "profile.archive.days.few": "{count} days",
     "profile.archive.days.many": "{count} days",
     "profile.archive.days.other": "{count} days",
-    "profile.archive.error.restore": "Could not restore habit"
+    "profile.archive.error.restore": "Could not restore habit",
+    "profile.archive.confirmations": "Confirmations",
+    "profile.archive.bestStreak": "Best streak",
+    "profile.archive.error.load": "Could not load archive",
+    "profile.archive.retry": "Try again"
 });

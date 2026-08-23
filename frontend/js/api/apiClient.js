@@ -1,3 +1,5 @@
+import { t } from "../../i18n/core/i18n.js";
+
 /* =========================================================
    SHARED API CLIENT
    ========================================================= */
@@ -130,7 +132,7 @@ export async function apiRequest(
             throw new Error(
                 getErrorMessage(
                     data,
-                    `Ошибка сервера: ${response.status}`
+                    t("common.error.serverStatus", { status: response.status })
                 )
             );
         }
@@ -142,13 +144,13 @@ export async function apiRequest(
             error?.name === "AbortError"
         ) {
             throw new Error(
-                "Сервер не ответил вовремя"
+                t("common.error.timeout")
             );
         }
 
         if (error instanceof TypeError) {
             throw new Error(
-                "Не удалось подключиться к серверу"
+                t("common.error.connection")
             );
         }
 

@@ -1,4 +1,4 @@
-import { t } from "../../../i18n/core/i18n.js";
+import { getLanguage, t } from "../../../i18n/core/i18n.js";
 import { getPluralForm } from "../../../i18n/core/plural.js";
 
 import {
@@ -45,8 +45,18 @@ function formatArchivedDate(
         return "";
     }
 
+    const localeByLanguage = {
+        ru: "ru-RU",
+        uk: "uk-UA",
+        en: "en-US"
+    };
+
+    const locale =
+        localeByLanguage[getLanguage()]
+        || localeByLanguage.ru;
+
     return new Intl.DateTimeFormat(
-        "ru-RU",
+        locale,
         {
             day: "2-digit",
             month: "2-digit",
@@ -62,39 +72,23 @@ function formatArchivedDate(
    СКЛОНЕНИЕ ДНЕЙ
    ========================================================= */
 
-function getDayWord(
-    value
-) {
-    const number =
+function formatDays(value) {
+    const count =
         Math.abs(
-            Number(value) || 0
+            Math.trunc(
+                Number(value) || 0
+            )
         );
 
-    const lastTwo =
-        number % 100;
+    const form =
+        getPluralForm(count);
 
-    const last =
-        number % 10;
-
-    if (
-        lastTwo >= 11 &&
-        lastTwo <= 14
-    ) {
-        return "дней";
-    }
-
-    if (last === 1) {
-        return "день";
-    }
-
-    if (
-        last >= 2 &&
-        last <= 4
-    ) {
-        return "дня";
-    }
-
-    return "дней";
+    return t(
+        `profile.archive.days.${form}`,
+        {
+            count
+        }
+    );
 }
 
 
@@ -255,7 +249,7 @@ function renderArchivedHabitCard(
                     </span>
 
                     <span>
-                        Восстановить
+                        ${t("profile.archive.restore")}
                     </span>
                 </button>
 
@@ -285,7 +279,7 @@ function renderArchivedHabitCard(
                         </strong>
 
                         <span class="profile-archive-card__stat-label">
-                            Подтверждений
+                            ${t("profile.archive.confirmations")}
                         </span>
 
                     </div>
@@ -314,11 +308,11 @@ function renderArchivedHabitCard(
 
                         <strong class="profile-archive-card__stat-value">
                             ${maxStreak}
-                            ${getDayWord(maxStreak)}
+                            ${formatDays(maxStreak).replace(`${maxStreak} `, "")}
                         </strong>
 
                         <span class="profile-archive-card__stat-label">
-                            Лучшая серия
+                            ${t("profile.archive.bestStreak")}
                         </span>
 
                     </div>
@@ -506,7 +500,7 @@ function renderError() {
 
 
                     <p class="profile-archive-error__title">
-                        Не удалось загрузить архив
+                        ${t("profile.archive.error.load")}
                     </p>
 
 
@@ -515,7 +509,7 @@ function renderError() {
                         class="profile-archive-error__retry"
                         data-profile-archive-retry
                     >
-                        Попробовать снова
+                        ${t("profile.archive.retry")}
                     </button>
 
                 </div>

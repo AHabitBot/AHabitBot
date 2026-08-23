@@ -15,5 +15,7 @@ export default Object.freeze({
     "profile.nickname.continue": "Continue",
     "profile.nickname.error.generic": "Something went wrong",
     "profile.nickname.validation.characters": "Use only letters, numbers, and _",
-    "profile.nickname.saving": "Saving..."
+    "profile.nickname.saving": "Saving...",
+    "profile.nickname.error.taken": "This nickname is already taken",
+    "profile.nickname.error.used": "You have already used your nickname change"
 });

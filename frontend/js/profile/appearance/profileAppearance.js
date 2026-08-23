@@ -311,7 +311,7 @@ function renderProfileAppearanceTabs() {
                 type="button"
                 data-appearance-tab="avatar"
             >
-                Аватар
+                ${t("profile.appearance.tabs.avatar")}
             </button>
 
 
@@ -327,7 +327,7 @@ function renderProfileAppearanceTabs() {
                 type="button"
                 data-appearance-tab="background"
             >
-                Оформление
+                ${t("profile.appearance.tabs.background")}
             </button>
 
         </div>
@@ -402,7 +402,12 @@ function renderAppearanceOption({
                                 profile-appearance-option__level
                             "
                         >
-                             Откроется на ${requiredLevel} уровне
+                             ${t(
+                                 "profile.appearance.locked.level",
+                                 {
+                                     level: requiredLevel
+                                 }
+                             )}
                         </span>
                     `
                     : ""
@@ -599,7 +604,7 @@ function renderProfileAppearanceButton() {
                 type="button"
                 data-appearance-apply
             >
-                Применить
+                ${t("profile.appearance.apply")}
             </button>
 
         </div>

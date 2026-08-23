@@ -15,5 +15,7 @@ export default Object.freeze({
     "profile.nickname.continue": "Продовжити",
     "profile.nickname.error.generic": "Сталася помилка",
     "profile.nickname.validation.characters": "Використовуйте лише літери, цифри та символ _",
-    "profile.nickname.saving": "Зберігаємо..."
+    "profile.nickname.saving": "Зберігаємо...",
+    "profile.nickname.error.taken": "Цей нікнейм уже зайнятий",
+    "profile.nickname.error.used": "Ви вже використали можливість змінити нікнейм"
 });

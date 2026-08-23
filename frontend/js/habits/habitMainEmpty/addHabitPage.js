@@ -1514,7 +1514,7 @@ export function renderIconPickerPage(
     </button>
 
     <h1 class="habit-icon-picker__title">
-        Выберите иконку
+        ${t("habits.emoji.title")}
     </h1>
 
 </header>

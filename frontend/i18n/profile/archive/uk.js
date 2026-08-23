@@ -12,5 +12,9 @@ export default Object.freeze({
     "profile.archive.days.few": "{count} дні",
     "profile.archive.days.many": "{count} днів",
     "profile.archive.days.other": "{count} днів",
-    "profile.archive.error.restore": "Не вдалося відновити звичку"
+    "profile.archive.error.restore": "Не вдалося відновити звичку",
+    "profile.archive.confirmations": "Підтверджень",
+    "profile.archive.bestStreak": "Найкраща серія",
+    "profile.archive.error.load": "Не вдалося завантажити архів",
+    "profile.archive.retry": "Спробувати ще раз"
 });
