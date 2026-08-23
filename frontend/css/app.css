@@ -258,25 +258,12 @@ body.app-ready #app {
 
 .app-loader {
     position: fixed;
-
     inset: 0;
-
     z-index: 9999;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
 
-    gap: 10px;
-
-    padding: 24px;
-
-    background:
-        var(--app-bg);
-
-    color:
-        var(--app-text-primary);
+    background: #101814;
 }
 
 
@@ -286,33 +273,53 @@ body.app-ready
 }
 
 
-.app-loader__mark {
-    margin-bottom: 8px;
+.app-loader__background {
+    position: absolute;
+    inset: 0;
 
-    color:
-        var(--app-green-ui);
+    display: block;
 
-    font-size: 34px;
-    line-height: 1;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center center;
+
+    user-select: none;
+    pointer-events: none;
 }
 
 
-.app-loader__title {
-    color:
-        var(--app-text-title);
-
-    font-size: 16px;
-    font-weight: 700;
-
-    letter-spacing: 0.08em;
-}
-
-
+/*
+ * В обычном состоянии текста нет — изображение само является
+ * полноценным экраном загрузки. Если bootstrap упадёт, app.js
+ * запишет сюда локализованную ошибку и она станет видимой.
+ */
 .app-loader__text {
-    color:
-        var(--app-text-secondary);
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: max(28px, env(safe-area-inset-bottom));
+    z-index: 1;
+
+    display: none;
+
+    padding: 10px 14px;
+
+    border-radius: 12px;
+
+    background: rgba(0, 0, 0, 0.58);
+    color: #ffffff;
 
     font-size: 13px;
-
+    line-height: 1.35;
     text-align: center;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+
+.app-loader__text:not(:empty) {
+    display: block;
 }
