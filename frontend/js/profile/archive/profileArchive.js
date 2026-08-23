@@ -1,3 +1,6 @@
+import { t } from "../../../i18n/core/i18n.js";
+import { getPluralForm } from "../../../i18n/core/plural.js";
+
 import {
     renderProfileSectionHeader
 } from "../profileComponents.js";
@@ -145,14 +148,12 @@ function renderEmptyState() {
 
 
             <h2 class="profile-archive-empty__title">
-                Архив пока пуст
+                ${t("profile.archive.empty.title")}
             </h2>
 
 
             <p class="profile-archive-empty__text">
-                Здесь появятся привычки,<br>
-                которые ты решишь больше<br>
-                не отслеживать.
+                ${t("profile.archive.empty.text")}
             </p>
 
         </div>
@@ -175,7 +176,7 @@ function renderArchivedHabitCard(
     const title =
         String(
             habit?.title ||
-            "Привычка"
+            t("profile.archive.habitFallback")
         );
 
     const emoji =
@@ -203,8 +204,8 @@ function renderArchivedHabitCard(
 
     const archiveDateText =
         archivedDate
-            ? `В архиве с ${archivedDate}`
-            : "В архиве";
+            ? t("profile.archive.archivedSince", { date: archivedDate })
+            : t("profile.archive.archived");
 
 
     return `
@@ -369,8 +370,7 @@ function renderArchiveHeading() {
         <div class="profile-archive-heading">
 
             <p class="profile-archive-heading__text">
-                Здесь хранятся привычки,
-                которые ты больше не отслеживаешь.
+                ${t("profile.archive.description")}
             </p>
 
         </div>
@@ -396,7 +396,7 @@ function renderArchivePage(
         <section class="profile-archive-page">
 
             ${renderProfileSectionHeader(
-                "Архив привычек"
+                t("profile.archive.title")
             )}
 
 
@@ -434,7 +434,7 @@ function renderLoading() {
         <section class="profile-archive-page">
 
             ${renderProfileSectionHeader(
-                "Архив привычек"
+                t("profile.archive.title")
             )}
 
 
@@ -486,7 +486,7 @@ function renderError() {
         <section class="profile-archive-page">
 
             ${renderProfileSectionHeader(
-                "Архив привычек"
+                t("profile.archive.title")
             )}
 
 

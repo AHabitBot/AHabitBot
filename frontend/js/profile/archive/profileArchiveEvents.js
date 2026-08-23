@@ -1,3 +1,5 @@
+import { t } from "../../../i18n/core/i18n.js";
+
 import {
     refreshArchivedHabits,
     restoreArchivedHabit
@@ -142,7 +144,7 @@ async function handleRestoreHabit(
         true;
 
     button.textContent =
-        "Восстановление...";
+        t("profile.archive.restoring");
 
 
     try {
@@ -213,7 +215,7 @@ async function handleRestoreHabit(
 
         button.textContent =
             originalText ||
-            "Восстановить";
+            t("profile.archive.restore");
 
         showRestoreError();
     } finally {
@@ -257,7 +259,7 @@ function showRestoreError() {
         window.Telegram?.WebApp;
 
     const message =
-        "Не удалось восстановить привычку";
+        t("profile.archive.error.restore");
 
     if (
         telegram &&

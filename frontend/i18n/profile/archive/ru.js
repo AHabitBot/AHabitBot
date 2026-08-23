@@ -1,0 +1,16 @@
+export default Object.freeze({
+    "profile.archive.title": "Архив привычек",
+    "profile.archive.description": "Здесь хранятся привычки, которые ты больше не отслеживаешь.",
+    "profile.archive.empty.title": "Архив пока пуст",
+    "profile.archive.empty.text": "Здесь появятся привычки, которые ты решишь больше не отслеживать.",
+    "profile.archive.habitFallback": "Привычка",
+    "profile.archive.archivedSince": "В архиве с {date}",
+    "profile.archive.archived": "В архиве",
+    "profile.archive.restore": "Восстановить",
+    "profile.archive.restoring": "Восстановление...",
+    "profile.archive.days.one": "{count} день",
+    "profile.archive.days.few": "{count} дня",
+    "profile.archive.days.many": "{count} дней",
+    "profile.archive.days.other": "{count} дней",
+    "profile.archive.error.restore": "Не удалось восстановить привычку"
+});

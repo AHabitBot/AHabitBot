@@ -1,0 +1,16 @@
+export default Object.freeze({
+    "profile.archive.title": "Habit archive",
+    "profile.archive.description": "This is where habits you no longer track are stored.",
+    "profile.archive.empty.title": "Your archive is empty",
+    "profile.archive.empty.text": "Habits you decide to stop tracking will appear here.",
+    "profile.archive.habitFallback": "Habit",
+    "profile.archive.archivedSince": "Archived since {date}",
+    "profile.archive.archived": "Archived",
+    "profile.archive.restore": "Restore",
+    "profile.archive.restoring": "Restoring...",
+    "profile.archive.days.one": "{count} day",
+    "profile.archive.days.few": "{count} days",
+    "profile.archive.days.many": "{count} days",
+    "profile.archive.days.other": "{count} days",
+    "profile.archive.error.restore": "Could not restore habit"
+});

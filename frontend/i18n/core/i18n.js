@@ -54,6 +54,10 @@ import profileReferralRu from "../profile/referral/ru.js";
 import profileReferralUk from "../profile/referral/uk.js";
 import profileReferralEn from "../profile/referral/en.js";
 
+import profileArchiveRu from "../profile/archive/ru.js";
+import profileArchiveUk from "../profile/archive/uk.js";
+import profileArchiveEn from "../profile/archive/en.js";
+
 import navigationRu from "../common/navigation/ru.js";
 import navigationUk from "../common/navigation/uk.js";
 import navigationEn from "../common/navigation/en.js";
@@ -100,6 +104,7 @@ const dictionaries = Object.freeze({
         profileAppearanceRu,
         profileSupportRu,
         profileReferralRu,
+        profileArchiveRu,
         navigationRu,
     ),
     uk: mergeDictionaries(
@@ -121,6 +126,7 @@ const dictionaries = Object.freeze({
         profileAppearanceUk,
         profileSupportUk,
         profileReferralUk,
+        profileArchiveUk,
         navigationUk,
     ),
     en: mergeDictionaries(
@@ -142,6 +148,7 @@ const dictionaries = Object.freeze({
         profileAppearanceEn,
         profileSupportEn,
         profileReferralEn,
+        profileArchiveEn,
         navigationEn,
     ),
 });
