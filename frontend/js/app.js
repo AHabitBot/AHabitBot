@@ -26,6 +26,74 @@ import {
 } from "../i18n/core/i18n.js"
 
 
+function createAppLoaderProgress() {
+    const fill = document.querySelector(
+        "[data-app-loader-fill]"
+    )
+
+    const percent = document.querySelector(
+        "[data-app-loader-percent]"
+    )
+
+    let current = 0
+    let timer = null
+
+    const set = (value) => {
+        const next = Math.max(
+            current,
+            Math.min(100, Math.round(Number(value) || 0))
+        )
+
+        current = next
+
+        if (fill) {
+            fill.style.width = `${next}%`
+        }
+
+        if (percent) {
+            percent.textContent = `${next}%`
+        }
+    }
+
+    const start = () => {
+        set(3)
+
+        timer = window.setInterval(() => {
+            if (current >= 68) {
+                return
+            }
+
+            const step =
+                current < 30 ? 4 :
+                current < 50 ? 2 :
+                1
+
+            set(current + step)
+        }, 180)
+    }
+
+    const stop = () => {
+        if (timer !== null) {
+            window.clearInterval(timer)
+            timer = null
+        }
+    }
+
+    return {
+        set,
+        start,
+        stop
+    }
+}
+
+
+function wait(ms) {
+    return new Promise((resolve) => {
+        window.setTimeout(resolve, ms)
+    })
+}
+
+
 function initTelegramWebApp() {
     const telegram =
         window.Telegram?.WebApp
@@ -269,17 +337,30 @@ async function initV2() {
         handleNavigation
     )
 
+    const loaderProgress =
+        createAppLoaderProgress()
+
+    loaderProgress.start()
+
     try {
-        await bootstrapApp()
+        await bootstrapApp({
+            onProgress: loaderProgress.set
+        })
 
         initHabitsEvents({
             useStore: true
         })
 
+        loaderProgress.stop()
+        loaderProgress.set(100)
+
+        await wait(220)
+
         document.body.classList.add(
             "app-ready"
         )
     } catch (error) {
+        loaderProgress.stop()
         console.error(
             "V2: стартовая загрузка приложения не удалась",
             error

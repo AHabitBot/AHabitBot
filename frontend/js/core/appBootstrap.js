@@ -182,7 +182,15 @@ function preloadCurrentAppearance(profile = {}) {
 }
 
 
-export async function bootstrapApp() {
+export async function bootstrapApp({ onProgress } = {}) {
+    const reportProgress = (value) => {
+        if (typeof onProgress === "function") {
+            onProgress(value)
+        }
+    }
+
+    reportProgress(8)
+
     const data = await apiRequest(
         "/api/bootstrap"
     )
@@ -203,14 +211,22 @@ export async function bootstrapApp() {
     /*
      * Один раз наполняем всё состояние приложения.
      */
+    reportProgress(72)
+
     setLanguage(
         data.settings?.language || "ru",
         { emit: false }
     )
 
+    reportProgress(80)
+
     syncThemeFromSettings(data.settings || {})
 
+    reportProgress(86)
+
     hydrateResources(data)
+
+    reportProgress(94)
 
 
     /*
@@ -223,6 +239,8 @@ export async function bootstrapApp() {
     preloadCurrentAppearance(
         data.profile
     )
+
+    reportProgress(97)
 
     return data
 }

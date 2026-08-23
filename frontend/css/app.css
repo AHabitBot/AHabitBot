@@ -263,7 +263,8 @@ body.app-ready #app {
 
     overflow: hidden;
 
-    background: #101814;
+    background: #0f1110;
+    color: #ffffff;
 }
 
 
@@ -277,8 +278,6 @@ body.app-ready
     position: absolute;
     inset: 0;
 
-    display: block;
-
     width: 100%;
     height: 100%;
 
@@ -290,36 +289,104 @@ body.app-ready
 }
 
 
-/*
- * В обычном состоянии текста нет — изображение само является
- * полноценным экраном загрузки. Если bootstrap упадёт, app.js
- * запишет сюда локализованную ошибку и она станет видимой.
- */
-.app-loader__text {
+.app-loader__progress-wrap {
     position: absolute;
-    left: 20px;
-    right: 20px;
-    bottom: max(28px, env(safe-area-inset-bottom));
-    z-index: 1;
+    left: 50%;
+    bottom: max(34px, calc(env(safe-area-inset-bottom) + 22px));
 
-    display: none;
+    width: min(78vw, 520px);
 
-    padding: 10px 14px;
+    transform: translateX(-50%);
 
-    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    background: rgba(0, 0, 0, 0.58);
-    color: #ffffff;
+    gap: 12px;
 
-    font-size: 13px;
-    line-height: 1.35;
-    text-align: center;
-
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    z-index: 2;
 }
 
 
-.app-loader__text:not(:empty) {
-    display: block;
+.app-loader__text {
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.96);
+
+    font-size: clamp(15px, 4vw, 19px);
+    font-weight: 600;
+    line-height: 1.2;
+
+    text-align: center;
+
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+
+
+.app-loader__progress {
+    position: relative;
+
+    width: 100%;
+    height: clamp(34px, 8.5vw, 42px);
+
+    overflow: hidden;
+
+    border: 2px solid rgba(255, 255, 255, 0.42);
+    border-radius: 999px;
+
+    background: rgba(18, 18, 18, 0.78);
+
+    box-shadow:
+        0 0 0 2px rgba(0, 0, 0, 0.28),
+        inset 0 0 12px rgba(0, 0, 0, 0.42),
+        0 5px 18px rgba(0, 0, 0, 0.28);
+}
+
+
+.app-loader__progress-fill {
+    position: absolute;
+    inset: 3px auto 3px 3px;
+
+    width: 0%;
+
+    border-radius: 999px;
+
+    background: linear-gradient(
+        180deg,
+        #75a914 0%,
+        #4d8000 100%
+    );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        0 0 12px rgba(100, 159, 10, 0.28);
+
+    transition: width 220ms ease-out;
+}
+
+
+.app-loader__progress-percent {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #ffffff;
+
+    font-size: clamp(16px, 4.5vw, 21px);
+    font-weight: 700;
+    line-height: 1;
+
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+
+    z-index: 2;
+}
+
+
+@media (min-width: 768px) {
+    .app-loader__progress-wrap {
+        bottom: max(46px, calc(env(safe-area-inset-bottom) + 30px));
+    }
 }
