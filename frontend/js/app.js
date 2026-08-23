@@ -26,71 +26,86 @@ import {
 } from "../i18n/core/i18n.js"
 
 
-function createAppLoaderProgress() {
-    const fill = document.querySelector(
-        "[data-app-loader-fill]"
-    )
 
-    const percent = document.querySelector(
-        "[data-app-loader-percent]"
-    )
+
+function createLoaderProgressController() {
+    const progressFill =
+        document.querySelector(
+            "[data-app-loader-progress]"
+        )
+
+    const percentText =
+        document.querySelector(
+            "[data-app-loader-percent]"
+        )
 
     let current = 0
     let timer = null
 
-    const set = (value) => {
-        const next = Math.max(
+    function render(value) {
+        current = Math.max(
             current,
-            Math.min(100, Math.round(Number(value) || 0))
+            Math.min(100, Math.round(value))
         )
 
-        current = next
-
-        if (fill) {
-            fill.style.width = `${next}%`
+        if (progressFill) {
+            progressFill.style.width =
+                `${current}%`
         }
 
-        if (percent) {
-            percent.textContent = `${next}%`
+        if (percentText) {
+            percentText.textContent =
+                `${current}%`
         }
     }
 
-    const start = () => {
-        set(3)
+    function start() {
+        render(0)
 
-        timer = window.setInterval(() => {
-            if (current >= 68) {
-                return
-            }
+        timer = window.setInterval(
+            () => {
+                if (current >= 90) {
+                    return
+                }
 
-            const step =
-                current < 30 ? 4 :
-                current < 50 ? 2 :
-                1
+                const step =
+                    current < 35
+                        ? 4
+                        : current < 65
+                            ? 2
+                            : 1
 
-            set(current + step)
-        }, 180)
+                render(current + step)
+            },
+            90
+        )
     }
 
-    const stop = () => {
+    function stop() {
         if (timer !== null) {
             window.clearInterval(timer)
             timer = null
         }
     }
 
-    return {
-        set,
-        start,
-        stop
+    async function complete() {
+        stop()
+        render(100)
+
+        await new Promise(
+            (resolve) =>
+                window.setTimeout(
+                    resolve,
+                    240
+                )
+        )
     }
-}
 
-
-function wait(ms) {
-    return new Promise((resolve) => {
-        window.setTimeout(resolve, ms)
-    })
+    return {
+        start,
+        stop,
+        complete
+    }
 }
 
 
@@ -338,23 +353,18 @@ async function initV2() {
     )
 
     const loaderProgress =
-        createAppLoaderProgress()
+        createLoaderProgressController()
 
     loaderProgress.start()
 
     try {
-        await bootstrapApp({
-            onProgress: loaderProgress.set
-        })
+        await bootstrapApp()
 
         initHabitsEvents({
             useStore: true
         })
 
-        loaderProgress.stop()
-        loaderProgress.set(100)
-
-        await wait(220)
+        await loaderProgress.complete()
 
         document.body.classList.add(
             "app-ready"

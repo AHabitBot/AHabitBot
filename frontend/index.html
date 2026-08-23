@@ -171,33 +171,35 @@
         aria-live="polite"
     >
         <img
-            class="app-loader__background"
-            src="/img/loading/loading_1.PNG"
+            class="app-loader__bg"
+            src="./img/loading/loading_1.PNG"
             alt=""
             aria-hidden="true"
             fetchpriority="high"
             decoding="async"
-        />
+        >
 
-        <div class="app-loader__progress-wrap">
-            <div
-                class="app-loader__text"
-                data-app-loader-text
-            >Загрузка твоего прогресса...</div>
+        <div class="app-loader__bottom">
+            <div class="app-loader__row">
+                <div
+                    class="app-loader__text"
+                    data-app-loader-text
+                >Загрузка твоего прогресса...</div>
+
+                <div
+                    class="app-loader__percent"
+                    data-app-loader-percent
+                >0%</div>
+            </div>
 
             <div
                 class="app-loader__progress"
-                aria-label="Прогресс загрузки"
+                aria-hidden="true"
             >
                 <div
                     class="app-loader__progress-fill"
-                    data-app-loader-fill
+                    data-app-loader-progress
                 ></div>
-
-                <span
-                    class="app-loader__progress-percent"
-                    data-app-loader-percent
-                >0%</span>
             </div>
         </div>
     </div>
