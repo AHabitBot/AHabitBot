@@ -21,6 +21,11 @@ import {
 } from "./core/appBootstrap.js"
 
 
+import {
+    t
+} from "../i18n/core/i18n.js"
+
+
 function initTelegramWebApp() {
     const telegram =
         window.Telegram?.WebApp
@@ -287,7 +292,7 @@ async function initV2() {
 
         if (loaderText) {
             loaderText.textContent =
-                "Не удалось загрузить данные. Открой приложение ещё раз."
+                t("common.app.loadError")
         }
     }
 }

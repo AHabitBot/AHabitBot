@@ -55,7 +55,7 @@ export function renderBottomNavigation(
                     </span>
 
                     <span class="bottom-navigation__label">
-                        Профиль
+                        ${t("common.navigation.profile.label")}
                     </span>
                 </button>
             `
@@ -103,7 +103,7 @@ export function renderBottomNavigation(
                 </span>
 
                 <span class="bottom-navigation__label">
-                    Главная
+                    ${t("common.navigation.habits.label")}
                 </span>
             </button>
 
@@ -137,7 +137,7 @@ export function renderBottomNavigation(
                 </span>
 
                 <span class="bottom-navigation__label">
-                    Лидерборд
+                    ${t("common.navigation.leaderboard.label")}
                 </span>
             </button>
 
@@ -307,3 +307,37 @@ function handleNavigationClick(event) {
         )
     );
 }
+
+/* =========================================================
+   ОБНОВИТЬ ЯЗЫК СМОНТИРОВАННОЙ НАВИГАЦИИ
+   ========================================================= */
+
+function refreshBottomNavigationLanguage() {
+    const navigation =
+        document.getElementById(
+            NAVIGATION_ID
+        );
+
+    if (!navigation) {
+        return;
+    }
+
+    const activeButton =
+        navigation.querySelector(
+            '[data-navigation-page][aria-current="page"]'
+        );
+
+    const activePage =
+        activeButton?.dataset?.navigationPage
+        || "habits";
+
+    mountBottomNavigation(
+        activePage
+    );
+}
+
+
+window.addEventListener(
+    "app:languagechange",
+    refreshBottomNavigationLanguage
+);
