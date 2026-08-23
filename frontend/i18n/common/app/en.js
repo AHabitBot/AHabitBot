@@ -1,4 +1,5 @@
 export default Object.freeze({
+    "common.app.loadingProgress": "Loading your progress...",
     "common.app.loading": "Loading...",
     "common.app.loadError": "Could not load data. Open the app again.",
     "common.error.serverStatus": "Server error: {status}",

@@ -84,6 +84,24 @@ import settingsThemeEn from "../profile/settings/theme/en.js";
 
 export const SUPPORTED_LANGUAGES = Object.freeze(["ru", "uk", "en"]);
 
+const LANGUAGE_STORAGE_KEY = "ahabit_language";
+
+function readStoredLanguage() {
+    try {
+        return localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    } catch {
+        return null;
+    }
+}
+
+function storeLanguage(language) {
+    try {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    } catch {
+        // Local storage may be unavailable in some WebView modes.
+    }
+}
+
 function mergeDictionaries(...parts) {
     return Object.freeze(Object.assign({}, ...parts));
 }
@@ -160,7 +178,7 @@ const dictionaries = Object.freeze({
     ),
 });
 
-let currentLanguage = "ru";
+let currentLanguage = normalizeLanguage(readStoredLanguage() || "ru");
 
 export function normalizeLanguage(language) {
     const normalized = String(language || "").trim().toLowerCase();
@@ -176,6 +194,7 @@ export function setLanguage(language, { emit = true } = {}) {
     const changed = nextLanguage !== currentLanguage;
 
     currentLanguage = nextLanguage;
+    storeLanguage(nextLanguage);
     document.documentElement.lang = nextLanguage;
 
     if (emit && changed) {
