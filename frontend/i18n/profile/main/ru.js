@@ -9,7 +9,7 @@ export default Object.freeze({
     "profile.main.menu.stats": "Игровые показатели",
     "profile.main.menu.achievements": "Достижения",
     "profile.main.menu.appearance": "Внешний вид",
-    "profile.main.menu.settings": "Данные и настройки",
+    "profile.main.menu.settings": "Настройки",
     "profile.main.menu.support": "Поддержка",
     "profile.main.menu.referral": "Пригласить друга",
     "profile.main.menu.archive": "Архив привычек",

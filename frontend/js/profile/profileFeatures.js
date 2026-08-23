@@ -18,7 +18,7 @@ export const PROFILE_FEATURES = {
     stats: true,
     achievements: true,
     appearance: true,
-    settings: false,
+    settings: true,
     support: true,
     referral: true,
     archive: true

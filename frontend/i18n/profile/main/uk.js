@@ -9,7 +9,7 @@ export default Object.freeze({
     "profile.main.menu.stats": "Ігрові показники",
     "profile.main.menu.achievements": "Досягнення",
     "profile.main.menu.appearance": "Зовнішній вигляд",
-    "profile.main.menu.settings": "Дані та налаштування",
+    "profile.main.menu.settings": "Налаштування",
     "profile.main.menu.support": "Підтримка",
     "profile.main.menu.referral": "Запросити друга",
     "profile.main.menu.archive": "Архів звичок",
