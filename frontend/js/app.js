@@ -27,6 +27,18 @@ import {
 
 
 
+function renderLoaderTranslation() {
+    const loaderText =
+        document.querySelector(
+            "[data-app-loader-text]"
+        )
+
+    if (loaderText) {
+        loaderText.textContent =
+            t("common.app.loadingProgress")
+    }
+}
+
 
 function createLoaderProgressController() {
     const progressFill =
@@ -347,6 +359,9 @@ async function initV2() {
 
     initTelegramWebApp()
 
+    // Сразу показываем загрузочный текст на последнем сохранённом языке.
+    renderLoaderTranslation()
+
     document.addEventListener(
         "app:navigate",
         handleNavigation
@@ -359,6 +374,10 @@ async function initV2() {
 
     try {
         await bootstrapApp()
+
+        // bootstrapApp синхронизирует язык с настройками пользователя.
+        // Обновляем текст загрузки ещё раз, чтобы он точно соответствовал БД.
+        renderLoaderTranslation()
 
         initHabitsEvents({
             useStore: true
