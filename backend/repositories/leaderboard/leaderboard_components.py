@@ -1,6 +1,43 @@
+import logging
+
 import asyncpg
 
 from backend.database.database import get_connection
+
+
+logger = logging.getLogger("uvicorn.error")
+
+
+# =========================================================
+# ВНУТРЕННИЙ FAIL-SAFE ДЛЯ SNAPSHOT-МЕХАНИКИ
+# =========================================================
+
+async def _fetch_with_rank_snapshot(
+    connection,
+    snapshot_query: str,
+    fallback_query: str,
+    *args,
+    fetchrow: bool = False,
+):
+    """
+    Пытается получить рейтинг с данными изменения позиции.
+
+    Если новая snapshot-логика недоступна (таблица/колонки/права/
+    любая другая ошибка именно в расширенном запросе), рейтинг всё
+    равно возвращается по старому стабильному запросу.
+
+    Благодаря этому проблема со стрелками никогда не блокирует
+    /api/bootstrap и запуск Mini App.
+    """
+    method = connection.fetchrow if fetchrow else connection.fetch
+
+    try:
+        return await method(snapshot_query, *args)
+    except Exception:
+        logger.exception(
+            "Leaderboard rank snapshot unavailable; using safe fallback without rank_change"
+        )
+        return await method(fallback_query, *args)
 
 
 # =========================================================
@@ -12,54 +49,79 @@ async def get_global_leaderboard_users(
 ) -> list[asyncpg.Record]:
     safe_limit = max(1, min(limit, 100))
 
-    async with get_connection() as connection:
-        return await connection.fetch(
-            """
-            WITH latest_snapshot AS (
-                SELECT MAX(snapshot_date) AS snapshot_date
-                FROM leaderboard_rank_snapshots
-                WHERE leaderboard_type = 'global'
-                  AND season_number = 0
-            ),
-            ranked AS (
-                SELECT
-                    ROW_NUMBER() OVER (
-                        ORDER BY
-                            stats.total_xp DESC,
-                            stats.user_id ASC
-                    )::INTEGER AS rank,
-                    users.id AS user_id,
-                    users.nickname,
-                    users.avatar_key,
-                    stats.total_xp,
-                    stats.current_streak
-                FROM user_stats AS stats
-                INNER JOIN users
-                    ON users.id = stats.user_id
-            )
+    snapshot_query = """
+        WITH latest_snapshot AS (
+            SELECT MAX(snapshot_date) AS snapshot_date
+            FROM leaderboard_rank_snapshots
+            WHERE leaderboard_type = 'global'
+              AND season_number = 0
+        ),
+        ranked AS (
             SELECT
-                ranked.rank,
-                ranked.user_id,
-                ranked.nickname,
-                ranked.avatar_key,
-                ranked.total_xp,
-                ranked.current_streak,
-                snapshot.rank AS previous_rank,
-                CASE
-                    WHEN snapshot.rank IS NULL THEN 0
-                    ELSE snapshot.rank - ranked.rank
-                END::INTEGER AS rank_change
-            FROM ranked
-            LEFT JOIN latest_snapshot
-                ON TRUE
-            LEFT JOIN leaderboard_rank_snapshots AS snapshot
-                ON snapshot.snapshot_date = latest_snapshot.snapshot_date
-               AND snapshot.leaderboard_type = 'global'
-               AND snapshot.season_number = 0
-               AND snapshot.user_id = ranked.user_id
-            ORDER BY ranked.rank ASC
-            LIMIT $1
-            """,
+                ROW_NUMBER() OVER (
+                    ORDER BY
+                        stats.total_xp DESC,
+                        stats.user_id ASC
+                )::INTEGER AS rank,
+                users.id AS user_id,
+                users.nickname,
+                users.avatar_key,
+                stats.total_xp,
+                stats.current_streak
+            FROM user_stats AS stats
+            INNER JOIN users
+                ON users.id = stats.user_id
+        )
+        SELECT
+            ranked.rank,
+            ranked.user_id,
+            ranked.nickname,
+            ranked.avatar_key,
+            ranked.total_xp,
+            ranked.current_streak,
+            snapshot.rank AS previous_rank,
+            CASE
+                WHEN snapshot.rank IS NULL THEN 0
+                ELSE snapshot.rank - ranked.rank
+            END::INTEGER AS rank_change
+        FROM ranked
+        LEFT JOIN latest_snapshot
+            ON TRUE
+        LEFT JOIN leaderboard_rank_snapshots AS snapshot
+            ON snapshot.snapshot_date = latest_snapshot.snapshot_date
+           AND snapshot.leaderboard_type = 'global'
+           AND snapshot.season_number = 0
+           AND snapshot.user_id = ranked.user_id
+        ORDER BY ranked.rank ASC
+        LIMIT $1
+    """
+
+    fallback_query = """
+        SELECT
+            ROW_NUMBER() OVER (
+                ORDER BY
+                    stats.total_xp DESC,
+                    stats.user_id ASC
+            )::INTEGER AS rank,
+            users.id AS user_id,
+            users.nickname,
+            users.avatar_key,
+            stats.total_xp,
+            stats.current_streak
+        FROM user_stats AS stats
+        INNER JOIN users
+            ON users.id = stats.user_id
+        ORDER BY
+            stats.total_xp DESC,
+            stats.user_id ASC
+        LIMIT $1
+    """
+
+    async with get_connection() as connection:
+        return await _fetch_with_rank_snapshot(
+            connection,
+            snapshot_query,
+            fallback_query,
             safe_limit,
         )
 
@@ -71,59 +133,87 @@ async def get_global_leaderboard_users(
 async def get_global_current_user(
     user_id: int,
 ) -> asyncpg.Record | None:
-    async with get_connection() as connection:
-        return await connection.fetchrow(
-            """
-            WITH latest_snapshot AS (
-                SELECT MAX(snapshot_date) AS snapshot_date
-                FROM leaderboard_rank_snapshots
-                WHERE leaderboard_type = 'global'
-                  AND season_number = 0
-            ),
-            current_user AS (
-                SELECT
-                    current_stats.user_id,
-                    user_data.nickname,
-                    user_data.avatar_key,
-                    current_stats.total_xp,
-                    current_stats.current_streak,
-                    (
-                        SELECT COUNT(*) + 1
-                        FROM user_stats AS other_stats
-                        WHERE
-                            other_stats.total_xp > current_stats.total_xp
-                            OR (
-                                other_stats.total_xp = current_stats.total_xp
-                                AND other_stats.user_id < current_stats.user_id
-                            )
-                    )::INTEGER AS rank
-                FROM user_stats AS current_stats
-                INNER JOIN users AS user_data
-                    ON user_data.id = current_stats.user_id
-                WHERE current_stats.user_id = $1
-            )
+    snapshot_query = """
+        WITH latest_snapshot AS (
+            SELECT MAX(snapshot_date) AS snapshot_date
+            FROM leaderboard_rank_snapshots
+            WHERE leaderboard_type = 'global'
+              AND season_number = 0
+        ),
+        current_user AS (
             SELECT
-                current_user.user_id,
-                current_user.nickname,
-                current_user.avatar_key,
-                current_user.total_xp,
-                current_user.current_streak,
-                current_user.rank,
-                snapshot.rank AS previous_rank,
-                CASE
-                    WHEN snapshot.rank IS NULL THEN 0
-                    ELSE snapshot.rank - current_user.rank
-                END::INTEGER AS rank_change
-            FROM current_user
-            LEFT JOIN latest_snapshot
-                ON TRUE
-            LEFT JOIN leaderboard_rank_snapshots AS snapshot
-                ON snapshot.snapshot_date = latest_snapshot.snapshot_date
-               AND snapshot.leaderboard_type = 'global'
-               AND snapshot.season_number = 0
-               AND snapshot.user_id = current_user.user_id
-            """,
+                current_stats.user_id,
+                user_data.nickname,
+                user_data.avatar_key,
+                current_stats.total_xp,
+                current_stats.current_streak,
+                (
+                    SELECT COUNT(*) + 1
+                    FROM user_stats AS other_stats
+                    WHERE
+                        other_stats.total_xp > current_stats.total_xp
+                        OR (
+                            other_stats.total_xp = current_stats.total_xp
+                            AND other_stats.user_id < current_stats.user_id
+                        )
+                )::INTEGER AS rank
+            FROM user_stats AS current_stats
+            INNER JOIN users AS user_data
+                ON user_data.id = current_stats.user_id
+            WHERE current_stats.user_id = $1
+        )
+        SELECT
+            current_user.user_id,
+            current_user.nickname,
+            current_user.avatar_key,
+            current_user.total_xp,
+            current_user.current_streak,
+            current_user.rank,
+            snapshot.rank AS previous_rank,
+            CASE
+                WHEN snapshot.rank IS NULL THEN 0
+                ELSE snapshot.rank - current_user.rank
+            END::INTEGER AS rank_change
+        FROM current_user
+        LEFT JOIN latest_snapshot
+            ON TRUE
+        LEFT JOIN leaderboard_rank_snapshots AS snapshot
+            ON snapshot.snapshot_date = latest_snapshot.snapshot_date
+           AND snapshot.leaderboard_type = 'global'
+           AND snapshot.season_number = 0
+           AND snapshot.user_id = current_user.user_id
+    """
+
+    fallback_query = """
+        SELECT
+            current_stats.user_id,
+            user_data.nickname,
+            user_data.avatar_key,
+            current_stats.total_xp,
+            current_stats.current_streak,
+            (
+                SELECT COUNT(*) + 1
+                FROM user_stats AS other_stats
+                WHERE
+                    other_stats.total_xp > current_stats.total_xp
+                    OR (
+                        other_stats.total_xp = current_stats.total_xp
+                        AND other_stats.user_id < current_stats.user_id
+                    )
+            )::INTEGER AS rank
+        FROM user_stats AS current_stats
+        INNER JOIN users AS user_data
+            ON user_data.id = current_stats.user_id
+        WHERE current_stats.user_id = $1
+    """
+
+    async with get_connection() as connection:
+        return await _fetch_with_rank_snapshot(
+            connection,
+            snapshot_query,
+            fallback_query,
             user_id,
+            fetchrow=True,
         )
 
 
@@ -137,59 +227,89 @@ async def get_season_leaderboard_users(
 ) -> list[asyncpg.Record]:
     safe_limit = max(1, min(limit, 100))
 
-    async with get_connection() as connection:
-        return await connection.fetch(
-            """
-            WITH latest_snapshot AS (
-                SELECT MAX(snapshot_date) AS snapshot_date
-                FROM leaderboard_rank_snapshots
-                WHERE leaderboard_type = 'season'
-                  AND season_number = $1
-            ),
-            ranked AS (
-                SELECT
-                    ROW_NUMBER() OVER (
-                        ORDER BY
-                            season_stats.season_xp DESC,
-                            season_stats.user_id ASC
-                    )::INTEGER AS rank,
-                    users.id AS user_id,
-                    users.nickname,
-                    users.avatar_key,
-                    season_stats.season_xp::INTEGER AS season_xp,
-                    global_stats.current_streak
-                FROM user_season_stats AS season_stats
-                INNER JOIN users
-                    ON users.id = season_stats.user_id
-                INNER JOIN user_stats AS global_stats
-                    ON global_stats.user_id = season_stats.user_id
-                WHERE
-                    season_stats.season_number = $1
-                    AND season_stats.season_xp > 0
-            )
+    snapshot_query = """
+        WITH latest_snapshot AS (
+            SELECT MAX(snapshot_date) AS snapshot_date
+            FROM leaderboard_rank_snapshots
+            WHERE leaderboard_type = 'season'
+              AND season_number = $1
+        ),
+        ranked AS (
             SELECT
-                ranked.rank,
-                ranked.user_id,
-                ranked.nickname,
-                ranked.avatar_key,
-                ranked.season_xp,
-                ranked.current_streak,
-                snapshot.rank AS previous_rank,
-                CASE
-                    WHEN snapshot.rank IS NULL THEN 0
-                    ELSE snapshot.rank - ranked.rank
-                END::INTEGER AS rank_change
-            FROM ranked
-            LEFT JOIN latest_snapshot
-                ON TRUE
-            LEFT JOIN leaderboard_rank_snapshots AS snapshot
-                ON snapshot.snapshot_date = latest_snapshot.snapshot_date
-               AND snapshot.leaderboard_type = 'season'
-               AND snapshot.season_number = $1
-               AND snapshot.user_id = ranked.user_id
-            ORDER BY ranked.rank ASC
-            LIMIT $2
-            """,
+                ROW_NUMBER() OVER (
+                    ORDER BY
+                        season_stats.season_xp DESC,
+                        season_stats.user_id ASC
+                )::INTEGER AS rank,
+                users.id AS user_id,
+                users.nickname,
+                users.avatar_key,
+                season_stats.season_xp::INTEGER AS season_xp,
+                global_stats.current_streak
+            FROM user_season_stats AS season_stats
+            INNER JOIN users
+                ON users.id = season_stats.user_id
+            INNER JOIN user_stats AS global_stats
+                ON global_stats.user_id = season_stats.user_id
+            WHERE
+                season_stats.season_number = $1
+                AND season_stats.season_xp > 0
+        )
+        SELECT
+            ranked.rank,
+            ranked.user_id,
+            ranked.nickname,
+            ranked.avatar_key,
+            ranked.season_xp,
+            ranked.current_streak,
+            snapshot.rank AS previous_rank,
+            CASE
+                WHEN snapshot.rank IS NULL THEN 0
+                ELSE snapshot.rank - ranked.rank
+            END::INTEGER AS rank_change
+        FROM ranked
+        LEFT JOIN latest_snapshot
+            ON TRUE
+        LEFT JOIN leaderboard_rank_snapshots AS snapshot
+            ON snapshot.snapshot_date = latest_snapshot.snapshot_date
+           AND snapshot.leaderboard_type = 'season'
+           AND snapshot.season_number = $1
+           AND snapshot.user_id = ranked.user_id
+        ORDER BY ranked.rank ASC
+        LIMIT $2
+    """
+
+    fallback_query = """
+        SELECT
+            ROW_NUMBER() OVER (
+                ORDER BY
+                    season_stats.season_xp DESC,
+                    season_stats.user_id ASC
+            )::INTEGER AS rank,
+            users.id AS user_id,
+            users.nickname,
+            users.avatar_key,
+            season_stats.season_xp::INTEGER AS season_xp,
+            global_stats.current_streak
+        FROM user_season_stats AS season_stats
+        INNER JOIN users
+            ON users.id = season_stats.user_id
+        INNER JOIN user_stats AS global_stats
+            ON global_stats.user_id = season_stats.user_id
+        WHERE
+            season_stats.season_number = $1
+            AND season_stats.season_xp > 0
+        ORDER BY
+            season_stats.season_xp DESC,
+            season_stats.user_id ASC
+        LIMIT $2
+    """
+
+    async with get_connection() as connection:
+        return await _fetch_with_rank_snapshot(
+            connection,
+            snapshot_query,
+            fallback_query,
             season_number,
             safe_limit,
         )
@@ -203,68 +323,106 @@ async def get_season_current_user(
     season_number: int,
     user_id: int,
 ) -> asyncpg.Record | None:
-    async with get_connection() as connection:
-        return await connection.fetchrow(
-            """
-            WITH latest_snapshot AS (
-                SELECT MAX(snapshot_date) AS snapshot_date
-                FROM leaderboard_rank_snapshots
-                WHERE leaderboard_type = 'season'
-                  AND season_number = $1
-            ),
-            current_user AS (
-                SELECT
-                    users.id AS user_id,
-                    users.nickname,
-                    users.avatar_key,
-                    COALESCE(season_stats.season_xp, 0)::INTEGER AS season_xp,
-                    global_stats.current_streak,
-                    (
-                        SELECT COUNT(*) + 1
-                        FROM users AS other_users
-                        INNER JOIN user_stats AS other_global_stats
-                            ON other_global_stats.user_id = other_users.id
-                        LEFT JOIN user_season_stats AS other_season_stats
-                            ON other_season_stats.user_id = other_users.id
-                           AND other_season_stats.season_number = $1
-                        WHERE
-                            COALESCE(other_season_stats.season_xp, 0)
-                                > COALESCE(season_stats.season_xp, 0)
-                            OR (
-                                COALESCE(other_season_stats.season_xp, 0)
-                                    = COALESCE(season_stats.season_xp, 0)
-                                AND other_users.id < users.id
-                            )
-                    )::INTEGER AS rank
-                FROM users
-                INNER JOIN user_stats AS global_stats
-                    ON global_stats.user_id = users.id
-                LEFT JOIN user_season_stats AS season_stats
-                    ON season_stats.user_id = users.id
-                   AND season_stats.season_number = $1
-                WHERE users.id = $2
-            )
+    snapshot_query = """
+        WITH latest_snapshot AS (
+            SELECT MAX(snapshot_date) AS snapshot_date
+            FROM leaderboard_rank_snapshots
+            WHERE leaderboard_type = 'season'
+              AND season_number = $1
+        ),
+        current_user AS (
             SELECT
-                current_user.user_id,
-                current_user.nickname,
-                current_user.avatar_key,
-                current_user.season_xp,
-                current_user.current_streak,
-                current_user.rank,
-                snapshot.rank AS previous_rank,
-                CASE
-                    WHEN snapshot.rank IS NULL THEN 0
-                    ELSE snapshot.rank - current_user.rank
-                END::INTEGER AS rank_change
-            FROM current_user
-            LEFT JOIN latest_snapshot
-                ON TRUE
-            LEFT JOIN leaderboard_rank_snapshots AS snapshot
-                ON snapshot.snapshot_date = latest_snapshot.snapshot_date
-               AND snapshot.leaderboard_type = 'season'
-               AND snapshot.season_number = $1
-               AND snapshot.user_id = current_user.user_id
-            """,
+                users.id AS user_id,
+                users.nickname,
+                users.avatar_key,
+                COALESCE(season_stats.season_xp, 0)::INTEGER AS season_xp,
+                global_stats.current_streak,
+                (
+                    SELECT COUNT(*) + 1
+                    FROM users AS other_users
+                    INNER JOIN user_stats AS other_global_stats
+                        ON other_global_stats.user_id = other_users.id
+                    LEFT JOIN user_season_stats AS other_season_stats
+                        ON other_season_stats.user_id = other_users.id
+                       AND other_season_stats.season_number = $1
+                    WHERE
+                        COALESCE(other_season_stats.season_xp, 0)
+                            > COALESCE(season_stats.season_xp, 0)
+                        OR (
+                            COALESCE(other_season_stats.season_xp, 0)
+                                = COALESCE(season_stats.season_xp, 0)
+                            AND other_users.id < users.id
+                        )
+                )::INTEGER AS rank
+            FROM users
+            INNER JOIN user_stats AS global_stats
+                ON global_stats.user_id = users.id
+            LEFT JOIN user_season_stats AS season_stats
+                ON season_stats.user_id = users.id
+               AND season_stats.season_number = $1
+            WHERE users.id = $2
+        )
+        SELECT
+            current_user.user_id,
+            current_user.nickname,
+            current_user.avatar_key,
+            current_user.season_xp,
+            current_user.current_streak,
+            current_user.rank,
+            snapshot.rank AS previous_rank,
+            CASE
+                WHEN snapshot.rank IS NULL THEN 0
+                ELSE snapshot.rank - current_user.rank
+            END::INTEGER AS rank_change
+        FROM current_user
+        LEFT JOIN latest_snapshot
+            ON TRUE
+        LEFT JOIN leaderboard_rank_snapshots AS snapshot
+            ON snapshot.snapshot_date = latest_snapshot.snapshot_date
+           AND snapshot.leaderboard_type = 'season'
+           AND snapshot.season_number = $1
+           AND snapshot.user_id = current_user.user_id
+    """
+
+    fallback_query = """
+        SELECT
+            users.id AS user_id,
+            users.nickname,
+            users.avatar_key,
+            COALESCE(season_stats.season_xp, 0)::INTEGER AS season_xp,
+            global_stats.current_streak,
+            (
+                SELECT COUNT(*) + 1
+                FROM users AS other_users
+                INNER JOIN user_stats AS other_global_stats
+                    ON other_global_stats.user_id = other_users.id
+                LEFT JOIN user_season_stats AS other_season_stats
+                    ON other_season_stats.user_id = other_users.id
+                   AND other_season_stats.season_number = $1
+                WHERE
+                    COALESCE(other_season_stats.season_xp, 0)
+                        > COALESCE(season_stats.season_xp, 0)
+                    OR (
+                        COALESCE(other_season_stats.season_xp, 0)
+                            = COALESCE(season_stats.season_xp, 0)
+                        AND other_users.id < users.id
+                    )
+            )::INTEGER AS rank
+        FROM users
+        INNER JOIN user_stats AS global_stats
+            ON global_stats.user_id = users.id
+        LEFT JOIN user_season_stats AS season_stats
+            ON season_stats.user_id = users.id
+           AND season_stats.season_number = $1
+        WHERE users.id = $2
+    """
+
+    async with get_connection() as connection:
+        return await _fetch_with_rank_snapshot(
+            connection,
+            snapshot_query,
+            fallback_query,
             season_number,
             user_id,
+            fetchrow=True,
         )
