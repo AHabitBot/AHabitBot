@@ -56,7 +56,7 @@
 
     overflow: hidden;
 
-    border-radius: 24px;
+    border-radius: 50%;
 
     background:
         color-mix(
@@ -77,7 +77,7 @@
     width: 100%;
     height: 100%;
 
-    border-radius: 21px;
+    border-radius: 50%;
 
     object-fit: cover;
 }
@@ -462,19 +462,19 @@
     }
 
 
-    .profile-user-card__avatar-wrap {
-        width: 84px;
-        height: 84px;
+.profile-user-card__avatar-wrap {
+    width: 84px;
+    height: 84px;
 
-        padding: 3px;
+    padding: 3px;
 
-        border-radius: 22px;
-    }
+    border-radius: 50%;
+}
 
 
-    .profile-user-card__avatar {
-        border-radius: 19px;
-    }
+.profile-user-card__avatar {
+    border-radius: 50%;
+}
 
 
     .profile-user-card__name-row {
