@@ -60,6 +60,23 @@
     border-bottom: none;
 }
 
+/* =========================================================
+   ROW WITH RANK CHANGE
+
+   rank | ↑1 / ↓1 | avatar | info | xp
+   ========================================================= */
+
+.leaderboard-list__row:has(.leaderboard-rank-change) {
+    grid-template-columns:
+        34px
+        34px
+        42px
+        minmax(0, 1fr)
+        auto;
+
+    column-gap: 6px;
+}
+
 
 /* =========================================================
    RANK
@@ -280,8 +297,7 @@
 }
 
 /* =========================================================
-   RANK + RANK CHANGE
-   Фиксированные независимые позиции
+   RANK / RANK CHANGE
    ========================================================= */
 
 .leaderboard-list__rank-wrap {
@@ -291,71 +307,44 @@
 
 /* =========================================================
    RANK
+   Всегда первая фиксированная позиция
    ========================================================= */
 
 .leaderboard-list__rank {
-    grid-column: 1;
-
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 28px;
-    min-width: 28px;
+    width: 34px;
+    min-width: 34px;
+
+    color: var(--app-text-primary);
+
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1;
 
     text-align: center;
+
+    -webkit-font-smoothing: antialiased;
 }
 
 
 /* =========================================================
-   RANK CHANGE SLOT
-   Всегда занимает своё место, даже если изменения нет
+   RANK CHANGE
+   Существует только при фактическом изменении позиции
    ========================================================= */
 
 .leaderboard-list__rank-change {
-    grid-column: 2;
-
     display: flex;
     align-items: center;
     justify-content: flex-start;
 
-    width: 38px;
-    min-width: 38px;
+    min-width: 0;
 
     overflow: visible;
 }
 
-
-/* =========================================================
-   AVATAR
-   ========================================================= */
-
-.leaderboard-list__avatar {
-    grid-column: 3;
-}
-
-
-/* =========================================================
-   INFO
-   ========================================================= */
-
-.leaderboard-list__info {
-    grid-column: 4;
-}
-
-
-/* =========================================================
-   XP
-   ========================================================= */
-
-.leaderboard-list__xp {
-    grid-column: 5;
-}
-
-
-/* =========================================================
-   RANK CHANGE CONTENT
-   ========================================================= */
 
 .leaderboard-rank-change {
     display: inline-flex;
@@ -372,15 +361,21 @@
 }
 
 
+/* UP */
+
 .leaderboard-rank-change--up {
     color: var(--app-green-active);
 }
 
 
+/* DOWN */
+
 .leaderboard-rank-change--down {
     color: #e45d4f;
 }
 
+
+/* ARROW */
 
 .leaderboard-rank-change__icon {
     flex: 0 0 auto;
@@ -395,6 +390,8 @@
         "opsz" 18;
 }
 
+
+/* VALUE */
 
 .leaderboard-rank-change__value {
     transform: translateY(0.5px);
