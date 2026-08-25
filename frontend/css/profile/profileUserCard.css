@@ -107,8 +107,10 @@
 
     gap: 6px;
 
+    min-height: 38px;
+
     padding:
-        6px
+        8px
         10px;
 
     box-sizing: border-box;
@@ -214,8 +216,10 @@
 
     margin-top: 8px;
 
+    min-height: 38px;
+
     padding:
-        6px
+        8px
         10px;
 
     box-sizing: border-box;
@@ -474,7 +478,7 @@
    ========================================================= */
 
 @media (
-    min-width: 430px
+    min-width: 390px
 ) {
 
     .profile-user-card__info {
