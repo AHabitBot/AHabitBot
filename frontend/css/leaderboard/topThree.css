@@ -600,46 +600,70 @@
 
 /* =========================================================
    RANK CHANGE — TOP 3
-   Как на референсе: слева в верхней части карточки.
+   Левый верхний угол карточки
    ========================================================= */
 
 .leaderboard-top-card__rank-change {
     position: absolute;
-    top: 34px;
-    left: 8px;
+
+    top: 12px;
+    left: 10px;
 
     z-index: 3;
 
     display: inline-flex;
     align-items: center;
+    justify-content: flex-start;
+
     gap: 1px;
 
     font-size: 12px;
     font-weight: 750;
     line-height: 1;
+
+    pointer-events: none;
 }
+
+
+/* Иконка стрелки */
 
 .leaderboard-top-card__rank-change
 .leaderboard-rank-change__icon {
     font-size: 18px;
+    line-height: 1;
 }
+
+
+/* =========================================================
+   FIRST PLACE
+   Оставляем то же положение относительно своей карточки
+   ========================================================= */
 
 .leaderboard-top-card--1
 .leaderboard-top-card__rank-change {
-    top: 42px;
+    top: 12px;
 }
 
+
+/* =========================================================
+   SMALL SCREENS
+   ========================================================= */
+
 @media (max-width: 380px) {
+
     .leaderboard-top-card__rank-change {
-        top: 32px;
-        left: 6px;
+        top: 10px;
+        left: 8px;
+
         font-size: 11px;
     }
 
+
     .leaderboard-top-card--1
     .leaderboard-top-card__rank-change {
-        top: 39px;
+        top: 10px;
     }
+
 
     .leaderboard-top-card__rank-change
     .leaderboard-rank-change__icon {
