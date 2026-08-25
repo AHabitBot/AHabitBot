@@ -196,6 +196,11 @@ function normalizeLeaderboardUser(
                 user?.rank
             ),
 
+        rankChange:
+            normalizeRankChange(
+                user?.rank_change
+            ),
+
         name:
             normalizeName(
                 user?.nickname
@@ -266,6 +271,11 @@ function normalizeCurrentUser(
         rank:
             normalizePositiveInteger(
                 user.rank
+            ),
+
+        rankChange:
+            normalizeRankChange(
+                user.rank_change
             ),
 
         name: "",
@@ -418,6 +428,20 @@ function normalizePositiveInteger(
 /* =========================================================
    НЕОТРИЦАТЕЛЬНОЕ ЧИСЛО
    ========================================================= */
+
+function normalizeRankChange(
+    value
+) {
+    const number =
+        Number(value);
+
+    if (!Number.isFinite(number)) {
+        return 0;
+    }
+
+    return Math.trunc(number);
+}
+
 
 function normalizeNonNegativeInteger(
     value

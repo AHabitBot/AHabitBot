@@ -182,6 +182,11 @@ export function renderTopThree(users = []) {
                         leaderboard-top-card--${user.rank}
                     "
                 >
+                    ${renderRankChange(
+                        user.rankChange,
+                        "leaderboard-top-card__rank-change"
+                    )}
+
                     <div
                         class="leaderboard-top-card__crown"
                         aria-label="${t("leaderboard.common.placeAria", { rank: user.rank })}"
@@ -252,9 +257,16 @@ export function renderLeaderboardList(users = []) {
             ${users.map((user) => `
                 <article class="leaderboard-list__row">
 
-                    <span class="leaderboard-list__rank">
-                        ${user.rank}
-                    </span>
+                    <div class="leaderboard-list__rank-wrap">
+                        <span class="leaderboard-list__rank">
+                            ${user.rank}
+                        </span>
+
+                        ${renderRankChange(
+                            user.rankChange,
+                            "leaderboard-list__rank-change"
+                        )}
+                    </div>
 
                     <img
                         class="leaderboard-list__avatar"
@@ -316,9 +328,16 @@ export function renderCurrentUser(user = null) {
             class="leaderboard-current-user"
             aria-label="${t("leaderboard.common.currentUserAria")}"
         >
-            <span class="leaderboard-current-user__rank">
-                ${user.rank}
-            </span>
+            <div class="leaderboard-current-user__rank-wrap">
+                <span class="leaderboard-current-user__rank">
+                    ${user.rank}
+                </span>
+
+                ${renderRankChange(
+                    user.rankChange,
+                    "leaderboard-current-user__rank-change"
+                )}
+            </div>
 
             <img
                 class="leaderboard-current-user__avatar"
@@ -362,6 +381,56 @@ export function renderCurrentUser(user = null) {
     `;
 }
 
+
+
+
+/* =========================================================
+   RANK CHANGE
+   ========================================================= */
+
+function renderRankChange(
+    value,
+    className = ""
+) {
+    const change = Number(value);
+
+    if (
+        !Number.isFinite(change)
+        || change === 0
+    ) {
+        return "";
+    }
+
+    const isUp = change > 0;
+    const amount = Math.abs(
+        Math.trunc(change)
+    );
+
+    return `
+        <span
+            class="
+                leaderboard-rank-change
+                ${
+                    isUp
+                        ? "leaderboard-rank-change--up"
+                        : "leaderboard-rank-change--down"
+                }
+                ${className}
+            "
+        >
+            ${renderMaterialIcon(
+                isUp
+                    ? "arrow_upward"
+                    : "arrow_downward",
+                "leaderboard-rank-change__icon"
+            )}
+
+            <span class="leaderboard-rank-change__value">
+                ${amount}
+            </span>
+        </span>
+    `;
+}
 
 /* =========================================================
    STREAK FORMAT

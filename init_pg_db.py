@@ -227,6 +227,46 @@ ON user_season_stats (
 );
 
 
+CREATE TABLE IF NOT EXISTS leaderboard_rank_snapshots (
+    snapshot_date DATE NOT NULL,
+    leaderboard_type VARCHAR(16) NOT NULL,
+    season_number INTEGER NOT NULL DEFAULT 0,
+    user_id BIGINT NOT NULL,
+    rank INTEGER NOT NULL CHECK (rank >= 1),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (
+        snapshot_date,
+        leaderboard_type,
+        season_number,
+        user_id
+    ),
+
+    CONSTRAINT fk_leaderboard_rank_snapshots_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT chk_leaderboard_rank_snapshot_type
+        CHECK (leaderboard_type IN ('global', 'season')),
+
+    CONSTRAINT chk_leaderboard_rank_snapshot_season
+        CHECK (
+            (leaderboard_type = 'global' AND season_number = 0)
+            OR
+            (leaderboard_type = 'season' AND season_number >= 1)
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_leaderboard_rank_snapshots_lookup
+    ON leaderboard_rank_snapshots (
+        leaderboard_type,
+        season_number,
+        snapshot_date DESC,
+        user_id
+    );
+
+
 CREATE INDEX IF NOT EXISTS idx_habits_user_id
     ON habits(user_id);
 
@@ -348,6 +388,7 @@ async def init_database() -> None:
         print("   • user_achievements")
         print("   • user_stats")
         print("   • user_season_stats")
+        print("   • leaderboard_rank_snapshots")
 
     finally:
         await connection.close()

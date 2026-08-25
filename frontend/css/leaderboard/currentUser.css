@@ -30,7 +30,7 @@
     display: grid;
 
     grid-template-columns:
-        30px
+        46px
         44px
         minmax(
             0,
@@ -254,7 +254,7 @@
 
     .leaderboard-current-user {
         grid-template-columns:
-            26px
+            42px
             40px
             minmax(
                 0,
@@ -288,4 +288,26 @@
     .leaderboard-current-user__xp {
         font-size: 15px;
     }
+}
+
+/* =========================================================
+   RANK CHANGE
+   ========================================================= */
+
+.leaderboard-current-user__rank-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+}
+
+.leaderboard-current-user__rank-change {
+    flex: 0 0 auto;
+    font-size: 11px;
+}
+
+.leaderboard-current-user__rank-change
+.leaderboard-rank-change__icon {
+    font-size: 15px;
 }
