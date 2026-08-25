@@ -4,6 +4,9 @@ from backend.database.database import get_connection
 from config import BOT_USERNAME
 
 
+DEFAULT_AVATAR_KEY = "standard_m_01"
+
+
 # ============================================================================
 # Получение пользователей
 # ============================================================================
@@ -52,15 +55,17 @@ async def create_user(
                     telegram_id,
                     username,
                     first_name,
-                    referral_link
+                    referral_link,
+                    avatar_key
                 )
-                VALUES ($1, $2, $3, $4)
+                VALUES ($1, $2, $3, $4, $5)
                 RETURNING id
                 """,
                 telegram_id,
                 username,
                 first_name,
                 referral_link,
+                DEFAULT_AVATAR_KEY,
             )
 
             if new_user is None:

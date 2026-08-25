@@ -22,6 +22,21 @@ CREATE TABLE IF NOT EXISTS users (
 
 
 
+-- Гарантируем правильный default и для уже существующей таблицы users.
+-- CREATE TABLE IF NOT EXISTS не меняет DEFAULT у ранее созданной колонки.
+ALTER TABLE users
+    ALTER COLUMN avatar_key
+    SET DEFAULT 'standard_m_01';
+
+-- Исправляем только известные устаревшие значения,
+-- не затрагивая выбранные пользователями валидные аватары.
+UPDATE users
+SET
+    avatar_key = 'standard_m_01',
+    updated_at = NOW()
+WHERE avatar_key IN ('beginer_m', 'beginner_m');
+
+
 
 CREATE TABLE IF NOT EXISTS user_settings (
     id BIGSERIAL PRIMARY KEY,
