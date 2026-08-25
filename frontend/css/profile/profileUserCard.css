@@ -258,6 +258,8 @@
 
     color:
         var(--app-green-ui);
+
+    white-space: nowrap;
 }
 
 
@@ -424,7 +426,7 @@
 
 
 /* =========================================================
-   DARK MODE — NICKNAME
+   DARK MODE — NICKNAME + LEVEL
    ========================================================= */
 
 :root[data-theme="dark"]
@@ -472,6 +474,7 @@
         );
 }
 
+
 /* =========================================================
    МАЛЕНЬКИЕ ЭКРАНЫ
    ========================================================= */
@@ -487,19 +490,19 @@
     }
 
 
-.profile-user-card__avatar-wrap {
-    width: 84px;
-    height: 84px;
+    .profile-user-card__avatar-wrap {
+        width: 84px;
+        height: 84px;
 
-    padding: 3px;
+        padding: 3px;
 
-    border-radius: 50%;
-}
+        border-radius: 50%;
+    }
 
 
-.profile-user-card__avatar {
-    border-radius: 50%;
-}
+    .profile-user-card__avatar {
+        border-radius: 50%;
+    }
 
 
     .profile-user-card__name-row {
@@ -540,19 +543,29 @@
     }
 }
 
+
 /* =========================================================
-   БОЛЬШИЕ ЭКРАНЫ — НИКНЕЙМ + УРОВЕНЬ В ОДНУ СТРОКУ
+   ШИРОКИЕ ЭКРАНЫ — НИКНЕЙМ + УРОВЕНЬ В ОДНУ СТРОКУ
    ========================================================= */
 
 @media (
-    min-width: 520px
+    min-width: 600px
 ) {
 
     .profile-user-card__info {
         display: flex;
         align-items: center;
+        flex-wrap: nowrap;
 
         gap: 8px;
+    }
+
+
+    .profile-user-card__name-row {
+        flex: 0 1 auto;
+
+        min-width: 0;
+        margin: 0;
     }
 
 
@@ -560,10 +573,5 @@
         flex: 0 0 auto;
 
         margin-top: 0;
-    }
-
-
-    .profile-user-card__name-row {
-        min-width: 0;
     }
 }
