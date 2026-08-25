@@ -115,15 +115,20 @@
 
     border:
         1px solid
-        var(--app-border);
+        color-mix(
+            in srgb,
+            var(--app-border)
+            75%,
+            transparent
+        );
 
-    border-radius: 12px;
+    border-radius: 14px;
 
     background:
         color-mix(
             in srgb,
             var(--app-surface)
-            84%,
+            76%,
             transparent
         );
 
@@ -210,26 +215,41 @@
     margin-top: 8px;
 
     padding:
-        4px
-        8px;
+        6px
+        10px;
+
+    box-sizing: border-box;
 
     border:
         1px solid
         color-mix(
             in srgb,
-            var(--app-green-ui)
-            12%,
+            var(--app-border)
+            75%,
             transparent
         );
 
-    border-radius: 999px;
+    border-radius: 14px;
 
     background:
         color-mix(
             in srgb,
-            var(--app-green-ui)
-            13%,
             var(--app-surface)
+            76%,
+            transparent
+        );
+
+    box-shadow:
+        var(--app-shadow);
+
+    backdrop-filter:
+        blur(
+            8px
+        );
+
+    -webkit-backdrop-filter:
+        blur(
+            8px
         );
 
     color:
@@ -404,12 +424,14 @@
    ========================================================= */
 
 :root[data-theme="dark"]
-.profile-user-card__name-row {
+.profile-user-card__name-row,
+:root[data-theme="dark"]
+.profile-user-card__level {
     background:
         color-mix(
             in srgb,
             var(--app-surface-raised)
-            84%,
+            82%,
             transparent
         );
 }
@@ -444,6 +466,35 @@
             82%,
             transparent
         );
+}
+
+
+/* =========================================================
+   БОЛЬШИЕ ЭКРАНЫ — НИКНЕЙМ + УРОВЕНЬ В ОДНУ СТРОКУ
+   ========================================================= */
+
+@media (
+    min-width: 430px
+) {
+
+    .profile-user-card__info {
+        display: flex;
+        align-items: center;
+
+        gap: 8px;
+    }
+
+
+    .profile-user-card__level {
+        flex: 0 0 auto;
+
+        margin-top: 0;
+    }
+
+
+    .profile-user-card__name-row {
+        min-width: 0;
+    }
 }
 
 
