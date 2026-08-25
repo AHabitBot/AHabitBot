@@ -472,36 +472,6 @@
         );
 }
 
-
-/* =========================================================
-   БОЛЬШИЕ ЭКРАНЫ — НИКНЕЙМ + УРОВЕНЬ В ОДНУ СТРОКУ
-   ========================================================= */
-
-@media (
-    min-width: 390px
-) {
-
-    .profile-user-card__info {
-        display: flex;
-        align-items: center;
-
-        gap: 8px;
-    }
-
-
-    .profile-user-card__level {
-        flex: 0 0 auto;
-
-        margin-top: 0;
-    }
-
-
-    .profile-user-card__name-row {
-        min-width: 0;
-    }
-}
-
-
 /* =========================================================
    МАЛЕНЬКИЕ ЭКРАНЫ
    ========================================================= */
@@ -567,5 +537,33 @@
         min-width: 80px;
 
         font-size: 12px;
+    }
+}
+
+/* =========================================================
+   БОЛЬШИЕ ЭКРАНЫ — НИКНЕЙМ + УРОВЕНЬ В ОДНУ СТРОКУ
+   ========================================================= */
+
+@media (
+    min-width: 520px
+) {
+
+    .profile-user-card__info {
+        display: flex;
+        align-items: center;
+
+        gap: 8px;
+    }
+
+
+    .profile-user-card__level {
+        flex: 0 0 auto;
+
+        margin-top: 0;
+    }
+
+
+    .profile-user-card__name-row {
+        min-width: 0;
     }
 }
