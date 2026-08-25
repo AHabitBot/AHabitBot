@@ -33,14 +33,15 @@
     display: grid;
 
     grid-template-columns:
-        42px
+        28px
+        38px
         42px
         minmax(0, 1fr)
         auto;
 
     align-items: center;
 
-    column-gap: 10px;
+    column-gap: 6px;
 
     min-height: 64px;
 
@@ -279,42 +280,111 @@
 }
 
 /* =========================================================
-   RANK CHANGE
+   RANK + RANK CHANGE
+   Фиксированные независимые позиции
    ========================================================= */
 
 .leaderboard-list__rank-wrap {
+    display: contents;
+}
+
+
+/* =========================================================
+   RANK
+   ========================================================= */
+
+.leaderboard-list__rank {
+    grid-column: 1;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    min-width: 0;
+
+    width: 28px;
+    min-width: 28px;
+
+    text-align: center;
 }
 
+
+/* =========================================================
+   RANK CHANGE SLOT
+   Всегда занимает своё место, даже если изменения нет
+   ========================================================= */
+
 .leaderboard-list__rank-change {
-    flex: 0 0 auto;
+    grid-column: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: 38px;
+    min-width: 38px;
+
+    overflow: visible;
 }
+
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.leaderboard-list__avatar {
+    grid-column: 3;
+}
+
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.leaderboard-list__info {
+    grid-column: 4;
+}
+
+
+/* =========================================================
+   XP
+   ========================================================= */
+
+.leaderboard-list__xp {
+    grid-column: 5;
+}
+
+
+/* =========================================================
+   RANK CHANGE CONTENT
+   ========================================================= */
 
 .leaderboard-rank-change {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+
     gap: 0;
 
     font-size: 11px;
     font-weight: 700;
     line-height: 1;
+
     white-space: nowrap;
 }
+
 
 .leaderboard-rank-change--up {
     color: var(--app-green-active);
 }
 
+
 .leaderboard-rank-change--down {
     color: #e45d4f;
 }
 
+
 .leaderboard-rank-change__icon {
+    flex: 0 0 auto;
+
     font-size: 15px;
     line-height: 1;
 
@@ -324,6 +394,7 @@
         "GRAD" 0,
         "opsz" 18;
 }
+
 
 .leaderboard-rank-change__value {
     transform: translateY(0.5px);
