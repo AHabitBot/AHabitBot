@@ -33,15 +33,14 @@
     display: grid;
 
     grid-template-columns:
-        28px
-        38px
+        34px
         42px
         minmax(0, 1fr)
         auto;
 
     align-items: center;
 
-    column-gap: 6px;
+    column-gap: 8px;
 
     min-height: 64px;
 
