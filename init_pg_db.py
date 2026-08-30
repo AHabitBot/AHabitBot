@@ -227,6 +227,53 @@ ON user_season_stats (
 );
 
 
+CREATE TABLE IF NOT EXISTS season_results (
+    season_number INTEGER NOT NULL,
+    user_id BIGINT NOT NULL,
+    final_rank INTEGER NOT NULL,
+    final_xp INTEGER NOT NULL,
+    season_start_date DATE NOT NULL,
+    season_end_date DATE NOT NULL,
+    finalized_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (
+        season_number,
+        user_id
+    ),
+
+    CONSTRAINT fk_season_results_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT chk_season_results_number
+        CHECK (season_number >= 1),
+
+    CONSTRAINT chk_season_results_rank
+        CHECK (final_rank >= 1),
+
+    CONSTRAINT chk_season_results_xp
+        CHECK (final_xp > 0),
+
+    CONSTRAINT chk_season_results_dates
+        CHECK (season_end_date >= season_start_date)
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS
+idx_season_results_unique_rank
+ON season_results (
+    season_number,
+    final_rank
+);
+
+CREATE INDEX IF NOT EXISTS
+idx_season_results_user_history
+ON season_results (
+    user_id,
+    season_number DESC
+);
+
+
 CREATE TABLE IF NOT EXISTS leaderboard_rank_snapshots (
     snapshot_date DATE NOT NULL,
     leaderboard_type VARCHAR(16) NOT NULL,
@@ -388,6 +435,7 @@ async def init_database() -> None:
         print("   • user_achievements")
         print("   • user_stats")
         print("   • user_season_stats")
+        print("   • season_results")
         print("   • leaderboard_rank_snapshots")
 
     finally:

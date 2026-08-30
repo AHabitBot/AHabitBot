@@ -20,7 +20,10 @@ from backend.services.leaderboard.season_service import (
     get_season_number,
 )
 from backend.services.profile import get_profile
-from backend.services.stats import get_profile_stats
+from backend.services.stats import (
+    get_profile_season_history,
+    get_profile_stats,
+)
 
 
 router = APIRouter(
@@ -75,6 +78,7 @@ async def read_bootstrap(user: CurrentUser):
     week_task = asyncio.create_task(get_profile_stats(user_id=user_id, period="week"))
     month_task = asyncio.create_task(get_profile_stats(user_id=user_id, period="month"))
     year_task = asyncio.create_task(get_profile_stats(user_id=user_id, period="year"))
+    season_history_task = asyncio.create_task(get_profile_season_history(user_id=user_id))
     achievements_task = asyncio.create_task(get_achievements(user_id=user_id))
     referral_task = asyncio.create_task(get_referral_stats(inviter_user_id=user_id))
     settings_task = asyncio.create_task(get_user_settings(user_id=user_id))
@@ -86,6 +90,7 @@ async def read_bootstrap(user: CurrentUser):
         week_stats,
         month_stats,
         year_stats,
+        season_history,
         achievements,
         referral_stats,
         settings,
@@ -96,6 +101,7 @@ async def read_bootstrap(user: CurrentUser):
         week_task,
         month_task,
         year_task,
+        season_history_task,
         achievements_task,
         referral_task,
         settings_task,
@@ -123,6 +129,7 @@ async def read_bootstrap(user: CurrentUser):
             "week": week_stats,
             "month": month_stats,
             "year": year_stats,
+            "seasons": season_history,
         },
         "achievements": achievements,
         "settings": settings,

@@ -3,6 +3,7 @@ import {
 } from "../profileComponents.js";
 
 import {
+    fetchProfileSeasonHistory,
     fetchProfileStats
 } from "./profileStatsApi.js";
 
@@ -71,6 +72,12 @@ PERIODS.forEach((period) => {
         () => fetchProfileStats(period),
     );
 });
+
+
+registerResource(
+    RESOURCE_KEYS.STATS_SEASONS,
+    () => fetchProfileSeasonHistory(),
+);
 
 
 async function getStatsData(
@@ -1336,6 +1343,95 @@ function renderError(
 }
 
 
+
+
+/* =========================================================
+   SEASON HISTORY
+   ========================================================= */
+
+function formatSeasonDate(value) {
+    if (!value) {
+        return "";
+    }
+
+    const parts = String(value).split("-");
+
+    if (parts.length !== 3) {
+        return String(value);
+    }
+
+    return `${parts[2]}.${parts[1]}.${parts[0]}`;
+}
+
+
+function renderSeasonHistory(history) {
+    const seasons = Array.isArray(history)
+        ? history
+        : [];
+
+    if (!seasons.length) {
+        return "";
+    }
+
+    return `
+        <section
+            class="
+                profile-stats-card
+                profile-stats-seasons
+            "
+        >
+            <div class="profile-stats-card__header">
+                <h2 class="profile-stats-card__title">
+                    ${t("profile.stats.seasons.title")}
+                </h2>
+            </div>
+
+            <div class="profile-stats-seasons__list">
+                ${seasons
+                    .map((season) => `
+                        <article class="profile-stats-season">
+                            <div class="profile-stats-season__badge">
+                                <span class="material-symbols-rounded">
+                                    workspace_premium
+                                </span>
+                            </div>
+
+                            <div class="profile-stats-season__info">
+                                <div class="profile-stats-season__title-row">
+                                    <strong class="profile-stats-season__title">
+                                        ${t("profile.stats.seasons.season", {
+                                            number: Number(season.season_number) || 0,
+                                        })}
+                                    </strong>
+
+                                    <span class="profile-stats-season__status">
+                                        ${t("profile.stats.seasons.completed")}
+                                    </span>
+                                </div>
+
+                                <span class="profile-stats-season__dates">
+                                    ${formatSeasonDate(season.start_date)} – ${formatSeasonDate(season.end_date)}
+                                </span>
+                            </div>
+
+                            <div class="profile-stats-season__result">
+                                <strong class="profile-stats-season__rank">
+                                    #${Number(season.final_rank) || 0}
+                                </strong>
+
+                                <span class="profile-stats-season__xp">
+                                    ${Number(season.final_xp) || 0} XP
+                                </span>
+                            </div>
+                        </article>
+                    `)
+                    .join("")}
+            </div>
+        </section>
+    `;
+}
+
+
 /* =========================================================
    RENDER CONTENT
    ========================================================= */
@@ -1343,6 +1439,7 @@ function renderError(
 function renderStatsContent(
     root,
     data,
+    seasonHistory = [],
 ) {
     root.innerHTML = `
         <section class="profile-stats-page">
@@ -1369,6 +1466,10 @@ function renderStatsContent(
                     data,
                 )}
 
+                ${renderSeasonHistory(
+                    seasonHistory,
+                )}
+
             </main>
 
         </section>
@@ -1393,10 +1494,17 @@ async function loadStatsPeriod(
 
     try {
 
-        const data =
-            await getStatsData(
+        const [
+            data,
+            seasonHistory,
+        ] = await Promise.all([
+            getStatsData(
                 period,
-            );
+            ),
+            getResource(
+                RESOURCE_KEYS.STATS_SEASONS,
+            ),
+        ]);
 
         /*
          * Пользователь мог переключиться
@@ -1413,6 +1521,7 @@ async function loadStatsPeriod(
         renderStatsContent(
             root,
             data,
+            seasonHistory,
         );
 
     } catch (error) {
@@ -1484,12 +1593,20 @@ export function renderProfileStatsPage(
         );
 
     if (cached) {
-        renderStatsContent(
-            root,
-            cached,
-        );
+        const cachedSeasons =
+            peekResource(
+                RESOURCE_KEYS.STATS_SEASONS,
+            );
 
-        return;
+        if (cachedSeasons) {
+            renderStatsContent(
+                root,
+                cached,
+                cachedSeasons,
+            );
+
+            return;
+        }
     }
 
     renderLoading(

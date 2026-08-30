@@ -74,6 +74,11 @@ export default Object.freeze({
     "profile.stats.dynamics.title": "Динаміка активності",
     "profile.stats.dynamics.hint": "Медалі позначають дні, коли ти отримав досягнення.",
 
+
+    "profile.stats.seasons.title": "Історія сезонів",
+    "profile.stats.seasons.season": "Season {number}",
+    "profile.stats.seasons.completed": "Завершено",
+
     "profile.stats.loading": "Завантажуємо показники...",
     "profile.stats.error.title": "Не вдалося завантажити статистику",
     "profile.stats.error.text": "Спробуй відкрити розділ ще раз."

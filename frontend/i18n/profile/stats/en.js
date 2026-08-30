@@ -74,6 +74,11 @@ export default Object.freeze({
     "profile.stats.dynamics.title": "Activity trend",
     "profile.stats.dynamics.hint": "Medals mark the days when you earned an achievement.",
 
+
+    "profile.stats.seasons.title": "Season history",
+    "profile.stats.seasons.season": "Season {number}",
+    "profile.stats.seasons.completed": "Completed",
+
     "profile.stats.loading": "Loading stats...",
     "profile.stats.error.title": "Could not load statistics",
     "profile.stats.error.text": "Try opening this section again."

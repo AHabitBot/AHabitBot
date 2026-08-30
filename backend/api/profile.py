@@ -25,6 +25,7 @@ from backend.services.achievements.achievements_service import (
 )
 
 from backend.services.stats import (
+    get_profile_season_history,
     get_profile_stats,
 )
 
@@ -214,3 +215,15 @@ async def read_profile_stats(
             detail=
                 str(error),
         )
+
+# =========================================================
+# ИСТОРИЯ СЕЗОНОВ
+# =========================================================
+
+@router.get("/season-history")
+async def read_profile_season_history(
+    user: CurrentUser,
+):
+    return await get_profile_season_history(
+        user_id=user["id"],
+    )

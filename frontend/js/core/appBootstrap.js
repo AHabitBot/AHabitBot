@@ -103,6 +103,13 @@ function hydrateResources(data) {
         data.stats.year
     )
 
+    setResource(
+        RESOURCE_KEYS.STATS_SEASONS,
+        Array.isArray(data.stats.seasons)
+            ? data.stats.seasons
+            : []
+    )
+
 
     /*
      * Лидерборды

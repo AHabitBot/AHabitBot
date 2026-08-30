@@ -178,3 +178,24 @@ export async function fetchProfileStats(
 
     return data;
 }
+
+/* =========================================================
+   ПОЛУЧИТЬ ИСТОРИЮ СЕЗОНОВ
+   ========================================================= */
+
+export async function fetchProfileSeasonHistory() {
+    const data = await apiRequest(
+        "/api/profile/season-history",
+        {
+            method: "GET",
+        }
+    );
+
+    if (!Array.isArray(data)) {
+        throw new Error(
+            "Некорректная история сезонов"
+        );
+    }
+
+    return data;
+}
