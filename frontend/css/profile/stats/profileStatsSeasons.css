@@ -3,41 +3,101 @@
    ========================================================= */
 
 .profile-stats-seasons {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding:
+        16px
+        14px
+        14px;
+
     margin-bottom: 18px;
 }
 
-.profile-stats-seasons__list {
-    overflow: hidden;
 
-    border: 1px solid var(--app-border);
-    border-radius: 18px;
+/* =========================================================
+   TITLE
+   ========================================================= */
 
-    background: var(--app-surface);
+.profile-stats-seasons__title {
+    margin: 0 0 12px;
+
+    color:
+        var(--app-text-primary);
+
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
 }
+
+
+/* =========================================================
+   LIST
+   ========================================================= */
+
+.profile-stats-seasons__list {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    /* ВАЖНО:
+       история находится прямо внутри основной карточки,
+       без второй рамки и второго фона */
+    overflow: visible;
+
+    border: none;
+    border-radius: 0;
+
+    background: transparent;
+}
+
+
+/* =========================================================
+   SEASON ITEM
+   ========================================================= */
 
 .profile-stats-season {
     display: grid;
+
     grid-template-columns:
         46px
         minmax(0, 1fr)
         auto;
 
     align-items: center;
+
     gap: 12px;
 
     min-height: 72px;
 
-    padding: 10px 14px;
+    padding:
+        10px
+        0;
 
     box-sizing: border-box;
 
     border-bottom:
-        1px solid rgba(35, 36, 40, 0.07);
+        1px solid
+        rgba(35, 36, 40, 0.07);
 }
 
+
+.profile-stats-season:first-child {
+    padding-top: 4px;
+}
+
+
 .profile-stats-season:last-child {
+    padding-bottom: 4px;
+
     border-bottom: none;
 }
+
+
+/* =========================================================
+   BADGE
+   ========================================================= */
 
 .profile-stats-season__badge {
     display: flex;
@@ -49,7 +109,8 @@
 
     border-radius: 50%;
 
-    color: #e3a915;
+    color:
+        #e3a915;
 
     background:
         color-mix(
@@ -61,7 +122,9 @@
         );
 }
 
-.profile-stats-season__badge .material-symbols-rounded {
+
+.profile-stats-season__badge
+.material-symbols-rounded {
     font-size: 25px;
 
     font-variation-settings:
@@ -71,34 +134,47 @@
         "opsz" 24;
 }
 
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
 .profile-stats-season__info {
     min-width: 0;
 }
+
 
 .profile-stats-season__title-row {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
     gap: 6px;
 }
 
+
 .profile-stats-season__title {
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-primary);
 
     font-size: 14px;
     font-weight: 700;
     line-height: 1.15;
 }
 
+
 .profile-stats-season__status {
     display: inline-flex;
     align-items: center;
 
-    padding: 3px 7px;
+    padding:
+        3px
+        7px;
 
     border-radius: 999px;
 
-    color: var(--app-green-active);
+    color:
+        var(--app-green-active);
 
     background:
         color-mix(
@@ -114,6 +190,7 @@
     line-height: 1;
 }
 
+
 .profile-stats-season__dates {
     display: block;
 
@@ -121,7 +198,8 @@
 
     overflow: hidden;
 
-    color: var(--app-text-secondary);
+    color:
+        var(--app-text-secondary);
 
     font-size: 12px;
     font-weight: 500;
@@ -130,6 +208,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+
+/* =========================================================
+   RESULT
+   ========================================================= */
 
 .profile-stats-season__result {
     display: flex;
@@ -140,18 +223,22 @@
     min-width: 56px;
 }
 
+
 .profile-stats-season__rank {
-    color: var(--app-green-active);
+    color:
+        var(--app-green-active);
 
     font-size: 17px;
     font-weight: 750;
     line-height: 1;
 }
 
+
 .profile-stats-season__xp {
     margin-top: 6px;
 
-    color: var(--app-text-primary);
+    color:
+        var(--app-text-primary);
 
     font-size: 12px;
     font-weight: 650;
@@ -160,13 +247,32 @@
     white-space: nowrap;
 }
 
+
+/* =========================================================
+   DARK THEME
+   ========================================================= */
+
 :root[data-theme="dark"]
 .profile-stats-season {
     border-bottom-color:
         rgba(255, 255, 255, 0.06);
 }
 
+
+/* =========================================================
+   SMALL SCREENS
+   ========================================================= */
+
 @media (max-width: 380px) {
+
+    .profile-stats-seasons {
+        padding:
+            16px
+            14px
+            14px;
+    }
+
+
     .profile-stats-season {
         grid-template-columns:
             40px
@@ -174,23 +280,25 @@
             auto;
 
         gap: 9px;
-
-        padding-right: 11px;
-        padding-left: 11px;
     }
+
 
     .profile-stats-season__badge {
         width: 38px;
         height: 38px;
     }
 
-    .profile-stats-season__badge .material-symbols-rounded {
+
+    .profile-stats-season__badge
+    .material-symbols-rounded {
         font-size: 23px;
     }
+
 
     .profile-stats-season__title {
         font-size: 13px;
     }
+
 
     .profile-stats-season__dates {
         font-size: 11px;
