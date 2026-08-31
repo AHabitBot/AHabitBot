@@ -1,6 +1,3 @@
-from datetime import datetime
-from zoneinfo import ZoneInfo
-
 from fastapi import APIRouter
 
 from backend.api.dependencies import (
@@ -13,14 +10,9 @@ from backend.repositories.leaderboard.leaderboard_components import (
     get_season_leaderboard_users,
 )
 from backend.services.leaderboard.season_service import (
-    get_season_dates,
-    get_season_number,
+    get_season_context,
 )
-
-
-LEADERBOARD_TIMEZONE = ZoneInfo(
-    "Europe/Kyiv"
-)
+from backend.services.leaderboard.season_results_service import ensure_and_get_finished_season
 
 
 router = APIRouter(
@@ -70,19 +62,13 @@ async def read_global_leaderboard(
 async def read_season_leaderboard(
     user: CurrentUser,
 ):
-    current_date = datetime.now(
-        LEADERBOARD_TIMEZONE
-    ).date()
+    season_context = get_season_context()
+    season_number = season_context.number
+    season_start_date = season_context.start_date
+    season_end_date = season_context.end_date
 
-    season_number = get_season_number(
-        current_date
-    )
-
-    season_start_date, season_end_date = (
-        get_season_dates(
-            season_number
-        )
-    )
+    if season_context.status == "finished":
+        return await ensure_and_get_finished_season(season_number, int(user["id"]))
 
     leaderboard_users = (
         await get_season_leaderboard_users(
@@ -99,9 +85,8 @@ async def read_season_leaderboard(
 
     return {
         "season": {
-            "number":
-                season_number,
-
+            "number": season_number,
+            "status": "active",
 
             "start_date":
                 season_start_date.isoformat(),

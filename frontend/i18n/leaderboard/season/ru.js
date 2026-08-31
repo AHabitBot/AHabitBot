@@ -1,6 +1,4 @@
 export default Object.freeze({
-    "leaderboard.season.title": "Сезон {number}",
-    "leaderboard.season.emptyTitle": "В этом сезоне пока нет участников",
-    "leaderboard.season.emptyText": "Подтверждай привычки, зарабатывай XP и займи своё место в рейтинге.",
-    "leaderboard.season.loadError": "Не удалось загрузить сезонный рейтинг"
+    "leaderboard.season.title": "Сезон {number}", "leaderboard.season.emptyTitle": "В этом сезоне пока нет участников", "leaderboard.season.emptyText": "Подтверждай привычки, зарабатывай XP и займи своё место в рейтинге.", "leaderboard.season.loadError": "Не удалось загрузить сезонный рейтинг",
+    "leaderboard.season.finishedTitle": "Сезон {number} завершён!", "leaderboard.season.finishedWork": "Отличная работа!", "leaderboard.season.nextStarts": "Следующий сезон стартует {date}.", "leaderboard.season.yourResults": "Твои итоги сезона", "leaderboard.season.yourPlace": "Твоё место", "leaderboard.season.earned": "Заработано", "leaderboard.season.noResult": "В этом сезоне у тебя не было сезонного XP.", "leaderboard.season.top3Title": "Топ-3 сезона", "leaderboard.season.summaryTitle": "Показатели сезона", "leaderboard.season.participants": "Участники", "leaderboard.season.confirmations": "Всего подтверждений", "leaderboard.season.bestStreak": "Наибольший стрик", "leaderboard.season.popularHabit": "Самая популярная привычка", "leaderboard.season.nextSeason": "Следующий сезон", "leaderboard.season.inviteFriend": "Пригласить друга"
 });

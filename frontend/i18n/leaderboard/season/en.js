@@ -1,6 +1,4 @@
 export default Object.freeze({
-    "leaderboard.season.title": "Season {number}",
-    "leaderboard.season.emptyTitle": "No participants this season yet",
-    "leaderboard.season.emptyText": "Complete habits, earn XP, and claim your place on the leaderboard.",
-    "leaderboard.season.loadError": "Could not load season leaderboard"
+    "leaderboard.season.title": "Season {number}", "leaderboard.season.emptyTitle": "No participants this season yet", "leaderboard.season.emptyText": "Confirm habits, earn XP and take your place in the ranking.", "leaderboard.season.loadError": "Could not load the season ranking",
+    "leaderboard.season.finishedTitle": "Season {number} finished!", "leaderboard.season.finishedWork": "Great work!", "leaderboard.season.nextStarts": "The next season starts {date}.", "leaderboard.season.yourResults": "Your season results", "leaderboard.season.yourPlace": "Your place", "leaderboard.season.earned": "Earned", "leaderboard.season.noResult": "You did not earn season XP this season.", "leaderboard.season.top3Title": "Season Top 3", "leaderboard.season.summaryTitle": "Season stats", "leaderboard.season.participants": "Participants", "leaderboard.season.confirmations": "Total confirmations", "leaderboard.season.bestStreak": "Best streak", "leaderboard.season.popularHabit": "Most popular habit", "leaderboard.season.nextSeason": "Next season", "leaderboard.season.inviteFriend": "Invite a friend"
 });

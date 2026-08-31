@@ -42,17 +42,19 @@ export async function fetchSeasonLeaderboard() {
             "/api/leaderboard/season"
         );
 
+    const isFinished =
+        data?.season?.status === "finished";
+
     if (
-        !Array.isArray(
-            data?.users
-        )
+        !isFinished
+        && !Array.isArray(data?.users)
     ) {
         throw new Error(
             "Некорректный ответ сервера"
         );
     }
 
-    if (!data.current_user) {
+    if (!isFinished && !data.current_user) {
         throw new Error(
             "Не получен текущий пользователь"
         );

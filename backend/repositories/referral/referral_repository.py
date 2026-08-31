@@ -1,11 +1,8 @@
-from datetime import datetime
-from zoneinfo import ZoneInfo
-
 import asyncpg
 
 from backend.database.database import get_connection
 from backend.services.leaderboard.season_service import (
-    get_season_number,
+    get_season_context,
 )
 
 
@@ -40,13 +37,8 @@ async def create_referral(
     # Определяем текущий сезон по дате Europe/Kyiv.
     # ------------------------------------------------------------------------
 
-    current_date = datetime.now(
-        ZoneInfo("Europe/Kyiv")
-    ).date()
-
-    season_number = get_season_number(
-        current_date
-    )
+    season_context = get_season_context()
+    season_number = season_context.number
 
     async with get_connection() as connection:
         async with connection.transaction():
@@ -121,37 +113,22 @@ async def create_referral(
             )
 
             # ----------------------------------------------------------------
-            # Начисляем тот же XP в текущий сезон.
+            # Season XP начисляется только в активную часть сезона.
+            # В итоговую неделю global XP продолжает начисляться выше.
             # ----------------------------------------------------------------
 
-            await connection.execute(
-                """
-                INSERT INTO user_season_stats (
-                    season_number,
-                    user_id,
-                    season_xp
+            if season_context.xp_active:
+                await connection.execute(
+                    """
+                    INSERT INTO user_season_stats (season_number, user_id, season_xp)
+                    VALUES ($1, $2, $3)
+                    ON CONFLICT (season_number, user_id)
+                    DO UPDATE SET
+                        season_xp = user_season_stats.season_xp + EXCLUDED.season_xp,
+                        updated_at = NOW()
+                    """,
+                    season_number, inviter_user_id, xp_amount,
                 )
-                VALUES (
-                    $1,
-                    $2,
-                    $3
-                )
-
-                ON CONFLICT (
-                    season_number,
-                    user_id
-                )
-                DO UPDATE SET
-                    season_xp =
-                        user_season_stats.season_xp
-                        + EXCLUDED.season_xp,
-
-                    updated_at = NOW()
-                """,
-                season_number,
-                inviter_user_id,
-                xp_amount,
-            )
 
             return referral
 

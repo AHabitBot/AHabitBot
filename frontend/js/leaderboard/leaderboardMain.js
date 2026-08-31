@@ -24,7 +24,9 @@ import {
 
 import {
     loadSeasonLeaderboard,
-    renderSeasonLeaderboard
+    renderSeasonLeaderboard,
+    renderFinishedSeason,
+    bindFinishedSeasonEvents
 }
 from "./season/seasonLeaderboard.js";
 
@@ -259,20 +261,23 @@ async function renderSeasonLeaderboardContent({
             return;
         }
 
-        content.innerHTML =
-            renderSeasonLeaderboard(
-                result.users
-            );
+        const isFinished =
+            result?.season?.status === "finished";
 
-        renderSeasonHeading(
-            result.season
-        );
+        content.innerHTML = isFinished
+            ? renderFinishedSeason(result)
+            : renderSeasonLeaderboard(result.users);
+
+        renderSeasonHeading(result.season);
 
         if (currentUserSlot) {
-            currentUserSlot.innerHTML =
-                renderCurrentUser(
-                    result.currentUser
-                );
+            currentUserSlot.innerHTML = isFinished
+                ? ""
+                : renderCurrentUser(result.currentUser);
+        }
+
+        if (isFinished) {
+            bindFinishedSeasonEvents(content);
         }
 
     } catch (error) {
@@ -341,7 +346,9 @@ function renderSeasonHeading(
         dates.textContent =
             formatSeasonPeriod(
                 season.startDate,
-                season.endDate
+                season.status === "finished"
+                    ? season.rankingEndDate
+                    : season.endDate
             );
     }
 

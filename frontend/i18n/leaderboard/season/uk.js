@@ -1,6 +1,4 @@
 export default Object.freeze({
-    "leaderboard.season.title": "Сезон {number}",
-    "leaderboard.season.emptyTitle": "У цьому сезоні поки немає учасників",
-    "leaderboard.season.emptyText": "Підтверджуй звички, заробляй XP та займи своє місце в рейтингу.",
-    "leaderboard.season.loadError": "Не вдалося завантажити сезонний рейтинг"
+    "leaderboard.season.title": "Сезон {number}", "leaderboard.season.emptyTitle": "У цьому сезоні поки немає учасників", "leaderboard.season.emptyText": "Підтверджуй звички, заробляй XP і займи своє місце в рейтингу.", "leaderboard.season.loadError": "Не вдалося завантажити сезонний рейтинг",
+    "leaderboard.season.finishedTitle": "Сезон {number} завершено!", "leaderboard.season.finishedWork": "Чудова робота!", "leaderboard.season.nextStarts": "Наступний сезон стартує {date}.", "leaderboard.season.yourResults": "Твої підсумки сезону", "leaderboard.season.yourPlace": "Твоє місце", "leaderboard.season.earned": "Зароблено", "leaderboard.season.noResult": "У цьому сезоні в тебе не було сезонного XP.", "leaderboard.season.top3Title": "Топ-3 сезону", "leaderboard.season.summaryTitle": "Показники сезону", "leaderboard.season.participants": "Учасники", "leaderboard.season.confirmations": "Усього підтверджень", "leaderboard.season.bestStreak": "Найбільший стрік", "leaderboard.season.popularHabit": "Найпопулярніша звичка", "leaderboard.season.nextSeason": "Наступний сезон", "leaderboard.season.inviteFriend": "Запросити друга"
 });

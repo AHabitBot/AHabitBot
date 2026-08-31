@@ -4,8 +4,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from backend.database.database import get_connection
 from backend.services.leaderboard.season_service import (
-    get_season_dates,
-    get_season_number,
+    get_season_context,
 )
 
 DAILY_XP_CONFIRMATIONS_LIMIT = 3
@@ -1138,15 +1137,10 @@ async def set_habit_confirmation(
                 timezone_name
             )
 
-            season_number = get_season_number(
-                confirmation_date
-            )
-
-            season_starts_on, season_ends_on = (
-                get_season_dates(
-                    season_number
-                )
-            )
+            season_context = get_season_context()
+            season_number = season_context.number
+            season_starts_on = season_context.start_date
+            season_ends_on = season_context.ranking_end_date
 
             # -------------------------------------------------
             # Текущее подтверждение за сегодня.
@@ -1505,7 +1499,7 @@ async def set_habit_confirmation(
 
                                 WHERE r.inviter_user_id = $1
                                   AND r.xp_awarded = TRUE
-                                  AND r.created_at::DATE
+                                  AND (r.created_at AT TIME ZONE 'Europe/Kyiv')::DATE
                                       BETWEEN $2 AND $3
                             ),
                             0
@@ -1522,7 +1516,7 @@ async def set_habit_confirmation(
 
                                 WHERE ua.user_id = $1
                                   AND ua.xp_awarded = TRUE
-                                  AND ua.earned_at::DATE
+                                  AND (ua.earned_at AT TIME ZONE 'Europe/Kyiv')::DATE
                                       BETWEEN $2 AND $3
                             ),
                             0
@@ -1542,33 +1536,34 @@ async def set_habit_confirmation(
             # ОБНОВЛЯЕМ USER_SEASON_STATS
             # =================================================
 
-            await connection.execute(
-                """
-                INSERT INTO user_season_stats (
+            if season_context.xp_active:
+                await connection.execute(
+                    """
+                    INSERT INTO user_season_stats (
+                        season_number,
+                        user_id,
+                        season_xp
+                    )
+                    VALUES (
+                        $1,
+                        $2,
+                        $3
+                    )
+
+                    ON CONFLICT (
+                        season_number,
+                        user_id
+                    )
+                    DO UPDATE SET
+                        season_xp =
+                            EXCLUDED.season_xp,
+
+                        updated_at = NOW()
+                    """,
                     season_number,
                     user_id,
-                    season_xp
+                    season_xp,
                 )
-                VALUES (
-                    $1,
-                    $2,
-                    $3
-                )
-
-                ON CONFLICT (
-                    season_number,
-                    user_id
-                )
-                DO UPDATE SET
-                    season_xp =
-                        EXCLUDED.season_xp,
-
-                    updated_at = NOW()
-                """,
-                season_number,
-                user_id,
-                season_xp,
-            )
 
             # =================================================
             # ФИНАЛЬНОЕ СОСТОЯНИЕ ПОДТВЕРЖДЕНИЯ
