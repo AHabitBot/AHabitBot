@@ -51,6 +51,8 @@
 .season-summary-item>.material-symbols-rounded { color:var(--app-text-muted); }
 .season-summary-item small { display:block; color:var(--app-text-muted); font-size:11px; line-height:1.25; }
 .season-summary-item strong { display:block; margin-top:3px; color:var(--app-text); font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.season-summary-item__content { min-width:0; }
+.season-summary-item__owner { display:block; margin-top:3px; color:var(--app-text-muted); font-size:11px; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .season-finished-next { padding:16px 18px; display:grid; grid-template-columns:1fr auto; align-items:center; gap:3px 12px; }
 .season-finished-next span { grid-column:1/-1; color:var(--app-text-muted); font-size:12px; }
 .season-finished-next strong { color:var(--app-text); font-size:16px; }.season-finished-next small { color:var(--app-text-muted); }

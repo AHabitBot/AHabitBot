@@ -65,7 +65,14 @@ async def _get_season_leaderboard(user_id: int) -> dict:
                     "end_date": season_end_date.isoformat(),
                 },
                 "current_user": None, "top3": [],
-                "summary": {"participants": 0, "confirmations": 0, "best_streak": 0, "popular_habit": None},
+                "summary": {
+                    "participants": 0,
+                    "confirmations": 0,
+                    "best_streak": 0,
+                    "best_streak_user": None,
+                    "popular_habit": None,
+                    "popular_habit_user": None,
+                },
                 "next_season": {"number": next_number, "start_date": next_start.isoformat(), "end_date": next_end.isoformat()},
             }
 

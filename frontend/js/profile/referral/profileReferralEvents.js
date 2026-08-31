@@ -61,15 +61,17 @@ async function copyReferralLink(
 // ПОДЕЛИТЬСЯ РЕФЕРАЛЬНОЙ ССЫЛКОЙ
 // =========================================================
 
-function shareReferralLink(
+export function shareReferralLink(
     referralLink,
+    customText = null,
 ) {
     if (!referralLink) {
         return;
     }
 
     const text =
-        t("profile.referral.shareText");
+        customText
+        || t("profile.referral.shareText");
 
     const shareUrl =
         "https://t.me/share/url"

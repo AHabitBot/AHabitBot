@@ -84,7 +84,7 @@ async def get_finished_season_payload(season_number: int, user_id: int, active_s
               )
             """, active_start, active_end, season_number,
         )
-        best_streak = await connection.fetchval(
+        best_streak = await connection.fetchrow(
             """
             WITH days AS (
                 SELECT DISTINCT h.user_id,
@@ -99,21 +99,28 @@ async def get_finished_season_payload(season_number: int, user_id: int, active_s
                        day - (ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY day))::INTEGER AS grp
                 FROM days
             ), streaks AS (
-                SELECT user_id, COUNT(*)::INTEGER AS streak FROM grouped GROUP BY user_id, grp
+                SELECT user_id, COUNT(*)::INTEGER AS streak
+                FROM grouped
+                GROUP BY user_id, grp
             )
-            SELECT COALESCE(MAX(streak), 0) FROM streaks
+            SELECT s.streak, u.nickname
+            FROM streaks s
+            JOIN users u ON u.id = s.user_id
+            ORDER BY s.streak DESC, s.user_id ASC
+            LIMIT 1
             """, active_start, active_end, season_number,
         )
-        popular_habit = await connection.fetchval(
+        popular_habit = await connection.fetchrow(
             """
-            SELECT h.title
+            SELECT h.title, u.nickname, COUNT(*)::INTEGER AS confirmations
             FROM habit_confirmations hc
             JOIN habits h ON h.id = hc.habit_id
+            JOIN users u ON u.id = h.user_id
             JOIN season_results sr ON sr.user_id = h.user_id AND sr.season_number = $3
             WHERE hc.is_confirmed = TRUE
-                  AND (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE BETWEEN $1 AND $2
-            GROUP BY h.title
-            ORDER BY COUNT(*) DESC, LOWER(h.title) ASC
+              AND (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE BETWEEN $1 AND $2
+            GROUP BY h.id, h.title, h.user_id, u.nickname
+            ORDER BY confirmations DESC, h.user_id ASC, h.id ASC
             LIMIT 1
             """, active_start, active_end, season_number,
         )
@@ -123,8 +130,10 @@ async def get_finished_season_payload(season_number: int, user_id: int, active_s
         "summary": {
             "participants": int(participants or 0),
             "confirmations": int(confirmations or 0),
-            "best_streak": int(best_streak or 0),
-            "popular_habit": popular_habit or None,
+            "best_streak": int(best_streak["streak"]) if best_streak else 0,
+            "best_streak_user": best_streak["nickname"] if best_streak else None,
+            "popular_habit": popular_habit["title"] if popular_habit else None,
+            "popular_habit_user": popular_habit["nickname"] if popular_habit else None,
         },
     }
 

@@ -7,6 +7,10 @@ import {
     peekResource
 } from "../../core/resourceCache.js";
 
+import {
+    shareReferralLink
+} from "../../profile/referral/profileReferralEvents.js";
+
 
 /* =========================================================
    ИТОГОВЫЙ ЭКРАН СЕЗОНА
@@ -117,15 +121,15 @@ export function renderFinishedSeason(result) {
                     ${renderMetric(
                         "local_fire_department",
                         t("leaderboard.season.bestStreak"),
-                        summary.best_streak ?? 0
+                        summary.best_streak ?? 0,
+                        summary.best_streak_user
                     )}
 
                     ${renderMetric(
                         "favorite",
                         t("leaderboard.season.popularHabit"),
-                        escapeHtml(
-                            summary.popular_habit || "—"
-                        )
+                        summary.popular_habit || "—",
+                        summary.popular_habit_user
                     )}
                 </div>
             </section>
@@ -153,12 +157,15 @@ export function renderFinishedSeason(result) {
                 type="button"
                 data-season-share
                 data-referral-link="${escapeAttribute(referralLink)}"
+                data-season-number="${escapeAttribute(season.number ?? "")}"
+                data-rank="${escapeAttribute(current?.rank ?? "")}"
+                data-xp="${escapeAttribute(current?.xp ?? 0)}"
             >
                 <span class="material-symbols-rounded">
-                    person_add
+                    share
                 </span>
 
-                ${t("leaderboard.season.inviteFriend")}
+                ${t("leaderboard.season.shareResults")}
             </button>
 
         </div>
@@ -190,33 +197,26 @@ export function bindFinishedSeasonEvents(root) {
                 return;
             }
 
-            const shareUrl =
-                "https://t.me/share/url?url="
-                + encodeURIComponent(referralLink)
-                + "&text="
-                + encodeURIComponent(
-                    t("profile.referral.shareText")
+            const seasonNumber =
+                button.dataset.seasonNumber;
+            const rank =
+                button.dataset.rank;
+            const xp =
+                button.dataset.xp;
+
+            const shareText =
+                t(
+                    "leaderboard.season.shareText",
+                    {
+                        number: seasonNumber,
+                        rank: rank || "—",
+                        xp: xp || "0"
+                    }
                 );
 
-            const telegram =
-                window.Telegram?.WebApp;
-
-            if (
-                telegram
-                && typeof telegram.openTelegramLink
-                    === "function"
-            ) {
-                telegram.openTelegramLink(
-                    shareUrl
-                );
-
-                return;
-            }
-
-            window.open(
-                shareUrl,
-                "_blank",
-                "noopener,noreferrer"
+            shareReferralLink(
+                referralLink,
+                shareText
             );
         }
     );
@@ -325,7 +325,8 @@ function getTopThree(users = []) {
 function renderMetric(
     icon,
     label,
-    value
+    value,
+    owner = null
 ) {
     return `
         <div class="season-summary-item">
@@ -333,9 +334,12 @@ function renderMetric(
                 ${icon}
             </span>
 
-            <div>
-                <small>${label}</small>
-                <strong>${value}</strong>
+            <div class="season-summary-item__content">
+                <small>${escapeHtml(label)}</small>
+                <strong>${escapeHtml(value)}</strong>
+                ${owner
+                    ? `<span class="season-summary-item__owner">${escapeHtml(owner)}</span>`
+                    : ""}
             </div>
         </div>
     `;
