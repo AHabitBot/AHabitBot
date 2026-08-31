@@ -98,6 +98,29 @@ export const PROFILE_AVATARS = [
         category: "standard",
         requiredLevel: 20,
         image: "./img/profile/avatar/avatar_standard_f_05.png"
+    },
+
+
+    /* =====================================================
+       PRIVATE — PETYA
+
+       Доступен только:
+       users.id = 4
+       users.id = 9
+       ===================================================== */
+
+    {
+        id: "avatar_petya_01",
+        category: "private",
+        requiredLevel: 1,
+
+        allowedUserIds: [
+            4,
+            9
+        ],
+
+        image:
+            "./img/profile/avatar/avatar_petya_01.png"
     }
 
 ]
@@ -140,6 +163,75 @@ export function getDefaultProfileAvatar() {
 
 
 /* =========================================================
+   IS AVATAR VISIBLE FOR USER
+   ========================================================= */
+
+export function isProfileAvatarVisibleForUser(
+    avatar,
+    userId
+) {
+    if (!avatar) {
+        return false
+    }
+
+
+    /*
+     * Если allowedUserIds отсутствует,
+     * это обычный публичный аватар.
+     */
+
+    if (
+        !Array.isArray(
+            avatar.allowedUserIds
+        )
+    ) {
+        return true
+    }
+
+
+    const normalizedUserId =
+        Number(userId)
+
+
+    if (
+        !Number.isFinite(
+            normalizedUserId
+        )
+    ) {
+        return false
+    }
+
+
+    return (
+        avatar.allowedUserIds
+            .map(Number)
+            .includes(
+                normalizedUserId
+            )
+    )
+}
+
+
+/* =========================================================
+   GET AVATARS FOR USER
+   ========================================================= */
+
+export function getProfileAvatarsForUser(
+    userId
+) {
+    return (
+        PROFILE_AVATARS.filter(
+            avatar =>
+                isProfileAvatarVisibleForUser(
+                    avatar,
+                    userId
+                )
+        )
+    )
+}
+
+
+/* =========================================================
    IS AVATAR UNLOCKED
    ========================================================= */
 
@@ -151,11 +243,13 @@ export function isProfileAvatarUnlocked(
         return false
     }
 
+
     const level =
         Math.max(
             1,
             Number(userLevel) || 1
         )
+
 
     const requiredLevel =
         Math.max(
@@ -164,6 +258,7 @@ export function isProfileAvatarUnlocked(
                 avatar.requiredLevel
             ) || 1
         )
+
 
     return (
         level >= requiredLevel
@@ -183,9 +278,11 @@ export function getProfileAvatarUnlockLevel(
             avatarId
         )
 
+
     if (!avatar) {
         return null
     }
+
 
     return (
         Math.max(

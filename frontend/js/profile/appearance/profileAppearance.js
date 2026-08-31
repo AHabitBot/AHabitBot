@@ -18,9 +18,10 @@ import {
 } from "../../core/dataSync.js"
 
 import {
-    PROFILE_AVATARS,
     DEFAULT_PROFILE_AVATAR_ID,
     getProfileAvatar,
+    getProfileAvatarsForUser,
+    isProfileAvatarVisibleForUser,
     isProfileAvatarUnlocked
 } from "./profileAppearanceAvatar.js"
 
@@ -41,9 +42,6 @@ let activeAppearanceTab =
 
 /* =========================================================
    ПРИМЕНЁННЫЕ ЗНАЧЕНИЯ
-
-   Это то, что реально сохранено в БД.
-   Именно на этих вариантах показываем галочку.
    ========================================================= */
 
 let appliedAvatarId =
@@ -55,12 +53,6 @@ let appliedBackgroundId =
 
 /* =========================================================
    PREVIEW
-
-   Это то, что пользователь сейчас просматривает.
-   На этих вариантах показываем зелёную рамку.
-
-   До нажатия «Применить»
-   значения в БД не меняются.
    ========================================================= */
 
 let previewAvatarId =
@@ -70,8 +62,15 @@ let previewBackgroundId =
     DEFAULT_PROFILE_BACKGROUND_ID
 
 
+/* =========================================================
+   CURRENT USER
+   ========================================================= */
+
 let currentUserLevel =
     1
+
+let currentUserId =
+    null
 
 
 /* =========================================================
@@ -97,11 +96,24 @@ function getActiveAppearanceOptions() {
         }
     }
 
+
     return {
         type: "avatar",
 
+        /*
+         * Здесь главное изменение.
+         *
+         * PROFILE_AVATARS напрямую
+         * больше не отображаем.
+         *
+         * Каждый пользователь получает
+         * только разрешённые ему аватары.
+         */
+
         options:
-            PROFILE_AVATARS,
+            getProfileAvatarsForUser(
+                currentUserId
+            ),
 
         previewId:
             previewAvatarId,
@@ -114,10 +126,6 @@ function getActiveAppearanceOptions() {
 
 /* =========================================================
    ПОЛУЧИТЬ ВНЕШНИЙ ВИД ИЗ CACHE
-
-   ВАЖНО:
-   Profile уже загружен Bootstrap'ом.
-   Здесь никаких API-запросов нет.
    ========================================================= */
 
 function loadProfileAppearance() {
@@ -132,6 +140,19 @@ function loadProfileAppearance() {
             "Profile отсутствует в Resource Cache"
         )
     }
+
+
+    /*
+     * Внутренний users.id.
+     *
+     * Именно его используем для
+     * персональных аватаров.
+     */
+
+    currentUserId =
+        Number(
+            profile.user_id
+        ) || null
 
 
     currentUserLevel =
@@ -156,9 +177,29 @@ function loadProfileAppearance() {
         )
 
 
+    /*
+     * Если по какой-либо причине
+     * пользователю сохранён аватар,
+     * которого он больше не имеет
+     * права использовать,
+     * в Appearance показываем default.
+     */
+
+    const visibleAvatar =
+        avatar &&
+        isProfileAvatarVisibleForUser(
+            avatar,
+            currentUserId
+        )
+            ? avatar
+            : getProfileAvatar(
+                DEFAULT_PROFILE_AVATAR_ID
+            )
+
+
     appliedAvatarId =
-        avatar
-            ? avatar.id
+        visibleAvatar
+            ? visibleAvatar.id
             : DEFAULT_PROFILE_AVATAR_ID
 
 
@@ -167,12 +208,6 @@ function loadProfileAppearance() {
             ? background.id
             : DEFAULT_PROFILE_BACKGROUND_ID
 
-
-    /*
-     * При каждом новом открытии страницы
-     * preview начинается с реально
-     * применённого внешнего вида.
-     */
 
     previewAvatarId =
         appliedAvatarId
@@ -197,6 +232,7 @@ function renderProfileAppearanceHero() {
         getProfileBackground(
             previewBackgroundId
         )
+
 
     return `
         <section
@@ -234,7 +270,7 @@ function renderProfileAppearanceHero() {
 
 
 /* =========================================================
-   ОБНОВИТЬ HERO БЕЗ ПЕРЕРИСОВКИ СТРАНИЦЫ
+   ОБНОВИТЬ HERO
    ========================================================= */
 
 function updateProfileAppearanceHero(
@@ -402,12 +438,13 @@ function renderAppearanceOption({
                                 profile-appearance-option__level
                             "
                         >
-                             ${t(
-                                 "profile.appearance.locked.level",
-                                 {
-                                     level: requiredLevel
-                                 }
-                             )}
+                            ${t(
+                                "profile.appearance.locked.level",
+                                {
+                                    level:
+                                        requiredLevel
+                                }
+                            )}
                         </span>
                     `
                     : ""
@@ -472,9 +509,6 @@ function renderProfileAppearanceOptions() {
 
 /* =========================================================
    ОБНОВИТЬ OPTIONS
-
-   Используется при смене вкладки.
-   Hero при этом не перерисовывается.
    ========================================================= */
 
 function updateProfileAppearanceOptions(
@@ -485,9 +519,11 @@ function updateProfileAppearanceOptions(
             ".profile-appearance-options"
         )
 
+
     if (!currentOptions) {
         return
     }
+
 
     currentOptions.outerHTML =
         renderProfileAppearanceOptions()
@@ -495,8 +531,7 @@ function updateProfileAppearanceOptions(
 
 
 /* =========================================================
-   ОБНОВИТЬ СОСТОЯНИЕ РАМОК И ГАЛОЧЕК
-   БЕЗ ПЕРЕРИСОВКИ СТРАНИЦЫ
+   СИНХРОНИЗИРОВАТЬ OPTIONS
    ========================================================= */
 
 function syncProfileAppearanceOptions(
@@ -533,24 +568,17 @@ function syncProfileAppearanceOptions(
                 appliedId
 
 
-            /*
-             * РАМКА = PREVIEW
-             */
-
             button.classList.toggle(
                 "is-selected",
                 isPreview
             )
+
 
             button.setAttribute(
                 "aria-pressed",
                 String(isPreview)
             )
 
-
-            /*
-             * ГАЛОЧКА = ПРИМЕНЁННЫЙ
-             */
 
             let check =
                 button.querySelector(
@@ -565,21 +593,26 @@ function syncProfileAppearanceOptions(
                             "span"
                         )
 
+
                     check.className =
                         "profile-appearance-option__check material-symbols-rounded"
+
 
                     check.setAttribute(
                         "aria-hidden",
                         "true"
                     )
 
+
                     check.textContent =
                         "check"
+
 
                     button.appendChild(
                         check
                     )
                 }
+
 
                 return
             }
@@ -674,6 +707,22 @@ function selectAppearancePreview(
         }
 
 
+        /*
+         * Дополнительная frontend-проверка:
+         * пользователь не сможет выбрать
+         * private avatar даже вручную через DOM.
+         */
+
+        if (
+            !isProfileAvatarVisibleForUser(
+                avatar,
+                currentUserId
+            )
+        ) {
+            return false
+        }
+
+
         const isUnlocked =
             isProfileAvatarUnlocked(
                 avatar,
@@ -727,14 +776,6 @@ function selectAppearancePreview(
 function bindProfileAppearanceEvents(
     root
 ) {
-
-    /*
-     * Используем один обработчик на root.
-     *
-     * Не пересоздаём всю страницу
-     * при каждом выборе.
-     */
-
     root.onclick =
         async (event) => {
 
@@ -747,10 +788,12 @@ function bindProfileAppearanceEvents(
                     "[data-appearance-tab]"
                 )
 
+
             if (tabButton) {
                 const tab =
                     tabButton.dataset
                         .appearanceTab
+
 
                 if (
                     tab !== "avatar" &&
@@ -792,6 +835,7 @@ function bindProfileAppearanceEvents(
                     root
                 )
 
+
                 return
             }
 
@@ -805,10 +849,12 @@ function bindProfileAppearanceEvents(
                     "[data-appearance-option]"
                 )
 
+
             if (optionButton) {
                 const optionId =
                     optionButton.dataset
                         .appearanceOption
+
 
                 const type =
                     optionButton.dataset
@@ -835,18 +881,15 @@ function bindProfileAppearanceEvents(
                 }
 
 
-                /*
-                 * Меняем только нужные элементы.
-                 * Страница не рендерится заново.
-                 */
-
                 updateProfileAppearanceHero(
                     root
                 )
 
+
                 syncProfileAppearanceOptions(
                     root
                 )
+
 
                 return
             }
@@ -860,6 +903,7 @@ function bindProfileAppearanceEvents(
                 event.target.closest(
                     "[data-appearance-apply]"
                 )
+
 
             if (!applyButton) {
                 return
@@ -881,37 +925,18 @@ function bindProfileAppearanceEvents(
                     })
 
 
-                /*
-                 * Только после успешного ответа API
-                 * считаем preview применённым.
-                 */
-
                 appliedAvatarId =
                     result.avatar_key
+
 
                 appliedBackgroundId =
                     result.background_key
 
 
-                /*
-                 * Обновляем только галочку
-                 * на текущей странице.
-                 */
-
                 syncProfileAppearanceOptions(
                     root
                 )
 
-
-                /*
-                 * Тихо обновляем зависимые кэши:
-                 *
-                 * PROFILE
-                 * GLOBAL LEADERBOARD
-                 * SEASON LEADERBOARD
-                 *
-                 * Открытая страница не перерисовывается.
-                 */
 
                 void syncAfterAppearanceChange()
             }
@@ -922,9 +947,12 @@ function bindProfileAppearanceEvents(
                     error
                 )
 
+
                 window.alert(
                     error?.message ||
-                    t("profile.appearance.error.saveGeneric")
+                    t(
+                        "profile.appearance.error.saveGeneric"
+                    )
                 )
             }
 
