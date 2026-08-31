@@ -13,8 +13,7 @@ import {
 import {
     RESOURCE_KEYS,
     registerResource,
-    getResource,
-    peekResource
+    getResource
 } from "../../core/resourceCache.js";
 
 
@@ -119,67 +118,6 @@ export function renderSeasonLeaderboard(
     });
 }
 
-
-
-export function renderFinishedSeason(result) {
-    const season = result?.season || {};
-    const summary = result?.summary || {};
-    const current = result?.currentUser;
-    const top3 = getTopThree(result?.top3 || []);
-    const next = result?.nextSeason || {};
-    const referral = peekResource(RESOURCE_KEYS.REFERRAL);
-    const referralLink = referral?.referral_link || "";
-
-    const userResult = current
-        ? `<div class="season-finished-user__avatar"><img src="${current.avatar}" alt=""></div>
-           <div class="season-finished-user__metric"><span>${t("leaderboard.season.yourPlace")}</span><strong>#${current.rank}</strong></div>
-           <div class="season-finished-user__metric"><span>${t("leaderboard.season.earned")}</span><strong>${current.xp} XP</strong></div>`
-        : `<div class="season-finished-user__empty">${t("leaderboard.season.noResult")}</div>`;
-
-    return `<div class="season-finished">
-        <section class="season-finished-hero">
-            <div><h2>${t("leaderboard.season.finishedTitle", {number: season.number})}</h2>
-            <div class="season-finished-hero__dates">${formatDate(season.startDate)} – ${formatDate(season.rankingEndDate)}</div>
-            <p>${t("leaderboard.season.finishedWork")}<br>${t("leaderboard.season.nextStarts", {date: formatLongDate(next.startDate)})}</p></div>
-            <div class="season-finished-hero__cup" aria-hidden="true">🏆</div>
-        </section>
-        <section class="season-finished-card"><h3>${t("leaderboard.season.yourResults")}</h3><div class="season-finished-user">${userResult}</div></section>
-        <section class="season-finished-card"><h3>${t("leaderboard.season.top3Title")}</h3>${top3.length ? renderFinishedTop3(top3) : `<div class="season-finished-empty">—</div>`}</section>
-        <section class="season-finished-card"><h3>${t("leaderboard.season.summaryTitle")}</h3>
-            <div class="season-summary-grid">
-                ${metric("groups", t("leaderboard.season.participants"), summary.participants ?? 0)}
-                ${metric("task_alt", t("leaderboard.season.confirmations"), summary.confirmations ?? 0)}
-                ${metric("local_fire_department", t("leaderboard.season.bestStreak"), summary.best_streak ?? 0)}
-                ${metric("favorite", t("leaderboard.season.popularHabit"), escapeHtml(summary.popular_habit || "—"))}
-            </div></section>
-        <section class="season-finished-next"><span>${t("leaderboard.season.nextSeason")}</span><strong>${t("leaderboard.season.title", {number: next.number})}</strong><small>${formatDate(next.startDate)} – ${formatDate(next.endDate)}</small></section>
-        <button class="season-finished-share" type="button" data-season-share data-referral-link="${escapeAttribute(referralLink)}"><span class="material-symbols-rounded">person_add</span>${t("leaderboard.season.inviteFriend")}</button>
-    </div>`;
-}
-
-export function bindFinishedSeasonEvents(root) {
-    const button = root?.querySelector("[data-season-share]");
-    if (!button) return;
-    button.addEventListener("click", () => {
-        const referralLink = button.dataset.referralLink;
-        if (!referralLink) return;
-        const shareUrl = "https://t.me/share/url?url=" + encodeURIComponent(referralLink)
-            + "&text=" + encodeURIComponent(t("profile.referral.shareText"));
-        const tg = window.Telegram?.WebApp;
-        if (tg && typeof tg.openTelegramLink === "function") tg.openTelegramLink(shareUrl);
-        else window.open(shareUrl, "_blank", "noopener,noreferrer");
-    });
-}
-
-function renderFinishedTop3(users) {
-    return `<div class="season-finished-top3">${users.map(user => `<div class="season-finished-top3__item season-finished-top3__item--${user.rank}">
-        <span class="season-finished-top3__rank">#${user.rank}</span><img src="${user.avatar}" alt=""><strong>${escapeHtml(user.name)}</strong><small>${user.xp} XP</small></div>`).join("")}</div>`;
-}
-function metric(icon, label, value) { return `<div class="season-summary-item"><span class="material-symbols-rounded">${icon}</span><div><small>${label}</small><strong>${value}</strong></div></div>`; }
-function formatDate(value) { if (!value) return ""; const [y,m,d]=value.split("-"); return `${d}.${m}.${y}`; }
-function formatLongDate(value) { return formatDate(value); }
-function escapeHtml(value) { return String(value ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
-function escapeAttribute(value) { return escapeHtml(value); }
 
 
 /* =========================================================

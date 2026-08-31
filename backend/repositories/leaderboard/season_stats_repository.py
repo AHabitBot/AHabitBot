@@ -19,11 +19,11 @@ async def rebuild_user_season_stats() -> int:
                 FROM (
                     SELECT
                         h.user_id,
-                        hc.confirmation_date AS award_date,
+                        (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE AS award_date,
                         hc.xp_amount::INTEGER AS xp
                     FROM habit_confirmations AS hc
                     INNER JOIN habits AS h ON h.id = hc.habit_id
-                    WHERE hc.confirmation_date >= $1
+                    WHERE (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE >= $1
                       AND hc.is_confirmed = TRUE
                       AND hc.xp_awarded = TRUE
 

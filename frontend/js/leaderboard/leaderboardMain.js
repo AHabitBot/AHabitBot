@@ -24,11 +24,14 @@ import {
 
 import {
     loadSeasonLeaderboard,
-    renderSeasonLeaderboard,
-    renderFinishedSeason,
-    bindFinishedSeasonEvents
+    renderSeasonLeaderboard
 }
 from "./season/seasonLeaderboard.js";
+
+import {
+    renderFinishedSeason,
+    bindFinishedSeasonEvents
+} from "./season/seasonFinished.js";
 
 import {
     t
@@ -189,6 +192,8 @@ async function renderGlobalLeaderboardContent({
             return;
         }
 
+        setFinishedSeasonLayout(false);
+
         content.innerHTML =
             renderGlobalLeaderboard(
                 result.users
@@ -263,6 +268,8 @@ async function renderSeasonLeaderboardContent({
 
         const isFinished =
             result?.season?.status === "finished";
+
+        setFinishedSeasonLayout(isFinished);
 
         content.innerHTML = isFinished
             ? renderFinishedSeason(result)
@@ -434,6 +441,7 @@ function renderLeaderboardError({
     currentUserSlot,
     message
 }) {
+    setFinishedSeasonLayout(false);
     content.innerHTML = `
         <div
             class="leaderboard-state
@@ -458,6 +466,7 @@ function clearLeaderboardContent({
     content,
     currentUserSlot
 }) {
+    setFinishedSeasonLayout(false);
     content.innerHTML = "";
 
     if (currentUserSlot) {
@@ -479,6 +488,30 @@ function isRenderCurrent(
         && renderId === activeRenderId
         && getActiveLeaderboardTab()
             === expectedTab
+    );
+}
+
+
+/* =========================================================
+   LAYOUT ИТОГОВ СЕЗОНА
+
+   На finished-экране нет фиксированной карточки текущего
+   пользователя, поэтому не резервируем под неё место.
+   ========================================================= */
+
+function setFinishedSeasonLayout(isFinished) {
+    const page =
+        leaderboardRoot?.querySelector(
+            ".leaderboard-page"
+        );
+
+    if (!page) {
+        return;
+    }
+
+    page.classList.toggle(
+        "leaderboard-page--season-finished",
+        Boolean(isFinished)
     );
 }
 

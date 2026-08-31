@@ -16,7 +16,7 @@ async def finalize_season(season_number: int, season_start_date, season_end_date
                     FROM habit_confirmations hc
                     JOIN habits h ON h.id = hc.habit_id
                     WHERE hc.is_confirmed = TRUE AND hc.xp_awarded = TRUE
-                      AND hc.confirmation_date BETWEEN $2 AND $3
+                      AND (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE BETWEEN $2 AND $3
                     UNION ALL
                     SELECT r.inviter_user_id, r.xp_amount::INTEGER
                     FROM referrals r
@@ -77,7 +77,7 @@ async def get_finished_season_payload(season_number: int, user_id: int, active_s
             SELECT COUNT(*) FROM habit_confirmations hc
             JOIN habits h ON h.id = hc.habit_id
             WHERE hc.is_confirmed = TRUE
-              AND hc.confirmation_date BETWEEN $1 AND $2
+              AND (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE BETWEEN $1 AND $2
               AND EXISTS (
                   SELECT 1 FROM season_results sr
                   WHERE sr.season_number = $3 AND sr.user_id = h.user_id
@@ -87,11 +87,13 @@ async def get_finished_season_payload(season_number: int, user_id: int, active_s
         best_streak = await connection.fetchval(
             """
             WITH days AS (
-                SELECT DISTINCT h.user_id, hc.confirmation_date AS day
+                SELECT DISTINCT h.user_id,
+                       (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE AS day
                 FROM habit_confirmations hc
                 JOIN habits h ON h.id = hc.habit_id
                 JOIN season_results sr ON sr.user_id = h.user_id AND sr.season_number = $3
-                WHERE hc.is_confirmed = TRUE AND hc.confirmation_date BETWEEN $1 AND $2
+                WHERE hc.is_confirmed = TRUE
+                  AND (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE BETWEEN $1 AND $2
             ), grouped AS (
                 SELECT user_id, day,
                        day - (ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY day))::INTEGER AS grp
@@ -108,7 +110,8 @@ async def get_finished_season_payload(season_number: int, user_id: int, active_s
             FROM habit_confirmations hc
             JOIN habits h ON h.id = hc.habit_id
             JOIN season_results sr ON sr.user_id = h.user_id AND sr.season_number = $3
-            WHERE hc.is_confirmed = TRUE AND hc.confirmation_date BETWEEN $1 AND $2
+            WHERE hc.is_confirmed = TRUE
+                  AND (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE BETWEEN $1 AND $2
             GROUP BY h.title
             ORDER BY COUNT(*) DESC, LOWER(h.title) ASC
             LIMIT 1

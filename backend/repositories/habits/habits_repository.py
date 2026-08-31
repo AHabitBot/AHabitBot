@@ -1480,7 +1480,7 @@ async def set_habit_confirmation(
                                     ON h.id = hc.habit_id
 
                                 WHERE h.user_id = $1
-                                  AND hc.confirmation_date
+                                  AND (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE
                                       BETWEEN $2 AND $3
                                   AND hc.is_confirmed = TRUE
                                   AND hc.xp_awarded = TRUE
