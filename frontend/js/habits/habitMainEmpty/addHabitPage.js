@@ -1054,6 +1054,34 @@ function handleHabitSaved(
    СОБЫТИЯ СТРАНИЦЫ СОЗДАНИЯ / РЕДАКТИРОВАНИЯ
    ========================================================= */
 
+function rerenderAddHabitPageWithoutScrollJump(
+    eventOptions
+) {
+    const root = getHabitsRoot()
+    const currentPage = root?.querySelector(
+        ".add-habit-v2"
+    )
+
+    const savedScrollTop =
+        currentPage?.scrollTop || 0
+
+    renderAddHabitPage()
+
+    const updatedPage = root?.querySelector(
+        ".add-habit-v2"
+    )
+
+    if (updatedPage) {
+        updatedPage.scrollTop = savedScrollTop
+
+        window.requestAnimationFrame(() => {
+            updatedPage.scrollTop = savedScrollTop
+        })
+    }
+
+    initAddHabitPageEvents(eventOptions)
+}
+
 export function initAddHabitPageEvents({
     onOpenHabitsPage = null,
     onHabitSaved = null,
@@ -1130,8 +1158,11 @@ export function initAddHabitPageEvents({
         button.addEventListener("click", () => {
             updateDraftFromAddHabitPage()
             setHabitDraftValue("repeatType", button.dataset.repeatType)
-            renderAddHabitPage()
-            initAddHabitPageEvents({ onOpenHabitsPage, onHabitSaved, onCancel })
+            rerenderAddHabitPageWithoutScrollJump({
+                onOpenHabitsPage,
+                onHabitSaved,
+                onCancel
+            })
         })
     })
     root.querySelectorAll("[data-repeat-day]").forEach(button => {
@@ -1156,8 +1187,11 @@ export function initAddHabitPageEvents({
                 const minimum = draft.originalChallengeTarget || 1
                 setHabitDraftValue("challengeTarget", Math.max(minimum, draft.challengeTarget + step))
             }
-            renderAddHabitPage()
-            initAddHabitPageEvents({ onOpenHabitsPage, onHabitSaved, onCancel })
+            rerenderAddHabitPageWithoutScrollJump({
+                onOpenHabitsPage,
+                onHabitSaved,
+                onCancel
+            })
         })
     })
 
