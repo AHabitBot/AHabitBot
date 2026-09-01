@@ -189,10 +189,9 @@ async def get_profile(
     # =====================================================
 
     return {
-        /*
-         * Нужен frontend Appearance
-         * для персональных аватаров.
-         */
+         # Нужен frontend Appearance
+         # для персональных аватаров.
+
         "user_id":
             int(user_id),
 
