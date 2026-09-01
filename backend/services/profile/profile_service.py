@@ -43,13 +43,17 @@ NICKNAME_PATTERN = re.compile(
 # PRIVATE AVATARS
 # =========================================================
 
-PRIVATE_AVATAR_USERS = {
+PRIVATE_AVATAR_USERS: dict[str, set[int]] = {
     "petya_01": {
         4,
         9,
     },
 }
 
+
+# =========================================================
+# PRIVATE AVATAR HELPERS
+# =========================================================
 
 def is_private_avatar(
     avatar_key: str,
@@ -61,22 +65,21 @@ def is_private_avatar(
 
 
 def can_user_use_private_avatar(
-    *,
     user_id: int,
     avatar_key: str,
 ) -> bool:
-    allowed_users = (
+    allowed_user_ids = (
         PRIVATE_AVATAR_USERS.get(
             avatar_key
         )
     )
 
-    if allowed_users is None:
+    if allowed_user_ids is None:
         return False
 
     return (
         int(user_id)
-        in allowed_users
+        in allowed_user_ids
     )
 
 
@@ -86,10 +89,15 @@ def can_user_use_private_avatar(
 
 async def get_profile(
     user_id: int,
+    achievements_data: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     """
     Возвращает подготовленные данные
     профиля пользователя.
+
+    achievements_data может быть заранее
+    передан bootstrap'ом, чтобы не выполнять
+    повторный запрос достижений.
     """
 
     profile_data = await get_profile_data(
@@ -159,9 +167,14 @@ async def get_profile(
     # ДОСТИЖЕНИЯ
     # =====================================================
 
-    achievements = await get_achievements(
-        user_id=user_id,
+    achievements = (
+        achievements_data
+        if achievements_data is not None
+        else await get_achievements(
+            user_id=user_id,
+        )
     )
+
 
     achievements_earned_count = max(
         int(
@@ -172,6 +185,7 @@ async def get_profile(
         ),
         0,
     )
+
 
     achievements_total_count = max(
         int(
@@ -189,9 +203,6 @@ async def get_profile(
     # =====================================================
 
     return {
-         # Нужен frontend Appearance
-         # для персональных аватаров.
-
         "user_id":
             int(user_id),
 
@@ -216,7 +227,8 @@ async def get_profile(
         ),
 
         "nickname_can_change": (
-            nickname_changed_at is None
+            nickname_changed_at
+            is None
         ),
 
         "total_xp":
@@ -282,9 +294,6 @@ async def change_nickname(
     - символ "_";
     - без пробелов;
     - без остальных спецсимволов.
-
-    Повторная смена блокируется на уровне SQL
-    через nickname_changed_at IS NULL.
     """
 
     normalized_nickname = (
@@ -332,7 +341,8 @@ async def change_nickname(
         updated_user = (
             await update_nickname_once(
                 user_id=user_id,
-                nickname=normalized_nickname,
+                nickname=
+                    normalized_nickname,
             )
         )
 
@@ -343,7 +353,7 @@ async def change_nickname(
 
 
     # =====================================================
-    # ПРАВО НА СМЕНУ УЖЕ ИСПОЛЬЗОВАНО
+    # СМЕНА УЖЕ ИСПОЛЬЗОВАНА
     # =====================================================
 
     if updated_user is None:
@@ -381,14 +391,11 @@ async def change_profile_appearance(
     """
     Сохраняет выбранный внешний вид пользователя.
 
-    Стандартные аватары:
-    - работают через appearance_config;
-    - открываются по уровню.
+    Обычные аватары проверяются
+    существующей системой уровней.
 
-    Private avatars:
-    - доступны только разрешённым
-      users.id;
-    - не зависят от уровня.
+    Private-аватары разрешены только
+    конкретным пользователям.
     """
 
     normalized_avatar_key = (
@@ -405,7 +412,7 @@ async def change_profile_appearance(
 
 
     # =====================================================
-    # AVATAR
+    # AVATAR KEY
     # =====================================================
 
     if not normalized_avatar_key:
@@ -413,6 +420,10 @@ async def change_profile_appearance(
             "Не передан avatar_key"
         )
 
+
+    # =====================================================
+    # PROFILE DATA
+    # =====================================================
 
     profile_data = await get_profile_data(
         user_id=user_id,
@@ -436,7 +447,7 @@ async def change_profile_appearance(
             avatar_key=
                 normalized_avatar_key,
         ):
-            raise PermissionError(
+            raise ValueError(
                 "Этот аватар недоступен "
                 "этому пользователю"
             )
@@ -452,6 +463,7 @@ async def change_profile_appearance(
                 normalized_avatar_key
             )
         )
+
 
         if required_level is None:
             raise ValueError(
@@ -512,8 +524,10 @@ async def change_profile_appearance(
     updated_appearance = (
         await update_profile_appearance(
             user_id=user_id,
+
             avatar_key=
                 normalized_avatar_key,
+
             background_key=
                 normalized_background_key,
         )
