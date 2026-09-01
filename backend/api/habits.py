@@ -25,6 +25,9 @@ from backend.services.habits.habit_service import (
     restore_user_habit,
     update_habit_confirmation,
 )
+from backend.services.repeat_rules import (
+    normalize_repeat_rule,
+)
 
 
 # Используем логгер Uvicorn, чтобы сообщения гарантированно
@@ -176,7 +179,6 @@ async def add_habit(
 
     user: CurrentUser,
 ):
-    from backend.services.habits.repeat_rules import normalize_repeat_rule
     try:
         repeat_type, repeat_days, weekly_target, challenge_target = normalize_repeat_rule(
             payload.repeat_type, payload.repeat_days, payload.weekly_target, payload.challenge_target
@@ -212,7 +214,6 @@ async def update_existing_habit(
     user: CurrentUser,
 ):
     try:
-        from backend.services.habits.repeat_rules import normalize_repeat_rule
         repeat_type, repeat_days, weekly_target, challenge_target = normalize_repeat_rule(
             payload.repeat_type, payload.repeat_days, payload.weekly_target, payload.challenge_target
         )
