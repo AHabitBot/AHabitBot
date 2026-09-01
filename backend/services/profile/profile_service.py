@@ -40,12 +40,52 @@ NICKNAME_PATTERN = re.compile(
 
 
 # =========================================================
+# PRIVATE AVATARS
+# =========================================================
+
+PRIVATE_AVATAR_USERS = {
+    "petya_01": {
+        4,
+        9,
+    },
+}
+
+
+def is_private_avatar(
+    avatar_key: str,
+) -> bool:
+    return (
+        avatar_key
+        in PRIVATE_AVATAR_USERS
+    )
+
+
+def can_user_use_private_avatar(
+    *,
+    user_id: int,
+    avatar_key: str,
+) -> bool:
+    allowed_users = (
+        PRIVATE_AVATAR_USERS.get(
+            avatar_key
+        )
+    )
+
+    if allowed_users is None:
+        return False
+
+    return (
+        int(user_id)
+        in allowed_users
+    )
+
+
+# =========================================================
 # ПОЛУЧИТЬ ПРОФИЛЬ
 # =========================================================
 
 async def get_profile(
     user_id: int,
-    achievements_data: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     """
     Возвращает подготовленные данные
@@ -97,7 +137,9 @@ async def get_profile(
             )
             or level_progress["level"]
         ),
-        int(level_progress["level"]),
+        int(
+            level_progress["level"]
+        ),
         1,
     )
 
@@ -117,12 +159,8 @@ async def get_profile(
     # ДОСТИЖЕНИЯ
     # =====================================================
 
-    achievements = (
-        achievements_data
-        if achievements_data is not None
-        else await get_achievements(
-            user_id=user_id,
-        )
+    achievements = await get_achievements(
+        user_id=user_id,
     )
 
     achievements_earned_count = max(
@@ -151,6 +189,13 @@ async def get_profile(
     # =====================================================
 
     return {
+        /*
+         * Нужен frontend Appearance
+         * для персональных аватаров.
+         */
+        "user_id":
+            int(user_id),
+
         "nickname": (
             profile_data.get(
                 "nickname"
@@ -217,6 +262,7 @@ async def get_profile(
         "achievements_total_count":
             achievements_total_count,
     }
+
 
 # =========================================================
 # ИЗМЕНИТЬ NICKNAME
@@ -319,7 +365,8 @@ async def change_nickname(
             ]
         ),
 
-        "nickname_can_change": False,
+        "nickname_can_change":
+            False,
     }
 
 
@@ -335,9 +382,14 @@ async def change_profile_appearance(
     """
     Сохраняет выбранный внешний вид пользователя.
 
-    Сейчас внешний вид состоит из:
-    - avatar_key;
-    - background_key.
+    Стандартные аватары:
+    - работают через appearance_config;
+    - открываются по уровню.
+
+    Private avatars:
+    - доступны только разрешённым
+      users.id;
+    - не зависят от уровня.
     """
 
     normalized_avatar_key = (
@@ -362,14 +414,6 @@ async def change_profile_appearance(
             "Не передан avatar_key"
         )
 
-    required_level = get_avatar_required_level(
-        normalized_avatar_key
-    )
-
-    if required_level is None:
-        raise ValueError(
-            "Неизвестный avatar_key"
-        )
 
     profile_data = await get_profile_data(
         user_id=user_id,
@@ -380,33 +424,76 @@ async def change_profile_appearance(
             "Профиль пользователя не найден"
         )
 
-    current_level = int(
-        calculate_level_progress(
-            total_xp=max(
-                0,
-                int(
-                    profile_data.get("total_xp")
-                    or 0
-                ),
-            )
-        )["level"]
-    )
 
-    highest_level_reached = max(
-        1,
-        current_level,
-        int(
-            profile_data.get(
-                "highest_level_reached"
-            )
-            or 1
-        ),
-    )
+    # =====================================================
+    # PRIVATE AVATAR
+    # =====================================================
 
-    if highest_level_reached < required_level:
-        raise ValueError(
-            "Этот аватар ещё не открыт"
+    if is_private_avatar(
+        normalized_avatar_key
+    ):
+        if not can_user_use_private_avatar(
+            user_id=user_id,
+            avatar_key=
+                normalized_avatar_key,
+        ):
+            raise PermissionError(
+                "Этот аватар недоступен "
+                "этому пользователю"
+            )
+
+
+    # =====================================================
+    # STANDARD AVATAR
+    # =====================================================
+
+    else:
+        required_level = (
+            get_avatar_required_level(
+                normalized_avatar_key
+            )
         )
+
+        if required_level is None:
+            raise ValueError(
+                "Неизвестный avatar_key"
+            )
+
+
+        current_level = int(
+            calculate_level_progress(
+                total_xp=max(
+                    0,
+                    int(
+                        profile_data.get(
+                            "total_xp"
+                        )
+                        or 0
+                    ),
+                )
+            )["level"]
+        )
+
+
+        highest_level_reached = max(
+            1,
+            current_level,
+            int(
+                profile_data.get(
+                    "highest_level_reached"
+                )
+                or 1
+            ),
+        )
+
+
+        if (
+            highest_level_reached
+            < required_level
+        ):
+            raise ValueError(
+                "Этот аватар ещё не открыт"
+            )
 
 
     # =====================================================

@@ -101,15 +101,9 @@ function getActiveAppearanceOptions() {
         type: "avatar",
 
         /*
-         * Здесь главное изменение.
-         *
-         * PROFILE_AVATARS напрямую
-         * больше не отображаем.
-         *
-         * Каждый пользователь получает
-         * только разрешённые ему аватары.
+         * Для avatar показываем уже
+         * отфильтрованный список.
          */
-
         options:
             getProfileAvatarsForUser(
                 currentUserId
@@ -142,18 +136,19 @@ function loadProfileAppearance() {
     }
 
 
-    /*
-     * Внутренний users.id.
-     *
-     * Именно его используем для
-     * персональных аватаров.
-     */
+    /* =====================================================
+       USER ID
+       ===================================================== */
 
     currentUserId =
         Number(
             profile.user_id
         ) || null
 
+
+    /* =====================================================
+       LEVEL
+       ===================================================== */
 
     currentUserLevel =
         Math.max(
@@ -165,11 +160,19 @@ function loadProfileAppearance() {
         )
 
 
+    /* =====================================================
+       AVATAR
+       ===================================================== */
+
     const avatar =
         getProfileAvatar(
             profile.avatar_key
         )
 
+
+    /* =====================================================
+       BACKGROUND
+       ===================================================== */
 
     const background =
         getProfileBackground(
@@ -178,18 +181,19 @@ function loadProfileAppearance() {
 
 
     /*
-     * Если по какой-либо причине
-     * пользователю сохранён аватар,
-     * которого он больше не имеет
-     * права использовать,
-     * в Appearance показываем default.
+     * Сохранённый private avatar
+     * принимаем только если пользователь
+     * действительно имеет к нему доступ.
      */
 
     const visibleAvatar =
-        avatar &&
-        isProfileAvatarVisibleForUser(
-            avatar,
-            currentUserId
+        (
+            avatar
+            &&
+            isProfileAvatarVisibleForUser(
+                avatar,
+                currentUserId
+            )
         )
             ? avatar
             : getProfileAvatar(
@@ -208,6 +212,12 @@ function loadProfileAppearance() {
             ? background.id
             : DEFAULT_PROFILE_BACKGROUND_ID
 
+
+    /*
+     * При открытии страницы preview
+     * начинается с реально применённого
+     * внешнего вида.
+     */
 
     previewAvatarId =
         appliedAvatarId
@@ -228,6 +238,7 @@ function renderProfileAppearanceHero() {
             previewAvatarId
         )
 
+
     const background =
         getProfileBackground(
             previewBackgroundId
@@ -237,7 +248,9 @@ function renderProfileAppearanceHero() {
     return `
         <section
             class="profile-appearance-hero"
-            aria-label="${t("profile.appearance.previewAria")}"
+            aria-label="${t(
+                "profile.appearance.previewAria"
+            )}"
         >
 
             <img
@@ -259,7 +272,9 @@ function renderProfileAppearanceHero() {
                 <img
                     class="profile-appearance-hero__avatar"
                     src="${avatar?.image || ""}"
-                    alt="${t("profile.appearance.characterAlt")}"
+                    alt="${t(
+                        "profile.appearance.characterAlt"
+                    )}"
                 >
 
             </div>
@@ -281,6 +296,7 @@ function updateProfileAppearanceHero(
             previewAvatarId
         )
 
+
     const background =
         getProfileBackground(
             previewBackgroundId
@@ -291,6 +307,7 @@ function updateProfileAppearanceHero(
         root.querySelector(
             ".profile-appearance-hero__avatar"
         )
+
 
     const backgroundImage =
         root.querySelector(
@@ -339,7 +356,8 @@ function renderProfileAppearanceTabs() {
                 class="
                     profile-appearance-tabs__item
                     ${
-                        activeAppearanceTab === "avatar"
+                        activeAppearanceTab ===
+                        "avatar"
                             ? "is-active"
                             : ""
                     }
@@ -347,7 +365,9 @@ function renderProfileAppearanceTabs() {
                 type="button"
                 data-appearance-tab="avatar"
             >
-                ${t("profile.appearance.tabs.avatar")}
+                ${t(
+                    "profile.appearance.tabs.avatar"
+                )}
             </button>
 
 
@@ -355,7 +375,8 @@ function renderProfileAppearanceTabs() {
                 class="
                     profile-appearance-tabs__item
                     ${
-                        activeAppearanceTab === "background"
+                        activeAppearanceTab ===
+                        "background"
                             ? "is-active"
                             : ""
                     }
@@ -363,7 +384,9 @@ function renderProfileAppearanceTabs() {
                 type="button"
                 data-appearance-tab="background"
             >
-                ${t("profile.appearance.tabs.background")}
+                ${t(
+                    "profile.appearance.tabs.background"
+                )}
             </button>
 
         </div>
@@ -393,7 +416,8 @@ function renderAppearanceOption({
 
     const isLocked =
         type === "avatar"
-        && !isProfileAvatarUnlocked(
+        &&
+        !isProfileAvatarUnlocked(
             option,
             currentUserLevel
         )
@@ -412,15 +436,29 @@ function renderAppearanceOption({
         <button
             class="
                 profile-appearance-option
-                ${isPreview ? "is-selected" : ""}
-                ${isLocked ? "is-locked" : ""}
+                ${
+                    isPreview
+                        ? "is-selected"
+                        : ""
+                }
+                ${
+                    isLocked
+                        ? "is-locked"
+                        : ""
+                }
             "
             type="button"
             data-appearance-option="${option.id}"
             data-appearance-type="${type}"
-            data-appearance-locked="${String(isLocked)}"
-            aria-pressed="${String(isPreview)}"
-            aria-disabled="${String(isLocked)}"
+            data-appearance-locked="${String(
+                isLocked
+            )}"
+            aria-pressed="${String(
+                isPreview
+            )}"
+            aria-disabled="${String(
+                isLocked
+            )}"
         >
 
             <img
@@ -492,15 +530,19 @@ function renderProfileAppearanceOptions() {
             data-appearance-options="${type}"
         >
 
-            ${options.map(
-                option =>
-                    renderAppearanceOption({
-                        option,
-                        type,
-                        previewId,
-                        appliedId
-                    })
-            ).join("")}
+            ${
+                options
+                    .map(
+                        option =>
+                            renderAppearanceOption({
+                                option,
+                                type,
+                                previewId,
+                                appliedId
+                            })
+                    )
+                    .join("")
+            }
 
         </div>
     `
@@ -568,6 +610,10 @@ function syncProfileAppearanceOptions(
                 appliedId
 
 
+            /*
+             * РАМКА = PREVIEW
+             */
+
             button.classList.toggle(
                 "is-selected",
                 isPreview
@@ -579,6 +625,10 @@ function syncProfileAppearanceOptions(
                 String(isPreview)
             )
 
+
+            /*
+             * ГАЛОЧКА = ПРИМЕНЁННЫЙ
+             */
 
             let check =
                 button.querySelector(
@@ -637,7 +687,9 @@ function renderProfileAppearanceButton() {
                 type="button"
                 data-appearance-apply
             >
-                ${t("profile.appearance.apply")}
+                ${t(
+                    "profile.appearance.apply"
+                )}
             </button>
 
         </div>
@@ -663,9 +715,13 @@ function renderProfileAppearanceContent(
             <div
                 class="profile-appearance-header"
             >
-                ${renderProfileSectionHeader(
-                    t("profile.appearance.title")
-                )}
+                ${
+                    renderProfileSectionHeader(
+                        t(
+                            "profile.appearance.title"
+                        )
+                    )
+                }
             </div>
 
 
@@ -708,9 +764,8 @@ function selectAppearancePreview(
 
 
         /*
-         * Дополнительная frontend-проверка:
-         * пользователь не сможет выбрать
-         * private avatar даже вручную через DOM.
+         * Private avatar нельзя выбрать,
+         * даже если вручную подменить DOM.
          */
 
         if (
@@ -779,9 +834,9 @@ function bindProfileAppearanceEvents(
     root.onclick =
         async (event) => {
 
-            /* -------------------------------------------------
+            /* ---------------------------------------------
                TAB
-               ------------------------------------------------- */
+               --------------------------------------------- */
 
             const tabButton =
                 event.target.closest(
@@ -796,7 +851,8 @@ function bindProfileAppearanceEvents(
 
 
                 if (
-                    tab !== "avatar" &&
+                    tab !== "avatar"
+                    &&
                     tab !== "background"
                 ) {
                     return
@@ -821,12 +877,15 @@ function bindProfileAppearanceEvents(
                     )
                     .forEach(
                         button => {
-                            button.classList.toggle(
-                                "is-active",
-                                button.dataset
-                                    .appearanceTab ===
-                                    activeAppearanceTab
-                            )
+                            button
+                                .classList
+                                .toggle(
+                                    "is-active",
+                                    button
+                                        .dataset
+                                        .appearanceTab ===
+                                        activeAppearanceTab
+                                )
                         }
                     )
 
@@ -840,9 +899,9 @@ function bindProfileAppearanceEvents(
             }
 
 
-            /* -------------------------------------------------
+            /* ---------------------------------------------
                OPTION
-               ------------------------------------------------- */
+               --------------------------------------------- */
 
             const optionButton =
                 event.target.closest(
@@ -895,9 +954,9 @@ function bindProfileAppearanceEvents(
             }
 
 
-            /* -------------------------------------------------
+            /* ---------------------------------------------
                APPLY
-               ------------------------------------------------- */
+               --------------------------------------------- */
 
             const applyButton =
                 event.target.closest(
@@ -925,6 +984,11 @@ function bindProfileAppearanceEvents(
                     })
 
 
+                /*
+                 * Сохранилось на backend —
+                 * теперь считаем применённым.
+                 */
+
                 appliedAvatarId =
                     result.avatar_key
 
@@ -938,6 +1002,10 @@ function bindProfileAppearanceEvents(
                 )
 
 
+                /*
+                 * PROFILE + leaderboard cache.
+                 */
+
                 void syncAfterAppearanceChange()
             }
 
@@ -949,7 +1017,8 @@ function bindProfileAppearanceEvents(
 
 
                 window.alert(
-                    error?.message ||
+                    error?.message
+                    ||
                     t(
                         "profile.appearance.error.saveGeneric"
                     )

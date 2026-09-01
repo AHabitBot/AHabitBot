@@ -19,13 +19,16 @@ export const PROFILE_AVATARS = [
         id: "standard_m_01",
         category: "standard",
         requiredLevel: 1,
-        image: "./img/profile/avatar/avatar_standard_m_01.png"
+        image:
+            "./img/profile/avatar/avatar_standard_m_01.png"
     },
+
     {
         id: "standard_f_01",
         category: "standard",
         requiredLevel: 1,
-        image: "./img/profile/avatar/avatar_standard_f_01.png"
+        image:
+            "./img/profile/avatar/avatar_standard_f_01.png"
     },
 
 
@@ -37,13 +40,16 @@ export const PROFILE_AVATARS = [
         id: "standard_m_02",
         category: "standard",
         requiredLevel: 5,
-        image: "./img/profile/avatar/avatar_standard_m_02.png"
+        image:
+            "./img/profile/avatar/avatar_standard_m_02.png"
     },
+
     {
         id: "standard_f_02",
         category: "standard",
         requiredLevel: 5,
-        image: "./img/profile/avatar/avatar_standard_f_02.png"
+        image:
+            "./img/profile/avatar/avatar_standard_f_02.png"
     },
 
 
@@ -55,13 +61,16 @@ export const PROFILE_AVATARS = [
         id: "standard_m_03",
         category: "standard",
         requiredLevel: 10,
-        image: "./img/profile/avatar/avatar_standard_m_03.png"
+        image:
+            "./img/profile/avatar/avatar_standard_m_03.png"
     },
+
     {
         id: "standard_f_03",
         category: "standard",
         requiredLevel: 10,
-        image: "./img/profile/avatar/avatar_standard_f_03.png"
+        image:
+            "./img/profile/avatar/avatar_standard_f_03.png"
     },
 
 
@@ -73,13 +82,16 @@ export const PROFILE_AVATARS = [
         id: "standard_m_04",
         category: "standard",
         requiredLevel: 15,
-        image: "./img/profile/avatar/avatar_standard_m_04.png"
+        image:
+            "./img/profile/avatar/avatar_standard_m_04.png"
     },
+
     {
         id: "standard_f_04",
         category: "standard",
         requiredLevel: 15,
-        image: "./img/profile/avatar/avatar_standard_f_04.png"
+        image:
+            "./img/profile/avatar/avatar_standard_f_04.png"
     },
 
 
@@ -91,27 +103,32 @@ export const PROFILE_AVATARS = [
         id: "standard_m_05",
         category: "standard",
         requiredLevel: 20,
-        image: "./img/profile/avatar/avatar_standard_m_05.png"
+        image:
+            "./img/profile/avatar/avatar_standard_m_05.png"
     },
+
     {
         id: "standard_f_05",
         category: "standard",
         requiredLevel: 20,
-        image: "./img/profile/avatar/avatar_standard_f_05.png"
+        image:
+            "./img/profile/avatar/avatar_standard_f_05.png"
     },
 
 
     /* =====================================================
        PRIVATE — PETYA
-
-       Доступен только:
-       users.id = 4
-       users.id = 9
+       Только users.id 4 и 9
        ===================================================== */
 
     {
-        id: "avatar_petya_01",
+        id: "petya_01",
         category: "private",
+
+        /*
+         * Private avatar не требует
+         * достижения определённого уровня.
+         */
         requiredLevel: 1,
 
         allowedUserIds: [
@@ -163,7 +180,7 @@ export function getDefaultProfileAvatar() {
 
 
 /* =========================================================
-   IS AVATAR VISIBLE FOR USER
+   AVATAR VISIBLE FOR USER
    ========================================================= */
 
 export function isProfileAvatarVisibleForUser(
@@ -176,8 +193,9 @@ export function isProfileAvatarVisibleForUser(
 
 
     /*
-     * Если allowedUserIds отсутствует,
-     * это обычный публичный аватар.
+     * Обычный avatar.
+     * allowedUserIds отсутствует —
+     * значит виден всем.
      */
 
     if (
@@ -204,9 +222,12 @@ export function isProfileAvatarVisibleForUser(
 
     return (
         avatar.allowedUserIds
-            .map(Number)
-            .includes(
-                normalizedUserId
+            .some(
+                allowedUserId =>
+                    Number(
+                        allowedUserId
+                    ) ===
+                    normalizedUserId
             )
     )
 }
