@@ -91,7 +91,11 @@ export async function createHabit(
                         String(
                             payload.size ||
                             "large"
-                        )
+                        ),
+                    repeat_type: payload.repeatType || "days",
+                    repeat_days: payload.repeatDays || [1,2,3,4,5,6,7],
+                    weekly_target: payload.repeatType === "weekly" ? payload.weeklyTarget : null,
+                    challenge_target: payload.repeatType === "challenge" ? payload.challengeTarget : null
                 }
             }
         );
@@ -156,7 +160,11 @@ export async function updateHabitApi(
                         String(
                             payload.size ||
                             "large"
-                        )
+                        ),
+                    repeat_type: payload.repeatType || "days",
+                    repeat_days: payload.repeatDays || [1,2,3,4,5,6,7],
+                    weekly_target: payload.repeatType === "weekly" ? payload.weeklyTarget : null,
+                    challenge_target: payload.repeatType === "challenge" ? payload.challengeTarget : null
                 }
             }
         );

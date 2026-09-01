@@ -17,5 +17,6 @@ export default Object.freeze({
     "habits.list.card.confirm.completedAria": "Звичку виконано",
     "habits.list.card.confirm.actionAria": "Підтвердити виконання звички",
     "habits.list.card.weekProgressAria": "Прогрес за тиждень",
-    "habits.list.card.currentStreakAria": "Поточна серія: {count}"
+    "habits.list.card.currentStreakAria": "Поточна серія: {count}",
+    "habits.list.repeat.everyDay":"Щодня","habits.list.repeat.except":"Щодня, крім {days}","habits.list.repeat.weekly":"{count} днів на тиждень","habits.list.repeat.challenge":"{count} днів без пропусків","habits.list.repeat.day.1":"Пн","habits.list.repeat.day.2":"Вт","habits.list.repeat.day.3":"Ср","habits.list.repeat.day.4":"Чт","habits.list.repeat.day.5":"Пт","habits.list.repeat.day.6":"Сб","habits.list.repeat.day.7":"Нд"
 });

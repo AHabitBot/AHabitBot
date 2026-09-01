@@ -63,6 +63,10 @@ class HabitCreateRequest(BaseModel):
     )
 
     size: Literal["large"] = "large"
+    repeat_type: Literal["days", "weekly", "challenge"] = "days"
+    repeat_days: list[int] = Field(default_factory=lambda: [1, 2, 3, 4, 5, 6, 7])
+    weekly_target: int | None = None
+    challenge_target: int | None = None
 
 
 class HabitUpdateRequest(BaseModel):
@@ -84,6 +88,10 @@ class HabitUpdateRequest(BaseModel):
     )
 
     size: Literal["large"] = "large"
+    repeat_type: Literal["days", "weekly", "challenge"] = "days"
+    repeat_days: list[int] = Field(default_factory=lambda: [1, 2, 3, 4, 5, 6, 7])
+    weekly_target: int | None = None
+    challenge_target: int | None = None
 
 
 class HabitConfirmationRequest(BaseModel):
@@ -168,12 +176,23 @@ async def add_habit(
 
     user: CurrentUser,
 ):
+    from backend.services.habits.repeat_rules import normalize_repeat_rule
+    try:
+        repeat_type, repeat_days, weekly_target, challenge_target = normalize_repeat_rule(
+            payload.repeat_type, payload.repeat_days, payload.weekly_target, payload.challenge_target
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
     habit = await create_habit(
         user_id=user["id"],
         title=payload.title.strip(),
         emoji=payload.emoji,
         color=payload.color,
         size=payload.size,
+        repeat_type=repeat_type,
+        repeat_days=repeat_days,
+        weekly_target=weekly_target,
+        challenge_target=challenge_target,
     )
 
     return {
@@ -193,6 +212,10 @@ async def update_existing_habit(
     user: CurrentUser,
 ):
     try:
+        from backend.services.habits.repeat_rules import normalize_repeat_rule
+        repeat_type, repeat_days, weekly_target, challenge_target = normalize_repeat_rule(
+            payload.repeat_type, payload.repeat_days, payload.weekly_target, payload.challenge_target
+        )
         habit = await edit_habit(
             user_id=user["id"],
             habit_id=habit_id,
@@ -200,6 +223,10 @@ async def update_existing_habit(
             emoji=payload.emoji,
             color=payload.color,
             size=payload.size,
+            repeat_type=repeat_type,
+            repeat_days=repeat_days,
+            weekly_target=weekly_target,
+            challenge_target=challenge_target,
         )
 
         if habit is None:
@@ -240,6 +267,8 @@ async def update_existing_habit(
     except HTTPException:
         raise
 
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
     except Exception:
         logger.exception(
             "\n"
@@ -309,6 +338,9 @@ async def archive_habit_endpoint(
 
     except HTTPException:
         raise
+
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
 
     except Exception:
         logger.exception(
@@ -513,6 +545,9 @@ async def set_confirmation(
 
     except HTTPException:
         raise
+
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
 
     except Exception:
         if payload.is_confirmed:

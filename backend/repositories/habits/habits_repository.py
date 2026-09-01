@@ -6,6 +6,11 @@ from backend.database.database import get_connection
 from backend.services.leaderboard.season_service import (
     get_season_context,
 )
+from backend.services.habits.repeat_rules import (
+    calculate_repeat_streak,
+    calculate_weekly_streak_with_target,
+    is_confirmation_allowed,
+)
 
 DAILY_XP_CONFIRMATIONS_LIMIT = 3
 DEFAULT_TIMEZONE = "Europe/Kyiv"
@@ -64,6 +69,11 @@ async def get_user_habits(
                 h.is_archived,
                 h.created_at,
                 h.updated_at,
+                h.repeat_type,
+                h.repeat_days,
+                h.weekly_target,
+                h.challenge_target,
+                h.repeat_started_on,
 
                 COALESCE(
                     today_confirmation.is_confirmed,
@@ -287,12 +297,18 @@ async def get_user_habits(
             in habit_completed_dates
         ]
 
-        habit["streak"] = (
-            calculate_habit_streak(
-                completed_dates=
-                    habit_completed_dates,
-                today=today,
+        if habit["repeat_type"] == "weekly":
+            habit["streak"] = calculate_weekly_streak_with_target(
+                habit_completed_dates, today, habit["repeat_started_on"],
+                int(habit["weekly_target"]),
             )
+        else:
+            habit["streak"] = calculate_repeat_streak(
+                habit["repeat_type"], list(habit["repeat_days"] or []),
+                habit_completed_dates, today, habit["repeat_started_on"],
+            )
+        habit["confirmation_allowed_today"] = is_confirmation_allowed(
+            habit["repeat_type"], list(habit["repeat_days"] or []), today,
         )
 
         habit["max_streak"] = (
@@ -348,6 +364,10 @@ async def create_habit(
     emoji: str,
     color: str,
     size: str,
+    repeat_type: str,
+    repeat_days: list[int],
+    weekly_target: int | None,
+    challenge_target: int | None,
 ) -> dict[str, Any]:
     async with get_connection() as connection:
         row = await connection.fetchrow(
@@ -357,9 +377,14 @@ async def create_habit(
                 title,
                 emoji,
                 color,
-                size
+                size,
+                repeat_type,
+                repeat_days,
+                weekly_target,
+                challenge_target,
+                repeat_started_on
             )
-            VALUES ($1, $2, $3, $4, $5)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING
                 id,
                 user_id,
@@ -371,12 +396,20 @@ async def create_habit(
                 is_archived,
                 created_at,
                 updated_at
+                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on
             """,
             user_id,
             title,
             emoji,
             color,
             size,
+            repeat_type,
+            repeat_days,
+            weekly_target,
+            challenge_target,
+            get_user_local_date(await connection.fetchval(
+                "SELECT timezone FROM user_settings WHERE user_id = $1", user_id
+            )),
         )
 
     if row is None:
@@ -398,6 +431,10 @@ async def update_habit(
     emoji: str,
     color: str,
     size: str,
+    repeat_type: str,
+    repeat_days: list[int],
+    weekly_target: int | None,
+    challenge_target: int | None,
 ) -> dict[str, Any] | None:
     """
     Обновляет привычку текущего пользователя.
@@ -411,6 +448,25 @@ async def update_habit(
     """
 
     async with get_connection() as connection:
+        current = await connection.fetchrow(
+            "SELECT repeat_type, challenge_target FROM habits WHERE id=$1 AND user_id=$2 AND is_archived=FALSE",
+            habit_id, user_id,
+        )
+        if current is None:
+            return None
+        if current["repeat_type"] == "challenge":
+            if repeat_type != "challenge":
+                raise ValueError("Начатый челлендж нельзя изменить на другой режим")
+            if int(challenge_target or 0) < int(current["challenge_target"] or 0):
+                raise ValueError("Количество дней челленджа можно только увеличивать")
+
+        timezone_name = await connection.fetchval(
+            "SELECT timezone FROM user_settings WHERE user_id = $1", user_id
+        )
+        rule_changed = (
+            current["repeat_type"] != repeat_type
+            or (repeat_type == "challenge" and int(challenge_target or 0) != int(current["challenge_target"] or 0))
+        )
         row = await connection.fetchrow(
             """
             UPDATE habits
@@ -419,6 +475,11 @@ async def update_habit(
                 emoji = $4,
                 color = $5,
                 size = $6,
+                repeat_type = $7,
+                repeat_days = $8,
+                weekly_target = $9,
+                challenge_target = $10,
+                repeat_started_on = CASE WHEN $11 THEN $12 ELSE repeat_started_on END,
                 updated_at = NOW()
             WHERE id = $1
               AND user_id = $2
@@ -434,6 +495,7 @@ async def update_habit(
                 is_archived,
                 created_at,
                 updated_at
+                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on
             """,
             habit_id,
             user_id,
@@ -441,6 +503,12 @@ async def update_habit(
             emoji,
             color,
             size,
+            repeat_type,
+            repeat_days,
+            weekly_target,
+            challenge_target,
+            rule_changed and current["repeat_type"] != "challenge",
+            get_user_local_date(timezone_name),
         )
 
     if row is None:
@@ -530,6 +598,7 @@ async def get_archived_habits(
                 h.archived_at,
                 h.created_at,
                 h.updated_at
+                , h.repeat_type, h.repeat_days, h.weekly_target, h.challenge_target, h.repeat_started_on
 
             FROM habits AS h
 
@@ -725,6 +794,7 @@ async def restore_habit(
                     archived_at,
                     created_at,
                     updated_at
+                    , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on
                 """,
                 habit_id,
                 user_id,
@@ -813,11 +883,15 @@ async def restore_habit(
             # Текущая серия
             # -------------------------------------------------
 
-            streak = calculate_habit_streak(
-                completed_dates=
-                    completed_dates,
-                today=today,
-            )
+            if row["repeat_type"] == "weekly":
+                streak = calculate_weekly_streak_with_target(
+                    completed_dates, today, row["repeat_started_on"], int(row["weekly_target"])
+                )
+            else:
+                streak = calculate_repeat_streak(
+                    row["repeat_type"], list(row["repeat_days"] or []),
+                    completed_dates, today, row["repeat_started_on"],
+                )
 
             # -------------------------------------------------
             # Лучшая серия
@@ -904,6 +978,10 @@ async def restore_habit(
             habit[
                 "week_progress"
             ] = week_progress
+
+            habit["confirmation_allowed_today"] = is_confirmation_allowed(
+                row["repeat_type"], list(row["repeat_days"] or []), today
+            )
 
             return habit
 
@@ -1107,6 +1185,7 @@ async def set_habit_confirmation(
                     id,
                     user_id,
                     xp_reward
+                    , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on
                 FROM habits
                 WHERE id = $1
                   AND user_id = $2
@@ -1136,6 +1215,11 @@ async def set_habit_confirmation(
             confirmation_date = get_user_local_date(
                 timezone_name
             )
+
+            if is_confirmed and not is_confirmation_allowed(
+                habit["repeat_type"], list(habit["repeat_days"] or []), confirmation_date
+            ):
+                raise ValueError("Сегодня привычка не запланирована")
 
             season_context = get_season_context()
             season_number = season_context.number
@@ -1635,11 +1719,16 @@ async def set_habit_confirmation(
             # СТРИК ПРИВЫЧКИ
             # =================================================
 
-            habit_streak = calculate_habit_streak(
-                completed_dates=
-                    habit_completed_dates,
-                today=confirmation_date,
-            )
+            if habit["repeat_type"] == "weekly":
+                habit_streak = calculate_weekly_streak_with_target(
+                    habit_completed_dates, confirmation_date,
+                    habit["repeat_started_on"], int(habit["weekly_target"]),
+                )
+            else:
+                habit_streak = calculate_repeat_streak(
+                    habit["repeat_type"], list(habit["repeat_days"] or []),
+                    habit_completed_dates, confirmation_date, habit["repeat_started_on"],
+                )
 
             habit_max_streak = (
                 calculate_habit_max_streak(
@@ -1725,6 +1814,11 @@ async def set_habit_confirmation(
 
                     "confirmation_date":
                         confirmation_date.isoformat(),
+
+                    "confirmation_allowed_today":
+                        is_confirmation_allowed(
+                            habit["repeat_type"], list(habit["repeat_days"] or []), confirmation_date
+                        ),
                 },
 
                 "statistics": {

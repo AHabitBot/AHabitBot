@@ -19,7 +19,12 @@ const DEFAULT_HABIT_DRAFT = {
     name: "",
     icon: "✱",
     color: "blue",
-    size: "large"
+    size: "large",
+    repeatType: "days",
+    repeatDays: [1, 2, 3, 4, 5, 6, 7],
+    weeklyTarget: 4,
+    challengeTarget: 30,
+    originalChallengeTarget: null
 }
 
 
@@ -67,7 +72,8 @@ function normalizeHabitId(habitId) {
 
 export function getHabitDraft() {
     return {
-        ...habitDraft
+        ...habitDraft,
+        repeatDays: [...habitDraft.repeatDays]
     }
 }
 
@@ -230,7 +236,13 @@ export function startHabitEditDraft(
             size:
                 String(
                     habit.size || "large"
-                )
+                ),
+            repeatType: habit.repeatType || "days",
+            repeatDays: [...(habit.repeatDays || [1,2,3,4,5,6,7])],
+            weeklyTarget: Number(habit.weeklyTarget) || 4,
+            challengeTarget: Number(habit.challengeTarget) || 30,
+            originalChallengeTarget: habit.repeatType === "challenge"
+                ? Number(habit.challengeTarget) || 1 : null
         }
     )
 

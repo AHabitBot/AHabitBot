@@ -384,6 +384,12 @@ export function renderAddHabitPage() {
 
 
                 <!-- Размер карточки -->
+                <section class="add-habit-v2__section habit-repeat">
+                    <div class="add-habit-v2__section-label">${t("habits.addHabit.repeat.label")}</div>
+                    ${renderRepeatSelector(getHabitDraft(), isEditing)}
+                </section>
+
+                <!-- Размер карточки -->
                 <section class="add-habit-v2__section">
 
                     <div class="add-habit-v2__section-label">
@@ -424,6 +430,24 @@ export function renderAddHabitPage() {
 
         </section>
     `
+}
+
+function renderRepeatSelector(draft, isEditing) {
+    const locked = isEditing && draft.originalChallengeTarget !== null
+    const days = [1,2,3,4,5,6,7]
+    const option = (type, title, body="") => `
+        <div class="habit-repeat__card ${draft.repeatType === type ? "is-selected" : ""} ${locked && type !== "challenge" ? "is-locked" : ""}">
+            <button type="button" class="habit-repeat__head" data-repeat-type="${type}" ${locked && type !== "challenge" ? "disabled" : ""}>
+                <span>${title}</span><span class="habit-repeat__radio"></span>
+            </button>${draft.repeatType === type ? body : ""}
+        </div>`
+    const dayButtons = `<div class="habit-repeat__days">${days.map(day => `<button type="button" data-repeat-day="${day}" class="${draft.repeatDays.includes(day) ? "is-selected" : ""}">${t(`habits.addHabit.repeat.day.${day}`)}</button>`).join("")}</div>`
+    const weekly = `<div class="habit-repeat__counter"><span>${t("habits.addHabit.repeat.weeklyValue", {count:draft.weeklyTarget})}</span><button type="button" data-repeat-step="weekly:-1">−</button><button type="button" data-repeat-step="weekly:1">+</button></div>`
+    const min = draft.originalChallengeTarget || 1
+    const challenge = `<div class="habit-repeat__counter"><span>${t("habits.addHabit.repeat.challengeValue", {count:draft.challengeTarget})}</span><button type="button" data-repeat-step="challenge:-1" ${draft.challengeTarget <= min ? "disabled" : ""}>−</button><button type="button" data-repeat-step="challenge:1">+</button></div>${locked ? `<p class="habit-repeat__hint">${t("habits.addHabit.repeat.challengeLocked")}</p>` : ""}`
+    return option("days", t("habits.addHabit.repeat.days"), dayButtons)
+        + option("weekly", t("habits.addHabit.repeat.weekly"), weekly)
+        + option("challenge", t("habits.addHabit.repeat.challenge"), challenge)
 }
 
 
@@ -744,7 +768,11 @@ export async function updateHabitFromDraft() {
                 title: habitName,
                 emoji: draft.icon || "✱",
                 color: draft.color || "blue",
-                size: draft.size || "large"
+                size: draft.size || "large",
+                repeatType: draft.repeatType,
+                repeatDays: draft.repeatDays,
+                weeklyTarget: draft.weeklyTarget,
+                challengeTarget: draft.challengeTarget
             }
         )
 
@@ -758,7 +786,12 @@ export async function updateHabitFromDraft() {
             name: response.title,
             icon: response.emoji,
             color: response.color,
-            size: response.size
+            size: response.size,
+            repeatType: response.repeat_type,
+            repeatDays: response.repeat_days,
+            weeklyTarget: response.weekly_target,
+            challengeTarget: response.challenge_target,
+            repeatStartedOn: response.repeat_started_on
         }
     )
 }
@@ -1093,6 +1126,41 @@ export function initAddHabitPageEvents({
         addPressAnimation(button)
     })
 
+    root.querySelectorAll("[data-repeat-type]").forEach(button => {
+        button.addEventListener("click", () => {
+            updateDraftFromAddHabitPage()
+            setHabitDraftValue("repeatType", button.dataset.repeatType)
+            renderAddHabitPage()
+            initAddHabitPageEvents({ onOpenHabitsPage, onHabitSaved, onCancel })
+        })
+    })
+    root.querySelectorAll("[data-repeat-day]").forEach(button => {
+        button.addEventListener("click", () => {
+            const day = Number(button.dataset.repeatDay)
+            const current = getHabitDraft().repeatDays
+            const next = current.includes(day) ? current.filter(item => item !== day) : [...current, day].sort()
+            if (!next.length) return
+            setHabitDraftValue("repeatDays", next)
+            button.classList.toggle("is-selected", next.includes(day))
+        })
+    })
+    root.querySelectorAll("[data-repeat-step]").forEach(button => {
+        button.addEventListener("click", () => {
+            updateDraftFromAddHabitPage()
+            const [kind, stepRaw] = button.dataset.repeatStep.split(":")
+            const step = Number(stepRaw)
+            const draft = getHabitDraft()
+            if (kind === "weekly") {
+                setHabitDraftValue("weeklyTarget", Math.min(7, Math.max(1, draft.weeklyTarget + step)))
+            } else {
+                const minimum = draft.originalChallengeTarget || 1
+                setHabitDraftValue("challengeTarget", Math.max(minimum, draft.challengeTarget + step))
+            }
+            renderAddHabitPage()
+            initAddHabitPageEvents({ onOpenHabitsPage, onHabitSaved, onCancel })
+        })
+    })
+
 
     /* =====================================================
        ВВОД НАЗВАНИЯ
@@ -1292,7 +1360,11 @@ saveButton?.addEventListener(
                             draft.color || "blue",
 
                         size:
-                            draft.size || "large"
+                            draft.size || "large",
+                        repeatType: draft.repeatType,
+                        repeatDays: draft.repeatDays,
+                        weeklyTarget: draft.weeklyTarget,
+                        challengeTarget: draft.challengeTarget
                     })
             }
 

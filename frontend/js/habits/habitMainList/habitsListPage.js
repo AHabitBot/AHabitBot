@@ -263,8 +263,10 @@ export function renderHabitCard(habit = {}) {
         completedToday = false,
         streak = 0,
         xpReward = 5,
-        weekProgress = []
+        weekProgress = [],
+        confirmationAllowedToday = true
     } = habit
+    // Imported lazily at module level below to keep rule formatting centralized.
 
     const safeId = escapeHtml(id)
     const safeName = escapeHtml(
@@ -282,14 +284,7 @@ export function renderHabitCard(habit = {}) {
         Math.floor(Number(xpReward) || 0)
     )
 
-    const statusText = completedToday
-        ? t(
-            "habits.list.card.status.completed",
-            {
-                xp: normalizedXpReward
-            }
-        )
-        : t("habits.list.card.status.inProgress")
+    const statusText = formatRepeatRule(habit)
 
     return `
         <article
@@ -324,6 +319,7 @@ export function renderHabitCard(habit = {}) {
                         : t("habits.list.card.confirm.actionAria")
                 }"
                 aria-pressed="${String(completedToday)}"
+                ${confirmationAllowedToday ? "" : "disabled"}
             >
                 ✓
             </button>
@@ -389,5 +385,4 @@ export function renderHabitCard(habit = {}) {
 
 
 
-
-
+import { formatRepeatRule } from "../habitRepeatRule.js"

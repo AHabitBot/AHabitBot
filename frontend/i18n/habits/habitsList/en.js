@@ -17,5 +17,6 @@ export default Object.freeze({
     "habits.list.card.confirm.completedAria": "Habit completed",
     "habits.list.card.confirm.actionAria": "Confirm habit completion",
     "habits.list.card.weekProgressAria": "Weekly progress",
-    "habits.list.card.currentStreakAria": "Current streak: {count}"
+    "habits.list.card.currentStreakAria": "Current streak: {count}",
+    "habits.list.repeat.everyDay":"Every day","habits.list.repeat.except":"Every day except {days}","habits.list.repeat.weekly":"{count} days a week","habits.list.repeat.challenge":"{count} days without misses","habits.list.repeat.day.1":"Mon","habits.list.repeat.day.2":"Tue","habits.list.repeat.day.3":"Wed","habits.list.repeat.day.4":"Thu","habits.list.repeat.day.5":"Fri","habits.list.repeat.day.6":"Sat","habits.list.repeat.day.7":"Sun"
 });

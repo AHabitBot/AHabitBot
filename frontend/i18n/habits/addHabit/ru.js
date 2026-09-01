@@ -34,5 +34,6 @@ export default Object.freeze({
     "habits.addHabit.size.large.title": "Большая",
     "habits.addHabit.size.large.description": "Подходит для подробного описания<br>и мотивации",
 
-    "habits.addHabit.error.save": "Не удалось сохранить привычку"
+    "habits.addHabit.error.save": "Не удалось сохранить привычку",
+    "habits.addHabit.repeat.label":"Повторение","habits.addHabit.repeat.days":"Выбор дней","habits.addHabit.repeat.weekly":"Недельная цель","habits.addHabit.repeat.challenge":"Челлендж","habits.addHabit.repeat.weeklyValue":"{count} дней в неделю","habits.addHabit.repeat.challengeValue":"{count} дней","habits.addHabit.repeat.challengeLocked":"Начатый челлендж нельзя сократить или изменить на другой режим.","habits.addHabit.repeat.day.1":"Пн","habits.addHabit.repeat.day.2":"Вт","habits.addHabit.repeat.day.3":"Ср","habits.addHabit.repeat.day.4":"Чт","habits.addHabit.repeat.day.5":"Пт","habits.addHabit.repeat.day.6":"Сб","habits.addHabit.repeat.day.7":"Вс"
 });

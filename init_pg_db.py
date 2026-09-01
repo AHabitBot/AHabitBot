@@ -77,6 +77,12 @@ CREATE TABLE IF NOT EXISTS habits (
     xp_reward INTEGER NOT NULL DEFAULT 5 CHECK (xp_reward >= 0),
     is_archived BOOLEAN NOT NULL DEFAULT FALSE,
     archived_at TIMESTAMPTZ,
+    repeat_type VARCHAR(16) NOT NULL DEFAULT 'days',
+    repeat_days SMALLINT[] NOT NULL
+        DEFAULT ARRAY[1, 2, 3, 4, 5, 6, 7]::SMALLINT[],
+    weekly_target SMALLINT,
+    challenge_target INTEGER,
+    repeat_started_on DATE NOT NULL DEFAULT CURRENT_DATE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
@@ -88,6 +94,87 @@ CREATE TABLE IF NOT EXISTS habits (
 
 ALTER TABLE habits
     ADD COLUMN IF NOT EXISTS archived_at TIMESTAMPTZ;
+
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS repeat_type VARCHAR(16);
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS repeat_days SMALLINT[];
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS weekly_target SMALLINT;
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS challenge_target INTEGER;
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS repeat_started_on DATE;
+
+UPDATE habits
+SET repeat_type = 'days'
+WHERE repeat_type IS NULL
+   OR repeat_type NOT IN ('days', 'weekly', 'challenge');
+
+UPDATE habits
+SET
+    repeat_days = CASE
+        WHEN repeat_days IS NULL
+          OR cardinality(repeat_days) = 0
+          OR NOT repeat_days <@ ARRAY[1, 2, 3, 4, 5, 6, 7]::SMALLINT[]
+        THEN ARRAY[1, 2, 3, 4, 5, 6, 7]::SMALLINT[]
+        ELSE ARRAY(
+            SELECT DISTINCT day_value
+            FROM unnest(repeat_days) AS day_value
+            ORDER BY day_value
+        )::SMALLINT[]
+    END,
+    weekly_target = NULL,
+    challenge_target = NULL
+WHERE repeat_type = 'days';
+
+UPDATE habits
+SET
+    repeat_days = ARRAY[]::SMALLINT[],
+    weekly_target = CASE
+        WHEN weekly_target BETWEEN 1 AND 7 THEN weekly_target
+        ELSE 1
+    END,
+    challenge_target = NULL
+WHERE repeat_type = 'weekly';
+
+UPDATE habits
+SET
+    repeat_days = ARRAY[]::SMALLINT[],
+    weekly_target = NULL,
+    challenge_target = CASE
+        WHEN challenge_target >= 1 THEN challenge_target
+        ELSE 1
+    END
+WHERE repeat_type = 'challenge';
+
+UPDATE habits
+SET repeat_started_on = COALESCE(repeat_started_on, created_at::DATE, CURRENT_DATE);
+
+ALTER TABLE habits
+    ALTER COLUMN repeat_type SET DEFAULT 'days',
+    ALTER COLUMN repeat_type SET NOT NULL,
+    ALTER COLUMN repeat_days
+        SET DEFAULT ARRAY[1, 2, 3, 4, 5, 6, 7]::SMALLINT[],
+    ALTER COLUMN repeat_days SET NOT NULL,
+    ALTER COLUMN repeat_started_on SET DEFAULT CURRENT_DATE,
+    ALTER COLUMN repeat_started_on SET NOT NULL;
+
+ALTER TABLE habits DROP CONSTRAINT IF EXISTS habits_repeat_rule_check;
+
+ALTER TABLE habits
+    ADD CONSTRAINT habits_repeat_rule_check CHECK (
+        (repeat_type = 'days'
+            AND cardinality(repeat_days) BETWEEN 1 AND 7
+            AND repeat_days <@ ARRAY[1, 2, 3, 4, 5, 6, 7]::SMALLINT[]
+            AND weekly_target IS NULL
+            AND challenge_target IS NULL)
+        OR
+        (repeat_type = 'weekly'
+            AND cardinality(repeat_days) = 0
+            AND weekly_target BETWEEN 1 AND 7
+            AND challenge_target IS NULL)
+        OR
+        (repeat_type = 'challenge'
+            AND cardinality(repeat_days) = 0
+            AND weekly_target IS NULL
+            AND challenge_target >= 1)
+    );
 
 CREATE TABLE IF NOT EXISTS habit_confirmations (
     id BIGSERIAL PRIMARY KEY,
@@ -320,6 +407,10 @@ CREATE INDEX IF NOT EXISTS idx_habits_user_id
 CREATE INDEX IF NOT EXISTS idx_habits_user_active
     ON habits(user_id, is_archived);
 
+CREATE INDEX IF NOT EXISTS idx_habits_active_user_order
+    ON habits(user_id, created_at, id)
+    WHERE is_archived = FALSE;
+
 CREATE INDEX IF NOT EXISTS idx_confirmations_habit_id
     ON habit_confirmations(habit_id);
 
@@ -328,6 +419,20 @@ CREATE INDEX IF NOT EXISTS idx_confirmations_date
 
 CREATE INDEX IF NOT EXISTS idx_confirmations_habit_confirmed
     ON habit_confirmations(habit_id, is_confirmed);
+
+CREATE INDEX IF NOT EXISTS idx_confirmations_confirmed_habit_date
+    ON habit_confirmations(habit_id, confirmation_date)
+    WHERE is_confirmed = TRUE;
+
+CREATE INDEX IF NOT EXISTS idx_confirmations_awarded_date_habit
+    ON habit_confirmations(confirmation_date, habit_id)
+    WHERE is_confirmed = TRUE
+      AND xp_awarded = TRUE;
+
+CREATE INDEX IF NOT EXISTS idx_confirmations_awarded_created_habit
+    ON habit_confirmations(created_at, habit_id)
+    WHERE is_confirmed = TRUE
+      AND xp_awarded = TRUE;
 
 CREATE INDEX IF NOT EXISTS idx_user_settings_user
     ON user_settings(user_id);
@@ -344,6 +449,13 @@ CREATE INDEX IF NOT EXISTS idx_habits_user_archive
         is_archived,
         archived_at DESC
     );
+
+CREATE INDEX IF NOT EXISTS idx_user_achievements_user_earned
+    ON user_achievements(user_id, earned_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_referrals_inviter_awarded_created
+    ON referrals(inviter_user_id, created_at)
+    WHERE xp_awarded = TRUE;
 
 """
 

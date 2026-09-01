@@ -85,6 +85,16 @@ export function normalizeHabit(
                         ? habit.completedDates
                         : []
                 )
+        ,
+        repeatType: habit.repeat_type ?? habit.repeatType ?? "days",
+        repeatDays: Array.isArray(habit.repeat_days ?? habit.repeatDays)
+            ? [...(habit.repeat_days ?? habit.repeatDays)].map(Number) : [1,2,3,4,5,6,7],
+        weeklyTarget: Number(habit.weekly_target ?? habit.weeklyTarget) || null,
+        challengeTarget: Number(habit.challenge_target ?? habit.challengeTarget) || null,
+        repeatStartedOn: habit.repeat_started_on ?? habit.repeatStartedOn ?? null,
+        confirmationAllowedToday: Boolean(
+            habit.confirmation_allowed_today ?? habit.confirmationAllowedToday ?? true
+        )
     }
 }
 

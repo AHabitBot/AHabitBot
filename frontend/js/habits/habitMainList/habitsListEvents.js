@@ -899,15 +899,7 @@ function updateHabitCardVisualState(
             completedToday
         )
 
-        description.textContent =
-            completedToday
-                ? t(
-                    "habits.list.card.status.completed",
-                    {
-                        xp: xpReward
-                    }
-                )
-                : t("habits.list.card.status.inProgress")
+        description.textContent = formatRepeatRule(habit)
     }
 
     progressItems.forEach(
@@ -1275,3 +1267,4 @@ export function initHabitsListEvents({
 export function resetHabitsListScroll() {
     habitsListScrollTop = 0
 }
+import { formatRepeatRule } from "../habitRepeatRule.js"

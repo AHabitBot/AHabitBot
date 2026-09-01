@@ -126,6 +126,10 @@ async def edit_habit(
     emoji: str,
     color: str,
     size: str,
+    repeat_type: str,
+    repeat_days: list[int],
+    weekly_target: int | None,
+    challenge_target: int | None,
 ) -> dict[str, Any] | None:
     """
     Обновляет редактируемые данные привычки.
@@ -141,6 +145,10 @@ async def edit_habit(
         emoji=emoji,
         color=color,
         size=size,
+        repeat_type=repeat_type,
+        repeat_days=repeat_days,
+        weekly_target=weekly_target,
+        challenge_target=challenge_target,
     )
 
 

@@ -45,7 +45,13 @@ function normalizeHabit(habit = {}) {
             : [],
         completedDates: Array.isArray(habit.completed_dates)
             ? habit.completed_dates
-            : []
+            : [],
+        repeatType: habit.repeat_type || "days",
+        repeatDays: Array.isArray(habit.repeat_days) ? habit.repeat_days.map(Number) : [1,2,3,4,5,6,7],
+        weeklyTarget: Number(habit.weekly_target) || null,
+        challengeTarget: Number(habit.challenge_target) || null,
+        repeatStartedOn: habit.repeat_started_on || null,
+        confirmationAllowedToday: habit.confirmation_allowed_today !== false
     }
 }
 
