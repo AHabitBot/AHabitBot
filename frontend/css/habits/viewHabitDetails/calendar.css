@@ -4,10 +4,55 @@
 
 .habit-details__calendar {
     width: 100%;
-
     box-sizing: border-box;
-
     margin-top: 24px;
+}
+
+
+/* =========================================================
+   ГОРИЗОНТАЛЬНАЯ ЛЕНТА МЕСЯЦЕВ
+   ========================================================= */
+
+.habit-calendar__viewport {
+    width: calc(100% + 36px);
+    margin-left: -18px;
+    padding: 0 18px 4px;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 18px;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.habit-calendar__viewport::-webkit-scrollbar {
+    display: none;
+}
+
+.habit-calendar__track {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.habit-calendar__month-page {
+    min-width: 0;
+    flex: 0 0 calc(100% - 38px);
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+}
+
+.habit-details__calendar.is-single-month
+.habit-calendar__viewport {
+    overflow-x: hidden;
+}
+
+.habit-details__calendar.is-single-month
+.habit-calendar__month-page {
+    flex-basis: 100%;
 }
 
 
@@ -62,7 +107,7 @@
             )
         );
 
-    column-gap: 7px;
+    column-gap: 6px;
 
     margin-bottom: 10px;
 }
@@ -108,8 +153,8 @@
             )
         );
 
-    column-gap: 7px;
-    row-gap: 7px;
+    column-gap: 6px;
+    row-gap: 6px;
 }
 
 
@@ -144,7 +189,7 @@
             var(--app-border)
         );
 
-    border-radius: 13px;
+    border-radius: 12px;
 
     color:
         var(--app-text-primary);
@@ -169,7 +214,7 @@
         Arial,
         sans-serif;
 
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 520;
     line-height: 1;
 
@@ -383,16 +428,16 @@
 
 
     .habit-calendar__weekdays {
-        column-gap: 5px;
+        column-gap: 4px;
 
         margin-bottom: 8px;
     }
 
 
     .habit-calendar__grid {
-        column-gap: 5px;
+        column-gap: 4px;
 
-        row-gap: 6px;
+        row-gap: 5px;
     }
 
 
@@ -402,9 +447,9 @@
 
 
     .habit-calendar__day {
-        border-radius: 11px;
+        border-radius: 10px;
 
-        font-size: 13px;
+        font-size: 12px;
     }
 }
 
@@ -415,7 +460,7 @@
 
     .habit-calendar__weekdays,
     .habit-calendar__grid {
-        column-gap: 4px;
+        column-gap: 3px;
     }
 
 
@@ -425,8 +470,8 @@
 
 
     .habit-calendar__day {
-        border-radius: 10px;
+        border-radius: 9px;
 
-        font-size: 12px;
+        font-size: 11px;
     }
 }

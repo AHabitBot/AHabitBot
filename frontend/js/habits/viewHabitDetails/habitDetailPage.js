@@ -10,6 +10,11 @@ import {
     getPluralForm
 } from "../../../i18n/core/plural.js"
 
+import {
+    initHabitCalendar,
+    renderHabitCalendar
+} from "./habitCalendar.js"
+
 
 /* =========================================================
    HABIT DETAIL PAGE
@@ -18,11 +23,12 @@ import {
 
    Отвечает за:
    - рендер детальной страницы;
-   - построение календаря;
    - форматирование дат и значений;
    - управление меню;
    - события страницы;
    - окно подтверждения удаления.
+
+   Календарь подключается отдельным модулем habitCalendar.js.
    ========================================================= */
 
 
@@ -145,75 +151,6 @@ function parseHabitDetailsDate(value) {
 
 
 /* =========================================================
-   КЛЮЧ ДАТЫ YYYY-MM-DD
-   ========================================================= */
-
-function getHabitDetailsDateKey(value) {
-    const date =
-        parseHabitDetailsDate(value)
-
-    if (!date) {
-        return ""
-    }
-
-    const year =
-        date.getFullYear()
-
-    const month =
-        String(date.getMonth() + 1)
-            .padStart(2, "0")
-
-    const day =
-        String(date.getDate())
-            .padStart(2, "0")
-
-    return `${year}-${month}-${day}`
-}
-
-
-/* =========================================================
-   СРАВНЕНИЕ ДАТ БЕЗ ВРЕМЕНИ
-   ========================================================= */
-
-function compareHabitDetailsDates(
-    firstValue,
-    secondValue
-) {
-    const firstDate =
-        parseHabitDetailsDate(firstValue)
-
-    const secondDate =
-        parseHabitDetailsDate(secondValue)
-
-    if (!firstDate || !secondDate) {
-        return 0
-    }
-
-    const firstTime = new Date(
-        firstDate.getFullYear(),
-        firstDate.getMonth(),
-        firstDate.getDate()
-    ).getTime()
-
-    const secondTime = new Date(
-        secondDate.getFullYear(),
-        secondDate.getMonth(),
-        secondDate.getDate()
-    ).getTime()
-
-    if (firstTime < secondTime) {
-        return -1
-    }
-
-    if (firstTime > secondTime) {
-        return 1
-    }
-
-    return 0
-}
-
-
-/* =========================================================
    ДЛИТЕЛЬНОСТЬ ПРИВЫЧКИ
 
    День создания считается первым днём.
@@ -259,357 +196,6 @@ function getHabitDuration(createdAt) {
     )
 }
 /* =========================================================
-   НАЗВАНИЯ МЕСЯЦЕВ
-   ========================================================= */
-
-function getHabitDetailsMonthName(
-    monthIndex
-) {
-    return t(
-        `habits.details.calendar.month.${monthIndex}`
-    )
-}
-
-
-/* =========================================================
-   НОРМАЛИЗАЦИЯ ВЫПОЛНЕННЫХ ДАТ
-   ========================================================= */
-
-function normalizeHabitCompletedDates(
-    completedDates
-) {
-    if (!Array.isArray(completedDates)) {
-        return new Set()
-    }
-
-    const normalizedDates =
-        completedDates
-            .map(getHabitDetailsDateKey)
-            .filter(Boolean)
-
-    return new Set(normalizedDates)
-}
-
-
-/* =========================================================
-   ПОСТРОЕНИЕ КАЛЕНДАРЯ
-
-   Возвращает данные текущего месяца.
-   Неделя начинается с понедельника.
-   ========================================================= */
-
-function createHabitDetailsCalendar({
-    completedDates = [],
-    createdAt = null,
-    currentDate = new Date()
-} = {}) {
-    const safeCurrentDate =
-        parseHabitDetailsDate(currentDate) ??
-        new Date()
-
-    const year =
-        safeCurrentDate.getFullYear()
-
-    const monthIndex =
-        safeCurrentDate.getMonth()
-
-    const todayKey =
-        getHabitDetailsDateKey(
-            safeCurrentDate
-        )
-
-    const createdDate =
-        parseHabitDetailsDate(createdAt)
-
-    const createdDateKey =
-        getHabitDetailsDateKey(
-            createdDate
-        )
-
-    const normalizedCompletedDates =
-        normalizeHabitCompletedDates(
-            completedDates
-        )
-
-    const firstDayOfMonth =
-        new Date(
-            year,
-            monthIndex,
-            1
-        )
-
-    const daysInMonth =
-        new Date(
-            year,
-            monthIndex + 1,
-            0
-        ).getDate()
-
-    /*
-       JavaScript:
-       Вс = 0
-       Пн = 1
-       ...
-       Сб = 6
-
-       Нам нужно:
-       Пн = 0
-       ...
-       Вс = 6
-    */
-
-    const emptyCellsBeforeMonth =
-        (
-            firstDayOfMonth.getDay() + 6
-        ) % 7
-
-    const cells = []
-
-    for (
-        let index = 0;
-        index < emptyCellsBeforeMonth;
-        index += 1
-    ) {
-        cells.push({
-            type: "empty",
-            key: `empty-${index}`
-        })
-    }
-
-    for (
-        let day = 1;
-        day <= daysInMonth;
-        day += 1
-    ) {
-        const date = new Date(
-            year,
-            monthIndex,
-            day
-        )
-
-        const dateKey =
-            getHabitDetailsDateKey(date)
-
-        const isToday =
-            dateKey === todayKey
-
-        const isCompleted =
-            normalizedCompletedDates.has(
-                dateKey
-            )
-
-        const isBeforeCreated =
-            Boolean(createdDateKey) &&
-            compareHabitDetailsDates(
-                date,
-                createdDate
-            ) < 0
-
-        const isFuture =
-            compareHabitDetailsDates(
-                date,
-                safeCurrentDate
-            ) > 0
-
-        cells.push({
-            type: "day",
-            key: dateKey,
-            day,
-            dateKey,
-            isToday,
-            isCompleted,
-            isBeforeCreated,
-            isFuture
-        })
-    }
-
-    return {
-        year,
-        monthIndex,
-        monthName:
-            getHabitDetailsMonthName(
-                monthIndex
-            ),
-        todayKey,
-        cells
-    }
-}
-
-
-/* =========================================================
-   ДНИ НЕДЕЛИ
-   ========================================================= */
-
-const HABIT_DETAILS_WEEK_DAYS = [
-    "mon",
-    "tue",
-    "wed",
-    "thu",
-    "fri",
-    "sat",
-    "sun"
-]
-
-
-/* =========================================================
-   РЕНДЕР ДНЕЙ НЕДЕЛИ
-   ========================================================= */
-
-function renderHabitCalendarWeekDays() {
-    return HABIT_DETAILS_WEEK_DAYS
-        .map(
-            (dayName) => `
-                <div
-                    class="habit-calendar__weekday"
-                    aria-hidden="true"
-                >
-                    ${t(
-                        `habits.details.calendar.weekday.${dayName}`
-                    )}
-                </div>
-            `
-        )
-        .join("")
-}
-
-
-/* =========================================================
-   РЕНДЕР ЯЧЕЙКИ КАЛЕНДАРЯ
-   ========================================================= */
-
-function renderHabitCalendarCell(cell) {
-    if (cell.type === "empty") {
-        return `
-            <div
-                class="
-                    habit-calendar__day
-                    habit-calendar__day--empty
-                "
-                aria-hidden="true"
-            ></div>
-        `
-    }
-
-    const classNames = [
-        "habit-calendar__day"
-    ]
-
-    if (cell.isCompleted) {
-        classNames.push(
-            "habit-calendar__day--completed"
-        )
-    }
-
-    if (cell.isToday) {
-        classNames.push(
-            "habit-calendar__day--today"
-        )
-    }
-
-    if (cell.isBeforeCreated) {
-        classNames.push(
-            "habit-calendar__day--before-created"
-        )
-    }
-
-    if (cell.isFuture) {
-        classNames.push(
-            "habit-calendar__day--future"
-        )
-    }
-
-    const stateLabel = []
-
-    if (cell.isCompleted) {
-        stateLabel.push(t("habits.details.calendar.state.completed"))
-    }
-
-    if (cell.isToday) {
-        stateLabel.push(t("habits.details.calendar.state.today"))
-    }
-
-    if (cell.isBeforeCreated) {
-        stateLabel.push(
-            t("habits.details.calendar.state.beforeCreated")
-        )
-    }
-
-    if (cell.isFuture) {
-        stateLabel.push(t("habits.details.calendar.state.future"))
-    }
-
-    const ariaLabel = stateLabel.length
-        ? `${cell.day}, ${stateLabel.join(", ")}`
-        : String(cell.day)
-
-    return `
-        <div
-            class="${classNames.join(" ")}"
-            data-date="${cell.dateKey}"
-            aria-label="${ariaLabel}"
-        >
-            <span class="habit-calendar__day-number">
-                ${cell.day}
-            </span>
-
-            ${
-                cell.isToday
-                    ? `
-                        <span
-                            class="habit-calendar__today-dot"
-                            aria-hidden="true"
-                        ></span>
-                    `
-                    : ""
-            }
-        </div>
-    `
-}
-
-
-/* =========================================================
-   РЕНДЕР КАЛЕНДАРЯ
-   ========================================================= */
-
-function renderHabitCalendar({
-    completedDates,
-    createdAt
-}) {
-    const calendar =
-        createHabitDetailsCalendar({
-            completedDates,
-            createdAt
-        })
-
-    const cellsHtml =
-        calendar.cells
-            .map(renderHabitCalendarCell)
-            .join("")
-
-    return `
-        <section
-            class="habit-details__calendar"
-            aria-label="${t("habits.details.calendar.aria")}"
-        >
-
-            <h2 class="habit-calendar__month">
-                ${calendar.monthName}
-            </h2>
-
-            <div class="habit-calendar__weekdays">
-                ${renderHabitCalendarWeekDays()}
-            </div>
-
-            <div class="habit-calendar__grid">
-                ${cellsHtml}
-            </div>
-
-        </section>
-    `
-}
-
-
-/* =========================================================
    HABIT DETAILS PAGE
 
    Отвечает только за разметку детальной страницы.
@@ -633,13 +219,6 @@ export function renderHabitDetailsPage(habit = {}) {
         streak = 0,
         xpReward = 5,
         createdAt = null,
-
-        /*
-           Пока API нет.
-
-           completedDates временно приходит
-           из локального объекта привычки / Store.
-        */
 
         completedDates = []
     } = habit
@@ -676,18 +255,11 @@ export function renderHabitDetailsPage(habit = {}) {
         )
         : t("habits.details.status.inProgress")
 
-/*
-   Пока API нет.
-
-   Если привычка подтверждена сегодня,
-    добавляем сегодняшнюю дату
-*/
-
-const calendarHtml =
-    renderHabitCalendar({
-        completedDates,
-        createdAt
-    })
+    const calendarHtml =
+        renderHabitCalendar({
+            completedDates,
+            createdAt
+        })
 
 
     root.innerHTML = `
@@ -1518,6 +1090,7 @@ export function initHabitDetailsEvents({
        ========================================================= */
 
     initHabitDetailsMenu(root)
+    initHabitCalendar(root)
 
 
     /* =========================================================
