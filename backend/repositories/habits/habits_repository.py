@@ -7,7 +7,7 @@ from backend.services.leaderboard.season_service import (
     get_season_context,
 )
 
-from backend.services.repeat_rules import (
+from backend.services.habits.repeat_rules import (
     calculate_repeat_streak,
     calculate_weekly_streak_with_target,
     is_confirmation_allowed,
