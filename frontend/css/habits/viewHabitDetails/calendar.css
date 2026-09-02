@@ -16,12 +16,12 @@
 .habit-calendar__viewport {
     width: calc(100% + 36px);
     margin-left: -18px;
-    padding: 0 18px 4px;
+    padding: 0 0 4px;
     box-sizing: border-box;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: 18px;
+    scroll-padding-inline: 30px;
     overscroll-behavior-x: contain;
     touch-action: pan-x pan-y;
     scrollbar-width: none;
@@ -35,12 +35,14 @@
 .habit-calendar__track {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: 20px;
+    padding-inline: 30px;
+    box-sizing: border-box;
 }
 
 .habit-calendar__month-page {
     min-width: 0;
-    flex: 0 0 calc(100% - 38px);
+    flex: 0 0 100%;
     scroll-snap-align: center;
     scroll-snap-stop: always;
 }
@@ -48,6 +50,11 @@
 .habit-details__calendar.is-single-month
 .habit-calendar__viewport {
     overflow-x: hidden;
+}
+
+.habit-details__calendar.is-single-month
+.habit-calendar__track {
+    padding-inline: 18px;
 }
 
 .habit-details__calendar.is-single-month
