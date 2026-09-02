@@ -25,7 +25,8 @@ from backend.services.habits.habit_service import (
     restore_user_habit,
     update_habit_confirmation,
 )
-from backend.services.repeat_rules import (
+
+from backend.services.habits.repeat_rules import (
     normalize_repeat_rule,
 )
 
