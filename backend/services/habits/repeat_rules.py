@@ -33,7 +33,12 @@ def normalize_repeat_rule(
 
 
 def is_confirmation_allowed(repeat_type: str, repeat_days: list[int], today: date) -> bool:
-    return repeat_type != "days" or today.isoweekday() in set(repeat_days)
+    """Allow optional confirmations outside the habit schedule.
+
+    ``repeat_days`` defines which days are required for the habit streak.
+    It must not prohibit a user from completing the habit on another day.
+    """
+    return True
 
 
 def calculate_repeat_streak(

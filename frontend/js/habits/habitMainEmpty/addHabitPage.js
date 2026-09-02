@@ -1046,6 +1046,13 @@ function rerenderAddHabitPageWithoutScrollJump(
 
     renderAddHabitPage()
 
+    /*
+     * renderAddHabitPage() полностью заменяет DOM экрана.
+     * Возвращаем значения из черновика до повторной привязки событий,
+     * чтобы введённое название, цвет, размер и иконка не терялись.
+     */
+    restoreDraftToAddHabitPage()
+
     const updatedPage = root?.querySelector(
         ".add-habit-v2"
     )
