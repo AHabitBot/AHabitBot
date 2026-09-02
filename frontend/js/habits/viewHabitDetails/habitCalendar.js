@@ -365,9 +365,23 @@ export function renderHabitCalendar({
                 data-calendar-viewport
             >
                 <div class="habit-calendar__track">
+                    ${months.length > 1 ? `
+                        <div
+                            class="habit-calendar__edge-spacer"
+                            aria-hidden="true"
+                        ></div>
+                    ` : ""}
+
                     ${months
                         .map(renderCalendarMonth)
                         .join("")}
+
+                    ${months.length > 1 ? `
+                        <div
+                            class="habit-calendar__edge-spacer"
+                            aria-hidden="true"
+                        ></div>
+                    ` : ""}
                 </div>
             </div>
         </section>

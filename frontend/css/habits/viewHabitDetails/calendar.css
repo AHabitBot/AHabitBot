@@ -33,6 +33,7 @@
 }
 
 .habit-calendar__track {
+    min-width: 100%;
     display: flex;
     align-items: flex-start;
     gap: 20px;
@@ -46,12 +47,11 @@
     scroll-snap-stop: always;
 }
 
-.habit-calendar__month-page:first-child {
-    margin-left: 30px;
-}
-
-.habit-calendar__month-page:last-child {
-    margin-right: 30px;
+.habit-calendar__edge-spacer {
+    min-width: 10px;
+    flex: 0 0 10px;
+    align-self: stretch;
+    pointer-events: none;
 }
 
 .habit-details__calendar.is-single-month
