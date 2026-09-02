@@ -365,23 +365,9 @@ export function renderHabitCalendar({
                 data-calendar-viewport
             >
                 <div class="habit-calendar__track">
-                    ${months.length > 1 ? `
-                        <div
-                            class="habit-calendar__edge-spacer"
-                            aria-hidden="true"
-                        ></div>
-                    ` : ""}
-
                     ${months
                         .map(renderCalendarMonth)
                         .join("")}
-
-                    ${months.length > 1 ? `
-                        <div
-                            class="habit-calendar__edge-spacer"
-                            aria-hidden="true"
-                        ></div>
-                    ` : ""}
                 </div>
             </div>
         </section>
@@ -393,13 +379,35 @@ export function initHabitCalendar(root) {
     const viewport = root?.querySelector(
         "[data-calendar-viewport]"
     )
+    const calendar = viewport?.closest(
+        ".habit-details__calendar"
+    )
     const currentMonth = viewport?.querySelector(
         '[data-calendar-current="true"]'
     )
 
-    if (!viewport || !currentMonth) {
+    if (!viewport || !calendar || !currentMonth) {
         return
     }
+
+    const sideSpace = calendar.classList.contains(
+        "is-single-month"
+    )
+        ? 18
+        : 30
+
+    calendar.style.setProperty(
+        "--habit-calendar-side-space",
+        `${sideSpace}px`
+    )
+
+    calendar.style.setProperty(
+        "--habit-calendar-page-width",
+        `${Math.max(
+            0,
+            viewport.clientWidth - sideSpace * 2
+        )}px`
+    )
 
     const centerCurrentMonth = () => {
         viewport.scrollLeft =

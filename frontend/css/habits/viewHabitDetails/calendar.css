@@ -3,6 +3,16 @@
    ========================================================= */
 
 .habit-details__calendar {
+    --habit-calendar-page-width:
+        calc(100vw - 60px);
+    --habit-calendar-side-space:
+        calc(
+            (
+                100vw -
+                var(--habit-calendar-page-width)
+            ) / 2
+        );
+
     width: 100%;
     box-sizing: border-box;
     margin-top: 24px;
@@ -21,7 +31,8 @@
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: 30px;
+    scroll-padding-inline:
+        var(--habit-calendar-side-space);
     overscroll-behavior-x: contain;
     touch-action: pan-x pan-y;
     scrollbar-width: none;
@@ -33,25 +44,25 @@
 }
 
 .habit-calendar__track {
-    min-width: 100%;
+    width: max-content;
     display: flex;
     align-items: flex-start;
     gap: 20px;
+    padding-inline:
+        var(--habit-calendar-side-space);
     box-sizing: border-box;
 }
 
 .habit-calendar__month-page {
     min-width: 0;
-    flex: 0 0 calc(100% - 60px);
+    width:
+        var(--habit-calendar-page-width);
+    flex:
+        0
+        0
+        var(--habit-calendar-page-width);
     scroll-snap-align: center;
     scroll-snap-stop: always;
-}
-
-.habit-calendar__edge-spacer {
-    min-width: 10px;
-    flex: 0 0 10px;
-    align-self: stretch;
-    pointer-events: none;
 }
 
 .habit-details__calendar.is-single-month
@@ -61,13 +72,18 @@
 
 .habit-details__calendar.is-single-month
 .habit-calendar__track {
+    width: 100%;
     gap: 0;
+    padding-inline:
+        var(--habit-calendar-side-space);
 }
 
 .habit-details__calendar.is-single-month
 .habit-calendar__month-page {
-    flex-basis: calc(100% - 36px);
-    margin-inline: 18px;
+    width:
+        var(--habit-calendar-page-width);
+    flex-basis:
+        var(--habit-calendar-page-width);
 }
 
 
