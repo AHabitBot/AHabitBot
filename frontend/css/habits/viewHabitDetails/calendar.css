@@ -36,15 +36,22 @@
     display: flex;
     align-items: flex-start;
     gap: 20px;
-    padding-inline: 30px;
     box-sizing: border-box;
 }
 
 .habit-calendar__month-page {
     min-width: 0;
-    flex: 0 0 100%;
+    flex: 0 0 calc(100% - 60px);
     scroll-snap-align: center;
     scroll-snap-stop: always;
+}
+
+.habit-calendar__month-page:first-child {
+    margin-left: 30px;
+}
+
+.habit-calendar__month-page:last-child {
+    margin-right: 30px;
 }
 
 .habit-details__calendar.is-single-month
@@ -54,12 +61,13 @@
 
 .habit-details__calendar.is-single-month
 .habit-calendar__track {
-    padding-inline: 18px;
+    gap: 0;
 }
 
 .habit-details__calendar.is-single-month
 .habit-calendar__month-page {
-    flex-basis: 100%;
+    flex-basis: calc(100% - 36px);
+    margin-inline: 18px;
 }
 
 
