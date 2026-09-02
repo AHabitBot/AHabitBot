@@ -15,6 +15,11 @@ import {
     renderHabitCalendar
 } from "./habitCalendar.js"
 
+import {
+    initHabitInvite,
+    renderHabitInvite
+} from "./habitInvite.js"
+
 
 /* =========================================================
    HABIT DETAIL PAGE
@@ -261,6 +266,14 @@ export function renderHabitDetailsPage(habit = {}) {
             createdAt
         })
 
+    const inviteHtml =
+        renderHabitInvite({
+            habitName:
+                name || t("habits.details.unnamed"),
+            durationText:
+                formatHabitDetailsDays(duration)
+        })
+
 
     root.innerHTML = `
         <section
@@ -443,6 +456,8 @@ export function renderHabitDetailsPage(habit = {}) {
 
 
                 ${calendarHtml}
+
+                ${inviteHtml}
 
             </main>
 
@@ -1091,6 +1106,7 @@ export function initHabitDetailsEvents({
 
     initHabitDetailsMenu(root)
     initHabitCalendar(root)
+    initHabitInvite(root)
 
 
     /* =========================================================
