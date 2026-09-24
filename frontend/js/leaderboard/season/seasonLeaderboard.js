@@ -97,9 +97,10 @@ export function buildSeasonLeaderboardResource(response) {
    ========================================================= */
 
 export function renderSeasonLeaderboard(
-    users = []
+    users = [],
+    currentUser = null
 ) {
-    if (!users.length) {
+    if (!currentUser || currentUser.xp <= 0) {
         return renderEmptySeason();
     }
 
@@ -132,14 +133,12 @@ function renderEmptySeason() {
                 leaderboard-state--empty
             "
         >
-            <div
-                class="
-                    leaderboard-state__icon
-                "
+            <img
+                class="leaderboard-state__image"
+                src="/img/leaderboard/empty-season.png"
+                alt=""
                 aria-hidden="true"
             >
-                🏆
-            </div>
 
             <div
                 class="

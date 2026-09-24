@@ -141,14 +141,15 @@ async function renderSeasonLeaderboardContent({
 
         content.innerHTML = isFinished
             ? renderFinishedSeason(result)
-            : renderSeasonLeaderboard(result.users);
+            : renderSeasonLeaderboard(result.users, result.currentUser);
 
         renderSeasonHeading(result.season);
 
         if (currentUserSlot) {
-            currentUserSlot.innerHTML = isFinished
-                ? ""
-                : renderCurrentUser(result.currentUser);
+            currentUserSlot.innerHTML =
+                isFinished || !result?.currentUser || result.currentUser.xp <= 0
+                    ? ""
+                    : renderCurrentUser(result.currentUser);
         }
 
         if (isFinished) {
