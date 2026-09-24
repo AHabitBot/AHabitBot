@@ -4,6 +4,7 @@ export default Object.freeze({
     "profile.main.avatarAlt": "User avatar",
     "profile.main.editNicknameAria": "Change nickname",
     "profile.main.level": "Level {level}",
+    "profile.main.leagueBronze": "Bronze",
     "profile.main.levelProgressAria": "Level progress: {current} of {required} XP",
 
     "profile.main.menu.stats": "Game stats",

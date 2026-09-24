@@ -4,6 +4,7 @@ export default Object.freeze({
     "profile.main.avatarAlt": "Аватар користувача",
     "profile.main.editNicknameAria": "Змінити нікнейм",
     "profile.main.level": "Рівень {level}",
+    "profile.main.leagueBronze": "Бронзова",
     "profile.main.levelProgressAria": "Прогрес рівня: {current} із {required} XP",
 
     "profile.main.menu.stats": "Ігрові показники",
