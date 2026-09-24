@@ -137,13 +137,22 @@ async function renderSeasonLeaderboardContent({
         const isFinished =
             result?.season?.status === "finished";
 
+        const isEmptySeason =
+            !isFinished
+            && (!result?.currentUser || result.currentUser.xp <= 0);
+
         setFinishedSeasonLayout(isFinished);
+        setEmptySeasonLayout(isEmptySeason);
 
         content.innerHTML = isFinished
             ? renderFinishedSeason(result)
             : renderSeasonLeaderboard(result.users, result.currentUser);
 
-        renderSeasonHeading(result.season);
+        if (isEmptySeason) {
+            hideSeasonHeading();
+        } else {
+            renderSeasonHeading(result.season);
+        }
 
         if (currentUserSlot) {
             currentUserSlot.innerHTML =
@@ -373,6 +382,27 @@ function setFinishedSeasonLayout(isFinished) {
     page.classList.toggle(
         "leaderboard-page--season-finished",
         Boolean(isFinished)
+    );
+}
+
+
+/* =========================================================
+   LAYOUT 0 XP
+   ========================================================= */
+
+function setEmptySeasonLayout(isEmpty) {
+    const page =
+        leaderboardRoot?.querySelector(
+            ".leaderboard-page"
+        );
+
+    if (!page) {
+        return;
+    }
+
+    page.classList.toggle(
+        "leaderboard-page--empty-season",
+        Boolean(isEmpty)
     );
 }
 

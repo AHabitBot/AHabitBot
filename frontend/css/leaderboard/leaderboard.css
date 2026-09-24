@@ -204,7 +204,7 @@
 .leaderboard-state__image {
     display: block;
 
-    width: 120px;
+    width: 240px;
     height: auto;
 
     margin-bottom: 16px;
@@ -228,4 +228,14 @@
     line-height: 1.4;
 
     color: var(--app-text-muted);
+}
+
+
+/* 0 XP: скрываем шапку и отдаём empty-state всю область */
+.leaderboard-page--empty-season .leaderboard-header {
+    display: none;
+}
+
+.leaderboard-page--empty-season .leaderboard-scroll-area {
+    top: 0;
 }
