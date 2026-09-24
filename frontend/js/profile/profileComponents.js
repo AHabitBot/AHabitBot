@@ -265,3 +265,436 @@ export function renderProfileUserCard(
         </section>
     `
 }
+
+
+/* =========================================================
+   PROFILE DEVELOPER
+   ========================================================= */
+const PROFILE_DEVELOPER_TELEGRAM_ID =
+    900410719
+
+
+function isProfileDeveloper() {
+    const telegramId =
+        Number(
+            window.Telegram
+                ?.WebApp
+                ?.initDataUnsafe
+                ?.user
+                ?.id
+        )
+
+    return (
+        telegramId ===
+        PROFILE_DEVELOPER_TELEGRAM_ID
+    )
+}
+
+
+/* =========================================================
+   PROFILE MENU RIGHT ICON
+   ========================================================= */
+
+function renderProfileMenuRightIcon(
+    feature
+) {
+    const isAvailable =
+        isProfileFeatureEnabled(
+            feature
+        )
+
+    const isDeveloper =
+        isProfileDeveloper()
+
+
+    if (
+        !isAvailable &&
+        !isDeveloper
+    ) {
+        return `
+            <span
+                class="
+                    material-symbols-rounded
+                    profile-menu__arrow
+                "
+                aria-hidden="true"
+            >
+                lock
+            </span>
+        `
+    }
+
+
+    return `
+        <span
+            class="
+                material-symbols-rounded
+                profile-menu__arrow
+            "
+            aria-hidden="true"
+        >
+            chevron_right
+        </span>
+    `
+}
+
+
+/* =========================================================
+   МЕНЮ ПРОФИЛЯ
+   ========================================================= */
+
+export function renderProfileMenu(
+    profile = {}
+) {
+
+    const achievementsEarnedCount =
+        normalizeProfileNumber(
+            profile.achievements_earned_count
+        )
+
+    const achievementsTotalCount =
+        normalizeProfileNumber(
+            profile.achievements_total_count
+        )
+
+
+    return `
+        <section class="profile-menu">
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="stats"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--stats
+                        "
+                        aria-hidden="true"
+                    >
+                        target
+                    </span>
+
+                    <span class="profile-menu__label">
+                        ${t("profile.main.menu.stats")}
+                    </span>
+
+                </div>
+
+                ${renderProfileMenuRightIcon("stats")}
+
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="achievements"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--achievements
+                        "
+                        aria-hidden="true"
+                    >
+                        workspace_premium
+                    </span>
+
+                    <span class="profile-menu__label">
+                        ${t("profile.main.menu.achievements")}
+                    </span>
+
+                </div>
+
+                <div class="profile-menu__right">
+
+<span
+    class="profile-menu__value"
+    data-profile-achievements-count
+>
+    ${achievementsEarnedCount}/${achievementsTotalCount}
+</span>
+
+                    ${renderProfileMenuRightIcon(
+                        "achievements"
+                    )}
+
+                </div>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="appearance"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--appearance
+                        "
+                        aria-hidden="true"
+                    >
+                        checkroom
+                    </span>
+
+                    <span class="profile-menu__label">
+                        ${t("profile.main.menu.appearance")}
+                    </span>
+
+                </div>
+
+                ${renderProfileMenuRightIcon(
+                    "appearance"
+                )}
+
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="settings"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--settings
+                        "
+                        aria-hidden="true"
+                    >
+                        settings
+                    </span>
+
+                    <span class="profile-menu__label">
+                        ${t("profile.main.menu.settings")}
+                    </span>
+
+                </div>
+
+                ${renderProfileMenuRightIcon(
+                    "settings"
+                )}
+
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="support"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--support
+                        "
+                        aria-hidden="true"
+                    >
+                        help
+                    </span>
+
+                    <span class="profile-menu__label">
+                        ${t("profile.main.menu.support")}
+                    </span>
+
+                </div>
+
+                ${renderProfileMenuRightIcon(
+                    "support"
+                )}
+
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="referral"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--invite
+                        "
+                        aria-hidden="true"
+                    >
+                        person_add
+                    </span>
+
+                    <span class="profile-menu__label">
+                        ${t("profile.main.menu.referral")}
+                    </span>
+
+                </div>
+
+                <div class="profile-menu__right">
+
+                    <span class="profile-menu__reward">
+                        +5 XP
+                    </span>
+
+                    ${renderProfileMenuRightIcon(
+                        "referral"
+                    )}
+
+                </div>
+
+            </button>
+
+
+            <button
+                type="button"
+                class="profile-menu__item"
+                data-profile-page="archive"
+            >
+                <div class="profile-menu__left">
+
+                    <span
+                        class="
+                            material-symbols-rounded
+                            profile-menu__icon
+                            profile-menu__icon--archive
+                        "
+                        aria-hidden="true"
+                    >
+                        inventory_2
+                    </span>
+
+                    <span class="profile-menu__label">
+                        ${t("profile.main.menu.archive")}
+                    </span>
+
+                </div>
+
+                ${renderProfileMenuRightIcon(
+                    "archive"
+                )}
+
+            </button>
+
+        </section>
+    `
+}
+
+/* =========================================================
+   HEADER ВНУТРЕННИХ РАЗДЕЛОВ
+   ========================================================= */
+
+export function renderProfileSectionHeader(
+    title
+) {
+    return `
+        <header class="profile-section-header">
+
+            <button
+                type="button"
+                class="profile-section-header__back"
+                data-profile-back
+                aria-label="${t("profile.main.sectionBackAria")}"
+            >
+                <span
+                    class="material-symbols-rounded"
+                    aria-hidden="true"
+                >
+                    arrow_back_ios_new
+                </span>
+            </button>
+
+            <h1 class="profile-section-header__title">
+                ${escapeProfileText(title)}
+            </h1>
+
+            <div
+                class="profile-section-header__spacer"
+                aria-hidden="true"
+            ></div>
+
+        </header>
+    `
+}
+
+
+/* =========================================================
+   ОБНОВИТЬ КАРТОЧКУ ПРОФИЛЯ В DOM
+   ========================================================= */
+
+export function updateProfileUserCard(
+    root,
+    profile = {}
+) {
+    if (!root) {
+        return
+    }
+
+    const slot =
+        root.querySelector(
+            "[data-profile-user-card-slot]"
+        )
+
+    if (!slot) {
+        return
+    }
+
+    slot.innerHTML =
+        renderProfileUserCard(
+            profile
+        )
+}
+
+
+/* =========================================================
+   ОБНОВИТЬ СЧЁТЧИК ДОСТИЖЕНИЙ В DOM
+   ========================================================= */
+
+export function updateProfileAchievementsCount(
+    root,
+    profile = {}
+) {
+    if (!root) {
+        return
+    }
+
+    const counter =
+        root.querySelector(
+            "[data-profile-achievements-count]"
+        )
+
+    if (!counter) {
+        return
+    }
+
+    const earned =
+        normalizeProfileNumber(
+            profile.achievements_earned_count
+        )
+
+    const total =
+        normalizeProfileNumber(
+            profile.achievements_total_count
+        )
+
+    counter.textContent =
+        `${earned}/${total}`
+}
