@@ -144,7 +144,6 @@ function handleProfileClick(
        После успешного изменения:
        - сервер сохраняет nickname;
        - Profile обновляется в Cache;
-       - Global Leaderboard обновляется в Cache;
        - Season Leaderboard обновляется в Cache;
 
        Текущая открытая страница профиля

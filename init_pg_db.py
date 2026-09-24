@@ -382,14 +382,10 @@ CREATE TABLE IF NOT EXISTS leaderboard_rank_snapshots (
         ON DELETE CASCADE,
 
     CONSTRAINT chk_leaderboard_rank_snapshot_type
-        CHECK (leaderboard_type IN ('global', 'season')),
+        CHECK (leaderboard_type = 'season'),
 
     CONSTRAINT chk_leaderboard_rank_snapshot_season
-        CHECK (
-            (leaderboard_type = 'global' AND season_number = 0)
-            OR
-            (leaderboard_type = 'season' AND season_number >= 1)
-        )
+        CHECK (leaderboard_type = 'season' AND season_number >= 1)
 );
 
 CREATE INDEX IF NOT EXISTS idx_leaderboard_rank_snapshots_lookup
@@ -436,12 +432,6 @@ CREATE INDEX IF NOT EXISTS idx_confirmations_awarded_created_habit
 
 CREATE INDEX IF NOT EXISTS idx_user_settings_user
     ON user_settings(user_id);
-
-CREATE INDEX IF NOT EXISTS idx_user_stats_global_leaderboard
-    ON user_stats (
-        total_xp DESC,
-        user_id ASC
-    );
 
 CREATE INDEX IF NOT EXISTS idx_habits_user_archive
     ON habits (

@@ -251,12 +251,6 @@ function getSeasonXp(
         return user.xp;
     }
 
-    if (
-        user?.total_xp !==
-        undefined
-    ) {
-        return user.total_xp;
-    }
 
     return 0;
 }

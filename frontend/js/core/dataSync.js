@@ -69,7 +69,6 @@ function syncResources(
    - уровень;
    - достижения;
    - статистику;
-   - глобальный рейтинг;
    - сезонный рейтинг.
    ========================================================= */
 
@@ -81,7 +80,6 @@ const HABIT_CONFIRMATION_RESOURCES = [
     RESOURCE_KEYS.STATS_MONTH,
     RESOURCE_KEYS.STATS_YEAR,
 
-    RESOURCE_KEYS.LEADERBOARD_GLOBAL,
     RESOURCE_KEYS.LEADERBOARD_SEASON
 ]
 
@@ -159,14 +157,12 @@ export function syncAfterHabitRestore() {
    Nickname отображается:
 
    - в Profile;
-   - в Global Leaderboard;
    - в Season Leaderboard.
    ========================================================= */
 
 const NICKNAME_CHANGE_RESOURCES = [
     RESOURCE_KEYS.PROFILE,
 
-    RESOURCE_KEYS.LEADERBOARD_GLOBAL,
     RESOURCE_KEYS.LEADERBOARD_SEASON
 ]
 
@@ -185,14 +181,12 @@ export function syncAfterNicknameChange() {
    Avatar / Background могут отображаться:
 
    - в Profile;
-   - в Global Leaderboard;
    - в Season Leaderboard.
    ========================================================= */
 
 const APPEARANCE_CHANGE_RESOURCES = [
     RESOURCE_KEYS.PROFILE,
 
-    RESOURCE_KEYS.LEADERBOARD_GLOBAL,
     RESOURCE_KEYS.LEADERBOARD_SEASON
 ]
 

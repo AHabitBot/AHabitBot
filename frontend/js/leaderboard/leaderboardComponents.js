@@ -7,10 +7,6 @@ import {
     getPluralForm
 } from "../../i18n/core/plural.js";
 
-import {
-    getActiveLeaderboardTab,
-} from "./leaderboardStore.js";
-
 
 /* =========================================================
    MATERIAL ICON
@@ -39,101 +35,29 @@ function renderMaterialIcon(
    ========================================================= */
 
 export function renderLeaderboardHeader() {
-    const activeTab =
-        getActiveLeaderboardTab();
-
-    const isGlobalActive =
-        activeTab === "global";
-
-    const isSeasonActive =
-        activeTab === "season";
-
     return `
         <header class="leaderboard-header">
+            <div class="leaderboard-header__title-row">
+                <h1 class="leaderboard-header__title">
+                    ${t("leaderboard.common.title")}
+                </h1>
 
-<div class="leaderboard-header__title-row">
-
-    <h1 class="leaderboard-header__title">
-        ${t("leaderboard.common.title")}
-    </h1>
-
-    <div
-        class="leaderboard-season-heading"
-        data-season-heading
-        hidden
-    >
-        <span
-            class="leaderboard-season-heading__title"
-            data-season-title
-        ></span>
-
-        <span
-            class="leaderboard-season-heading__dates"
-            data-season-dates
-        ></span>
-    </div>
-
-</div>
-
-            <div
-                class="leaderboard-tabs"
-                role="tablist"
-                aria-label="${t("leaderboard.common.tabsAria")}"
-            >
-
-                <button
-                    class="
-                        leaderboard-tabs__button
-                        ${
-                            isGlobalActive
-                                ? "leaderboard-tabs__button--active"
-                                : ""
-                        }
-                    "
-                    type="button"
-                    role="tab"
-                    data-leaderboard-tab="global"
-                    aria-selected="${isGlobalActive}"
-                    tabindex="${isGlobalActive ? "0" : "-1"}"
+                <div
+                    class="leaderboard-season-heading"
+                    data-season-heading
+                    hidden
                 >
-                    ${renderMaterialIcon(
-                        "public",
-                        "leaderboard-tabs__icon"
-                    )}
+                    <span
+                        class="leaderboard-season-heading__title"
+                        data-season-title
+                    ></span>
 
-                    <span class="leaderboard-tabs__label">
-                        ${t("leaderboard.common.globalTab")}
-                    </span>
-                </button>
-
-
-                <button
-                    class="
-                        leaderboard-tabs__button
-                        ${
-                            isSeasonActive
-                                ? "leaderboard-tabs__button--active"
-                                : ""
-                        }
-                    "
-                    type="button"
-                    role="tab"
-                    data-leaderboard-tab="season"
-                    aria-selected="${isSeasonActive}"
-                    tabindex="${isSeasonActive ? "0" : "-1"}"
-                >
-                    ${renderMaterialIcon(
-                        "calendar_month",
-                        "leaderboard-tabs__icon"
-                    )}
-
-                    <span class="leaderboard-tabs__label">
-                        ${t("leaderboard.common.seasonTab")}
-                    </span>
-                </button>
-
+                    <span
+                        class="leaderboard-season-heading__dates"
+                        data-season-dates
+                    ></span>
+                </div>
             </div>
-
         </header>
     `;
 }

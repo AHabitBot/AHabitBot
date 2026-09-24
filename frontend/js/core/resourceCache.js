@@ -20,7 +20,6 @@ export const RESOURCE_KEYS = Object.freeze({
     STATS_YEAR: "stats:year",
     STATS_SEASONS: "stats:seasons",
 
-    LEADERBOARD_GLOBAL: "leaderboard:global",
     LEADERBOARD_SEASON: "leaderboard:season",
 
     ACHIEVEMENTS: "achievements",

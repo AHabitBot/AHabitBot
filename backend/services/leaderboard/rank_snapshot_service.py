@@ -22,44 +22,6 @@ async def create_daily_rank_snapshot() -> None:
 
     async with get_connection() as connection:
         async with connection.transaction():
-            await connection.execute(
-                """
-                INSERT INTO leaderboard_rank_snapshots (
-                    snapshot_date,
-                    leaderboard_type,
-                    season_number,
-                    user_id,
-                    rank
-                )
-                SELECT
-                    $1::DATE,
-                    'global',
-                    0,
-                    ranked.user_id,
-                    ranked.rank
-                FROM (
-                    SELECT
-                        stats.user_id,
-                        ROW_NUMBER() OVER (
-                            ORDER BY
-                                stats.total_xp DESC,
-                                stats.user_id ASC
-                        )::INTEGER AS rank
-                    FROM user_stats AS stats
-                ) AS ranked
-                ON CONFLICT (
-                    snapshot_date,
-                    leaderboard_type,
-                    season_number,
-                    user_id
-                )
-                DO UPDATE SET
-                    rank = EXCLUDED.rank,
-                    created_at = NOW()
-                """,
-                snapshot_date,
-            )
-
             if season_context.xp_active:
                 await connection.execute(
                     """
@@ -109,24 +71,6 @@ async def has_snapshot_for_today() -> bool:
     snapshot_date = season_context.current_date
 
     async with get_connection() as connection:
-        global_exists = bool(
-            await connection.fetchval(
-                """
-                SELECT EXISTS (
-                    SELECT 1
-                    FROM leaderboard_rank_snapshots
-                    WHERE snapshot_date = $1
-                      AND leaderboard_type = 'global'
-                      AND season_number = 0
-                )
-                """,
-                snapshot_date,
-            )
-        )
-
-        if not global_exists:
-            return False
-
         if not season_context.xp_active:
             return True
 

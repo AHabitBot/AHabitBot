@@ -13,10 +13,6 @@ import {
 } from "../habits/habitsStore.js"
 
 import {
-    buildGlobalLeaderboardResource
-} from "../leaderboard/global/globalLeaderboard.js"
-
-import {
     buildSeasonLeaderboardResource
 } from "../leaderboard/season/seasonLeaderboard.js"
 
@@ -121,16 +117,9 @@ function hydrateResources(data) {
      * Лидерборды
      */
     setResource(
-        RESOURCE_KEYS.LEADERBOARD_GLOBAL,
-        buildGlobalLeaderboardResource(
-            data.leaderboard.global
-        )
-    )
-
-    setResource(
         RESOURCE_KEYS.LEADERBOARD_SEASON,
         buildSeasonLeaderboardResource(
-            data.leaderboard.season
+            data.leaderboard
         )
     )
 

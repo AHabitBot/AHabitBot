@@ -4,8 +4,6 @@ from fastapi import APIRouter, HTTPException, status
 from backend.api.dependencies import CurrentUser
 from backend.repositories.habits import get_user_habits
 from backend.repositories.leaderboard.leaderboard_components import (
-    get_global_current_user,
-    get_global_leaderboard_users,
     get_season_current_user,
     get_season_leaderboard_users,
 )
@@ -27,18 +25,6 @@ router = APIRouter(
     prefix="/api/bootstrap",
     tags=["bootstrap"],
 )
-
-
-async def _get_global_leaderboard(user_id: int) -> dict:
-    users, current_user = await asyncio.gather(
-        get_global_leaderboard_users(),
-        get_global_current_user(user_id),
-    )
-
-    return {
-        "users": [dict(item) for item in users],
-        "current_user": dict(current_user) if current_user is not None else None,
-    }
 
 
 async def _get_season_leaderboard(user_id: int) -> dict:
@@ -98,7 +84,6 @@ async def read_bootstrap(user: CurrentUser):
     user_id = int(user["id"])
 
     habits_task = asyncio.create_task(get_user_habits(user_id))
-    global_task = asyncio.create_task(_get_global_leaderboard(user_id))
     season_task = asyncio.create_task(_get_season_leaderboard(user_id))
     week_task = asyncio.create_task(get_profile_stats(user_id=user_id, period="week"))
     month_task = asyncio.create_task(get_profile_stats(user_id=user_id, period="month"))
@@ -109,7 +94,6 @@ async def read_bootstrap(user: CurrentUser):
 
     (
         habits,
-        global_leaderboard,
         season_leaderboard,
         week_stats,
         month_stats,
@@ -119,7 +103,6 @@ async def read_bootstrap(user: CurrentUser):
         settings,
     ) = await asyncio.gather(
         habits_task,
-        global_task,
         season_task,
         week_task,
         month_task,
@@ -153,10 +136,7 @@ async def read_bootstrap(user: CurrentUser):
     return {
         "habits": habits,
         "profile": profile,
-        "leaderboard": {
-            "global": global_leaderboard,
-            "season": season_leaderboard,
-        },
+        "leaderboard": season_leaderboard,
         "stats": {
             "week": week_stats,
             "month": month_stats,
