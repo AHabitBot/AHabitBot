@@ -217,19 +217,19 @@
 
 @media (max-width: 519px) {
     .profile-user-card {
-        min-height: 190px;
-        border-radius: 24px;
+        min-height: 160px;
+        border-radius: 22px;
     }
 
     .profile-user-card__layout {
-        gap: 14px;
-        min-height: 190px;
-        padding: 18px 16px;
+        gap: 12px;
+        min-height: 160px;
+        padding: 12px 14px;
     }
 
     .profile-user-card__avatar-wrap {
-        width: 112px;
-        height: 112px;
+        width: 104px;
+        height: 104px;
     }
 
     .profile-user-card__avatar {
@@ -239,7 +239,7 @@
     }
 
     .profile-user-card__name {
-        font-size: 25px;
+        font-size: 24px;
     }
 
     .profile-user-card__edit-icon {
@@ -248,7 +248,7 @@
 
     .profile-user-card__meta {
         gap: 5px;
-        margin-top: 7px;
+        margin-top: 6px;
         font-size: 13px;
     }
 
@@ -259,8 +259,8 @@
 
     .profile-user-card__progress-row {
         gap: 10px;
-        margin-top: 15px;
-        padding: 8px 10px;
+        margin-top: 11px;
+        padding: 7px 10px;
         border-radius: 13px;
     }
 
@@ -275,14 +275,20 @@
 }
 
 @media (max-width: 380px) {
+    .profile-user-card {
+        min-height: 145px;
+        border-radius: 20px;
+    }
+
     .profile-user-card__layout {
-        gap: 11px;
-        padding: 16px 12px;
+        gap: 10px;
+        min-height: 145px;
+        padding: 10px 11px;
     }
 
     .profile-user-card__avatar-wrap {
-        width: 96px;
-        height: 96px;
+        width: 92px;
+        height: 92px;
     }
 
     .profile-user-card__avatar {
@@ -296,6 +302,7 @@
     }
 
     .profile-user-card__meta {
+        margin-top: 5px;
         font-size: 12px;
     }
 
@@ -306,7 +313,8 @@
 
     .profile-user-card__progress-row {
         gap: 8px;
-        margin-top: 12px;
+        margin-top: 9px;
+        padding: 6px 9px;
     }
 
     .profile-user-card__xp {
