@@ -157,8 +157,19 @@ export function renderProfileUserCard(
         <section
             class="profile-user-card"
             style="background-image: url('${background.image}');"
+            data-profile-page="appearance"
+            role="button"
+            tabindex="0"
+            aria-label="${t("profile.main.menu.appearance")}"
         >
             <div class="profile-user-card__overlay"></div>
+
+            <span
+                class="material-symbols-rounded profile-user-card__appearance-edit"
+                aria-hidden="true"
+            >
+                edit
+            </span>
 
             <div class="profile-user-card__layout">
 
@@ -428,37 +439,6 @@ export function renderProfileMenu(
                     )}
 
                 </div>
-
-            </button>
-
-
-            <button
-                type="button"
-                class="profile-menu__item"
-                data-profile-page="appearance"
-            >
-                <div class="profile-menu__left">
-
-                    <span
-                        class="
-                            material-symbols-rounded
-                            profile-menu__icon
-                            profile-menu__icon--appearance
-                        "
-                        aria-hidden="true"
-                    >
-                        checkroom
-                    </span>
-
-                    <span class="profile-menu__label">
-                        ${t("profile.main.menu.appearance")}
-                    </span>
-
-                </div>
-
-                ${renderProfileMenuRightIcon(
-                    "appearance"
-                )}
 
             </button>
 
