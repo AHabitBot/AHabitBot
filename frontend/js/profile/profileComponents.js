@@ -165,10 +165,10 @@ export function renderProfileUserCard(
             <div class="profile-user-card__overlay"></div>
 
             <span
-                class="material-symbols-rounded profile-user-card__appearance-edit"
+                class="profile-user-card__appearance-edit"
                 aria-hidden="true"
             >
-                edit
+                <span class="material-symbols-rounded profile-user-card__appearance-edit-icon">edit</span>
             </span>
 
             <div class="profile-user-card__layout">

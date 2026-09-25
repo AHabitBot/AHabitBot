@@ -32,14 +32,18 @@
     color: #ffffff;
     background: rgba(20, 27, 29, 0.72);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    font-size: 24px;
-    line-height: 1;
     pointer-events: none;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 0, "opsz" 24;
 }
 
+.profile-user-card__appearance-edit-icon {
+    display: block;
+    font-size: 24px;
+    line-height: 1;
+    font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 0, "opsz" 24;
+    transform: translate(0, 0);
+}
 
 .profile-user-card__overlay {
     position: absolute;
@@ -257,6 +261,9 @@
         right: 10px;
         width: 36px;
         height: 36px;
+    }
+
+    .profile-user-card__appearance-edit-icon {
         font-size: 20px;
     }
 
@@ -325,6 +332,9 @@
         right: 8px;
         width: 32px;
         height: 32px;
+    }
+
+    .profile-user-card__appearance-edit-icon {
         font-size: 18px;
     }
 
