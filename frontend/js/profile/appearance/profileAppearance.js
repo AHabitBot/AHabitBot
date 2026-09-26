@@ -314,21 +314,94 @@ function renderProfileAppearancePreview() {
 }
 
 
-function updateProfileAppearancePreview(root) {
-    const slot =
+function updateProfileAppearancePreview(
+    root,
+    type
+) {
+    const card =
         root.querySelector(
-            "[data-profile-appearance-card-slot]"
+            "[data-profile-appearance-card-slot] .profile-user-card"
         )
 
-    if (!slot) {
+    if (!card) {
         return
     }
 
-    slot.innerHTML =
-        renderProfileUserCard(
-            getAppearancePreviewProfile(),
-            { mode: "appearance" }
-        )
+
+    /* =====================================================
+       AVATAR
+       Меняем только изображение аватара. Карточка целиком
+       не перерисовывается, поэтому XP/лига/фон/рамка
+       остаются теми же DOM-элементами.
+       ===================================================== */
+
+    if (type === "avatar") {
+        const avatar =
+            getProfileAvatar(
+                previewAvatarId
+            )
+
+        const avatarImage =
+            card.querySelector(
+                ".profile-user-card__avatar"
+            )
+
+        if (
+            avatar
+            &&
+            avatarImage
+        ) {
+            avatarImage.src =
+                avatar.image
+        }
+
+        return
+    }
+
+
+    /* =====================================================
+       BACKGROUND
+       ===================================================== */
+
+    if (type === "background") {
+        const background =
+            getProfileBackground(
+                previewBackgroundId
+            )
+
+        if (background) {
+            card.style.backgroundImage =
+                `url("${background.image}")`
+        }
+
+        return
+    }
+
+
+    /* =====================================================
+       FRAME
+       ===================================================== */
+
+    if (type === "frame") {
+        const frame =
+            getProfileFrame(
+                previewFrameId
+            )
+
+        const frameImage =
+            card.querySelector(
+                ".profile-user-card__avatar-frame"
+            )
+
+        if (
+            frame
+            &&
+            frameImage
+        ) {
+            frameImage.src =
+                frame.image
+        }
+    }
 }
 
 
@@ -974,7 +1047,8 @@ function bindProfileAppearanceEvents(
 
 
                 updateProfileAppearancePreview(
-                    root
+                    root,
+                    type
                 )
 
 
