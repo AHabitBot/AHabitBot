@@ -5,4 +5,4 @@ venv/
 .venv/
 .vscode/
 .idea/
-*.log
+*.log*.zip

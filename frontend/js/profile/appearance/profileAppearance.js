@@ -11,7 +11,8 @@ import {
 
 import {
     RESOURCE_KEYS,
-    peekResource
+    peekResource,
+    setResource
 } from "../../core/resourceCache.js"
 
 import {
@@ -1109,13 +1110,51 @@ function bindProfileAppearanceEvents(
                     result.frame_key
 
 
+                /*
+                 * PATCH уже вернул подтверждённые backend значения.
+                 * Сразу обновляем только три appearance-поля текущего
+                 * PROFILE snapshot. Поэтому при мгновенном возврате
+                 * на страницу профиля она не успеет взять старые
+                 * avatar/background/frame из cache.
+                 *
+                 * Остальные поля профиля не трогаем.
+                 */
+
+                const cachedProfile =
+                    peekResource(
+                        RESOURCE_KEYS.PROFILE
+                    )
+
+                if (cachedProfile) {
+                    const updatedProfile = {
+                        ...cachedProfile,
+                        avatar_key:
+                            result.avatar_key,
+                        background_key:
+                            result.background_key,
+                        frame_key:
+                            result.frame_key
+                    }
+
+                    setResource(
+                        RESOURCE_KEYS.PROFILE,
+                        updatedProfile
+                    )
+
+                    currentProfile =
+                        updatedProfile
+                }
+
+
                 syncProfileAppearanceOptions(
                     root
                 )
 
 
                 /*
-                 * PROFILE + leaderboard cache.
+                 * После мгновенного локального commit оставляем
+                 * штатную фоновую синхронизацию PROFILE + leaderboard.
+                 * Она больше не является источником первого отображения.
                  */
 
                 void syncAfterAppearanceChange()
