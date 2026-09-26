@@ -209,7 +209,7 @@
     height: 12px;
     overflow: hidden;
     border-radius: 999px;
-    background: rgba(226, 238, 235, 0.34);
+    background: #aeb8b6;
 }
 
 .profile-user-card__progress-fill {
