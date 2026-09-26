@@ -19,6 +19,7 @@ async def get_profile_data(
                 u.nickname_changed_at,
                 u.avatar_key,
                 u.background_key,
+                u.frame_key,
                 COALESCE(us.total_xp, 0) AS total_xp,
                 COALESCE(us.highest_level_reached, 1) AS highest_level_reached
             FROM users AS u
@@ -83,6 +84,7 @@ async def update_profile_appearance(
     user_id: int,
     avatar_key: str,
     background_key: str,
+    frame_key: str,
 ) -> dict | None:
     async with get_connection() as connection:
         row = await connection.fetchrow(
@@ -91,14 +93,17 @@ async def update_profile_appearance(
             SET
                 avatar_key = $1,
                 background_key = $2,
+                frame_key = $3,
                 updated_at = NOW()
-            WHERE id = $3
+            WHERE id = $4
             RETURNING
                 avatar_key,
-                background_key
+                background_key,
+                frame_key
             """,
             avatar_key,
             background_key,
+            frame_key,
             user_id,
         )
 

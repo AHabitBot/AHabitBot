@@ -215,8 +215,6 @@ function loadProfileAppearance() {
 
     /* =====================================================
        FRAME
-       Пока backend не хранит frame_key, используется
-       единственная рамка по умолчанию.
        ===================================================== */
 
     const frame =
@@ -1087,7 +1085,10 @@ function bindProfileAppearanceEvents(
                             previewAvatarId,
 
                         backgroundKey:
-                            previewBackgroundId
+                            previewBackgroundId,
+
+                        frameKey:
+                            previewFrameId
                     })
 
 
@@ -1102,6 +1103,10 @@ function bindProfileAppearanceEvents(
 
                 appliedBackgroundId =
                     result.background_key
+
+
+                appliedFrameId =
+                    result.frame_key
 
 
                 syncProfileAppearanceOptions(

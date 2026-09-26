@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
     nickname_changed_at TIMESTAMPTZ,
     avatar_key VARCHAR(64) NOT NULL DEFAULT 'standard_m_01',
     background_key VARCHAR(64) NOT NULL DEFAULT 'background_forest_1',
+    frame_key VARCHAR(64) NOT NULL DEFAULT 'frame_bronze',
     first_name VARCHAR(255),
     username VARCHAR(255),
     referral_link VARCHAR(255) UNIQUE,
@@ -24,6 +25,11 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Гарантируем правильный default и для уже существующей таблицы users.
 -- CREATE TABLE IF NOT EXISTS не меняет DEFAULT у ранее созданной колонки.
+
+ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS frame_key
+    VARCHAR(64) NOT NULL DEFAULT 'frame_bronze';
+
 ALTER TABLE users
     ALTER COLUMN avatar_key
     SET DEFAULT 'standard_m_01';

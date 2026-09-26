@@ -13,6 +13,13 @@ import {
    ========================================================= */
 
 export async function fetchProfile() {
+    if (!normalizedFrameKey) {
+        throw new Error(
+            "Не передан frameKey"
+        )
+    }
+
+
     const data =
         await apiRequest(
             "/api/profile"
@@ -109,7 +116,8 @@ export async function updateProfileNickname(
 
 export async function updateProfileAppearance({
     avatarKey,
-    backgroundKey
+    backgroundKey,
+    frameKey
 }) {
     const normalizedAvatarKey =
         String(
@@ -119,6 +127,11 @@ export async function updateProfileAppearance({
     const normalizedBackgroundKey =
         String(
             backgroundKey || ""
+        ).trim()
+
+    const normalizedFrameKey =
+        String(
+            frameKey || ""
         ).trim()
 
 
@@ -147,7 +160,10 @@ export async function updateProfileAppearance({
                         normalizedAvatarKey,
 
                     background_key:
-                        normalizedBackgroundKey
+                        normalizedBackgroundKey,
+
+                    frame_key:
+                        normalizedFrameKey
                 }
             }
         )
@@ -165,7 +181,8 @@ export async function updateProfileAppearance({
 
     if (
         typeof data.avatar_key !== "string" ||
-        typeof data.background_key !== "string"
+        typeof data.background_key !== "string" ||
+        typeof data.frame_key !== "string"
     ) {
         throw new Error(
             "Сервер не вернул обновлённый внешний вид"

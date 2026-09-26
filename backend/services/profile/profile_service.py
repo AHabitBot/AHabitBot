@@ -226,6 +226,13 @@ async def get_profile(
             or "background_forest_1"
         ),
 
+        "frame_key": (
+            profile_data.get(
+                "frame_key"
+            )
+            or "frame_bronze"
+        ),
+
         "nickname_can_change": (
             nickname_changed_at
             is None
@@ -334,6 +341,19 @@ async def change_nickname(
 
 
     # =====================================================
+    # FRAME
+    # =====================================================
+
+    if normalized_frame_key not in {
+        "frame_bronze",
+        "frame_vine",
+    }:
+        raise ValueError(
+            "Неизвестный frame_key"
+        )
+
+
+    # =====================================================
     # ОБНОВЛЕНИЕ
     # =====================================================
 
@@ -387,6 +407,7 @@ async def change_profile_appearance(
     user_id: int,
     avatar_key: str,
     background_key: str,
+    frame_key: str,
 ) -> dict[str, Any]:
     """
     Сохраняет выбранный внешний вид пользователя.
@@ -407,6 +428,12 @@ async def change_profile_appearance(
     normalized_background_key = (
         str(
             background_key or ""
+        ).strip()
+    )
+
+    normalized_frame_key = (
+        str(
+            frame_key or ""
         ).strip()
     )
 
@@ -530,6 +557,9 @@ async def change_profile_appearance(
 
             background_key=
                 normalized_background_key,
+
+            frame_key=
+                normalized_frame_key,
         )
     )
 
@@ -558,6 +588,12 @@ async def change_profile_appearance(
         "background_key": (
             updated_appearance[
                 "background_key"
+            ]
+        ),
+
+        "frame_key": (
+            updated_appearance[
+                "frame_key"
             ]
         ),
     }

@@ -47,6 +47,7 @@ class UpdateNicknameRequest(BaseModel):
 class UpdateAppearanceRequest(BaseModel):
     avatar_key: str
     background_key: str
+    frame_key: str
 
 
 # =========================================================
@@ -126,6 +127,8 @@ async def update_profile_appearance_endpoint(
                     payload.avatar_key,
                 background_key=
                     payload.background_key,
+                frame_key=
+                    payload.frame_key,
             )
         )
 
