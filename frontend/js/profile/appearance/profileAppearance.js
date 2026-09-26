@@ -1,7 +1,8 @@
 import { t } from "../../../i18n/core/i18n.js";
 
 import {
-    renderProfileSectionHeader
+    renderProfileSectionHeader,
+    renderProfileUserCard
 } from "../profileComponents.js"
 
 import {
@@ -72,6 +73,9 @@ let currentUserLevel =
 let currentUserId =
     null
 
+let currentProfile =
+    null
+
 
 /* =========================================================
    ПОЛУЧИТЬ ДАННЫЕ АКТИВНОЙ ВКЛАДКИ
@@ -134,6 +138,10 @@ function loadProfileAppearance() {
             "Profile отсутствует в Resource Cache"
         )
     }
+
+
+    currentProfile =
+        profile
 
 
     /* =====================================================
@@ -229,118 +237,48 @@ function loadProfileAppearance() {
 
 
 /* =========================================================
-   HERO
+   PROFILE CARD PREVIEW
+   Используем тот же компонент, что и на главной профиля.
+   Отличается только mode=appearance: карточка не кликабельна
+   и не показывает элементы редактирования.
    ========================================================= */
 
-function renderProfileAppearanceHero() {
-    const avatar =
-        getProfileAvatar(
-            previewAvatarId
-        )
+function getAppearancePreviewProfile() {
+    return {
+        ...(currentProfile || {}),
+        avatar_key: previewAvatarId,
+        background_key: previewBackgroundId
+    }
+}
 
 
-    const background =
-        getProfileBackground(
-            previewBackgroundId
-        )
-
-
+function renderProfileAppearancePreview() {
     return `
-        <section
-            class="profile-appearance-hero"
-            aria-label="${t(
-                "profile.appearance.previewAria"
-            )}"
-        >
-
-            <img
-                class="profile-appearance-hero__background"
-                src="${background?.image || ""}"
-                alt=""
-                aria-hidden="true"
-            >
-
-            <div
-                class="profile-appearance-hero__fade"
-                aria-hidden="true"
-            ></div>
-
-            <div
-                class="profile-appearance-hero__avatar-wrap"
-            >
-
-                <img
-                    class="profile-appearance-hero__avatar"
-                    src="${avatar?.image || ""}"
-                    alt="${t(
-                        "profile.appearance.characterAlt"
-                    )}"
-                >
-
-            </div>
-
-        </section>
+        <div data-profile-appearance-card-slot>
+            ${renderProfileUserCard(
+                getAppearancePreviewProfile(),
+                { mode: "appearance" }
+            )}
+        </div>
     `
 }
 
 
-/* =========================================================
-   ОБНОВИТЬ HERO
-   ========================================================= */
-
-function updateProfileAppearanceHero(
-    root
-) {
-    const avatar =
-        getProfileAvatar(
-            previewAvatarId
-        )
-
-
-    const background =
-        getProfileBackground(
-            previewBackgroundId
-        )
-
-
-    const avatarImage =
+function updateProfileAppearancePreview(root) {
+    const slot =
         root.querySelector(
-            ".profile-appearance-hero__avatar"
+            "[data-profile-appearance-card-slot]"
         )
 
-
-    const backgroundImage =
-        root.querySelector(
-            ".profile-appearance-hero__background"
-        )
-
-
-    if (
-        avatarImage &&
-        avatar?.image &&
-        avatarImage.src !==
-            new URL(
-                avatar.image,
-                window.location.href
-            ).href
-    ) {
-        avatarImage.src =
-            avatar.image
+    if (!slot) {
+        return
     }
 
-
-    if (
-        backgroundImage &&
-        background?.image &&
-        backgroundImage.src !==
-            new URL(
-                background.image,
-                window.location.href
-            ).href
-    ) {
-        backgroundImage.src =
-            background.image
-    }
+    slot.innerHTML =
+        renderProfileUserCard(
+            getAppearancePreviewProfile(),
+            { mode: "appearance" }
+        )
 }
 
 
@@ -725,7 +663,7 @@ function renderProfileAppearanceContent(
             </div>
 
 
-            ${renderProfileAppearanceHero()}
+            ${renderProfileAppearancePreview()}
 
 
             ${renderProfileAppearanceTabs()}
@@ -940,7 +878,7 @@ function bindProfileAppearanceEvents(
                 }
 
 
-                updateProfileAppearanceHero(
+                updateProfileAppearancePreview(
                     root
                 )
 

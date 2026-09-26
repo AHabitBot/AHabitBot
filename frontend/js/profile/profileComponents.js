@@ -63,8 +63,11 @@ function normalizeProfileNumber(
    ========================================================= */
 
 export function renderProfileUserCard(
-    profile = {}
+    profile = {},
+    { mode = "profile" } = {}
 ) {
+    const isAppearancePreview =
+        mode === "appearance"
     const nickname =
         escapeProfileText(
             profile.nickname || "Player"
@@ -157,19 +160,31 @@ export function renderProfileUserCard(
         <section
             class="profile-user-card"
             style="background-image: url('${background.image}');"
-            data-profile-page="appearance"
-            role="button"
-            tabindex="0"
-            aria-label="${t("profile.main.menu.appearance")}"
+            ${
+                isAppearancePreview
+                    ? `data-profile-card-mode="appearance"`
+                    : `
+                        data-profile-page="appearance"
+                        role="button"
+                        tabindex="0"
+                        aria-label="${t("profile.main.menu.appearance")}"
+                    `
+            }
         >
             <div class="profile-user-card__overlay"></div>
 
-            <span
-                class="profile-user-card__appearance-edit"
-                aria-hidden="true"
-            >
-                <span class="material-symbols-rounded profile-user-card__appearance-edit-icon">edit</span>
-            </span>
+            ${
+                isAppearancePreview
+                    ? ""
+                    : `
+                        <span
+                            class="profile-user-card__appearance-edit"
+                            aria-hidden="true"
+                        >
+                            <span class="material-symbols-rounded profile-user-card__appearance-edit-icon">edit</span>
+                        </span>
+                    `
+            }
 
             <div class="profile-user-card__layout">
 
@@ -197,7 +212,7 @@ export function renderProfileUserCard(
                         </h2>
 
                         ${
-                            nicknameCanChange
+                            nicknameCanChange && !isAppearancePreview
                                 ? `
                                     <span
                                         class="material-symbols-rounded profile-user-card__edit-icon"
