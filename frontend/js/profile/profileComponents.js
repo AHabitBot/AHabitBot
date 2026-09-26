@@ -212,7 +212,7 @@ export function renderProfileUserCard(
                         </h2>
 
                         ${
-                            nicknameCanChange && !isAppearancePreview
+                            nicknameCanChange && isAppearancePreview
                                 ? `
                                     <span
                                         class="material-symbols-rounded profile-user-card__edit-icon"
