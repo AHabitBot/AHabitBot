@@ -13,13 +13,6 @@ import {
    ========================================================= */
 
 export async function fetchProfile() {
-    if (!normalizedFrameKey) {
-        throw new Error(
-            "Не передан frameKey"
-        )
-    }
-
-
     const data =
         await apiRequest(
             "/api/profile"
@@ -145,6 +138,13 @@ export async function updateProfileAppearance({
     if (!normalizedBackgroundKey) {
         throw new Error(
             "Не передан backgroundKey"
+        )
+    }
+
+
+    if (!normalizedFrameKey) {
+        throw new Error(
+            "Не передан frameKey"
         )
     }
 
