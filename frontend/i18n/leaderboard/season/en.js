@@ -15,6 +15,14 @@ export default Object.freeze({
     "leaderboard.common.days.many": "{count} days",
     "leaderboard.common.days.other": "{count} days",
 
+
+    "leaderboard.league.bronze": "Bronze League",
+    "leaderboard.league.aria": "Leagues",
+    "leaderboard.league.remaining.one": "{count} day left",
+    "leaderboard.league.remaining.few": "{count} days left",
+    "leaderboard.league.remaining.many": "{count} days left",
+    "leaderboard.league.remaining.other": "{count} days left",
+
     "leaderboard.common.loading": "Loading leaderboard…",
 
 "leaderboard.season.title": "Season {number}", "leaderboard.season.emptyTitle": "Don’t put it off!", "leaderboard.season.emptyText": "Complete a habit to join this season’s competition.", "leaderboard.season.loadError": "Could not load the season ranking",

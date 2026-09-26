@@ -41,7 +41,7 @@ const LEAGUE_ICON = "/img/profile/league/league_bronze.png";
 // из реальных данных — верстка останется прежней.
 const LEAGUES = Array.from({ length: 10 }, (_, index) => ({
     id: index + 1,
-    name: index === 0 ? "Бронзовая лига" : `Лига ${index + 1}`,
+    nameKey: index === 0 ? "leaderboard.league.bronze" : "leaderboard.league.bronze",
     icon: LEAGUE_ICON
 }));
 
@@ -55,7 +55,7 @@ export function renderLeaderboardHeader() {
                     class="leaderboard-league-heading__title"
                     data-league-title
                 >
-                    ${LEAGUES[currentLeagueIndex].name}
+                    ${t(LEAGUES[currentLeagueIndex].nameKey)}
                 </h1>
 
                 <span
@@ -66,7 +66,7 @@ export function renderLeaderboardHeader() {
 
             <div
                 class="leaderboard-leagues-card"
-                aria-label="Лиги"
+                aria-label="${t("leaderboard.league.aria")}"
             >
                 <div class="leaderboard-leagues-track">
                     ${LEAGUES.map((league, index) => {

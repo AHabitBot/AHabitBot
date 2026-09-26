@@ -15,6 +15,14 @@ export default Object.freeze({
     "leaderboard.common.days.many": "{count} днів",
     "leaderboard.common.days.other": "{count} днів",
 
+
+    "leaderboard.league.bronze": "Бронзова ліга",
+    "leaderboard.league.aria": "Ліги",
+    "leaderboard.league.remaining.one": "Залишився {count} день",
+    "leaderboard.league.remaining.few": "Залишилося {count} дні",
+    "leaderboard.league.remaining.many": "Залишилося {count} днів",
+    "leaderboard.league.remaining.other": "Залишилося {count} днів",
+
     "leaderboard.common.loading": "Завантаження рейтингу…",
 
 "leaderboard.season.title": "Сезон {number}", "leaderboard.season.emptyTitle": "Не відкладайте!", "leaderboard.season.emptyText": "Виконайте звичку, щоб вступити у змагання цього сезону.", "leaderboard.season.loadError": "Не вдалося завантажити сезонний рейтинг",

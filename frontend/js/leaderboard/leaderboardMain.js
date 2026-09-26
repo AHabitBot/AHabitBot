@@ -24,6 +24,10 @@ import {
     t
 } from "../../i18n/core/i18n.js";
 
+import {
+    getPluralForm
+} from "../../i18n/core/plural.js";
+
 let leaderboardRoot = null;
 
 let activeRenderId = 0;
@@ -239,23 +243,12 @@ function getRemainingSeasonDays(endDate) {
 
 
 function formatRemainingDays(days) {
-    const language = document.documentElement.lang || "ru";
+    const pluralForm = getPluralForm(days);
 
-    if (language.startsWith("uk")) {
-        return days === 1
-            ? "Залишився 1 день"
-            : `Залишилось ${days} днів`;
-    }
-
-    if (language.startsWith("en")) {
-        return days === 1
-            ? "1 day left"
-            : `${days} days left`;
-    }
-
-    return days === 1
-        ? "Остался 1 день"
-        : `Осталось ${days} дней`;
+    return t(
+        `leaderboard.league.remaining.${pluralForm}`,
+        { count: days }
+    );
 }
 
 
