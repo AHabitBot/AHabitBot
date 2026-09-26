@@ -149,9 +149,9 @@ async function renderSeasonLeaderboardContent({
             : renderSeasonLeaderboard(result.users, result.currentUser);
 
         if (isEmptySeason) {
-            hideSeasonHeading();
+            hideLeagueHeading();
         } else {
-            renderSeasonHeading(result.season);
+            renderLeagueHeading(result.season);
         }
 
         if (currentUserSlot) {
@@ -188,65 +188,74 @@ async function renderSeasonLeaderboardContent({
 
 
 /* =========================================================
-   ЗАГОЛОВОК СЕЗОНА
+   ШАПКА ЛИГИ — РЕАЛЬНЫЙ ОСТАТОК СЕЗОНА
    ========================================================= */
 
-function renderSeasonHeading(
-    season
-) {
-    const heading =
+function renderLeagueHeading(season) {
+    const remaining =
         leaderboardRoot?.querySelector(
-            "[data-season-heading]"
+            "[data-season-remaining]"
         );
 
-    if (!heading || !season) {
-        hideSeasonHeading();
+    if (!remaining || !season?.endDate) {
+        hideLeagueHeading();
         return;
     }
 
-    const title =
-        heading.querySelector(
-            "[data-season-title]"
-        );
+    const days = getRemainingSeasonDays(season.endDate);
 
-    const dates =
-        heading.querySelector(
-            "[data-season-dates]"
-        );
-
-    if (title) {
-        title.textContent =
-            t(
-                "leaderboard.season.title",
-                {
-                    number: season.number
-                }
-            );
-    }
-
-    if (dates) {
-        dates.textContent =
-            formatSeasonPeriod(
-                season.startDate,
-                season.status === "finished"
-                    ? season.rankingEndDate
-                    : season.endDate
-            );
-    }
-
-    heading.hidden = false;
+    remaining.textContent = formatRemainingDays(days);
+    remaining.hidden = false;
 }
 
 
-function hideSeasonHeading() {
-    const heading =
+function hideLeagueHeading() {
+    const remaining =
         leaderboardRoot?.querySelector(
-            "[data-season-heading]"
+            "[data-season-remaining]"
         );
 
-    if (heading) {
-        heading.hidden = true;
+    if (remaining) {
+        remaining.hidden = true;
     }
+}
+
+
+function getRemainingSeasonDays(endDate) {
+    // endDate приходит из /api/leaderboard/season в формате YYYY-MM-DD.
+    // Считаем календарные дни включительно: в последний день сезона
+    // пользователь видит «Остался 1 день», а не 0.
+    const end = new Date(`${endDate}T23:59:59`);
+
+    if (Number.isNaN(end.getTime())) {
+        return 0;
+    }
+
+    const now = new Date();
+    const diff = end.getTime() - now.getTime();
+
+    return Math.max(0, Math.ceil(diff / 86400000));
+}
+
+
+function formatRemainingDays(days) {
+    const language = document.documentElement.lang || "ru";
+
+    if (language.startsWith("uk")) {
+        return days === 1
+            ? "Залишився 1 день"
+            : `Залишилось ${days} днів`;
+    }
+
+    if (language.startsWith("en")) {
+        return days === 1
+            ? "1 day left"
+            : `${days} days left`;
+    }
+
+    return days === 1
+        ? "Остался 1 день"
+        : `Осталось ${days} дней`;
 }
 
 

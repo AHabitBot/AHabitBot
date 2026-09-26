@@ -31,31 +31,74 @@ function renderMaterialIcon(
 
 
 /* =========================================================
-   HEADER
+   LEAGUE HEADER
    ========================================================= */
 
+const LEAGUE_ICON = "/img/profile/league/league_bronze.png";
+
+// Шаблон на 10 лиг. Пока все используют бронзовую эмблему.
+// Позже достаточно заменить name/icon и передавать currentLeagueIndex
+// из реальных данных — верстка останется прежней.
+const LEAGUES = Array.from({ length: 10 }, (_, index) => ({
+    id: index + 1,
+    name: index === 0 ? "Бронзовая лига" : `Лига ${index + 1}`,
+    icon: LEAGUE_ICON
+}));
+
 export function renderLeaderboardHeader() {
+    const currentLeagueIndex = 0;
+
     return `
         <header class="leaderboard-header">
-            <div class="leaderboard-header__title-row">
-                <h1 class="leaderboard-header__title">
-                    ${t("leaderboard.common.title")}
+            <div class="leaderboard-league-heading">
+                <h1
+                    class="leaderboard-league-heading__title"
+                    data-league-title
+                >
+                    ${LEAGUES[currentLeagueIndex].name}
                 </h1>
 
-                <div
-                    class="leaderboard-season-heading"
-                    data-season-heading
-                    hidden
-                >
-                    <span
-                        class="leaderboard-season-heading__title"
-                        data-season-title
-                    ></span>
+                <span
+                    class="leaderboard-league-heading__remaining"
+                    data-season-remaining
+                ></span>
+            </div>
 
-                    <span
-                        class="leaderboard-season-heading__dates"
-                        data-season-dates
-                    ></span>
+            <div
+                class="leaderboard-leagues-card"
+                aria-label="Лиги"
+            >
+                <div class="leaderboard-leagues-track">
+                    ${LEAGUES.map((league, index) => {
+                        const state = index < currentLeagueIndex
+                            ? "completed"
+                            : index === currentLeagueIndex
+                                ? "current"
+                                : "locked";
+
+                        return `
+                            <div
+                                class="leaderboard-league leaderboard-league--${state}"
+                                data-league-index="${index}"
+                            >
+                                <div class="leaderboard-league__badge">
+                                    <img
+                                        class="leaderboard-league__icon"
+                                        src="${league.icon}"
+                                        alt=""
+                                        aria-hidden="true"
+                                    >
+
+                                    ${state === "locked"
+                                        ? renderMaterialIcon(
+                                            "lock",
+                                            "leaderboard-league__lock"
+                                        )
+                                        : ""}
+                                </div>
+                            </div>
+                        `;
+                    }).join("")}
                 </div>
             </div>
         </header>
