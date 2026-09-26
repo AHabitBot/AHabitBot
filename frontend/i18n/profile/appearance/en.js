@@ -1,6 +1,7 @@
 export default Object.freeze({
     "profile.appearance.title": "Appearance",
     "profile.appearance.tabs.avatar": "Avatar",
+    "profile.appearance.tabs.frame": "Frames",
     "profile.appearance.tabs.background": "Background",
     "profile.appearance.preview": "Preview",
     "profile.appearance.apply": "Apply",

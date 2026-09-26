@@ -32,6 +32,12 @@ import {
     getProfileBackground
 } from "./profileAppearanceBackground.js"
 
+import {
+    PROFILE_FRAMES,
+    DEFAULT_PROFILE_FRAME_ID,
+    getProfileFrame
+} from "./profileAppearanceFrame.js"
+
 
 /* =========================================================
    PROFILE APPEARANCE — STATE
@@ -51,6 +57,9 @@ let appliedAvatarId =
 let appliedBackgroundId =
     DEFAULT_PROFILE_BACKGROUND_ID
 
+let appliedFrameId =
+    DEFAULT_PROFILE_FRAME_ID
+
 
 /* =========================================================
    PREVIEW
@@ -61,6 +70,9 @@ let previewAvatarId =
 
 let previewBackgroundId =
     DEFAULT_PROFILE_BACKGROUND_ID
+
+let previewFrameId =
+    DEFAULT_PROFILE_FRAME_ID
 
 
 /* =========================================================
@@ -97,6 +109,19 @@ function getActiveAppearanceOptions() {
 
             appliedId:
                 appliedBackgroundId
+        }
+    }
+
+
+    if (
+        activeAppearanceTab ===
+        "frame"
+    ) {
+        return {
+            type: "frame",
+            options: PROFILE_FRAMES,
+            previewId: previewFrameId,
+            appliedId: appliedFrameId
         }
     }
 
@@ -188,6 +213,18 @@ function loadProfileAppearance() {
         )
 
 
+    /* =====================================================
+       FRAME
+       Пока backend не хранит frame_key, используется
+       единственная рамка по умолчанию.
+       ===================================================== */
+
+    const frame =
+        getProfileFrame(
+            profile.frame_key
+        )
+
+
     /*
      * Сохранённый private avatar
      * принимаем только если пользователь
@@ -221,6 +258,13 @@ function loadProfileAppearance() {
             : DEFAULT_PROFILE_BACKGROUND_ID
 
 
+
+    appliedFrameId =
+        frame
+            ? frame.id
+            : DEFAULT_PROFILE_FRAME_ID
+
+
     /*
      * При открытии страницы preview
      * начинается с реально применённого
@@ -233,6 +277,11 @@ function loadProfileAppearance() {
 
     previewBackgroundId =
         appliedBackgroundId
+
+
+
+    previewFrameId =
+        appliedFrameId
 }
 
 
@@ -247,7 +296,8 @@ function getAppearancePreviewProfile() {
     return {
         ...(currentProfile || {}),
         avatar_key: previewAvatarId,
-        background_key: previewBackgroundId
+        background_key: previewBackgroundId,
+        frame_key: previewFrameId
     }
 }
 
@@ -327,6 +377,25 @@ function renderProfileAppearanceTabs() {
                 )}
             </button>
 
+
+            <button
+                class="
+                    profile-appearance-tabs__item
+                    ${
+                        activeAppearanceTab ===
+                        "frame"
+                            ? "is-active"
+                            : ""
+                    }
+                "
+                type="button"
+                data-appearance-tab="frame"
+            >
+                ${t(
+                    "profile.appearance.tabs.frame"
+                )}
+            </button>
+
         </div>
     `
 }
@@ -382,6 +451,11 @@ function renderAppearanceOption({
                 ${
                     isLocked
                         ? "is-locked"
+                        : ""
+                }
+                ${
+                    type === "frame"
+                        ? "is-frame-option"
                         : ""
                 }
             "
@@ -758,6 +832,25 @@ function selectAppearancePreview(
     }
 
 
+    if (
+        type === "frame"
+    ) {
+        const frame =
+            getProfileFrame(
+                optionId
+            )
+
+        if (!frame) {
+            return false
+        }
+
+        previewFrameId =
+            optionId
+
+        return true
+    }
+
+
     return false
 }
 
@@ -792,6 +885,8 @@ function bindProfileAppearanceEvents(
                     tab !== "avatar"
                     &&
                     tab !== "background"
+                    &&
+                    tab !== "frame"
                 ) {
                     return
                 }

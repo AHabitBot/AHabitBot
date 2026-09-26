@@ -9,6 +9,11 @@ import {
 } from "./appearance/profileAppearanceBackground.js"
 
 import {
+    getProfileFrame,
+    getDefaultProfileFrame
+} from "./appearance/profileAppearanceFrame.js"
+
+import {
     isProfileFeatureEnabled
 } from "./profileFeatures.js"
 
@@ -141,7 +146,10 @@ export function renderProfileUserCard(
     }
 
     const avatarFrame =
-        "/img/profile/frame/frame_bronze.png"
+        getProfileFrame(
+            profile.frame_key
+        )
+        || getDefaultProfileFrame()
 
 
     /* =====================================================
@@ -197,7 +205,7 @@ export function renderProfileUserCard(
 
                     <img
                         class="profile-user-card__avatar-frame"
-                        src="${avatarFrame}"
+                        src="${avatarFrame.image}"
                         alt=""
                         aria-hidden="true"
                     >

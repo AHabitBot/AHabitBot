@@ -301,3 +301,15 @@
     background:
         var(--app-surface);
 }
+
+/* =========================================================
+   FRAME OPTION
+   Прозрачную PNG-рамку показываем целиком.
+   ========================================================= */
+
+.profile-appearance-option.is-frame-option
+.profile-appearance-option__image {
+    object-fit: contain;
+    padding: 8px;
+    box-sizing: border-box;
+}

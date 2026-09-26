@@ -1,6 +1,7 @@
 export default Object.freeze({
     "profile.appearance.title": "Внешний вид",
     "profile.appearance.tabs.avatar": "Аватар",
+    "profile.appearance.tabs.frame": "Рамки",
     "profile.appearance.tabs.background": "Оформление",
     "profile.appearance.preview": "Предпросмотр",
     "profile.appearance.apply": "Применить",
