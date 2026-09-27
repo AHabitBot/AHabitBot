@@ -20,8 +20,6 @@ import {
     bootstrapApp
 } from "./core/appBootstrap.js"
 
-import { openSharedHabitInviteFromTelegram } from "./habits/sharedHabitInvite.js"
-
 
 import {
     t,
@@ -394,8 +392,6 @@ async function initV2() {
         document.body.classList.add(
             "app-ready"
         )
-
-        await openSharedHabitInviteFromTelegram()
     } catch (error) {
         loaderProgress.stop()
         console.error(
