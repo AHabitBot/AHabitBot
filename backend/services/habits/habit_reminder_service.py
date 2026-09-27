@@ -11,7 +11,7 @@ from backend.i18n.notifications import habit_reminder_text, normalize_language
 
 logger = logging.getLogger("uvicorn.error")
 
-CHECK_INTERVAL_SECONDS = 60
+CHECK_INTERVAL_SECONDS = 20
 DEFAULT_TIMEZONE = "Europe/Kyiv"
 
 

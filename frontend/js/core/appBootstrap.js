@@ -47,6 +47,9 @@ function normalizeHabit(habit = {}) {
         weeklyTarget: Number(habit.weekly_target) || null,
         challengeTarget: Number(habit.challenge_target) || null,
         repeatStartedOn: habit.repeat_started_on || null,
+        reminderTime: habit.habit_reminder
+            ? String(habit.habit_reminder).slice(0, 5)
+            : null,
         confirmationAllowedToday: habit.confirmation_allowed_today !== false
     }
 }
