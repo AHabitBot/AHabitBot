@@ -11,10 +11,14 @@ export default Object.freeze({
     "habits.addHabit.name.iconAria": "Выбрать значок привычки",
     "habits.addHabit.name.placeholder": "Назовите привычку",
 
-    "habits.addHabit.suggestions.noWaste": "Не тратить на фигню",
-    "habits.addHabit.suggestions.saveMoney": "Откладывать деньги",
-    "habits.addHabit.suggestions.planBudget": "Планировать бюджет",
-    "habits.addHabit.suggestions.readBook": "Читать книгу",
+    "habits.addHabit.suggestions.makeBed": "Застелать кровать",
+    "habits.addHabit.suggestions.walk": "Прогулка",
+    "habits.addHabit.suggestions.reading": "Чтение",
+    "habits.addHabit.suggestions.saving": "Экономия",
+    "habits.addHabit.suggestions.morningWater": "Вода утром",
+    "habits.addHabit.suggestions.running": "Пробежка",
+    "habits.addHabit.suggestions.noSweets": "Без сладкого",
+    "habits.addHabit.suggestions.phone3Hours": "3 часа телефона в день",
 
     "habits.addHabit.color.label": "Цвет",
     "habits.addHabit.color.groupAria": "Цвет карточки привычки",

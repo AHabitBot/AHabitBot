@@ -11,10 +11,14 @@ export default Object.freeze({
     "habits.addHabit.name.iconAria": "Вибрати значок звички",
     "habits.addHabit.name.placeholder": "Назвіть звичку",
 
-    "habits.addHabit.suggestions.noWaste": "Не витрачати на дурниці",
-    "habits.addHabit.suggestions.saveMoney": "Відкладати гроші",
-    "habits.addHabit.suggestions.planBudget": "Планувати бюджет",
-    "habits.addHabit.suggestions.readBook": "Читати книгу",
+    "habits.addHabit.suggestions.makeBed": "Застелити ліжко",
+    "habits.addHabit.suggestions.walk": "Прогулянка",
+    "habits.addHabit.suggestions.reading": "Читання",
+    "habits.addHabit.suggestions.saving": "Економія",
+    "habits.addHabit.suggestions.morningWater": "Вода вранці",
+    "habits.addHabit.suggestions.running": "Пробіжка",
+    "habits.addHabit.suggestions.noSweets": "Без солодкого",
+    "habits.addHabit.suggestions.phone3Hours": "3 години телефону на день",
 
     "habits.addHabit.color.label": "Колір",
     "habits.addHabit.color.groupAria": "Колір картки звички",

@@ -11,10 +11,14 @@ export default Object.freeze({
     "habits.addHabit.name.iconAria": "Choose habit icon",
     "habits.addHabit.name.placeholder": "Name your habit",
 
-    "habits.addHabit.suggestions.noWaste": "Stop wasting money",
-    "habits.addHabit.suggestions.saveMoney": "Save money",
-    "habits.addHabit.suggestions.planBudget": "Plan a budget",
-    "habits.addHabit.suggestions.readBook": "Read a book",
+    "habits.addHabit.suggestions.makeBed": "Make the bed",
+    "habits.addHabit.suggestions.walk": "Walk",
+    "habits.addHabit.suggestions.reading": "Reading",
+    "habits.addHabit.suggestions.saving": "Saving money",
+    "habits.addHabit.suggestions.morningWater": "Water in the morning",
+    "habits.addHabit.suggestions.running": "Run",
+    "habits.addHabit.suggestions.noSweets": "No sweets",
+    "habits.addHabit.suggestions.phone3Hours": "3 hours of phone time a day",
 
     "habits.addHabit.color.label": "Color",
     "habits.addHabit.color.groupAria": "Habit card color",

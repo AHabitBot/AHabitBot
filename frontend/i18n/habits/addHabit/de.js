@@ -11,10 +11,14 @@ export default Object.freeze({
     "habits.addHabit.name.iconAria": "Gewohnheitssymbol auswählen",
     "habits.addHabit.name.placeholder": "Benenne deine Gewohnheit",
 
-    "habits.addHabit.suggestions.noWaste": "Kein Geld verschwenden",
-    "habits.addHabit.suggestions.saveMoney": "Geld sparen",
-    "habits.addHabit.suggestions.planBudget": "Budget planen",
-    "habits.addHabit.suggestions.readBook": "Ein Buch lesen",
+    "habits.addHabit.suggestions.makeBed": "Bett machen",
+    "habits.addHabit.suggestions.walk": "Spaziergang",
+    "habits.addHabit.suggestions.reading": "Lesen",
+    "habits.addHabit.suggestions.saving": "Geld sparen",
+    "habits.addHabit.suggestions.morningWater": "Wasser am Morgen",
+    "habits.addHabit.suggestions.running": "Joggen",
+    "habits.addHabit.suggestions.noSweets": "Keine Süßigkeiten",
+    "habits.addHabit.suggestions.phone3Hours": "3 Stunden Handy am Tag",
 
     "habits.addHabit.color.label": "Farbe",
     "habits.addHabit.color.groupAria": "Farbe der Gewohnheitskarte",

@@ -182,9 +182,10 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.noWaste")}"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.makeBed")}"
+                            data-habit-icon="🛏"
                         >
-                            ${t("habits.addHabit.suggestions.noWaste")}
+                            🛏 ${t("habits.addHabit.suggestions.makeBed")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -194,9 +195,10 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.saveMoney")}"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.walk")}"
+                            data-habit-icon="🚶🏼‍➡️"
                         >
-                            ${t("habits.addHabit.suggestions.saveMoney")}
+                            🚶🏼‍➡️ ${t("habits.addHabit.suggestions.walk")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -206,9 +208,10 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.planBudget")}"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.reading")}"
+                            data-habit-icon="📖"
                         >
-                            ${t("habits.addHabit.suggestions.planBudget")}
+                            📖 ${t("habits.addHabit.suggestions.reading")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -218,9 +221,62 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.readBook")}"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.saving")}"
+                            data-habit-icon="💰"
                         >
-                            ${t("habits.addHabit.suggestions.readBook")}
+                            💰 ${t("habits.addHabit.suggestions.saving")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.morningWater")}"
+                            data-habit-icon="💦"
+                        >
+                            💦 ${t("habits.addHabit.suggestions.morningWater")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.running")}"
+                            data-habit-icon="🏃🏻‍♀️"
+                        >
+                            🏃🏻‍♀️ ${t("habits.addHabit.suggestions.running")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.noSweets")}"
+                            data-habit-icon="✅"
+                        >
+                            ✅ ${t("habits.addHabit.suggestions.noSweets")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.phone3Hours")}"
+                            data-habit-icon="📵"
+                        >
+                            📵 ${t("habits.addHabit.suggestions.phone3Hours")}
                         </button>
 
                     </div>
@@ -1104,6 +1160,10 @@ export function initAddHabitPageEvents({
         "#add-habit-name"
     )
 
+    const selectedIcon = root.querySelector(
+        ".add-habit-v2__selected-icon"
+    )
+
     const suggestionButtons =
         root.querySelectorAll(
             "[data-habit-suggestion]"
@@ -1245,6 +1305,10 @@ export function initAddHabitPageEvents({
                     button.dataset
                         .habitSuggestion || ""
 
+                const suggestionIcon =
+                    button.dataset
+                        .habitIcon || "✱"
+
                 nameInput.value =
                     suggestion
 
@@ -1252,6 +1316,16 @@ export function initAddHabitPageEvents({
                     "name",
                     suggestion
                 )
+
+                setHabitDraftValue(
+                    "icon",
+                    suggestionIcon
+                )
+
+                if (selectedIcon) {
+                    selectedIcon.textContent =
+                        suggestionIcon
+                }
 
                 nameInput.focus()
 
