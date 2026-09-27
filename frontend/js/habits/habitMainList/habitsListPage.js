@@ -253,6 +253,25 @@ function renderWeekProgress(progress) {
    РЕНДЕР КАРТОЧКИ
    ========================================================= */
 
+function renderSharedHabitAvatars(shared) {
+    const members = Array.isArray(shared?.members) ? shared.members : []
+    if (members.length < 2) return ""
+
+    const visible = members.slice(0, 3)
+    const extra = Math.max(0, members.length - visible.length)
+    const avatars = visible.map((member) => {
+        const key = /^[a-zA-Z0-9_-]+$/.test(String(member?.avatar_key || ""))
+            ? String(member.avatar_key)
+            : "standard_m_01"
+        return `<span class="habit-card__member-avatar-wrap">
+            <img class="habit-card__member-avatar" src="/img/profile/avatar/avatar_${key}.png" alt="">
+            ${member?.confirmed_today ? '<span class="habit-card__member-done">✓</span>' : ''}
+        </span>`
+    }).join("")
+
+    return `<div class="habit-card__members">${avatars}${extra ? `<span class="habit-card__members-extra">+${extra}</span>` : ""}</div>`
+}
+
 export function renderHabitCard(habit = {}) {
     const {
         id = "",
@@ -264,7 +283,8 @@ export function renderHabitCard(habit = {}) {
         streak = 0,
         xpReward = 5,
         weekProgress = [],
-        confirmationAllowedToday = true
+        confirmationAllowedToday = true,
+        shared = null
     } = habit
     // Imported lazily at module level below to keep rule formatting centralized.
 
@@ -297,12 +317,10 @@ export function renderHabitCard(habit = {}) {
             data-habit-id="${safeId}"
         >
 
-            <div
-                class="habit-card__icon"
-                aria-hidden="true"
-            >
-                ${safeIcon}
-            </div>
+            ${Array.isArray(shared?.members) && shared.members.length >= 2
+                ? renderSharedHabitAvatars(shared)
+                : `<div class="habit-card__icon" aria-hidden="true">${safeIcon}</div>`
+            }
 
 
             <button

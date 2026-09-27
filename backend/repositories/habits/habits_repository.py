@@ -8,6 +8,8 @@ from backend.services.leaderboard.season_service import (
     get_season_context,
 )
 
+from backend.repositories.habits.shared_habits_repository import get_shared_contexts_for_habits
+
 from backend.services.habits.repeat_rules import (
     calculate_repeat_streak,
     calculate_weekly_streak_with_target,
@@ -327,6 +329,16 @@ async def get_user_habits(
         )
 
         habits.append(habit)
+
+    shared_contexts = await get_shared_contexts_for_habits(
+        [int(habit["id"]) for habit in habits],
+        today,
+    )
+    for habit in habits:
+        shared = shared_contexts.get(int(habit["id"]))
+        if shared is not None:
+            shared["is_owner"] = int(shared["owner_user_id"]) == int(user_id)
+        habit["shared"] = shared
 
     return {
         "habits": habits,

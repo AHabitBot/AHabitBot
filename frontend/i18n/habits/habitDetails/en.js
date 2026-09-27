@@ -52,4 +52,12 @@ export default Object.freeze({
     "habits.details.archive.title": "Move this habit to the archive?",
     "habits.details.archive.confirm": "Archive",
     "habits.details.archive.keep": "Keep"
+
+    "habits.sharedInvite.join": "Join",
+    "habits.sharedInvite.own": "This is your habit",
+    "habits.sharedInvite.alreadyJoined": "You already joined",
+    "habits.sharedInvite.full": "Group is full",
+    "habits.sharedInvite.text": "Invites you to build this habit together.",
+    "habits.sharedInvite.joining": "Joining…",
+    "habits.sharedInvite.joined": "Done!",
 });

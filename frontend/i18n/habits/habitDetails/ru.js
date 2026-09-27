@@ -52,4 +52,12 @@ export default Object.freeze({
     "habits.details.archive.title": "Переместить привычку в архив?",
     "habits.details.archive.confirm": "Архивировать",
     "habits.details.archive.keep": "Оставить"
+
+    "habits.sharedInvite.join": "Присоединиться",
+    "habits.sharedInvite.own": "Это ваша привычка",
+    "habits.sharedInvite.alreadyJoined": "Вы уже участвуете",
+    "habits.sharedInvite.full": "Группа заполнена",
+    "habits.sharedInvite.text": "Приглашает выполнять эту привычку вместе.",
+    "habits.sharedInvite.joining": "Присоединяем…",
+    "habits.sharedInvite.joined": "Готово!",
 });

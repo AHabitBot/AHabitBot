@@ -592,3 +592,43 @@ async def set_confirmation(
         )
 
         raise
+
+
+# =========================================================
+# СОВМЕСТНАЯ ПРИВЫЧКА — ПРИГЛАШЕНИЕ / ПРИСОЕДИНЕНИЕ
+# =========================================================
+
+@router.get("/invite/{invite_token}")
+async def read_shared_habit_invite(
+    invite_token: str,
+    user: CurrentUser,
+):
+    from backend.repositories.habits.shared_habits_repository import get_shared_invite_preview
+
+    preview = await get_shared_invite_preview(
+        invite_token=invite_token,
+        user_id=int(user["id"]),
+    )
+    if preview is None:
+        raise HTTPException(status_code=404, detail="Приглашение не найдено")
+    return {"invite": preview}
+
+
+@router.post("/invite/{invite_token}/join")
+async def join_shared_habit_by_invite(
+    invite_token: str,
+    user: CurrentUser,
+):
+    from backend.repositories.habits.shared_habits_repository import join_shared_habit
+
+    result = await join_shared_habit(
+        invite_token=invite_token,
+        user_id=int(user["id"]),
+    )
+    if result is None:
+        raise HTTPException(status_code=404, detail="Приглашение не найдено")
+    if result.get("status") == "full":
+        raise HTTPException(status_code=409, detail="В этой привычке уже 5 участников")
+    if result.get("status") == "own_habit":
+        raise HTTPException(status_code=409, detail="Это ваша привычка")
+    return result

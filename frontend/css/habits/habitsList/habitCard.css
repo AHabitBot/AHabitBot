@@ -665,3 +665,51 @@
 
     padding-bottom: 14px;
 }
+/* Shared habit: avatars replace the ordinary emoji without changing card layout. */
+.habit-card__members {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    min-width: 82px;
+    height: 48px;
+    z-index: 2;
+}
+.habit-card__member-avatar-wrap {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    margin-left: -12px;
+}
+.habit-card__member-avatar-wrap:first-child { margin-left: 0; }
+.habit-card__member-avatar {
+    display: block;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--app-bg);
+    border: 2px solid var(--app-bg);
+}
+.habit-card__member-done {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 16px;
+    height: 16px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #2f9e5b;
+    color: #fff;
+    border: 2px solid var(--app-bg);
+    font-size: 10px;
+    font-weight: 900;
+}
+.habit-card__members-extra {
+    margin-left: 5px;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--app-text-secondary);
+}

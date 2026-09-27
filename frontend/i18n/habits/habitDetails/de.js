@@ -52,4 +52,12 @@ export default Object.freeze({
     "habits.details.archive.title": "Diese Gewohnheit archivieren?",
     "habits.details.archive.confirm": "Archivieren",
     "habits.details.archive.keep": "Behalten"
+
+    "habits.sharedInvite.join": "Beitreten",
+    "habits.sharedInvite.own": "Das ist deine Gewohnheit",
+    "habits.sharedInvite.alreadyJoined": "Du bist bereits dabei",
+    "habits.sharedInvite.full": "Gruppe ist voll",
+    "habits.sharedInvite.text": "Lädt dich ein, diese Gewohnheit gemeinsam aufzubauen.",
+    "habits.sharedInvite.joining": "Beitritt…",
+    "habits.sharedInvite.joined": "Fertig!",
 });

@@ -50,7 +50,9 @@ function normalizeHabit(habit = {}) {
         reminderTime: habit.habit_reminder
             ? String(habit.habit_reminder).slice(0, 5)
             : null,
-        confirmationAllowedToday: habit.confirmation_allowed_today !== false
+        confirmationAllowedToday: habit.confirmation_allowed_today !== false,
+        inviteToken: habit.invite_token || null,
+        shared: habit.shared || null
     }
 }
 

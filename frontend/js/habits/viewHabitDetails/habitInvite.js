@@ -3,11 +3,6 @@ import {
 } from "../../../i18n/core/i18n.js"
 
 import {
-    RESOURCE_KEYS,
-    peekResource
-} from "../../core/resourceCache.js"
-
-import {
     shareReferralLink
 } from "../../profile/referral/profileReferralEvents.js"
 
@@ -27,7 +22,8 @@ function escapeAttribute(value) {
 
 export function renderHabitInvite({
     habitName,
-    durationText
+    durationText,
+    inviteToken
 }) {
     return `
         <button
@@ -36,6 +32,7 @@ export function renderHabitInvite({
             data-habit-invite
             data-habit-name="${escapeAttribute(habitName)}"
             data-habit-duration="${escapeAttribute(durationText)}"
+            data-habit-invite-token="${escapeAttribute(inviteToken)}"
         >
             <span
                 class="material-symbols-rounded habit-details__invite-icon"
@@ -66,15 +63,15 @@ export function initHabitInvite(root) {
     button.addEventListener(
         "click",
         () => {
-            const referral = peekResource(
-                RESOURCE_KEYS.REFERRAL
-            )
-            const referralLink =
-                referral?.referral_link || ""
+            const inviteToken =
+                button.dataset.habitInviteToken || ""
 
-            if (!referralLink) {
+            if (!inviteToken) {
                 return
             }
+
+            const referralLink =
+                `https://t.me/AHabitBot?startapp=habit_${encodeURIComponent(inviteToken)}`
 
             const shareText = t(
                 "habits.details.invite.shareText",
