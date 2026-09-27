@@ -50,7 +50,71 @@ function normalizeHabit(habit = {}) {
         reminderTime: habit.habit_reminder
             ? String(habit.habit_reminder).slice(0, 5)
             : null,
-        confirmationAllowedToday: habit.confirmation_allowed_today !== false
+        confirmationAllowedToday:
+            habit.confirmation_allowed_today !== false,
+
+        inviteToken:
+            habit.invite_token ??
+            habit.inviteToken ??
+            "",
+
+        shared:
+            habit.shared && typeof habit.shared === "object"
+                ? {
+                    sharedHabitId:
+                        Number(
+                            habit.shared.shared_habit_id ??
+                            habit.shared.sharedHabitId
+                        ) || null,
+
+                    ownerUserId:
+                        Number(
+                            habit.shared.owner_user_id ??
+                            habit.shared.ownerUserId
+                        ) || null,
+
+                    isOwner:
+                        Boolean(
+                            habit.shared.is_owner ??
+                            habit.shared.isOwner
+                        ),
+
+                    members:
+                        Array.isArray(habit.shared.members)
+                            ? habit.shared.members.map(
+                                (member) => ({
+                                    userId:
+                                        Number(
+                                            member.user_id ??
+                                            member.userId
+                                        ) || null,
+
+                                    habitId:
+                                        String(
+                                            member.habit_id ??
+                                            member.habitId ??
+                                            ""
+                                        ),
+
+                                    nickname:
+                                        member.nickname ||
+                                        "Player",
+
+                                    avatarKey:
+                                        member.avatar_key ??
+                                        member.avatarKey ??
+                                        "standard_m_01",
+
+                                    confirmedToday:
+                                        Boolean(
+                                            member.confirmed_today ??
+                                            member.confirmedToday
+                                        )
+                                })
+                            )
+                            : []
+                }
+                : null
     }
 }
 
