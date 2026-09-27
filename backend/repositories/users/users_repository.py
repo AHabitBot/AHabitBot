@@ -2,6 +2,8 @@ import asyncpg
 
 from backend.database.database import get_connection
 from config import BOT_USERNAME
+from backend.i18n.notifications import normalize_language
+from backend.services.settings import normalize_timezone
 
 
 DEFAULT_AVATAR_KEY = "standard_m_01"
@@ -41,10 +43,18 @@ async def create_user(
     telegram_id: int,
     username: str | None,
     first_name: str | None,
+    language: str | None = None,
+    timezone: str | None = None,
 ) -> asyncpg.Record:
     referral_link = (
         f"https://t.me/{BOT_USERNAME}"
         f"?start={telegram_id}"
+    )
+
+    initial_language = normalize_language(language)
+    initial_timezone = normalize_timezone(
+        timezone,
+        fallback=None,
     )
 
     async with get_connection() as connection:
@@ -85,11 +95,13 @@ async def create_user(
                 )
                 VALUES (
                     $1,
-                    'Europe/Kyiv',
-                    'ru'
+                    $2,
+                    $3
                 )
                 """,
                 user_id,
+                initial_timezone,
+                initial_language,
             )
 
             await connection.execute(

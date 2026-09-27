@@ -10,6 +10,9 @@ from backend.api.dependencies import (
     CurrentUser,
 )
 
+from backend.i18n.notifications import SUPPORTED_LANGUAGES
+from backend.services.settings import normalize_timezone
+
 from backend.repositories.settings import (
     get_user_settings,
     set_reminders_enabled,
@@ -23,20 +26,6 @@ router = APIRouter(
     prefix="/api/settings",
     tags=["settings"],
 )
-
-
-# =========================================================
-# ДОСТУПНЫЕ ЧАСОВЫЕ ПОЯСА MVP
-# =========================================================
-
-ALLOWED_TIMEZONES = {
-    "Europe/Berlin",
-    "Europe/Warsaw",
-    "Europe/Kyiv",
-    "Europe/Moscow",
-    "Europe/Oslo",
-    "America/New_York",
-}
 
 
 # =========================================================
@@ -113,10 +102,12 @@ async def update_timezone(
         .strip()
     )
 
-    if (
-        timezone
-        not in ALLOWED_TIMEZONES
-    ):
+    timezone = normalize_timezone(
+        timezone,
+        fallback=None,
+    )
+
+    if timezone is None:
         raise HTTPException(
             status_code=
                 status.HTTP_400_BAD_REQUEST,
@@ -170,7 +161,7 @@ async def update_language(
         .lower()
     )
 
-    if language not in {"ru", "uk", "en"}:
+    if language not in SUPPORTED_LANGUAGES:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Недоступный язык",

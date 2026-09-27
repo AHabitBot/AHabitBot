@@ -27,6 +27,29 @@ function getTelegramInitData() {
 
 
 /* =========================================================
+   CLIENT TIMEZONE
+   ========================================================= */
+
+function getClientTimezone() {
+    try {
+        return (
+            Intl.DateTimeFormat()
+                .resolvedOptions()
+                .timeZone
+            || ""
+        );
+    } catch (error) {
+        console.warn(
+            "Не удалось определить часовой пояс устройства",
+            error
+        );
+
+        return "";
+    }
+}
+
+
+/* =========================================================
    ERROR MESSAGE
    ========================================================= */
 
@@ -91,6 +114,9 @@ export async function apiRequest(
 
         "X-Telegram-Init-Data":
             getTelegramInitData(),
+
+        "X-Client-Timezone":
+            getClientTimezone(),
 
         ...headers
     };

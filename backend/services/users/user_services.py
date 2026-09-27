@@ -30,6 +30,8 @@ async def register_user(
             telegram_id=user.id,
             username=user.username,
             first_name=user.first_name,
+            language=user.language_code,
+            timezone=None,
         )
 
         print(

@@ -47,7 +47,7 @@ WHERE avatar_key IN ('beginer_m', 'beginner_m');
 CREATE TABLE IF NOT EXISTS user_settings (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL UNIQUE,
-    timezone VARCHAR(64) NOT NULL DEFAULT 'Europe/Kyiv',
+    timezone VARCHAR(64),
     language VARCHAR(10) NOT NULL DEFAULT 'ru',
     theme VARCHAR(10) NOT NULL DEFAULT 'light',
     reminders_enabled BOOLEAN NOT NULL DEFAULT FALSE,
@@ -72,6 +72,13 @@ ALTER TABLE user_settings
 ALTER TABLE user_settings
     ADD COLUMN IF NOT EXISTS last_reminder_date
     DATE;
+
+-- Timezone остаётся NULL только до первого запуска Mini App.
+-- Это позволяет получить реальную IANA-зону устройства, не трогая
+-- уже настроенных существующих пользователей.
+ALTER TABLE user_settings
+    ALTER COLUMN timezone DROP NOT NULL,
+    ALTER COLUMN timezone DROP DEFAULT;
 
 CREATE TABLE IF NOT EXISTS habits (
     id BIGSERIAL PRIMARY KEY,

@@ -3,8 +3,13 @@ DEFAULT_LANGUAGE = "ru"
 
 
 def normalize_language(language: str | None) -> str:
-    value = str(language or DEFAULT_LANGUAGE).lower()
-    return value if value in SUPPORTED_LANGUAGES else DEFAULT_LANGUAGE
+    value = str(language or DEFAULT_LANGUAGE).strip().lower()
+    base_language = value.replace("_", "-").split("-", 1)[0]
+    return (
+        base_language
+        if base_language in SUPPORTED_LANGUAGES
+        else DEFAULT_LANGUAGE
+    )
 
 
 def plural_form(value: int, language: str) -> str:

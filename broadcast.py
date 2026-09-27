@@ -21,6 +21,7 @@ from backend.database.database import (
 from backend.repositories.leaderboard.season_results_repository import (
     get_finished_season_payload,
 )
+from backend.i18n.notifications import normalize_language
 
 
 # =========================================================
@@ -60,41 +61,6 @@ SEASON_ACTIVE_END = date(
 # После проверки поменяй на False.
 
 DRY_RUN = False
-
-
-# =========================================================
-# LANGUAGES
-# =========================================================
-
-SUPPORTED_LANGUAGES = {
-    "ru",
-    "uk",
-    "en",
-}
-
-DEFAULT_LANGUAGE = "ru"
-
-
-# =========================================================
-# NORMALIZE LANGUAGE
-# =========================================================
-
-def normalize_language(
-    language: str | None,
-) -> str:
-    value = (
-        str(
-            language
-            or DEFAULT_LANGUAGE
-        )
-        .strip()
-        .lower()
-    )
-
-    if value in SUPPORTED_LANGUAGES:
-        return value
-
-    return DEFAULT_LANGUAGE
 
 
 # =========================================================
