@@ -605,9 +605,7 @@ export function renderAddHabitPage() {
                         type="button"
                         data-action="open-habit-reminder"
                     >
-                        <span class="habit-reminder__icon" aria-hidden="true">
-                            <span class="material-symbols-rounded habit-reminder__icon-glyph">notifications</span>
-                        </span>
+                        <span class="habit-reminder__icon" aria-hidden="true"></span>
                         <span class="habit-reminder__copy">
                             <strong>${t("habits.addHabit.reminder.title")}</strong>
                             <small data-habit-reminder-value>
