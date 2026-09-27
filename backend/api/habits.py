@@ -1,5 +1,6 @@
 import logging
 import re
+from datetime import time
 from typing import Literal
 
 from fastapi import (
@@ -105,7 +106,7 @@ class HabitConfirmationRequest(BaseModel):
     is_confirmed: bool
 
 
-def normalize_habit_reminder(value: str | None) -> str | None:
+def normalize_habit_reminder(value: str | None) -> time | None:
     if value is None:
         return None
 
@@ -113,7 +114,7 @@ def normalize_habit_reminder(value: str | None) -> str | None:
     if not re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", normalized):
         raise ValueError("Некорректное время напоминания")
 
-    return normalized
+    return time.fromisoformat(normalized)
 
 
 # =========================================================
