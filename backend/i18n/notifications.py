@@ -70,6 +70,17 @@ def reminder_text(language: str) -> str:
     }[language]
 
 
+def habit_reminder_text(title: str, emoji: str, language: str) -> str:
+    language = normalize_language(language)
+    templates = {
+        "ru": "🔔 <b>Время для привычки</b>\n\n{emoji} {title}\n\nНе забудь выполнить привычку сегодня.",
+        "uk": "🔔 <b>Час для звички</b>\n\n{emoji} {title}\n\nНе забудь виконати звичку сьогодні.",
+        "en": "🔔 <b>Habit time</b>\n\n{emoji} {title}\n\nDon't forget to complete your habit today.",
+        "de": "🔔 <b>Zeit für deine Gewohnheit</b>\n\n{emoji} {title}\n\nVergiss nicht, deine Gewohnheit heute zu erledigen.",
+    }
+    return templates[language].format(emoji=emoji, title=title)
+
+
 def level_text(level: int, unlocked: int, language: str) -> str:
     language = normalize_language(language)
     if language == "uk":

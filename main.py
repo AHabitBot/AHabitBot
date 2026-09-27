@@ -20,6 +20,10 @@ from backend.services.settings import (
     run_reminder_loop,
 )
 
+from backend.services.habits.habit_reminder_service import (
+    run_habit_reminder_loop,
+)
+
 from backend.services.leaderboard import (
     run_rank_snapshot_loop,
 )
@@ -37,6 +41,7 @@ async def main() -> None:
     )
 
     reminder_task = None
+    habit_reminder_task = None
     rank_snapshot_task = None
 
     try:
@@ -61,6 +66,16 @@ async def main() -> None:
 
         print(
             "✅ Сервис напоминаний запущен"
+        )
+
+        # Напоминания по конкретным привычкам работают
+        # независимо от напоминаний в настройках.
+        habit_reminder_task = asyncio.create_task(
+            run_habit_reminder_loop(bot)
+        )
+
+        print(
+            "✅ Сервис напоминаний привычек запущен"
         )
 
         # =================================================
@@ -102,6 +117,20 @@ async def main() -> None:
 
             try:
                 await reminder_task
+
+            except asyncio.CancelledError:
+                pass
+
+
+        # =================================================
+        # ОСТАНОВКА НАПОМИНАНИЙ ПРИВЫЧЕК
+        # =================================================
+
+        if habit_reminder_task is not None:
+            habit_reminder_task.cancel()
+
+            try:
+                await habit_reminder_task
 
             except asyncio.CancelledError:
                 pass

@@ -75,6 +75,7 @@ async def get_user_habits(
                 h.weekly_target,
                 h.challenge_target,
                 h.repeat_started_on,
+                h.habit_reminder,
 
                 COALESCE(
                     today_confirmation.is_confirmed,
@@ -369,6 +370,7 @@ async def create_habit(
     repeat_days: list[int],
     weekly_target: int | None,
     challenge_target: int | None,
+    habit_reminder: str | None,
 ) -> dict[str, Any]:
     async with get_connection() as connection:
         row = await connection.fetchrow(
@@ -383,9 +385,10 @@ async def create_habit(
                 repeat_days,
                 weekly_target,
                 challenge_target,
-                repeat_started_on
+                repeat_started_on,
+                habit_reminder
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::TIME)
             RETURNING
                 id,
                 user_id,
@@ -397,7 +400,7 @@ async def create_habit(
                 is_archived,
                 created_at,
                 updated_at
-                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on
+                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on, habit_reminder
             """,
             user_id,
             title,
@@ -411,6 +414,7 @@ async def create_habit(
             get_user_local_date(await connection.fetchval(
                 "SELECT timezone FROM user_settings WHERE user_id = $1", user_id
             )),
+            habit_reminder,
         )
 
     if row is None:
@@ -436,6 +440,7 @@ async def update_habit(
     repeat_days: list[int],
     weekly_target: int | None,
     challenge_target: int | None,
+    habit_reminder: str | None,
 ) -> dict[str, Any] | None:
     """
     Обновляет привычку текущего пользователя.
@@ -481,6 +486,11 @@ async def update_habit(
                 weekly_target = $9,
                 challenge_target = $10,
                 repeat_started_on = CASE WHEN $11 THEN $12 ELSE repeat_started_on END,
+                habit_reminder = $13::TIME,
+                habit_reminder_last_sent_date = CASE
+                    WHEN habit_reminder IS DISTINCT FROM $13::TIME THEN NULL
+                    ELSE habit_reminder_last_sent_date
+                END,
                 updated_at = NOW()
             WHERE id = $1
               AND user_id = $2
@@ -496,7 +506,7 @@ async def update_habit(
                 is_archived,
                 created_at,
                 updated_at
-                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on
+                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on, habit_reminder
             """,
             habit_id,
             user_id,
@@ -510,6 +520,7 @@ async def update_habit(
             challenge_target,
             rule_changed and current["repeat_type"] != "challenge",
             get_user_local_date(timezone_name),
+            habit_reminder,
         )
 
     if row is None:

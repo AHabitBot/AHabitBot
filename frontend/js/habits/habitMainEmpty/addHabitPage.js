@@ -594,6 +594,28 @@ export function renderAddHabitPage() {
                     ${renderHabitRepeatSelector(getHabitDraft(), isEditing)}
                 </section>
 
+                <!-- Напоминание конкретной привычки -->
+                <section class="add-habit-v2__section habit-reminder">
+                    <div class="add-habit-v2__section-label">
+                        ${t("habits.addHabit.reminder.label")}
+                    </div>
+
+                    <button
+                        class="habit-reminder__card"
+                        type="button"
+                        data-action="open-habit-reminder"
+                    >
+                        <span class="material-symbols-rounded habit-reminder__icon" aria-hidden="true">notifications</span>
+                        <span class="habit-reminder__copy">
+                            <strong>${t("habits.addHabit.reminder.title")}</strong>
+                            <small data-habit-reminder-value>
+                                ${getHabitDraftValue("reminderTime") || t("habits.addHabit.reminder.notSet")}
+                            </small>
+                        </span>
+                        <span class="material-symbols-rounded habit-reminder__chevron" aria-hidden="true">chevron_right</span>
+                    </button>
+                </section>
+
                 <!-- Размер карточки -->
                 <section class="add-habit-v2__section">
 
@@ -951,7 +973,8 @@ export async function updateHabitFromDraft() {
                 repeatType: draft.repeatType,
                 repeatDays: draft.repeatDays,
                 weeklyTarget: draft.weeklyTarget,
-                challengeTarget: draft.challengeTarget
+                challengeTarget: draft.challengeTarget,
+                reminderTime: draft.reminderTime
             }
         )
 
@@ -970,7 +993,8 @@ export async function updateHabitFromDraft() {
             repeatDays: response.repeat_days,
             weeklyTarget: response.weekly_target,
             challengeTarget: response.challenge_target,
-            repeatStartedOn: response.repeat_started_on
+            repeatStartedOn: response.repeat_started_on,
+            reminderTime: response.habit_reminder ? String(response.habit_reminder).slice(0, 5) : null
         }
     )
 }
@@ -1233,6 +1257,85 @@ function handleHabitSaved(
    СОБЫТИЯ СТРАНИЦЫ СОЗДАНИЯ / РЕДАКТИРОВАНИЯ
    ========================================================= */
 
+function createTimeWheel(values, selectedValue, type) {
+    return `<div class="habit-reminder-picker__wheel" data-time-wheel="${type}">
+        <div class="habit-reminder-picker__spacer"></div>
+        ${values.map((value) => `<button type="button" class="habit-reminder-picker__value${value === selectedValue ? " is-selected" : ""}" data-time-value="${value}">${String(value).padStart(2, "0")}</button>`).join("")}
+        <div class="habit-reminder-picker__spacer"></div>
+    </div>`
+}
+
+function openHabitReminderPicker() {
+    document.querySelector(".habit-reminder-picker")?.remove()
+    const current = getHabitDraftValue("reminderTime") || "08:00"
+    const [hourValue, minuteValue] = current.split(":").map(Number)
+    const overlay = document.createElement("div")
+    overlay.className = "habit-reminder-picker"
+    overlay.innerHTML = `
+        <button class="habit-reminder-picker__backdrop" type="button" data-action="close-reminder-picker" aria-label="${t("habits.addHabit.reminder.cancel")}"></button>
+        <div class="habit-reminder-picker__sheet" role="dialog" aria-modal="true">
+            <div class="habit-reminder-picker__handle"></div>
+            <h2>${t("habits.addHabit.reminder.chooseTime")}</h2>
+            <div class="habit-reminder-picker__wheels">
+                <div class="habit-reminder-picker__selection"></div>
+                ${createTimeWheel(Array.from({length: 24}, (_, i) => i), hourValue, "hour")}
+                ${createTimeWheel(Array.from({length: 60}, (_, i) => i), minuteValue, "minute")}
+            </div>
+            <div class="habit-reminder-picker__actions">
+                <button type="button" class="habit-reminder-picker__disable" data-action="disable-habit-reminder">${t("habits.addHabit.reminder.disable")}</button>
+                <button type="button" class="habit-reminder-picker__done" data-action="save-habit-reminder">${t("habits.addHabit.reminder.done")}</button>
+            </div>
+        </div>`
+    document.body.appendChild(overlay)
+
+    const nearestValue = (type) => {
+        const wheel = overlay.querySelector(`[data-time-wheel="${type}"]`)
+        const center = wheel.getBoundingClientRect().top + wheel.clientHeight / 2
+        let best = null, distance = Infinity
+        wheel.querySelectorAll("[data-time-value]").forEach((item) => {
+            const rect = item.getBoundingClientRect()
+            const next = Math.abs(center - (rect.top + rect.height / 2))
+            if (next < distance) { distance = next; best = item }
+        })
+        return Number(best?.dataset.timeValue || 0)
+    }
+
+    overlay.querySelectorAll("[data-time-wheel]").forEach((wheel) => {
+        requestAnimationFrame(() => {
+            const initial = wheel.querySelector(".is-selected")
+            if (initial) {
+                wheel.scrollTop = initial.offsetTop - (wheel.clientHeight - initial.offsetHeight) / 2
+            }
+        })
+        let timer = null
+        wheel.addEventListener("scroll", () => {
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                const selected = nearestValue(wheel.dataset.timeWheel)
+                wheel.querySelectorAll("[data-time-value]").forEach((item) => item.classList.toggle("is-selected", Number(item.dataset.timeValue) === selected))
+            }, 60)
+        }, { passive: true })
+        wheel.querySelectorAll("[data-time-value]").forEach((item) => item.addEventListener("click", () => item.scrollIntoView({ behavior: "smooth", block: "center" })))
+    })
+
+    const close = () => overlay.remove()
+    overlay.querySelector('[data-action="close-reminder-picker"]')?.addEventListener("click", close)
+    overlay.querySelector('[data-action="disable-habit-reminder"]')?.addEventListener("click", () => {
+        setHabitDraftValue("reminderTime", null)
+        close()
+        rerenderAddHabitPageWithoutScrollJump(currentAddHabitCallbacks)
+    })
+    overlay.querySelector('[data-action="save-habit-reminder"]')?.addEventListener("click", () => {
+        const hour = nearestValue("hour")
+        const minute = nearestValue("minute")
+        setHabitDraftValue("reminderTime", `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`)
+        close()
+        rerenderAddHabitPageWithoutScrollJump(currentAddHabitCallbacks)
+    })
+}
+
+let currentAddHabitCallbacks = {}
+
 function rerenderAddHabitPageWithoutScrollJump(
     eventOptions
 ) {
@@ -1273,6 +1376,7 @@ export function initAddHabitPageEvents({
     onHabitSaved = null,
     onCancel = null
 } = {}) {
+    currentAddHabitCallbacks = { onOpenHabitsPage, onHabitSaved, onCancel }
     const root = getHabitsRoot()
 
     if (!root) {
@@ -1323,6 +1427,10 @@ export function initAddHabitPageEvents({
             "[data-habit-size]"
         )
 
+    const reminderButton = root.querySelector(
+        '[data-action="open-habit-reminder"]'
+    )
+
 
     /* =====================================================
        АНИМАЦИИ НАЖАТИЯ
@@ -1331,6 +1439,7 @@ export function initAddHabitPageEvents({
     addPressAnimation(backButton)
     addPressAnimation(saveButton)
     addPressAnimation(iconButton)
+    addPressAnimation(reminderButton)
 
     suggestionButtons.forEach((button) => {
         addPressAnimation(button)
@@ -1520,6 +1629,15 @@ export function initAddHabitPageEvents({
     })
 
 
+    reminderButton?.addEventListener(
+        "click",
+        () => {
+            updateDraftFromAddHabitPage()
+            openHabitReminderPicker()
+        }
+    )
+
+
     /* =====================================================
        СОХРАНЕНИЕ ПРИВЫЧКИ
 
@@ -1574,7 +1692,8 @@ saveButton?.addEventListener(
                         repeatType: draft.repeatType,
                         repeatDays: draft.repeatDays,
                         weeklyTarget: draft.weeklyTarget,
-                        challengeTarget: draft.challengeTarget
+                        challengeTarget: draft.challengeTarget,
+                        reminderTime: draft.reminderTime
                     })
             }
 

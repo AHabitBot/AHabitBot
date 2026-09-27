@@ -50,5 +50,13 @@ export default Object.freeze({
     "habits.addHabit.size.large.description": "Ideal für ausführliche Beschreibungen<br>und Motivation",
 
     "habits.addHabit.error.save": "Gewohnheit konnte nicht gespeichert werden",
-    "habits.addHabit.repeat.label": "Wiederholen","habits.addHabit.repeat.days": "Tage auswählen","habits.addHabit.repeat.weekly": "Wochenziel","habits.addHabit.repeat.challenge": "Challenge","habits.addHabit.repeat.weeklyValue": "{count} Tage pro Woche","habits.addHabit.repeat.challengeValue": "{count} Tage","habits.addHabit.repeat.challengeLocked": "Eine gestartete Challenge kann nicht verkürzt oder in einen anderen Modus geändert werden.","habits.addHabit.repeat.day.1": "Mo","habits.addHabit.repeat.day.2": "Di","habits.addHabit.repeat.day.3": "Mi","habits.addHabit.repeat.day.4": "Do","habits.addHabit.repeat.day.5": "Fr","habits.addHabit.repeat.day.6": "Sa","habits.addHabit.repeat.day.7": "So"
+    "habits.addHabit.repeat.label": "Wiederholen","habits.addHabit.repeat.days": "Tage auswählen","habits.addHabit.repeat.weekly": "Wochenziel","habits.addHabit.repeat.challenge": "Challenge","habits.addHabit.repeat.weeklyValue": "{count} Tage pro Woche","habits.addHabit.repeat.challengeValue": "{count} Tage","habits.addHabit.repeat.challengeLocked": "Eine gestartete Challenge kann nicht verkürzt oder in einen anderen Modus geändert werden.","habits.addHabit.repeat.day.1": "Mo","habits.addHabit.repeat.day.2": "Di","habits.addHabit.repeat.day.3": "Mi","habits.addHabit.repeat.day.4": "Do","habits.addHabit.repeat.day.5": "Fr","habits.addHabit.repeat.day.6": "Sa","habits.addHabit.repeat.day.7": "So",
+
+    "habits.addHabit.reminder.label": "Erinnerung",
+    "habits.addHabit.reminder.title": "Erinnerung",
+    "habits.addHabit.reminder.notSet": "Nicht eingestellt",
+    "habits.addHabit.reminder.chooseTime": "Uhrzeit wählen",
+    "habits.addHabit.reminder.disable": "Erinnerung ausschalten",
+    "habits.addHabit.reminder.done": "Fertig",
+    "habits.addHabit.reminder.cancel": "Zeitauswahl schließen",
 });

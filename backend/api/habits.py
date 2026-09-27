@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import Literal
 
 from fastapi import (
@@ -71,6 +72,7 @@ class HabitCreateRequest(BaseModel):
     repeat_days: list[int] = Field(default_factory=lambda: [1, 2, 3, 4, 5, 6, 7])
     weekly_target: int | None = None
     challenge_target: int | None = None
+    habit_reminder: str | None = None
 
 
 class HabitUpdateRequest(BaseModel):
@@ -96,10 +98,22 @@ class HabitUpdateRequest(BaseModel):
     repeat_days: list[int] = Field(default_factory=lambda: [1, 2, 3, 4, 5, 6, 7])
     weekly_target: int | None = None
     challenge_target: int | None = None
+    habit_reminder: str | None = None
 
 
 class HabitConfirmationRequest(BaseModel):
     is_confirmed: bool
+
+
+def normalize_habit_reminder(value: str | None) -> str | None:
+    if value is None:
+        return None
+
+    normalized = str(value).strip()
+    if not re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", normalized):
+        raise ValueError("Некорректное время напоминания")
+
+    return normalized
 
 
 # =========================================================
@@ -184,6 +198,7 @@ async def add_habit(
         repeat_type, repeat_days, weekly_target, challenge_target = normalize_repeat_rule(
             payload.repeat_type, payload.repeat_days, payload.weekly_target, payload.challenge_target
         )
+        habit_reminder = normalize_habit_reminder(payload.habit_reminder)
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
     habit = await create_habit(
@@ -196,6 +211,7 @@ async def add_habit(
         repeat_days=repeat_days,
         weekly_target=weekly_target,
         challenge_target=challenge_target,
+        habit_reminder=habit_reminder,
     )
 
     return {
@@ -229,6 +245,7 @@ async def update_existing_habit(
             repeat_days=repeat_days,
             weekly_target=weekly_target,
             challenge_target=challenge_target,
+            habit_reminder=normalize_habit_reminder(payload.habit_reminder),
         )
 
         if habit is None:

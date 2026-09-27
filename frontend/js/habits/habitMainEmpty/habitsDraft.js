@@ -24,7 +24,8 @@ const DEFAULT_HABIT_DRAFT = {
     repeatDays: [1, 2, 3, 4, 5, 6, 7],
     weeklyTarget: 4,
     challengeTarget: 30,
-    originalChallengeTarget: null
+    originalChallengeTarget: null,
+    reminderTime: null
 }
 
 
@@ -242,7 +243,8 @@ export function startHabitEditDraft(
             weeklyTarget: Number(habit.weeklyTarget) || 4,
             challengeTarget: Number(habit.challengeTarget) || 30,
             originalChallengeTarget: habit.repeatType === "challenge"
-                ? Number(habit.challengeTarget) || 1 : null
+                ? Number(habit.challengeTarget) || 1 : null,
+            reminderTime: habit.reminderTime || null
         }
     )
 

@@ -130,6 +130,7 @@ async def edit_habit(
     repeat_days: list[int],
     weekly_target: int | None,
     challenge_target: int | None,
+    habit_reminder: str | None,
 ) -> dict[str, Any] | None:
     """
     Обновляет редактируемые данные привычки.
@@ -149,6 +150,7 @@ async def edit_habit(
         repeat_days=repeat_days,
         weekly_target=weekly_target,
         challenge_target=challenge_target,
+        habit_reminder=habit_reminder,
     )
 
 

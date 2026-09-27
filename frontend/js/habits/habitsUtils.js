@@ -92,6 +92,10 @@ export function normalizeHabit(
         weeklyTarget: Number(habit.weekly_target ?? habit.weeklyTarget) || null,
         challengeTarget: Number(habit.challenge_target ?? habit.challengeTarget) || null,
         repeatStartedOn: habit.repeat_started_on ?? habit.repeatStartedOn ?? null,
+        reminderTime: (() => {
+            const value = habit.habit_reminder ?? habit.reminderTime ?? null
+            return value ? String(value).slice(0, 5) : null
+        })(),
         confirmationAllowedToday: Boolean(
             habit.confirmation_allowed_today ?? habit.confirmationAllowedToday ?? true
         )

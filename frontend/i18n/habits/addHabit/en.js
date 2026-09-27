@@ -50,5 +50,13 @@ export default Object.freeze({
     "habits.addHabit.size.large.description": "Best for detailed descriptions<br>and motivation",
 
     "habits.addHabit.error.save": "Could not save habit",
-    "habits.addHabit.repeat.label":"Repeat","habits.addHabit.repeat.days":"Choose days","habits.addHabit.repeat.weekly":"Weekly goal","habits.addHabit.repeat.challenge":"Challenge","habits.addHabit.repeat.weeklyValue":"{count} days a week","habits.addHabit.repeat.challengeValue":"{count} days","habits.addHabit.repeat.challengeLocked":"A started challenge cannot be shortened or changed to another mode.","habits.addHabit.repeat.day.1":"Mon","habits.addHabit.repeat.day.2":"Tue","habits.addHabit.repeat.day.3":"Wed","habits.addHabit.repeat.day.4":"Thu","habits.addHabit.repeat.day.5":"Fri","habits.addHabit.repeat.day.6":"Sat","habits.addHabit.repeat.day.7":"Sun"
+    "habits.addHabit.repeat.label":"Repeat","habits.addHabit.repeat.days":"Choose days","habits.addHabit.repeat.weekly":"Weekly goal","habits.addHabit.repeat.challenge":"Challenge","habits.addHabit.repeat.weeklyValue":"{count} days a week","habits.addHabit.repeat.challengeValue":"{count} days","habits.addHabit.repeat.challengeLocked":"A started challenge cannot be shortened or changed to another mode.","habits.addHabit.repeat.day.1":"Mon","habits.addHabit.repeat.day.2":"Tue","habits.addHabit.repeat.day.3":"Wed","habits.addHabit.repeat.day.4":"Thu","habits.addHabit.repeat.day.5":"Fri","habits.addHabit.repeat.day.6":"Sat","habits.addHabit.repeat.day.7":"Sun",
+
+    "habits.addHabit.reminder.label": "Reminder",
+    "habits.addHabit.reminder.title": "Reminder",
+    "habits.addHabit.reminder.notSet": "Not set",
+    "habits.addHabit.reminder.chooseTime": "Choose time",
+    "habits.addHabit.reminder.disable": "Turn off reminder",
+    "habits.addHabit.reminder.done": "Done",
+    "habits.addHabit.reminder.cancel": "Close time picker",
 });

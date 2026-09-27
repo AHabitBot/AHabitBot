@@ -94,6 +94,8 @@ CREATE TABLE IF NOT EXISTS habits (
     weekly_target SMALLINT,
     challenge_target INTEGER,
     repeat_started_on DATE NOT NULL DEFAULT CURRENT_DATE,
+    habit_reminder TIME,
+    habit_reminder_last_sent_date DATE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
@@ -111,6 +113,8 @@ ALTER TABLE habits ADD COLUMN IF NOT EXISTS repeat_days SMALLINT[];
 ALTER TABLE habits ADD COLUMN IF NOT EXISTS weekly_target SMALLINT;
 ALTER TABLE habits ADD COLUMN IF NOT EXISTS challenge_target INTEGER;
 ALTER TABLE habits ADD COLUMN IF NOT EXISTS repeat_started_on DATE;
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS habit_reminder TIME;
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS habit_reminder_last_sent_date DATE;
 
 UPDATE habits
 SET repeat_type = 'days'
