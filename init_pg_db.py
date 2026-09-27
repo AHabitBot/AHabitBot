@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS habits (
     repeat_started_on DATE NOT NULL DEFAULT CURRENT_DATE,
     habit_reminder TIME,
     habit_reminder_last_sent_date DATE,
+    invite_token VARCHAR(64) UNIQUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
@@ -115,6 +116,20 @@ ALTER TABLE habits ADD COLUMN IF NOT EXISTS challenge_target INTEGER;
 ALTER TABLE habits ADD COLUMN IF NOT EXISTS repeat_started_on DATE;
 ALTER TABLE habits ADD COLUMN IF NOT EXISTS habit_reminder TIME;
 ALTER TABLE habits ADD COLUMN IF NOT EXISTS habit_reminder_last_sent_date DATE;
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS invite_token VARCHAR(64);
+
+-- Старые привычки тоже получают токен. Наличие токена само по себе
+-- не делает привычку совместной: shared_habits появится только после
+-- фактического присоединения второго пользователя.
+UPDATE habits
+SET invite_token = md5(random()::text || clock_timestamp()::text || id::text)
+WHERE invite_token IS NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_habits_invite_token
+    ON habits(invite_token);
+
+ALTER TABLE habits
+    ALTER COLUMN invite_token SET NOT NULL;
 
 UPDATE habits
 SET repeat_type = 'days'
@@ -190,6 +205,54 @@ ALTER TABLE habits
             AND weekly_target IS NULL
             AND challenge_target >= 1)
     );
+
+CREATE TABLE IF NOT EXISTS shared_habits (
+    id BIGSERIAL PRIMARY KEY,
+    owner_user_id BIGINT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT fk_shared_habits_owner
+        FOREIGN KEY (owner_user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS shared_habit_members (
+    shared_habit_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    habit_id BIGINT NOT NULL,
+    joined_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (shared_habit_id, user_id),
+
+    CONSTRAINT fk_shared_habit_members_shared_habit
+        FOREIGN KEY (shared_habit_id)
+        REFERENCES shared_habits(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_shared_habit_members_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_shared_habit_members_habit
+        FOREIGN KEY (habit_id)
+        REFERENCES habits(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT uq_shared_habit_member_habit
+        UNIQUE (habit_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_shared_habits_owner_user_id
+    ON shared_habits(owner_user_id);
+
+CREATE INDEX IF NOT EXISTS idx_shared_habit_members_user_id
+    ON shared_habit_members(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_shared_habit_members_habit_id
+    ON shared_habit_members(habit_id);
+
 
 CREATE TABLE IF NOT EXISTS habit_confirmations (
     id BIGSERIAL PRIMARY KEY,
@@ -547,6 +610,8 @@ async def init_database() -> None:
         print("   • users")
         print("   • user_settings")
         print("   • habits")
+        print("   • shared_habits")
+        print("   • shared_habit_members")
         print("   • habit_confirmations")
         print("   • referrals")
         print("   • user_achievements")

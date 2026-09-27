@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+import secrets
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -76,6 +77,7 @@ async def get_user_habits(
                 h.challenge_target,
                 h.repeat_started_on,
                 h.habit_reminder,
+                h.invite_token,
 
                 COALESCE(
                     today_confirmation.is_confirmed,
@@ -373,6 +375,8 @@ async def create_habit(
     habit_reminder: str | None,
 ) -> dict[str, Any]:
     async with get_connection() as connection:
+        invite_token = secrets.token_urlsafe(24)
+
         row = await connection.fetchrow(
             """
             INSERT INTO habits (
@@ -386,9 +390,10 @@ async def create_habit(
                 weekly_target,
                 challenge_target,
                 repeat_started_on,
-                habit_reminder
+                habit_reminder,
+                invite_token
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::TIME)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::TIME, $12)
             RETURNING
                 id,
                 user_id,
@@ -400,7 +405,7 @@ async def create_habit(
                 is_archived,
                 created_at,
                 updated_at
-                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on, habit_reminder
+                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on, habit_reminder, invite_token
             """,
             user_id,
             title,
@@ -415,6 +420,7 @@ async def create_habit(
                 "SELECT timezone FROM user_settings WHERE user_id = $1", user_id
             )),
             habit_reminder,
+            invite_token,
         )
 
     if row is None:
