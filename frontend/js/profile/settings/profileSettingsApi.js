@@ -170,7 +170,7 @@ export async function updateTheme(theme) {
 export async function updateLanguage(language) {
     const normalizedLanguage = String(language || "").trim().toLowerCase();
 
-    if (!["ru", "uk", "en"].includes(normalizedLanguage)) {
+    if (!["ru", "uk", "en", "de"].includes(normalizedLanguage)) {
         throw new Error("Некорректный язык");
     }
 
@@ -185,7 +185,7 @@ export async function updateLanguage(language) {
     if (
         !data ||
         typeof data !== "object" ||
-        !["ru", "uk", "en"].includes(data.language)
+        !["ru", "uk", "en", "de"].includes(data.language)
     ) {
         throw new Error("Сервер не вернул язык");
     }
