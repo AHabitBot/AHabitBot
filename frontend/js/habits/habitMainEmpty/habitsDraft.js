@@ -25,7 +25,8 @@ const DEFAULT_HABIT_DRAFT = {
     weeklyTarget: 4,
     challengeTarget: 30,
     originalChallengeTarget: null,
-    reminderTime: null
+    reminderTime: null,
+    sharedParticipantLocked: false
 }
 
 
@@ -244,7 +245,10 @@ export function startHabitEditDraft(
             challengeTarget: Number(habit.challengeTarget) || 30,
             originalChallengeTarget: habit.repeatType === "challenge"
                 ? Number(habit.challengeTarget) || 1 : null,
-            reminderTime: habit.reminderTime || null
+            reminderTime: habit.reminderTime || null,
+            sharedParticipantLocked: Boolean(
+                habit.shared && !habit.shared.isOwner
+            )
         }
     )
 

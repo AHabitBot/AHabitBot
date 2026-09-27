@@ -5,6 +5,8 @@ export default Object.freeze({
     "habits.addHabit.create.backAria": "Back to habits",
     "habits.addHabit.edit.backAria": "Back to habit",
     "habits.addHabit.create.saveAria": "Save habit",
+    "habits.addHabit.shared.locked": "The creator manages the shared habit settings. You can only change your own reminder.",
+
     "habits.addHabit.edit.saveAria": "Save changes",
 
     "habits.addHabit.name.label": "Name",

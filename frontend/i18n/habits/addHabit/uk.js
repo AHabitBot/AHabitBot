@@ -5,6 +5,8 @@ export default Object.freeze({
     "habits.addHabit.create.backAria": "Повернутися до звичок",
     "habits.addHabit.edit.backAria": "Повернутися до звички",
     "habits.addHabit.create.saveAria": "Зберегти звичку",
+    "habits.addHabit.shared.locked": "Параметрами спільної звички керує автор. Ви можете змінити лише своє нагадування.",
+
     "habits.addHabit.edit.saveAria": "Зберегти зміни",
 
     "habits.addHabit.name.label": "Назва",

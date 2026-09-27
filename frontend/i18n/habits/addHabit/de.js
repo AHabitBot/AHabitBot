@@ -5,6 +5,8 @@ export default Object.freeze({
     "habits.addHabit.create.backAria": "Zurück zu den Gewohnheiten",
     "habits.addHabit.edit.backAria": "Zurück zur Gewohnheit",
     "habits.addHabit.create.saveAria": "Gewohnheit speichern",
+    "habits.addHabit.shared.locked": "Der Ersteller verwaltet die Einstellungen der gemeinsamen Gewohnheit. Du kannst nur deine eigene Erinnerung ändern.",
+
     "habits.addHabit.edit.saveAria": "Änderungen speichern",
 
     "habits.addHabit.name.label": "Name",

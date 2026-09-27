@@ -83,6 +83,14 @@ export function renderAddHabitPage() {
         ? t("habits.addHabit.edit.saveAria")
         : t("habits.addHabit.create.saveAria")
 
+    const isSharedParticipantLocked =
+        isEditing
+        && Boolean(
+            getHabitDraftValue(
+                "sharedParticipantLocked"
+            )
+        )
+
 
     /* =====================================================
        РАЗМЕТКА
@@ -134,6 +142,28 @@ export function renderAddHabitPage() {
 
             <!-- Основное содержимое -->
             <div class="add-habit-v2__content">
+
+                ${
+                    isSharedParticipantLocked
+                        ? `
+                            <div
+                                class="add-habit-v2__shared-lock"
+                                role="note"
+                            >
+                                <span
+                                    class="add-habit-v2__shared-lock-icon"
+                                    aria-hidden="true"
+                                >
+                                    🔒
+                                </span>
+
+                                <span>
+                                    ${t("habits.addHabit.shared.locked")}
+                                </span>
+                            </div>
+                        `
+                        : ""
+                }
 
                 <!-- Название привычки -->
                 <section class="add-habit-v2__section">
@@ -657,6 +687,21 @@ export function renderAddHabitPage() {
 
         </section>
     `
+
+    if (isSharedParticipantLocked) {
+        root
+            .querySelectorAll(
+                ".add-habit-v2__section:not(.habit-reminder) input, "
+                + ".add-habit-v2__section:not(.habit-reminder) button"
+            )
+            .forEach((control) => {
+                control.disabled = true
+                control.setAttribute(
+                    "aria-disabled",
+                    "true"
+                )
+            })
+    }
 }
 
 

@@ -163,3 +163,48 @@ body:has(.add-habit-v2)
             );
     }
 }
+
+
+/* =========================================================
+   СОВМЕСТНАЯ ПРИВЫЧКА — РЕЖИМ УЧАСТНИКА
+   Общие параметры видны, но управляет ими создатель.
+   Напоминание остаётся персональным.
+   ========================================================= */
+
+.add-habit-v2__shared-lock {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    margin: 2px 0 18px;
+    padding: 13px 14px;
+
+    border: 1px solid var(--add-habit-border);
+    border-radius: 14px;
+
+    background: var(--add-habit-soft);
+    color: var(--add-habit-secondary);
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.add-habit-v2__shared-lock-icon {
+    flex: 0 0 auto;
+    line-height: 1.35;
+}
+
+.add-habit-v2[data-page-mode="edit"]
+.add-habit-v2__section:not(.habit-reminder)
+:disabled {
+    cursor: default;
+}
+
+.add-habit-v2[data-page-mode="edit"]
+.add-habit-v2__section:not(.habit-reminder)
+input:disabled {
+    opacity: 1;
+    -webkit-text-fill-color: currentColor;
+}
+
