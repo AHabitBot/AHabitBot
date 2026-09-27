@@ -22,7 +22,8 @@ import {
 
 
 import {
-    t
+    t,
+    initializeLanguageFromTelegram
 } from "../i18n/core/i18n.js"
 
 
@@ -359,7 +360,10 @@ async function initV2() {
 
     initTelegramWebApp()
 
-    // Сразу показываем загрузочный текст на последнем сохранённом языке.
+    // До первого кадра загрузки синхронизируем язык:
+    // сохранённый ручной выбор имеет приоритет,
+    // а при первом запуске берём язык Telegram.
+    initializeLanguageFromTelegram()
     renderLoaderTranslation()
 
     document.addEventListener(

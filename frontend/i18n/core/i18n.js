@@ -175,8 +175,25 @@ const dictionaries = Object.freeze({
 let currentLanguage = normalizeLanguage(readStoredLanguage() || "en");
 
 export function normalizeLanguage(language) {
-    const normalized = String(language || "").trim().toLowerCase();
+    const normalized = String(language || "")
+        .trim()
+        .toLowerCase()
+        .split(/[-_]/)[0];
+
     return SUPPORTED_LANGUAGES.includes(normalized) ? normalized : "en";
+}
+
+export function initializeLanguageFromTelegram() {
+    const storedLanguage = readStoredLanguage();
+
+    if (storedLanguage) {
+        return setLanguage(storedLanguage, { emit: false });
+    }
+
+    const telegramLanguage =
+        window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code;
+
+    return setLanguage(telegramLanguage || "en", { emit: false });
 }
 
 export function getLanguage() {
