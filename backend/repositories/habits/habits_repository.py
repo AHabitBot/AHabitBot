@@ -1282,6 +1282,14 @@ async def set_habit_confirmation(
                 confirmation_date,
             )
 
+            confirmation_state_changed = bool(
+                is_confirmed
+                and not (
+                    confirmation is not None
+                    and confirmation["is_confirmed"]
+                )
+            )
+
             # =================================================
             # ПОДТВЕРЖДЕНИЕ
             # =================================================
@@ -1856,6 +1864,9 @@ async def set_habit_confirmation(
                             habit["repeat_type"], list(habit["repeat_days"] or []), confirmation_date
                         ),
                 },
+
+                "confirmation_state_changed":
+                    confirmation_state_changed,
 
                 "statistics": {
                     "current_streak":

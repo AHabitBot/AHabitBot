@@ -16,6 +16,10 @@ from backend.services.profile.level_progression_service import (
     sync_user_level_progression,
 )
 
+from backend.services.habits.shared_habit_notification_service import (
+    send_shared_habit_confirmation_notifications,
+)
+
 
 # =========================================================
 # ОБНОВИТЬ ПОДТВЕРЖДЕНИЕ ПРИВЫЧКИ
@@ -111,6 +115,26 @@ async def update_habit_confirmation(
     result["level_progression"] = (
         level_progression
     )
+
+    # Уведомляем остальных участников только при реальном
+    # переходе из "не выполнено" в "выполнено". Повторный
+    # одинаковый запрос не создаёт дублирующее сообщение.
+    if (
+        is_confirmed
+        and result.get("confirmation_state_changed")
+    ):
+        try:
+            await send_shared_habit_confirmation_notifications(
+                user_id=user_id,
+                habit_id=habit_id,
+            )
+        except Exception as error:
+            print(
+                "⚠️ Ошибка уведомления совместной привычки | "
+                f"User ID: {user_id} | "
+                f"Habit ID: {habit_id} | "
+                f"Ошибка: {error}"
+            )
 
     return result
 
