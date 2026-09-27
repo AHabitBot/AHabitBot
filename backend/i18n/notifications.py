@@ -1,4 +1,4 @@
-SUPPORTED_LANGUAGES = {"ru", "uk", "en"}
+SUPPORTED_LANGUAGES = {"ru", "uk", "en", "de"}
 DEFAULT_LANGUAGE = "en"
 
 
@@ -16,7 +16,7 @@ def plural_form(value: int, language: str) -> str:
     count = abs(int(value))
     language = normalize_language(language)
 
-    if language == "en":
+    if language in {"en", "de"}:
         return "one" if count == 1 else "many"
 
     last_two = count % 100
@@ -47,6 +47,11 @@ WORDS = {
         "confirmation": {"one": "confirmation", "few": "confirmations", "many": "confirmations"},
         "friend": {"one": "friend", "few": "friends", "many": "friends"},
     },
+    "de": {
+        "day": {"one": "Tag", "few": "Tage", "many": "Tage"},
+        "confirmation": {"one": "Bestätigung", "few": "Bestätigungen", "many": "Bestätigungen"},
+        "friend": {"one": "Freund", "few": "Freunde", "many": "Freunde"},
+    },
 }
 
 
@@ -61,6 +66,7 @@ def reminder_text(language: str) -> str:
         "ru": "🔔 <b>Не забудь о своих привычках!</b>\n\nДень ещё не закончен — отметь выполненные привычки и продолжай свою серию 💪",
         "uk": "🔔 <b>Не забудь про свої звички!</b>\n\nДень ще не закінчився — відміть виконані звички та продовжуй свою серію 💪",
         "en": "🔔 <b>Don't forget your habits!</b>\n\nThe day isn't over yet — check off the habits you've completed and keep your streak going 💪",
+        "de": "🔔 <b>Vergiss deine Gewohnheiten nicht!</b>\n\nDer Tag ist noch nicht vorbei — hake deine erledigten Gewohnheiten ab und setze deine Serie fort 💪",
     }[language]
 
 
@@ -72,6 +78,9 @@ def level_text(level: int, unlocked: int, language: str) -> str:
     if language == "en":
         text = f"🥳 <b>New level!</b>\n\nYou've reached <b>level {level}</b>"
         return text + (f"\n\n🔓 <b>New avatars unlocked: {unlocked}</b>\nCheck them out in Profile → Appearance." if unlocked else "\n\n⭐ Keep it up!")
+    if language == "de":
+        text = f"🥳 <b>Neues Level!</b>\n\nDu hast <b>Level {level}</b> erreicht"
+        return text + (f"\n\n🔓 <b>Neue Avatare freigeschaltet: {unlocked}</b>\nSieh sie dir unter Profil → Aussehen an." if unlocked else "\n\n⭐ Weiter so!")
     text = f"🥳 <b>Новый уровень!</b>\n\nТы достиг <b>{level} уровня</b>"
     return text + (f"\n\n🔓 <b>Открыто новых аватаров: {unlocked}</b>\nЗагляни в Профиль → Внешний вид." if unlocked else "\n\n⭐ Продолжай в том же темпе!")
 
@@ -82,6 +91,8 @@ def referral_text(first_name: str, xp: int, language: str) -> str:
         return f"🎉 <b>Новий друг!</b>\n\n<b>{first_name}</b> зареєструвався за вашим реферальним посиланням.\n\n✨ <b>+{xp} XP</b> нараховано"
     if language == "en":
         return f"🎉 <b>New friend!</b>\n\n<b>{first_name}</b> joined through your referral link.\n\n✨ <b>+{xp} XP</b> earned"
+    if language == "de":
+        return f"🎉 <b>Neuer Freund!</b>\n\n<b>{first_name}</b> hat sich über deinen Empfehlungslink registriert.\n\n✨ <b>+{xp} XP</b> erhalten"
     return f"🎉 <b>Новый друг!</b>\n\n<b>{first_name}</b> зарегистрировался по вашей реферальной ссылке.\n\n✨ <b>+{xp} XP</b> начислено"
 
 
@@ -94,6 +105,7 @@ def achievement_text(kind: str, targets: list[int], xp: int, next_target: int | 
         "ru": {"title1": "🏆 <b>Новое достижение!</b>", "titleN": "🏆 <b>Получены достижения!</b>", "streak": "🔥 Серия", "confirmation": "✅ Подтверждения", "invitation": "👥 Приглашения", "earned": "начислено", "next": "Следующая цель"},
         "uk": {"title1": "🏆 <b>Нове досягнення!</b>", "titleN": "🏆 <b>Отримано досягнення!</b>", "streak": "🔥 Серія", "confirmation": "✅ Підтвердження", "invitation": "👥 Запрошення", "earned": "нараховано", "next": "Наступна ціль"},
         "en": {"title1": "🏆 <b>New achievement!</b>", "titleN": "🏆 <b>Achievements earned!</b>", "streak": "🔥 Streak", "confirmation": "✅ Confirmations", "invitation": "👥 Invitations", "earned": "earned", "next": "Next goal"},
+        "de": {"title1": "🏆 <b>Neue Errungenschaft!</b>", "titleN": "🏆 <b>Errungenschaften erhalten!</b>", "streak": "🔥 Serie", "confirmation": "✅ Bestätigungen", "invitation": "👥 Einladungen", "earned": "erhalten", "next": "Nächstes Ziel"},
     }[language]
 
     def target_label(value: int) -> str:

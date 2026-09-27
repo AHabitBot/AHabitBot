@@ -25,7 +25,7 @@ async def _get_user_language_by_telegram_id(telegram_id: int) -> str:
             """,
             telegram_id,
         )
-    return str(value or "ru")
+    return str(value or "en")
 
 
 router = Router()
