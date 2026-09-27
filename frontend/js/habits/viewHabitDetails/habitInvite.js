@@ -3,11 +3,6 @@ import {
 } from "../../../i18n/core/i18n.js"
 
 import {
-    RESOURCE_KEYS,
-    peekResource
-} from "../../core/resourceCache.js"
-
-import {
     shareReferralLink
 } from "../../profile/referral/profileReferralEvents.js"
 
@@ -27,7 +22,8 @@ function escapeAttribute(value) {
 
 export function renderHabitInvite({
     habitName,
-    durationText
+    durationText,
+    inviteToken
 }) {
     return `
         <button
@@ -36,6 +32,7 @@ export function renderHabitInvite({
             data-habit-invite
             data-habit-name="${escapeAttribute(habitName)}"
             data-habit-duration="${escapeAttribute(durationText)}"
+            data-habit-invite-token="${escapeAttribute(inviteToken)}"
         >
             <span
                 class="material-symbols-rounded habit-details__invite-icon"
@@ -53,45 +50,24 @@ export function renderHabitInvite({
 
 
 export function initHabitInvite(root) {
-    const button = root?.querySelector(
-        "[data-habit-invite]"
-    )
-
-    if (!button) {
-        return
-    }
+    const button = root?.querySelector("[data-habit-invite]")
+    if (!button) return
 
     addPressAnimation(button)
 
-    button.addEventListener(
-        "click",
-        () => {
-            const referral = peekResource(
-                RESOURCE_KEYS.REFERRAL
-            )
-            const referralLink =
-                referral?.referral_link || ""
+    button.addEventListener("click", () => {
+        const inviteToken = button.dataset.habitInviteToken || ""
+        if (!inviteToken) return
 
-            if (!referralLink) {
-                return
-            }
+        const inviteLink =
+            "https://t.me/AHabitBot?startapp=habit_"
+            + encodeURIComponent(inviteToken)
 
-            const shareText = t(
-                "habits.details.invite.shareText",
-                {
-                    name:
-                        button.dataset.habitName ||
-                        t("habits.details.unnamed"),
-                    duration:
-                        button.dataset.habitDuration ||
-                        ""
-                }
-            )
+        const shareText = t("habits.details.invite.shareText", {
+            name: button.dataset.habitName || t("habits.details.unnamed"),
+            duration: button.dataset.habitDuration || ""
+        })
 
-            shareReferralLink(
-                referralLink,
-                shareText
-            )
-        }
-    )
+        shareReferralLink(inviteLink, shareText)
+    })
 }

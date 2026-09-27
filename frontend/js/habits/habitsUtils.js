@@ -98,7 +98,20 @@ export function normalizeHabit(
         })(),
         confirmationAllowedToday: Boolean(
             habit.confirmation_allowed_today ?? habit.confirmationAllowedToday ?? true
-        )
+        ),
+        inviteToken: habit.invite_token ?? habit.inviteToken ?? "",
+        shared: habit.shared ? {
+            sharedHabitId: Number(habit.shared.shared_habit_id ?? habit.shared.sharedHabitId) || null,
+            ownerUserId: Number(habit.shared.owner_user_id ?? habit.shared.ownerUserId) || null,
+            isOwner: Boolean(habit.shared.is_owner ?? habit.shared.isOwner),
+            members: Array.isArray(habit.shared.members) ? habit.shared.members.map((member) => ({
+                userId: Number(member.user_id ?? member.userId) || null,
+                habitId: String(member.habit_id ?? member.habitId ?? ""),
+                nickname: member.nickname || "Player",
+                avatarKey: member.avatar_key ?? member.avatarKey ?? "standard_m_01",
+                confirmedToday: Boolean(member.confirmed_today ?? member.confirmedToday)
+            })) : []
+        } : null
     }
 }
 

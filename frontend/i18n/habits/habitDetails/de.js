@@ -49,6 +49,14 @@ export default Object.freeze({
     "habits.details.invite.button": "Freund einladen",
     "habits.details.invite.shareText": "Ich arbeite seit {duration} an der Gewohnheit „{name}“ 🔥\n\nMach mit – gemeinsam werden wir besser!",
 
+    "habits.sharedInvite.text": "Du wurdest eingeladen, diese Gewohnheit gemeinsam aufzubauen.",
+    "habits.sharedInvite.join": "Beitreten",
+    "habits.sharedInvite.joining": "Beitritt…",
+    "habits.sharedInvite.joined": "Fertig!",
+    "habits.sharedInvite.own": "Das ist deine Gewohnheit",
+    "habits.sharedInvite.alreadyJoined": "Du bist bereits dabei",
+    "habits.sharedInvite.full": "Gruppe ist voll",
+
     "habits.details.archive.title": "Diese Gewohnheit archivieren?",
     "habits.details.archive.confirm": "Archivieren",
     "habits.details.archive.keep": "Behalten"

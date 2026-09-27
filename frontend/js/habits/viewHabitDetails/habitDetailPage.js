@@ -271,7 +271,9 @@ export function renderHabitDetailsPage(habit = {}) {
             habitName:
                 name || t("habits.details.unnamed"),
             durationText:
-                formatHabitDetailsDays(duration)
+                formatHabitDetailsDays(duration),
+            inviteToken:
+                habit.inviteToken || ""
         })
 
 

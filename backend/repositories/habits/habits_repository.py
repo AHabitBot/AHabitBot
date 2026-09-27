@@ -1,8 +1,12 @@
 from datetime import date, datetime, timedelta
+import secrets
 from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from backend.database.database import get_connection
+from backend.repositories.habits.shared_habits_repository import (
+    get_shared_contexts_for_habits,
+)
 from backend.services.leaderboard.season_service import (
     get_season_context,
 )
@@ -76,6 +80,7 @@ async def get_user_habits(
                 h.challenge_target,
                 h.repeat_started_on,
                 h.habit_reminder,
+                h.invite_token,
 
                 COALESCE(
                     today_confirmation.is_confirmed,
@@ -262,6 +267,11 @@ async def get_user_habits(
             row["confirmation_date"]
         )
 
+    shared_contexts = await get_shared_contexts_for_habits(
+        habit_ids=[int(row["id"]) for row in habit_rows],
+        today=today,
+    )
+
     # =====================================================
     # ФОРМИРУЕМ ФИНАЛЬНЫЙ СПИСОК ПРИВЫЧЕК
     # =====================================================
@@ -324,6 +334,16 @@ async def get_user_habits(
             habit_completed_dates
         )
 
+        shared_context = shared_contexts.get(int(row["id"]))
+        habit["shared"] = (
+            {
+                **shared_context,
+                "is_owner": int(shared_context["owner_user_id"]) == int(user_id),
+            }
+            if shared_context
+            else None
+        )
+
         habits.append(habit)
 
     return {
@@ -372,6 +392,8 @@ async def create_habit(
     challenge_target: int | None,
     habit_reminder: str | None,
 ) -> dict[str, Any]:
+    invite_token = secrets.token_urlsafe(24)
+
     async with get_connection() as connection:
         row = await connection.fetchrow(
             """
@@ -386,9 +408,10 @@ async def create_habit(
                 weekly_target,
                 challenge_target,
                 repeat_started_on,
-                habit_reminder
+                habit_reminder,
+                invite_token
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::TIME)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::TIME, $12)
             RETURNING
                 id,
                 user_id,
@@ -400,7 +423,7 @@ async def create_habit(
                 is_archived,
                 created_at,
                 updated_at
-                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on, habit_reminder
+                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on, habit_reminder, invite_token
             """,
             user_id,
             title,
@@ -415,6 +438,7 @@ async def create_habit(
                 "SELECT timezone FROM user_settings WHERE user_id = $1", user_id
             )),
             habit_reminder,
+            invite_token,
         )
 
     if row is None:

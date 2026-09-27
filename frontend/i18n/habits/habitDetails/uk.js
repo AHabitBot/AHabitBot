@@ -49,6 +49,14 @@ export default Object.freeze({
     "habits.details.invite.button": "Запросити друга",
     "habits.details.invite.shareText": "У мене є звичка «{name}», і я розвиваю її вже {duration} 🔥\n\nПриєднуйся — ставаймо кращими разом!",
 
+    "habits.sharedInvite.text": "Вас запрошують виконувати цю звичку разом.",
+    "habits.sharedInvite.join": "Приєднатися",
+    "habits.sharedInvite.joining": "Приєднуємо…",
+    "habits.sharedInvite.joined": "Готово!",
+    "habits.sharedInvite.own": "Це ваша звичка",
+    "habits.sharedInvite.alreadyJoined": "Ви вже берете участь",
+    "habits.sharedInvite.full": "Групу заповнено",
+
     "habits.details.archive.title": "Перемістити звичку до архіву?",
     "habits.details.archive.confirm": "Архівувати",
     "habits.details.archive.keep": "Залишити"

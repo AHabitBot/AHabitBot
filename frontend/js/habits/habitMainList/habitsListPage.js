@@ -249,6 +249,25 @@ function renderWeekProgress(progress) {
 }
 
 
+function getHabitAvatarSrc(avatarKey) {
+    const key = String(avatarKey || "standard_m_01")
+    const safeKey = /^[a-zA-Z0-9_-]+$/.test(key) ? key : "standard_m_01"
+    return `./img/profile/avatar/avatar_${safeKey}.png`
+}
+
+function renderSharedHabitPeople(shared) {
+    const members = Array.isArray(shared?.members) ? shared.members : []
+    if (members.length < 2) return ""
+    const visible = members.slice(0, 3)
+    const hidden = Math.max(0, members.length - visible.length)
+    return `<div class="habit-card__people">${visible.map((member) => `
+        <span class="habit-card__person ${member.confirmedToday ? "is-completed" : ""}" title="${escapeHtml(member.nickname || "Player")}">
+            <img class="habit-card__person-avatar" src="${getHabitAvatarSrc(member.avatarKey)}" alt="">
+            ${member.confirmedToday ? `<span class="habit-card__person-check" aria-hidden="true">✓</span>` : ""}
+        </span>`).join("")}${hidden ? `<span class="habit-card__people-more">+${hidden}</span>` : ""}</div>`
+}
+
+
 /* =========================================================
    РЕНДЕР КАРТОЧКИ
    ========================================================= */
@@ -264,7 +283,8 @@ export function renderHabitCard(habit = {}) {
         streak = 0,
         xpReward = 5,
         weekProgress = [],
-        confirmationAllowedToday = true
+        confirmationAllowedToday = true,
+        shared = null
     } = habit
     // Imported lazily at module level below to keep rule formatting centralized.
 
@@ -297,12 +317,11 @@ export function renderHabitCard(habit = {}) {
             data-habit-id="${safeId}"
         >
 
-            <div
-                class="habit-card__icon"
-                aria-hidden="true"
-            >
-                ${safeIcon}
-            </div>
+            ${
+                Array.isArray(shared?.members) && shared.members.length >= 2
+                    ? renderSharedHabitPeople(shared)
+                    : `<div class="habit-card__icon" aria-hidden="true">${safeIcon}</div>`
+            }
 
 
             <button
