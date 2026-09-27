@@ -195,6 +195,20 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.tenMinOutside")}"
+                            data-habit-icon="🌳"
+                        >
+                            🌳 ${t("habits.addHabit.suggestions.tenMinOutside")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
                             data-habit-suggestion="${t("habits.addHabit.suggestions.morningWater")}"
                             data-habit-icon="💧"
                         >
@@ -251,19 +265,6 @@ export function renderAddHabitPage() {
                             data-habit-icon="🚶"
                         >
                             🚶 ${t("habits.addHabit.suggestions.thousandSteps")}
-                        </button>
-
-                        <span class="add-habit-v2__divider">
-                            |
-                        </span>
-
-                        <button
-                            class="add-habit-v2__suggestion"
-                            type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.tenMinOutside")}"
-                            data-habit-icon="🌳"
-                        >
-                            🌳 ${t("habits.addHabit.suggestions.tenMinOutside")}
                         </button>
 
                         <span class="add-habit-v2__divider">
