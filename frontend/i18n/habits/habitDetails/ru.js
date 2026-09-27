@@ -46,7 +46,7 @@ export default Object.freeze({
     "habits.details.calendar.state.beforeCreated": "до создания привычки",
     "habits.details.calendar.state.future": "будущий день",
 
-    "habits.details.invite.button": "Пригласить друга",
+    "habits.details.invite.button": "Выполнять вместе",
     "habits.details.invite.shareText": "У меня есть привычка «{name}», и я развиваю её уже {duration} 🔥\n\nПрисоединяйся — давай становиться лучше вместе!",
 
     "habits.sharedInvite.text": "Вас приглашают выполнять эту привычку вместе.",

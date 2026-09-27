@@ -46,7 +46,7 @@ export default Object.freeze({
     "habits.details.calendar.state.beforeCreated": "before habit creation",
     "habits.details.calendar.state.future": "future day",
 
-    "habits.details.invite.button": "Invite a friend",
+    "habits.details.invite.button": "Do it together",
     "habits.details.invite.shareText": "I’ve been building the habit “{name}” for {duration} 🔥\n\nJoin me — let’s get better together!",
 
     "habits.sharedInvite.text": "You have been invited to build this habit together.",

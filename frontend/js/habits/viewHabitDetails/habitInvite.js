@@ -35,13 +35,29 @@ export function renderHabitInvite({
             data-habit-invite-token="${escapeAttribute(inviteToken)}"
         >
             <span
-                class="material-symbols-rounded habit-details__invite-icon"
+                class="habit-details__invite-people"
                 aria-hidden="true"
             >
-                person_add
+                <span class="habit-details__invite-person">
+                    <img
+                        src="./img/profile/avatar/avatar_standard_f_01.png"
+                        alt=""
+                    >
+                </span>
+
+                <span class="habit-details__invite-person">
+                    <img
+                        src="./img/profile/avatar/avatar_standard_m_01.png"
+                        alt=""
+                    >
+                </span>
+
+                <span class="habit-details__invite-person habit-details__invite-person--add">
+                    +
+                </span>
             </span>
 
-            <span>
+            <span class="habit-details__invite-label">
                 ${t("habits.details.invite.button")}
             </span>
         </button>
