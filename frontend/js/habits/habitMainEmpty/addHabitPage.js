@@ -195,10 +195,10 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.walk")}"
-                            data-habit-icon="🚶🏼‍➡️"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.morningWater")}"
+                            data-habit-icon="💧"
                         >
-                            🚶🏼‍➡️ ${t("habits.addHabit.suggestions.walk")}
+                            💧 ${t("habits.addHabit.suggestions.morningWater")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -208,10 +208,10 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.reading")}"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.onePage")}"
                             data-habit-icon="📖"
                         >
-                            📖 ${t("habits.addHabit.suggestions.reading")}
+                            📖 ${t("habits.addHabit.suggestions.onePage")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -221,10 +221,62 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.saving")}"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.fiveMinExercise")}"
+                            data-habit-icon="🤸"
+                        >
+                            🤸 ${t("habits.addHabit.suggestions.fiveMinExercise")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.tenPushups")}"
+                            data-habit-icon="💪"
+                        >
+                            💪 ${t("habits.addHabit.suggestions.tenPushups")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.thousandSteps")}"
+                            data-habit-icon="🚶"
+                        >
+                            🚶 ${t("habits.addHabit.suggestions.thousandSteps")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.tenMinOutside")}"
+                            data-habit-icon="🌳"
+                        >
+                            🌳 ${t("habits.addHabit.suggestions.tenMinOutside")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.saveSmallAmount")}"
                             data-habit-icon="💰"
                         >
-                            💰 ${t("habits.addHabit.suggestions.saving")}
+                            💰 ${t("habits.addHabit.suggestions.saveSmallAmount")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -234,10 +286,10 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.morningWater")}"
-                            data-habit-icon="💦"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.fiveMinCleaning")}"
+                            data-habit-icon="🧽"
                         >
-                            💦 ${t("habits.addHabit.suggestions.morningWater")}
+                            🧽 ${t("habits.addHabit.suggestions.fiveMinCleaning")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -247,10 +299,62 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.running")}"
-                            data-habit-icon="🏃🏻‍♀️"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.oneImportantTask")}"
+                            data-habit-icon="✅"
                         >
-                            🏃🏻‍♀️ ${t("habits.addHabit.suggestions.running")}
+                            ✅ ${t("habits.addHabit.suggestions.oneImportantTask")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.studyFiveMin")}"
+                            data-habit-icon="🎓"
+                        >
+                            🎓 ${t("habits.addHabit.suggestions.studyFiveMin")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.oneNewWord")}"
+                            data-habit-icon="🗣"
+                        >
+                            🗣 ${t("habits.addHabit.suggestions.oneNewWord")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.noSnooze")}"
+                            data-habit-icon="☀️"
+                        >
+                            ☀️ ${t("habits.addHabit.suggestions.noSnooze")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.oneFruit")}"
+                            data-habit-icon="🍎"
+                        >
+                            🍎 ${t("habits.addHabit.suggestions.oneFruit")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -261,9 +365,9 @@ export function renderAddHabitPage() {
                             class="add-habit-v2__suggestion"
                             type="button"
                             data-habit-suggestion="${t("habits.addHabit.suggestions.noSweets")}"
-                            data-habit-icon="✅"
+                            data-habit-icon="🍬"
                         >
-                            ✅ ${t("habits.addHabit.suggestions.noSweets")}
+                            🍬 ${t("habits.addHabit.suggestions.noSweets")}
                         </button>
 
                         <span class="add-habit-v2__divider">
@@ -273,10 +377,49 @@ export function renderAddHabitPage() {
                         <button
                             class="add-habit-v2__suggestion"
                             type="button"
-                            data-habit-suggestion="${t("habits.addHabit.suggestions.phone3Hours")}"
-                            data-habit-icon="📵"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.oneLessCoffee")}"
+                            data-habit-icon="☕"
                         >
-                            📵 ${t("habits.addHabit.suggestions.phone3Hours")}
+                            ☕ ${t("habits.addHabit.suggestions.oneLessCoffee")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.oneMinBreathing")}"
+                            data-habit-icon="🌬"
+                        >
+                            🌬 ${t("habits.addHabit.suggestions.oneMinBreathing")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.sleep15Earlier")}"
+                            data-habit-icon="🛌"
+                        >
+                            🛌 ${t("habits.addHabit.suggestions.sleep15Earlier")}
+                        </button>
+
+                        <span class="add-habit-v2__divider">
+                            |
+                        </span>
+
+                        <button
+                            class="add-habit-v2__suggestion"
+                            type="button"
+                            data-habit-suggestion="${t("habits.addHabit.suggestions.morningShower")}"
+                            data-habit-icon="🚿"
+                        >
+                            🚿 ${t("habits.addHabit.suggestions.morningShower")}
                         </button>
 
                     </div>
