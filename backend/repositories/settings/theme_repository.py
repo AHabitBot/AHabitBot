@@ -31,7 +31,7 @@ async def set_user_theme(user_id: int, theme: str) -> dict:
     return {
         "user_id": int(row["user_id"]),
         "timezone": row["timezone"] or "Europe/Kyiv",
-        "language": row["language"] or "ru",
+        "language": row["language"] or "en",
         "theme": row["theme"] or "light",
         "reminders_enabled": bool(row["reminders_enabled"]),
         "last_reminder_date": (

@@ -13,7 +13,7 @@ async def send_level_up_notification(
     telegram_id: int,
     level: int,
     unlocked_avatars_count: int = 0,
-    language: str = "ru",
+    language: str = "en",
 ) -> bool:
     """
     Отправляет сообщение о новом максимальном уровне.

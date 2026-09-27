@@ -1,5 +1,5 @@
 SUPPORTED_LANGUAGES = {"ru", "uk", "en"}
-DEFAULT_LANGUAGE = "ru"
+DEFAULT_LANGUAGE = "en"
 
 
 def normalize_language(language: str | None) -> str:

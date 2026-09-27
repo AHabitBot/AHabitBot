@@ -134,7 +134,7 @@ async def send_streak_achievement_notification(
     earned_targets: list[int],
     total_xp_reward: int,
     next_target: int | None = None,
-    language: str = "ru",
+    language: str = "en",
 ) -> bool:
     normalized_targets = sorted({int(x) for x in earned_targets if int(x) > 0})
     if not normalized_targets:
@@ -152,7 +152,7 @@ async def send_confirmation_achievement_notification(
     earned_targets: list[int],
     total_xp_reward: int,
     next_target: int | None = None,
-    language: str = "ru",
+    language: str = "en",
 ) -> bool:
     normalized_targets = sorted({int(x) for x in earned_targets if int(x) > 0})
     if not normalized_targets:
@@ -170,7 +170,7 @@ async def send_invitation_achievement_notification(
     earned_targets: list[int],
     total_xp_reward: int,
     next_target: int | None = None,
-    language: str = "ru",
+    language: str = "en",
 ) -> bool:
     normalized_targets = sorted({int(x) for x in earned_targets if int(x) > 0})
     if not normalized_targets:

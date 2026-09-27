@@ -172,11 +172,11 @@ const dictionaries = Object.freeze({
     ),
 });
 
-let currentLanguage = normalizeLanguage(readStoredLanguage() || "ru");
+let currentLanguage = normalizeLanguage(readStoredLanguage() || "en");
 
 export function normalizeLanguage(language) {
     const normalized = String(language || "").trim().toLowerCase();
-    return SUPPORTED_LANGUAGES.includes(normalized) ? normalized : "ru";
+    return SUPPORTED_LANGUAGES.includes(normalized) ? normalized : "en";
 }
 
 export function getLanguage() {
@@ -203,8 +203,8 @@ export function setLanguage(language, { emit = true } = {}) {
 }
 
 export function t(key, params = {}) {
-    const dictionary = dictionaries[currentLanguage] || dictionaries.ru;
-    const fallback = dictionaries.ru;
+    const dictionary = dictionaries[currentLanguage] || dictionaries.en;
+    const fallback = dictionaries.en;
     let value = dictionary[key] ?? fallback[key] ?? key;
 
     if (typeof value !== "string") {

@@ -216,7 +216,7 @@ export async function bootstrapApp({ onProgress } = {}) {
     reportProgress(72)
 
     setLanguage(
-        data.settings?.language || "ru",
+        data.settings?.language || "en",
         { emit: false }
     )
 

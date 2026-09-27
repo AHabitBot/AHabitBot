@@ -17,7 +17,7 @@ async def _get_user_language_by_telegram_id(telegram_id: int) -> str:
     async with get_connection() as connection:
         value = await connection.fetchval(
             """
-            SELECT COALESCE(us.language, 'ru')
+            SELECT COALESCE(us.language, 'en')
             FROM users AS u
             LEFT JOIN user_settings AS us ON us.user_id = u.id
             WHERE u.telegram_id = $1

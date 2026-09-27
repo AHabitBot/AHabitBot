@@ -124,7 +124,7 @@ async def get_level_progression_state(
             """
             SELECT
                 u.telegram_id,
-                COALESCE(settings.language, 'ru') AS language,
+                COALESCE(settings.language, 'en') AS language,
                 COALESCE(us.total_xp, 0) AS total_xp,
                 COALESCE(
                     us.highest_level_reached,
