@@ -467,90 +467,225 @@ async def update_habit(
     habit_reminder: str | None,
 ) -> dict[str, Any] | None:
     """
-    Обновляет привычку текущего пользователя.
+    Обычная привычка обновляется как раньше.
 
-    Возвращает обновлённую привычку.
-
-    Возвращает None, если:
-    - привычка не найдена;
-    - привычка принадлежит другому пользователю;
-    - привычка находится в архиве.
+    В совместной привычке:
+    - владелец синхронизирует общие параметры всем;
+    - обычный участник меняет только своё напоминание;
+    - напоминания других участников никогда не меняются.
     """
 
     async with get_connection() as connection:
-        current = await connection.fetchrow(
-            "SELECT repeat_type, challenge_target FROM habits WHERE id=$1 AND user_id=$2 AND is_archived=FALSE",
-            habit_id, user_id,
-        )
-        if current is None:
-            return None
-        if current["repeat_type"] == "challenge":
-            if repeat_type != "challenge":
-                raise ValueError("Начатый челлендж нельзя изменить на другой режим")
-            if int(challenge_target or 0) < int(current["challenge_target"] or 0):
-                raise ValueError("Количество дней челленджа можно только увеличивать")
+        async with connection.transaction():
+            current = await connection.fetchrow(
+                """
+                SELECT
+                    h.*,
+                    shm.shared_habit_id,
+                    sh.owner_user_id
+                FROM habits AS h
+                LEFT JOIN shared_habit_members AS shm
+                    ON shm.habit_id = h.id
+                LEFT JOIN shared_habits AS sh
+                    ON sh.id = shm.shared_habit_id
+                WHERE h.id = $1
+                  AND h.user_id = $2
+                  AND h.is_archived = FALSE
+                FOR UPDATE OF h
+                """,
+                habit_id,
+                user_id,
+            )
 
-        timezone_name = await connection.fetchval(
-            "SELECT timezone FROM user_settings WHERE user_id = $1", user_id
-        )
-        rule_changed = (
-            current["repeat_type"] != repeat_type
-            or (repeat_type == "challenge" and int(challenge_target or 0) != int(current["challenge_target"] or 0))
-        )
-        row = await connection.fetchrow(
-            """
-            UPDATE habits
-            SET
-                title = $3,
-                emoji = $4,
-                color = $5,
-                size = $6,
-                repeat_type = $7,
-                repeat_days = $8,
-                weekly_target = $9,
-                challenge_target = $10,
-                repeat_started_on = CASE WHEN $11 THEN $12 ELSE repeat_started_on END,
-                habit_reminder = $13::TIME,
-                habit_reminder_last_sent_date = CASE
-                    WHEN habit_reminder IS DISTINCT FROM $13::TIME THEN NULL
-                    ELSE habit_reminder_last_sent_date
-                END,
-                updated_at = NOW()
-            WHERE id = $1
-              AND user_id = $2
-              AND is_archived = FALSE
-            RETURNING
-                id,
+            if current is None:
+                return None
+
+            shared_habit_id = current["shared_habit_id"]
+            is_shared = shared_habit_id is not None
+            is_owner = (
+                is_shared
+                and int(current["owner_user_id"]) == int(user_id)
+            )
+
+            # Участник совместной привычки:
+            # общие поля менять не может.
+            if is_shared and not is_owner:
+                row = await connection.fetchrow(
+                    """
+                    UPDATE habits
+                    SET
+                        habit_reminder = $3::TIME,
+                        habit_reminder_last_sent_date = CASE
+                            WHEN habit_reminder
+                                IS DISTINCT FROM $3::TIME
+                            THEN NULL
+                            ELSE habit_reminder_last_sent_date
+                        END,
+                        updated_at = NOW()
+                    WHERE id = $1
+                      AND user_id = $2
+                      AND is_archived = FALSE
+                    RETURNING
+                        id, user_id, title, emoji, color, size,
+                        xp_reward, is_archived, created_at, updated_at,
+                        repeat_type, repeat_days, weekly_target,
+                        challenge_target, repeat_started_on,
+                        habit_reminder, invite_token
+                    """,
+                    habit_id,
+                    user_id,
+                    habit_reminder,
+                )
+                return dict(row) if row else None
+
+            if current["repeat_type"] == "challenge":
+                if repeat_type != "challenge":
+                    raise ValueError(
+                        "Начатый челлендж нельзя изменить на другой режим"
+                    )
+                if int(challenge_target or 0) < int(
+                    current["challenge_target"] or 0
+                ):
+                    raise ValueError(
+                        "Количество дней челленджа можно только увеличивать"
+                    )
+
+            timezone_name = await connection.fetchval(
+                """
+                SELECT timezone
+                FROM user_settings
+                WHERE user_id = $1
+                """,
+                user_id,
+            )
+
+            rule_changed = (
+                current["repeat_type"] != repeat_type
+                or (
+                    repeat_type == "challenge"
+                    and int(challenge_target or 0)
+                    != int(current["challenge_target"] or 0)
+                )
+            )
+
+            new_repeat_started_on = (
+                get_user_local_date(timezone_name)
+                if (
+                    rule_changed
+                    and current["repeat_type"] != "challenge"
+                )
+                else current["repeat_started_on"]
+            )
+
+            # Владелец: общие параметры обновляются
+            # во всех связанных habits.
+            if is_owner:
+                await connection.execute(
+                    """
+                    UPDATE habits AS h
+                    SET
+                        title = $2,
+                        emoji = $3,
+                        color = $4,
+                        size = $5,
+                        repeat_type = $6,
+                        repeat_days = $7,
+                        weekly_target = $8,
+                        challenge_target = $9,
+                        repeat_started_on = $10,
+                        updated_at = NOW()
+                    FROM shared_habit_members AS shm
+                    WHERE shm.shared_habit_id = $1
+                      AND h.id = shm.habit_id
+                      AND h.is_archived = FALSE
+                    """,
+                    shared_habit_id,
+                    title,
+                    emoji,
+                    color,
+                    size,
+                    repeat_type,
+                    repeat_days,
+                    weekly_target,
+                    challenge_target,
+                    new_repeat_started_on,
+                )
+
+                # Напоминание владельца остаётся персональным.
+                row = await connection.fetchrow(
+                    """
+                    UPDATE habits
+                    SET
+                        habit_reminder = $3::TIME,
+                        habit_reminder_last_sent_date = CASE
+                            WHEN habit_reminder
+                                IS DISTINCT FROM $3::TIME
+                            THEN NULL
+                            ELSE habit_reminder_last_sent_date
+                        END,
+                        updated_at = NOW()
+                    WHERE id = $1
+                      AND user_id = $2
+                      AND is_archived = FALSE
+                    RETURNING
+                        id, user_id, title, emoji, color, size,
+                        xp_reward, is_archived, created_at, updated_at,
+                        repeat_type, repeat_days, weekly_target,
+                        challenge_target, repeat_started_on,
+                        habit_reminder, invite_token
+                    """,
+                    habit_id,
+                    user_id,
+                    habit_reminder,
+                )
+                return dict(row) if row else None
+
+            # Обычная привычка.
+            row = await connection.fetchrow(
+                """
+                UPDATE habits
+                SET
+                    title = $3,
+                    emoji = $4,
+                    color = $5,
+                    size = $6,
+                    repeat_type = $7,
+                    repeat_days = $8,
+                    weekly_target = $9,
+                    challenge_target = $10,
+                    repeat_started_on = $11,
+                    habit_reminder = $12::TIME,
+                    habit_reminder_last_sent_date = CASE
+                        WHEN habit_reminder
+                            IS DISTINCT FROM $12::TIME
+                        THEN NULL
+                        ELSE habit_reminder_last_sent_date
+                    END,
+                    updated_at = NOW()
+                WHERE id = $1
+                  AND user_id = $2
+                  AND is_archived = FALSE
+                RETURNING
+                    id, user_id, title, emoji, color, size,
+                    xp_reward, is_archived, created_at, updated_at,
+                    repeat_type, repeat_days, weekly_target,
+                    challenge_target, repeat_started_on,
+                    habit_reminder, invite_token
+                """,
+                habit_id,
                 user_id,
                 title,
                 emoji,
                 color,
                 size,
-                xp_reward,
-                is_archived,
-                created_at,
-                updated_at
-                , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on, habit_reminder
-            """,
-            habit_id,
-            user_id,
-            title,
-            emoji,
-            color,
-            size,
-            repeat_type,
-            repeat_days,
-            weekly_target,
-            challenge_target,
-            rule_changed and current["repeat_type"] != "challenge",
-            get_user_local_date(timezone_name),
-            habit_reminder,
-        )
-
-    if row is None:
-        return None
-
-    return dict(row)
+                repeat_type,
+                repeat_days,
+                weekly_target,
+                challenge_target,
+                new_repeat_started_on,
+                habit_reminder,
+            )
+            return dict(row) if row else None
 
 
 # =========================================================
