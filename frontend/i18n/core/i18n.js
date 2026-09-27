@@ -1,85 +1,105 @@
 import habitsEmptyRu from "../habits/habitsEmpty/ru.js";
 import habitsEmptyUk from "../habits/habitsEmpty/uk.js";
 import habitsEmptyEn from "../habits/habitsEmpty/en.js";
+import habitsEmptyDe from "../habits/habitsEmpty/de.js";
 
 import habitsListRu from "../habits/habitsList/ru.js";
 import habitsListUk from "../habits/habitsList/uk.js";
 import habitsListEn from "../habits/habitsList/en.js";
+import habitsListDe from "../habits/habitsList/de.js";
 
 import habitDetailsRu from "../habits/habitDetails/ru.js";
 import habitDetailsUk from "../habits/habitDetails/uk.js";
 import habitDetailsEn from "../habits/habitDetails/en.js";
+import habitDetailsDe from "../habits/habitDetails/de.js";
 
 import addHabitRu from "../habits/addHabit/ru.js";
 import addHabitUk from "../habits/addHabit/uk.js";
 import addHabitEn from "../habits/addHabit/en.js";
+import addHabitDe from "../habits/addHabit/de.js";
 
 import emojiRu from "../habits/emoji/ru.js";
 import emojiUk from "../habits/emoji/uk.js";
 import emojiEn from "../habits/emoji/en.js";
+import emojiDe from "../habits/emoji/de.js";
 
 
 import leaderboardSeasonRu from "../leaderboard/season/ru.js";
 import leaderboardSeasonUk from "../leaderboard/season/uk.js";
 import leaderboardSeasonEn from "../leaderboard/season/en.js";
+import leaderboardSeasonDe from "../leaderboard/season/de.js";
 
 import profileMainRu from "../profile/main/ru.js";
 import profileMainUk from "../profile/main/uk.js";
 import profileMainEn from "../profile/main/en.js";
+import profileMainDe from "../profile/main/de.js";
 
 import profileNicknameRu from "../profile/nickname/ru.js";
 import profileNicknameUk from "../profile/nickname/uk.js";
 import profileNicknameEn from "../profile/nickname/en.js";
+import profileNicknameDe from "../profile/nickname/de.js";
 
 import profileStatsRu from "../profile/stats/ru.js";
 import profileStatsUk from "../profile/stats/uk.js";
 import profileStatsEn from "../profile/stats/en.js";
+import profileStatsDe from "../profile/stats/de.js";
 
 import profileAchievementsRu from "../profile/achievements/ru.js";
 import profileAchievementsUk from "../profile/achievements/uk.js";
 import profileAchievementsEn from "../profile/achievements/en.js";
+import profileAchievementsDe from "../profile/achievements/de.js";
 
 import profileAppearanceRu from "../profile/appearance/ru.js";
 import profileAppearanceUk from "../profile/appearance/uk.js";
 import profileAppearanceEn from "../profile/appearance/en.js";
+import profileAppearanceDe from "../profile/appearance/de.js";
 
 import profileSupportRu from "../profile/support/ru.js";
 import profileSupportUk from "../profile/support/uk.js";
 import profileSupportEn from "../profile/support/en.js";
+import profileSupportDe from "../profile/support/de.js";
 
 import profileReferralRu from "../profile/referral/ru.js";
 import profileReferralUk from "../profile/referral/uk.js";
 import profileReferralEn from "../profile/referral/en.js";
+import profileReferralDe from "../profile/referral/de.js";
 
 import profileArchiveRu from "../profile/archive/ru.js";
 import profileArchiveUk from "../profile/archive/uk.js";
 import profileArchiveEn from "../profile/archive/en.js";
+import profileArchiveDe from "../profile/archive/de.js";
 
 import navigationRu from "../common/navigation/ru.js";
 import navigationUk from "../common/navigation/uk.js";
 import navigationEn from "../common/navigation/en.js";
+import navigationDe from "../common/navigation/de.js";
 
 import commonAppRu from "../common/app/ru.js";
 import commonAppUk from "../common/app/uk.js";
 import commonAppEn from "../common/app/en.js";
+import commonAppDe from "../common/app/de.js";
 
 import settingsMainRu from "../profile/settings/main/ru.js";
 import settingsMainUk from "../profile/settings/main/uk.js";
 import settingsMainEn from "../profile/settings/main/en.js";
+import settingsMainDe from "../profile/settings/main/de.js";
 
 import settingsLanguageRu from "../profile/settings/language/ru.js";
 import settingsLanguageUk from "../profile/settings/language/uk.js";
 import settingsLanguageEn from "../profile/settings/language/en.js";
+import settingsLanguageDe from "../profile/settings/language/de.js";
 
 import settingsTimezoneRu from "../profile/settings/timezone/ru.js";
 import settingsTimezoneUk from "../profile/settings/timezone/uk.js";
 import settingsTimezoneEn from "../profile/settings/timezone/en.js";
+import settingsTimezoneDe from "../profile/settings/timezone/de.js";
 
 import settingsThemeRu from "../profile/settings/theme/ru.js";
 import settingsThemeUk from "../profile/settings/theme/uk.js";
 import settingsThemeEn from "../profile/settings/theme/en.js";
+import settingsThemeDe from "../profile/settings/theme/de.js";
 
-export const SUPPORTED_LANGUAGES = Object.freeze(["ru", "uk", "en"]);
+export const SUPPORTED_LANGUAGES = Object.freeze(["ru", "uk", "en", "de"]);
 
 const LANGUAGE_STORAGE_KEY = "ahabit_language";
 
@@ -169,6 +189,28 @@ const dictionaries = Object.freeze({
         profileArchiveEn,
         navigationEn,
         commonAppEn,
+    ),
+    de: mergeDictionaries(
+        settingsMainDe,
+        settingsLanguageDe,
+        settingsTimezoneDe,
+        settingsThemeDe,
+        habitsEmptyDe,
+        habitsListDe,
+        habitDetailsDe,
+        addHabitDe,
+        emojiDe,
+        leaderboardSeasonDe,
+        profileMainDe,
+        profileNicknameDe,
+        profileStatsDe,
+        profileAchievementsDe,
+        profileAppearanceDe,
+        profileSupportDe,
+        profileReferralDe,
+        profileArchiveDe,
+        navigationDe,
+        commonAppDe,
     ),
 });
 

@@ -1,0 +1,20 @@
+export default Object.freeze({
+    "profile.archive.title": "Gewohnheitsarchiv",
+    "profile.archive.description": "Hier werden Gewohnheiten gespeichert, die du nicht mehr verfolgst.",
+    "profile.archive.empty.title": "Dein Archiv ist leer",
+    "profile.archive.empty.text": "Gewohnheiten, die du nicht mehr verfolgen möchtest, erscheinen hier.",
+    "profile.archive.habitFallback": "Gewohnheit",
+    "profile.archive.archivedSince": "Archiviert seit {date}",
+    "profile.archive.archived": "Archiviert",
+    "profile.archive.restore": "Wiederherstellen",
+    "profile.archive.restoring": "Wird wiederhergestellt...",
+    "profile.archive.days.one": "{count} Tag",
+    "profile.archive.days.few": "{count} Tage",
+    "profile.archive.days.many": "{count} Tage",
+    "profile.archive.days.other": "{count} Tage",
+    "profile.archive.error.restore": "Gewohnheit konnte nicht wiederhergestellt werden",
+    "profile.archive.confirmations": "Bestätigungen",
+    "profile.archive.bestStreak": "Beste Serie",
+    "profile.archive.error.load": "Archiv konnte nicht geladen werden",
+    "profile.archive.retry": "Erneut versuchen"
+});

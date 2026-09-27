@@ -11,6 +11,7 @@ const LANGUAGE_OPTIONS = Object.freeze([
     { value: "ru" },
     { value: "uk" },
     { value: "en" },
+    { value: "de" },
 ]);
 
 let languageRequestInProgress = false;

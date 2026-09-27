@@ -1,0 +1,21 @@
+export default Object.freeze({
+    "profile.nickname.title": "Nickname ändern",
+    "profile.nickname.closeAria": "Schließen",
+    "profile.nickname.description": "Wähle einen neuen Nickname. Du kannst ihn nur einmal ändern.",
+    "profile.nickname.inputAria": "Neuer Nickname",
+    "profile.nickname.placeholder": "Nickname eingeben",
+    "profile.nickname.rules": "3 bis 20 Zeichen",
+    "profile.nickname.save": "Speichern",
+    "profile.nickname.validation.length": "Der Nickname muss zwischen 3 und 20 Zeichen lang sein",
+    "profile.nickname.validation.same": "Gib einen neuen Nickname ein",
+    "profile.nickname.confirm": "Nickname zu „{nickname}“ ändern?\n\nNach dem Speichern kannst du ihn nicht mehr ändern.",
+    "profile.nickname.error.save": "Nickname konnte nicht gespeichert werden",
+    "profile.nickname.error.change": "Nickname konnte nicht geändert werden",
+    "profile.nickname.rulesFull": "3–20 Zeichen: Buchstaben, Zahlen und _",
+    "profile.nickname.continue": "Weiter",
+    "profile.nickname.error.generic": "Etwas ist schiefgelaufen",
+    "profile.nickname.validation.characters": "Verwende nur Buchstaben, Zahlen und _",
+    "profile.nickname.saving": "Wird gespeichert...",
+    "profile.nickname.error.taken": "Dieser Nickname ist bereits vergeben",
+    "profile.nickname.error.used": "Du hast deine einmalige Nickname-Änderung bereits verwendet"
+});
