@@ -940,7 +940,7 @@ function stopConfirmationLoading(button) {
     button.removeAttribute("aria-busy")
 }
 
-function showXpReward(card, amount) {
+function showXpChange(card, amount, { removed = false } = {}) {
     const xpAmount = normalizePositiveInteger(amount)
 
     if (!card || xpAmount <= 0) return
@@ -948,8 +948,8 @@ function showXpReward(card, amount) {
     card.querySelector(".habit-card__xp-reward")?.remove()
 
     const reward = document.createElement("span")
-    reward.className = "habit-card__xp-reward"
-    reward.textContent = `+${xpAmount} XP`
+    reward.className = `habit-card__xp-reward${removed ? " is-removed" : ""}`
+    reward.textContent = `${removed ? "-" : "+"}${xpAmount} XP`
     reward.setAttribute("aria-hidden", "true")
 
     card.appendChild(reward)
@@ -1008,9 +1008,12 @@ function animateHabitReward(card, previousHabit, finalHabit, response) {
     const stateChanged = Boolean(response?.confirmation_state_changed)
     const xpAwarded = Boolean(response?.habit?.xp_awarded_today)
     const xpAmount = response?.habit?.xp_amount_today
+    const xpRemoved = response?.habit?.xp_removed_today
 
     if (stateChanged && finalHabit.completedToday && xpAwarded) {
-        showXpReward(card, xpAmount)
+        showXpChange(card, xpAmount)
+    } else if (stateChanged && !finalHabit.completedToday) {
+        showXpChange(card, xpRemoved, { removed: true })
     }
 }
 
@@ -1182,6 +1185,19 @@ confirmButton?.addEventListener(
 
             stopConfirmationLoading(confirmButton)
             updateHabitCardVisualState(card, finalHabit)
+
+            /*
+             * При отмене на короткий момент оставляем ✓ как
+             * визуальное подтверждение успешной операции.
+             * Данные уже серверные; это только transient-анимация.
+             */
+            if (!desiredState && response?.confirmation_state_changed) {
+                confirmButton.classList.add("is-unconfirm-success")
+
+                window.setTimeout(() => {
+                    confirmButton.classList.remove("is-unconfirm-success")
+                }, 320)
+            }
 
             setHabitsStatistics({
                 currentStreak: normalizePositiveInteger(

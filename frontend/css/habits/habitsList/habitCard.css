@@ -739,6 +739,22 @@
     }
 }
 
+/* Короткая точка успеха после обратного вращения при отмене. */
+.habit-card__check.is-unconfirm-success {
+    color: #ffffff;
+    background: var(--habit-accent);
+    box-shadow:
+        0
+        5px
+        12px
+        rgba(var(--habit-accent-rgb), 0.22);
+}
+
+.habit-card__check.is-unconfirm-success .habit-card__check-mark {
+    opacity: 1;
+    transform: scale(1);
+}
+
 .habit-card__xp-reward {
     position: absolute;
     z-index: 8;

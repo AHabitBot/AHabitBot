@@ -1417,12 +1417,27 @@ async def set_habit_confirmation(
                 confirmation_date,
             )
 
-            confirmation_state_changed = bool(
-                is_confirmed
-                and not (
-                    confirmation is not None
-                    and confirmation["is_confirmed"]
+            confirmation_was_confirmed = bool(
+                confirmation is not None
+                and confirmation["is_confirmed"]
+            )
+
+            confirmation_state_changed = (
+                confirmation_was_confirmed
+                != bool(is_confirmed)
+            )
+
+            # Сколько XP реально будет снято именно этой отменой.
+            # Ничего не угадываем на frontend: сервер знает,
+            # было ли XP начислено этому подтверждению.
+            xp_removed_today = (
+                int(confirmation["xp_amount"] or 0)
+                if (
+                    not is_confirmed
+                    and confirmation_was_confirmed
+                    and confirmation["xp_awarded"]
                 )
+                else 0
             )
 
             # =================================================
@@ -1990,6 +2005,9 @@ async def set_habit_confirmation(
 
                     "xp_amount_today":
                         xp_amount_today,
+
+                    "xp_removed_today":
+                        xp_removed_today,
 
                     "confirmation_date":
                         confirmation_date.isoformat(),
