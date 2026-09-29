@@ -976,6 +976,13 @@ function animateHabitReward(card, previousHabit, finalHabit, response) {
             void item.offsetWidth
             item.classList.add("is-rewarded")
         } else if (wasCompleted && !isCompleted) {
+            /*
+             * updateHabitCardVisualState() уже применил серверное false.
+             * На время обратной анимации визуально возвращаем заполнение,
+             * чтобы реально разгрузить его справа налево, а не анимировать
+             * уже пустую полоску. После анимации оставляем серверное false.
+             */
+            item.classList.add("is-completed")
             void item.offsetWidth
             item.classList.add("is-unrewarded")
         }
@@ -983,6 +990,10 @@ function animateHabitReward(card, previousHabit, finalHabit, response) {
         if (wasCompleted !== isCompleted) {
             window.setTimeout(() => {
                 item.classList.remove("is-rewarded", "is-unrewarded")
+
+                if (!isCompleted) {
+                    item.classList.remove("is-completed")
+                }
             }, REWARD_ANIMATION_MS)
         }
     })

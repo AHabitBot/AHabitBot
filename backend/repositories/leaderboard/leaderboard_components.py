@@ -153,7 +153,7 @@ async def get_season_current_user(
             WHERE leaderboard_type = 'season'
               AND season_number = $1
         ),
-        current_user AS (
+        current_member AS (
             SELECT
                 users.id AS user_id,
                 users.nickname,
@@ -186,25 +186,25 @@ async def get_season_current_user(
             WHERE users.id = $2
         )
         SELECT
-            current_user.user_id,
-            current_user.nickname,
-            current_user.avatar_key,
-            current_user.season_xp,
-            current_user.current_streak,
-            current_user.rank,
+            current_member.user_id,
+            current_member.nickname,
+            current_member.avatar_key,
+            current_member.season_xp,
+            current_member.current_streak,
+            current_member.rank,
             snapshot.rank AS previous_rank,
             CASE
                 WHEN snapshot.rank IS NULL THEN 0
-                ELSE snapshot.rank - current_user.rank
+                ELSE snapshot.rank - current_member.rank
             END::INTEGER AS rank_change
-        FROM current_user
+        FROM current_member
         LEFT JOIN latest_snapshot
             ON TRUE
         LEFT JOIN leaderboard_rank_snapshots AS snapshot
             ON snapshot.snapshot_date = latest_snapshot.snapshot_date
            AND snapshot.leaderboard_type = 'season'
            AND snapshot.season_number = $1
-           AND snapshot.user_id = current_user.user_id
+           AND snapshot.user_id = current_member.user_id
     """
 
     fallback_query = """

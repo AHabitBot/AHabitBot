@@ -725,11 +725,12 @@
         infinite;
 }
 
-/* При отмене подтверждения дуга заметно идёт против часовой стрелки. */
+/* При отмене кнопка уже залита цветом привычки, поэтому
+   обратную дугу рисуем светлой — иначе она сливается с кругом. */
 .habit-card__check.is-confirming.is-unconfirming::after {
     border-top-color: transparent;
-    border-right-color: var(--habit-accent);
-    border-bottom-color: rgba(var(--habit-accent-rgb), 0.34);
+    border-right-color: #ffffff;
+    border-bottom-color: rgba(255, 255, 255, 0.42);
     animation-direction: reverse;
 }
 
