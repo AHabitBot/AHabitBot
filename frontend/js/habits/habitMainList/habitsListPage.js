@@ -340,7 +340,7 @@ export function renderHabitCard(habit = {}) {
                 aria-pressed="${String(completedToday)}"
                 ${confirmationAllowedToday ? "" : "disabled"}
             >
-                ✓
+                <span class="habit-card__check-mark" aria-hidden="true">✓</span>
             </button>
 
 

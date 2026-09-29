@@ -116,30 +116,6 @@ function getHabitsListElement() {
 
 
 /* =========================================================
-   ИНДЕКС СЕГОДНЯШНЕГО ДНЯ
-
-   weekProgress:
-
-   0 — понедельник
-   1 — вторник
-   2 — среда
-   3 — четверг
-   4 — пятница
-   5 — суббота
-   6 — воскресенье
-   ========================================================= */
-
-function getTodayWeekIndex() {
-    const nativeDayIndex =
-        new Date().getDay()
-
-    return nativeDayIndex === 0
-        ? 6
-        : nativeDayIndex - 1
-}
-
-
-/* =========================================================
    НОРМАЛИЗАЦИЯ ПОЛОЖИТЕЛЬНОГО ЦЕЛОГО ЧИСЛА
    ========================================================= */
 
@@ -936,6 +912,91 @@ function updateHabitCardVisualState(
 
 
 /* =========================================================
+   АНИМАЦИЯ ПОДТВЕРЖДЕНИЯ НА КАРТОЧКЕ
+   ========================================================= */
+
+const CONFIRMATION_SPIN_MIN_MS = 450
+const REWARD_ANIMATION_MS = 650
+
+function wait(ms) {
+    return new Promise((resolve) => {
+        window.setTimeout(resolve, ms)
+    })
+}
+
+function startConfirmationLoading(button) {
+    if (!button) return
+
+    button.classList.add("is-confirming")
+    button.setAttribute("aria-busy", "true")
+}
+
+function stopConfirmationLoading(button) {
+    if (!button) return
+
+    button.classList.remove("is-confirming")
+    button.removeAttribute("aria-busy")
+}
+
+function showXpReward(card, amount) {
+    const xpAmount = normalizePositiveInteger(amount)
+
+    if (!card || xpAmount <= 0) return
+
+    card.querySelector(".habit-card__xp-reward")?.remove()
+
+    const reward = document.createElement("span")
+    reward.className = "habit-card__xp-reward"
+    reward.textContent = `+${xpAmount} XP`
+    reward.setAttribute("aria-hidden", "true")
+
+    card.appendChild(reward)
+
+    window.setTimeout(() => {
+        reward.remove()
+    }, REWARD_ANIMATION_MS)
+}
+
+function animateHabitReward(card, previousHabit, finalHabit, response) {
+    if (!card || !finalHabit) return
+
+    const previousProgress = normalizeWeekProgress(previousHabit?.weekProgress)
+    const finalProgress = normalizeWeekProgress(finalHabit.weekProgress)
+    const progressItems = card.querySelectorAll(".habit-card__progress-item")
+
+    progressItems.forEach((item, index) => {
+        if (!previousProgress[index] && finalProgress[index]) {
+            item.classList.remove("is-rewarded")
+            void item.offsetWidth
+            item.classList.add("is-rewarded")
+        }
+    })
+
+    const previousStreak = normalizePositiveInteger(previousHabit?.streak)
+    const finalStreak = normalizePositiveInteger(finalHabit.streak)
+    const streak = card.querySelector(".habit-card__streak")
+
+    if (streak && previousStreak !== finalStreak) {
+        streak.classList.remove("is-updated")
+        void streak.offsetWidth
+        streak.classList.add("is-updated")
+
+        window.setTimeout(() => {
+            streak.classList.remove("is-updated")
+        }, REWARD_ANIMATION_MS)
+    }
+
+    const stateChanged = Boolean(response?.confirmation_state_changed)
+    const xpAwarded = Boolean(response?.habit?.xp_awarded_today)
+    const xpAmount = response?.habit?.xp_amount_today
+
+    if (stateChanged && finalHabit.completedToday && xpAwarded) {
+        showXpReward(card, xpAmount)
+    }
+}
+
+
+/* =========================================================
    СОБЫТИЯ ОДНОЙ КАРТОЧКИ
    ========================================================= */
 
@@ -1032,189 +1093,119 @@ confirmButton?.addEventListener(
         event.preventDefault()
         event.stopPropagation()
 
-        if (
-            pendingHabitConfirmations.has(
-                habitId
-            )
-        ) {
+        if (pendingHabitConfirmations.has(habitId)) {
             return
         }
 
-        const habit = getHabitById(
-            habitId
-        )
+        const habit = getHabitById(habitId)
 
         if (!habit) {
             return
         }
 
-        pendingHabitConfirmations.add(
-            habitId
-        )
-
+        pendingHabitConfirmations.add(habitId)
         confirmButton.disabled = true
 
         const previousHabit = {
             ...habit,
-            weekProgress:
-                normalizeWeekProgress(
-                    habit.weekProgress
-                )
+            weekProgress: normalizeWeekProgress(habit.weekProgress)
         }
 
-        const desiredState =
-            !Boolean(
-                habit.completedToday
+        const desiredState = !Boolean(habit.completedToday)
+        const loadingStartedAt = performance.now()
+
+        /*
+         * Новый optimistic-сценарий:
+         * данные привычки не подменяем до ответа сервера.
+         * Мгновенно показываем только состояние действия —
+         * вращение контура кнопки.
+         */
+        startConfirmationLoading(confirmButton)
+
+        try {
+            const response = await setHabitConfirmation(
+                habitId,
+                desiredState
             )
 
-        const optimisticWeekProgress =
-            normalizeWeekProgress(
-                habit.weekProgress
-            )
+            const elapsed = performance.now() - loadingStartedAt
+            const remaining = Math.max(0, CONFIRMATION_SPIN_MIN_MS - elapsed)
 
-        optimisticWeekProgress[
-            getTodayWeekIndex()
-        ] = desiredState
+            if (remaining > 0) {
+                await wait(remaining)
+            }
 
-        const optimisticHabit =
-            updateHabit(
+            const serverHabit = response.habit
+            const serverCompletedToday = Boolean(serverHabit.completed_today)
+            const serverCompletedDates = Array.isArray(serverHabit.completed_dates)
+                ? serverHabit.completed_dates
+                : []
+            const serverStreak = normalizePositiveInteger(serverHabit.streak)
+            const finalWeekProgress = normalizeWeekProgress(serverHabit.week_progress)
+
+            const finalHabit = updateHabit(
                 habitId,
                 {
-                    completedToday:
-                        desiredState,
-
-                    weekProgress:
-                        optimisticWeekProgress,
-
-                    completedAt:
-                        desiredState
-                            ? new Date().toISOString()
-                            : null
+                    completedToday: serverCompletedToday,
+                    completedDates: serverCompletedDates,
+                    streak: serverStreak,
+                    weekProgress: finalWeekProgress,
+                    completedAt: serverCompletedToday
+                        ? new Date().toISOString()
+                        : null
                 }
             )
 
-        /*
-         * Интерфейс меняется сразу,
-         * до ответа сервера.
-         */
-        updateHabitCardVisualState(
-            card,
-            optimisticHabit
-        )
-
-        try {
-            const response =
-                await setHabitConfirmation(
-                    habitId,
-                    desiredState
-                )
-
-            const serverHabit =
-                response.habit
-
-            const serverCompletedToday =
-                Boolean(
-                    serverHabit.completed_today
-                )
-
-            const serverCompletedDates =
-                Array.isArray(
-                    serverHabit.completed_dates
-                )
-                    ? serverHabit.completed_dates
-                    : []
-
-            const serverStreak =
-                normalizePositiveInteger(
-                    serverHabit.streak
-                )
-
-            const finalWeekProgress =
-                normalizeWeekProgress(
-                    serverHabit.week_progress
-                )
-
-            const finalHabit =
-                updateHabit(
-                    habitId,
-                    {
-                        completedToday:
-                            serverCompletedToday,
-
-                        completedDates:
-                            serverCompletedDates,
-
-                        streak:
-                            serverStreak,
-
-                        weekProgress:
-                            finalWeekProgress,
-
-                        completedAt:
-                            serverCompletedToday
-                                ? optimisticHabit
-                                    .completedAt
-                                : null
-                    }
-                )
-
-            updateHabitCardVisualState(
-                card,
-                finalHabit
-            )
+            stopConfirmationLoading(confirmButton)
+            updateHabitCardVisualState(card, finalHabit)
 
             setHabitsStatistics({
-                currentStreak:
-                    normalizePositiveInteger(
-                        response.statistics
-                            ?.current_streak
-                    ),
-
-                maxStreak:
-                    normalizePositiveInteger(
-                        response.statistics
-                            ?.max_streak
-                    )
+                currentStreak: normalizePositiveInteger(
+                    response.statistics?.current_streak
+                ),
+                maxStreak: normalizePositiveInteger(
+                    response.statistics?.max_streak
+                )
             })
 
             refreshHabitsStatsVisual()
 
-        } catch (error) {
             /*
-             * Если API вернул ошибку,
-             * возвращаем старое состояние.
+             * ✓, недельная полоска и streak уже получили
+             * серверное состояние одним кадром. Поверх него
+             * одновременно запускаем визуальную награду.
              */
-            updateHabit(
-                habitId,
-                previousHabit
+            animateHabitReward(
+                card,
+                previousHabit,
+                finalHabit,
+                response
             )
 
-            updateHabitCardVisualState(
-                card,
-                previousHabit
-            )
+        } catch (error) {
+            stopConfirmationLoading(confirmButton)
+
+            /*
+             * Store не менялся до успешного ответа сервера,
+             * но оставляем явную синхронизацию как страховку.
+             */
+            updateHabit(habitId, previousHabit)
+            updateHabitCardVisualState(card, previousHabit)
 
             console.error(
                 "Ошибка подтверждения привычки:",
                 error
             )
         } finally {
-            pendingHabitConfirmations.delete(
-                habitId
-            )
+            pendingHabitConfirmations.delete(habitId)
 
-            if (
-                document.contains(
-                    confirmButton
-                )
-            ) {
-                confirmButton.disabled =
-                    false
+            if (document.contains(confirmButton)) {
+                confirmButton.disabled = false
             }
         }
     }
 )
-}
+}}
 
 /* =========================================================
    ИНИЦИАЛИЗАЦИЯ СОБЫТИЙ СПИСКА

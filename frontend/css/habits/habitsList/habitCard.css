@@ -676,3 +676,164 @@
 .habit-card__person-avatar { width:100%; height:100%; display:block; border:2px solid var(--habit-card-base); border-radius:50%; object-fit:cover; }
 .habit-card__person-check { position:absolute; right:-1px; bottom:-1px; width:15px; height:15px; display:flex; align-items:center; justify-content:center; border:2px solid var(--habit-card-base); border-radius:50%; background:var(--habit-accent); color:#fff; font-size:9px; font-weight:900; line-height:1; }
 .habit-card__people-more { width:34px; height:34px; flex:0 0 34px; display:flex; align-items:center; justify-content:center; margin-left:-8px; border:2px solid var(--habit-card-base); border-radius:50%; background:var(--app-surface-soft); color:var(--app-text-secondary); font-size:11px; font-weight:800; line-height:1; }
+
+/* =========================================================
+   CONFIRMATION REWARD FLOW
+
+   Нажатие -> вращение контура -> ✓ -> XP + progress + streak.
+   ========================================================= */
+
+.habit-card__check-mark {
+    position: relative;
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        opacity 120ms ease,
+        transform 180ms ease;
+}
+
+.habit-card__check.is-confirming {
+    cursor: default;
+}
+
+.habit-card__check.is-confirming .habit-card__check-mark {
+    opacity: 0;
+    transform: scale(0.72);
+}
+
+.habit-card__check.is-confirming::after {
+    content: "";
+
+    position: absolute;
+    inset: 2px;
+
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--habit-accent);
+    border-right-color: rgba(var(--habit-accent-rgb), 0.42);
+
+    pointer-events: none;
+
+    animation:
+        habit-confirmation-spin
+        450ms
+        linear
+        infinite;
+}
+
+@keyframes habit-confirmation-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.habit-card__xp-reward {
+    position: absolute;
+    z-index: 8;
+
+    top: 18px;
+    right: 70px;
+
+    color: var(--habit-accent);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+
+    font-size: 15px;
+    font-weight: 750;
+    line-height: 1;
+
+    white-space: nowrap;
+    pointer-events: none;
+
+    animation:
+        habit-xp-reward
+        650ms
+        ease-out
+        forwards;
+}
+
+@keyframes habit-xp-reward {
+    0% {
+        opacity: 0;
+        transform: translateY(5px) scale(0.88);
+    }
+
+    24% {
+        opacity: 1;
+        transform: translateY(0) scale(1.05);
+    }
+
+    68% {
+        opacity: 1;
+        transform: translateY(-7px) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-14px) scale(0.96);
+    }
+}
+
+.habit-card__progress-item.is-rewarded {
+    animation:
+        habit-progress-reward
+        520ms
+        ease-out;
+}
+
+@keyframes habit-progress-reward {
+    0% {
+        transform: scaleX(0.12);
+        transform-origin: left center;
+        opacity: 0.55;
+    }
+
+    100% {
+        transform: scaleX(1);
+        transform-origin: left center;
+        opacity: 1;
+    }
+}
+
+.habit-card__streak.is-updated {
+    animation:
+        habit-streak-update
+        520ms
+        ease-out;
+}
+
+@keyframes habit-streak-update {
+    0% {
+        transform: scale(0.9);
+    }
+
+    42% {
+        transform: scale(1.13);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .habit-card__check.is-confirming::after {
+        animation-duration: 900ms;
+    }
+
+    .habit-card__xp-reward,
+    .habit-card__progress-item.is-rewarded,
+    .habit-card__streak.is-updated {
+        animation: none;
+    }
+}
