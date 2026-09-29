@@ -725,6 +725,11 @@
         infinite;
 }
 
+/* При отмене подтверждения та же дуга идёт в обратную сторону. */
+.habit-card__check.is-confirming.is-unconfirming::after {
+    animation-direction: reverse;
+}
+
 @keyframes habit-confirmation-spin {
     to {
         transform: rotate(360deg);

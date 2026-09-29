@@ -924,17 +924,18 @@ function wait(ms) {
     })
 }
 
-function startConfirmationLoading(button) {
+function startConfirmationLoading(button, { reverse = false } = {}) {
     if (!button) return
 
     button.classList.add("is-confirming")
+    button.classList.toggle("is-unconfirming", reverse)
     button.setAttribute("aria-busy", "true")
 }
 
 function stopConfirmationLoading(button) {
     if (!button) return
 
-    button.classList.remove("is-confirming")
+    button.classList.remove("is-confirming", "is-unconfirming")
     button.removeAttribute("aria-busy")
 }
 
@@ -1120,7 +1121,9 @@ confirmButton?.addEventListener(
          * Мгновенно показываем только состояние действия —
          * вращение контура кнопки.
          */
-        startConfirmationLoading(confirmButton)
+        startConfirmationLoading(confirmButton, {
+            reverse: !desiredState
+        })
 
         try {
             const response = await setHabitConfirmation(
