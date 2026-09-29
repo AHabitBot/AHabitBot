@@ -725,8 +725,11 @@
         infinite;
 }
 
-/* При отмене подтверждения та же дуга идёт в обратную сторону. */
+/* При отмене подтверждения дуга заметно идёт против часовой стрелки. */
 .habit-card__check.is-confirming.is-unconfirming::after {
+    border-top-color: transparent;
+    border-right-color: var(--habit-accent);
+    border-bottom-color: rgba(var(--habit-accent-rgb), 0.34);
     animation-direction: reverse;
 }
 
@@ -810,6 +813,28 @@
     }
 }
 
+.habit-card__progress-item.is-unrewarded {
+    animation:
+        habit-progress-unreward
+        520ms
+        ease-in
+        forwards;
+}
+
+@keyframes habit-progress-unreward {
+    0% {
+        transform: scaleX(1);
+        transform-origin: right center;
+        opacity: 1;
+    }
+
+    100% {
+        transform: scaleX(0.12);
+        transform-origin: right center;
+        opacity: 0.55;
+    }
+}
+
 .habit-card__streak.is-updated {
     animation:
         habit-streak-update
@@ -831,6 +856,27 @@
     }
 }
 
+.habit-card__streak.is-decreased {
+    animation:
+        habit-streak-decrease
+        520ms
+        ease-out;
+}
+
+@keyframes habit-streak-decrease {
+    0% {
+        transform: scale(1);
+    }
+
+    42% {
+        transform: scale(0.86);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .habit-card__check.is-confirming::after {
         animation-duration: 900ms;
@@ -838,7 +884,9 @@
 
     .habit-card__xp-reward,
     .habit-card__progress-item.is-rewarded,
-    .habit-card__streak.is-updated {
+    .habit-card__progress-item.is-unrewarded,
+    .habit-card__streak.is-updated,
+    .habit-card__streak.is-decreased {
         animation: none;
     }
 }

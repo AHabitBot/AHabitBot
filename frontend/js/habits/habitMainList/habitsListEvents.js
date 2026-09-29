@@ -916,6 +916,7 @@ function updateHabitCardVisualState(
    ========================================================= */
 
 const CONFIRMATION_SPIN_MIN_MS = 450
+const UNCONFIRMATION_SPIN_MIN_MS = 650
 const REWARD_ANIMATION_MS = 650
 
 function wait(ms) {
@@ -966,10 +967,23 @@ function animateHabitReward(card, previousHabit, finalHabit, response) {
     const progressItems = card.querySelectorAll(".habit-card__progress-item")
 
     progressItems.forEach((item, index) => {
-        if (!previousProgress[index] && finalProgress[index]) {
-            item.classList.remove("is-rewarded")
+        const wasCompleted = Boolean(previousProgress[index])
+        const isCompleted = Boolean(finalProgress[index])
+
+        item.classList.remove("is-rewarded", "is-unrewarded")
+
+        if (!wasCompleted && isCompleted) {
             void item.offsetWidth
             item.classList.add("is-rewarded")
+        } else if (wasCompleted && !isCompleted) {
+            void item.offsetWidth
+            item.classList.add("is-unrewarded")
+        }
+
+        if (wasCompleted !== isCompleted) {
+            window.setTimeout(() => {
+                item.classList.remove("is-rewarded", "is-unrewarded")
+            }, REWARD_ANIMATION_MS)
         }
     })
 
@@ -978,12 +992,16 @@ function animateHabitReward(card, previousHabit, finalHabit, response) {
     const streak = card.querySelector(".habit-card__streak")
 
     if (streak && previousStreak !== finalStreak) {
-        streak.classList.remove("is-updated")
+        const streakClass = finalStreak < previousStreak
+            ? "is-decreased"
+            : "is-updated"
+
+        streak.classList.remove("is-updated", "is-decreased")
         void streak.offsetWidth
-        streak.classList.add("is-updated")
+        streak.classList.add(streakClass)
 
         window.setTimeout(() => {
-            streak.classList.remove("is-updated")
+            streak.classList.remove("is-updated", "is-decreased")
         }, REWARD_ANIMATION_MS)
     }
 
@@ -1132,7 +1150,10 @@ confirmButton?.addEventListener(
             )
 
             const elapsed = performance.now() - loadingStartedAt
-            const remaining = Math.max(0, CONFIRMATION_SPIN_MIN_MS - elapsed)
+            const minimumSpinMs = desiredState
+                ? CONFIRMATION_SPIN_MIN_MS
+                : UNCONFIRMATION_SPIN_MIN_MS
+            const remaining = Math.max(0, minimumSpinMs - elapsed)
 
             if (remaining > 0) {
                 await wait(remaining)
