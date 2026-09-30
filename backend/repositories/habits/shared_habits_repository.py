@@ -209,7 +209,12 @@ async def get_shared_contexts_for_habits(habit_ids: list[int], today) -> dict[in
     return result
 
 async def get_shared_streak_states_for_habits(habit_ids: list[int], today, connection=None) -> dict[int, dict[str, Any]]:
-    """Рассчитать единый командный streak для каждой shared-привычки одним batch-запросом."""
+    """Рассчитать личное состояние shared-streak для каждой копии привычки.
+
+    Результат дня общий для активных участников (SUCCESS только если выполнили все),
+    но отсчёт streak каждой копии начинается не раньше вступления её владельца в группу.
+    Поэтому новый участник не наследует уже накопленный streak остальных.
+    """
     if not habit_ids:
         return {}
 
@@ -222,6 +227,7 @@ async def get_shared_streak_states_for_habits(habit_ids: list[int], today, conne
             SELECT
                 me.habit_id AS requested_habit_id,
                 me.shared_habit_id,
+                me.joined_at AS requested_joined_at,
                 requested.repeat_type,
                 requested.repeat_days,
                 requested.repeat_started_on,
@@ -257,6 +263,7 @@ async def get_shared_streak_states_for_habits(habit_ids: list[int], today, conne
             "repeat_type": row["repeat_type"],
             "repeat_days": list(row["repeat_days"] or []),
             "repeat_started_on": row["repeat_started_on"],
+            "requested_joined_on": row["requested_joined_at"].date(),
             "members": {},
         })
         member_id = int(row["user_id"])
@@ -273,7 +280,12 @@ async def get_shared_streak_states_for_habits(habit_ids: list[int], today, conne
         members = list(group["members"].values())
         if not members:
             continue
-        group_started_on = max(group["repeat_started_on"], min(m["joined_on"] for m in members))
+        # У каждого участника свой отсчёт shared-streak. Старую командную
+        # историю, накопленную до его вступления, он не наследует.
+        group_started_on = max(
+            group["repeat_started_on"],
+            group["requested_joined_on"],
+        )
         scheduled = set(ALL_WEEKDAYS if group["repeat_type"] == "challenge" else group["repeat_days"])
         day_results: list[bool] = []
         cursor = group_started_on
