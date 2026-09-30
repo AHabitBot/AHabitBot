@@ -925,8 +925,9 @@
 
 /* =========================================================
    SHARED HABIT PARTICIPANTS — EXPANDABLE
-   Compact: overlapping avatars. Expanded: horizontal members
-   with today's confirmation badge and nickname below.
+   Compact: the left avatar is visually on top.
+   Expanded: avatars smoothly slide into a horizontal row;
+   today's confirmation badge stays attached to the avatar.
    ========================================================= */
 
 .habit-card__people {
@@ -937,28 +938,78 @@
 .habit-card__people-list {
     display: flex;
     align-items: flex-start;
+    gap: 0;
+    transition: gap 280ms cubic-bezier(.2,.8,.2,1);
 }
 
 .habit-card__person-wrap {
     position: relative;
+    z-index: 1;
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;
     align-items: center;
+    width: 36px;
     min-width: 36px;
     margin-left: -9px;
+    opacity: 1;
+    transform: translateX(0);
+    transition:
+        margin-left 280ms cubic-bezier(.2,.8,.2,1),
+        width 280ms cubic-bezier(.2,.8,.2,1),
+        min-width 280ms cubic-bezier(.2,.8,.2,1),
+        opacity 180ms ease,
+        transform 280ms cubic-bezier(.2,.8,.2,1);
 }
 
 .habit-card__person-wrap:first-child {
     margin-left: 0;
 }
 
+/* Leftmost avatar is above every avatar that follows it. */
+.habit-card__person-wrap:nth-child(1) { z-index: 6; }
+.habit-card__person-wrap:nth-child(2) { z-index: 5; }
+.habit-card__person-wrap:nth-child(3) { z-index: 4; }
+.habit-card__person-wrap:nth-child(4) { z-index: 3; }
+.habit-card__person-wrap:nth-child(5) { z-index: 2; }
+
+/* In compact mode only the first three avatars are visible.
+   Extra members stay in layout-ready state so expansion can animate. */
 .habit-card__person-wrap:nth-child(n + 4) {
-    display: none;
+    width: 0;
+    min-width: 0;
+    margin-left: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.habit-card__person {
+    transition:
+        width 280ms cubic-bezier(.2,.8,.2,1),
+        height 280ms cubic-bezier(.2,.8,.2,1),
+        flex-basis 280ms cubic-bezier(.2,.8,.2,1);
 }
 
 .habit-card__person-name {
-    display: none;
+    display: block;
+    width: 58px;
+    max-height: 0;
+    margin-top: 0;
+    overflow: hidden;
+    color: var(--app-text-secondary);
+    font-size: 10px;
+    font-weight: 650;
+    line-height: 1.15;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition:
+        max-height 220ms ease,
+        margin-top 220ms ease,
+        opacity 160ms ease,
+        transform 260ms cubic-bezier(.2,.8,.2,1);
 }
 
 .habit-card.is-people-expanded {
@@ -989,10 +1040,12 @@
 }
 
 .habit-card.is-people-expanded .habit-card__person-wrap {
-    display: flex;
+    z-index: 1;
     width: 58px;
     min-width: 58px;
     margin-left: 0;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .habit-card.is-people-expanded .habit-card__person {
@@ -1003,19 +1056,13 @@
 }
 
 .habit-card.is-people-expanded .habit-card__person-name {
-    display: block;
-    width: 58px;
+    max-height: 24px;
     margin-top: 5px;
-    color: var(--app-text-secondary);
-    font-size: 10px;
-    font-weight: 650;
-    line-height: 1.15;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .habit-card.is-people-expanded .habit-card__people-more {
     display: none;
 }
+

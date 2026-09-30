@@ -914,6 +914,40 @@ function updateHabitCardVisualState(
                 : ""
     }
 
+    /*
+     * Shared participant state is part of the same visual frame as
+     * progress and streak. This removes the need to reload the page
+     * after confirming/unconfirming your own shared habit.
+     */
+    const sharedMembers = Array.isArray(habit.shared?.members)
+        ? habit.shared.members
+        : []
+
+    if (sharedMembers.length >= 2) {
+        card.querySelectorAll(".habit-card__person-wrap").forEach((personWrap, index) => {
+            const member = sharedMembers[index]
+            if (!member) return
+
+            const person = personWrap.querySelector(".habit-card__person")
+            if (!person) return
+
+            const completed = Boolean(member.confirmedToday)
+            person.classList.toggle("is-completed", completed)
+
+            let check = person.querySelector(".habit-card__person-check")
+
+            if (completed && !check) {
+                check = document.createElement("span")
+                check.className = "habit-card__person-check"
+                check.setAttribute("aria-hidden", "true")
+                check.textContent = "✓"
+                person.appendChild(check)
+            } else if (!completed && check) {
+                check.remove()
+            }
+        })
+    }
+
     streakContainer?.setAttribute(
         "aria-label",
         t(
@@ -1227,6 +1261,23 @@ confirmButton?.addEventListener(
             const serverStreakFrozen = Boolean(serverHabit.streak_frozen)
             const finalWeekProgress = normalizeWeekProgress(serverHabit.week_progress)
 
+            const currentShared = habit.shared
+            const finalShared = currentShared
+                ? {
+                    ...currentShared,
+                    members: Array.isArray(currentShared.members)
+                        ? currentShared.members.map((member) =>
+                            String(member.habitId) === String(habitId)
+                                ? {
+                                    ...member,
+                                    confirmedToday: serverCompletedToday
+                                }
+                                : member
+                        )
+                        : []
+                }
+                : null
+
             const finalHabit = updateHabit(
                 habitId,
                 {
@@ -1235,6 +1286,7 @@ confirmButton?.addEventListener(
                     streak: serverStreak,
                     streakFrozen: serverStreakFrozen,
                     weekProgress: finalWeekProgress,
+                    shared: finalShared,
                     completedAt: serverCompletedToday
                         ? new Date().toISOString()
                         : null
