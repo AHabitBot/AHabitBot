@@ -174,7 +174,7 @@ function renderShell(
     root
 ) {
     root.innerHTML = `
-        <section class="public-profile-page">
+        <section class="profile-stats-page public-profile-page">
 
             <div data-public-profile-header>
                 ${renderProfileSectionHeader(

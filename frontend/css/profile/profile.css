@@ -98,90 +98,55 @@
     }
 }
 
-/* PUBLIC GAME PROFILE */
-.public-profile-top {
-    width: 100%;
-    box-sizing: border-box;
+/* =========================================================
+   PUBLIC GAME PROFILE — КОМПОЗИЦИЯ ГОТОВЫХ БЛОКОВ
+   ========================================================= */
+
+/*
+ * Скролл, высота и фон берутся из существующей
+ * .profile-stats-page.
+ *
+ * Карточка получает только тот же горизонтальный отступ,
+ * который она имеет внутри обычной .profile-page.
+ */
+.public-profile-card {
+    padding:
+        0
+        16px;
+
+    box-sizing:
+        border-box;
 }
 
-.public-profile-card {
-    padding: 4px 16px 0;
-    box-sizing: border-box;
-}
 
 .public-profile-stats-title {
-    margin: 18px 16px 4px;
-    color: var(--app-text-title);
+    margin:
+        18px
+        16px
+        4px;
+
+    color:
+        var(--app-text-title);
+
     font-size: 20px;
     font-weight: 750;
     line-height: 1.2;
 }
 
-.public-profile-card .profile-user-card {
-    cursor: default;
+
+.public-profile-card
+.profile-user-card {
+    cursor:
+        default;
 }
 
 
-.public-profile-page {
-    width: 100%;
-    min-height: 100%;
-    box-sizing: border-box;
-}
+@media (
+    max-width: 360px
+) {
 
-.public-profile-page .profile-stats-body {
-    padding-top: 0;
-}
-
-
-/* =========================================================
-   PUBLIC GAME PROFILE — FULLSCREEN / SCROLL
-   ========================================================= */
-
-.public-profile-page {
-    position: fixed;
-    inset: 0;
-    z-index: 20;
-
-    width: 100%;
-    height: 100dvh;
-    min-height: 100dvh;
-
-    box-sizing: border-box;
-
-    padding:
-        max(
-            12px,
-            env(safe-area-inset-top)
-        )
-        16px
-        calc(
-            24px +
-            env(safe-area-inset-bottom)
-        );
-
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    background:
-        var(--app-bg);
-
-    scrollbar-width: none;
-
-    -webkit-overflow-scrolling:
-        touch;
-
-    overscroll-behavior-y:
-        contain;
-}
-
-.public-profile-page::-webkit-scrollbar {
-    display: none;
-}
-
-.public-profile-page .public-profile-card,
-.public-profile-page .public-profile-stats-title,
-.public-profile-page .profile-stats-body {
-    position: relative;
-    width: 100%;
-    box-sizing: border-box;
+    .public-profile-card {
+        padding-right: 14px;
+        padding-left: 14px;
+    }
 }
