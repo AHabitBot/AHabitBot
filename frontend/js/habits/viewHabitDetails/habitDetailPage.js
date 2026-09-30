@@ -415,7 +415,7 @@ export function renderHabitDetailsPage(habit = {}) {
                         <div class="habit-details__stat-main">
 
                             <span aria-hidden="true">
-                                ${streakFrozen ? "🧊" : "🔥"}
+                                ${normalizedStreak >= 3 ? (streakFrozen ? "🧊" : "🔥") : ""}
                             </span>
 
                             <span>

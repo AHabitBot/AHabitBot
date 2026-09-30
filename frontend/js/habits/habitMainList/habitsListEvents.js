@@ -909,7 +909,9 @@ function updateHabitCardVisualState(
 
     if (streakIcon) {
         streakIcon.textContent =
-            habit.streakFrozen ? "🧊" : "🔥"
+            streak >= 3
+                ? (habit.streakFrozen ? "🧊" : "🔥")
+                : ""
     }
 
     streakContainer?.setAttribute(
