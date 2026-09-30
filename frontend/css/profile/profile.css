@@ -120,3 +120,14 @@
 .public-profile-card .profile-user-card {
     cursor: default;
 }
+
+
+.public-profile-page {
+    width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+.public-profile-page .profile-stats-body {
+    padding-top: 0;
+}

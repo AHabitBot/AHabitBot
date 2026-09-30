@@ -486,7 +486,6 @@ function bindPublicProfileEvents(root) {
                     onBack: () => renderLeaderboardPage(root)
                 }
             );
-        },
-        { once: true }
+        }
     );
 }

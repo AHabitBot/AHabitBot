@@ -54,8 +54,6 @@ const WEEKDAY_KEYS = [
 
 
 let currentPeriod = "week";
-let activePublicUserId = null;
-let activePublicHeaderHtml = "";
 
 /* =========================================================
    RESOURCE CACHE
@@ -1269,13 +1267,9 @@ function renderLoading(
     root.innerHTML = `
         <section class="profile-stats-page">
 
-            ${
-                activePublicHeaderHtml
-                    ? activePublicHeaderHtml
-                    : renderProfileSectionHeader(
-                        t("profile.stats.title")
-                    )
-            }
+            ${renderProfileSectionHeader(
+                t("profile.stats.title")
+            )}
 
             <main class="profile-stats-body">
 
@@ -1442,6 +1436,34 @@ function renderSeasonHistory(history) {
    RENDER CONTENT
    ========================================================= */
 
+export function renderProfileStatsBody(
+    data,
+    seasonHistory = [],
+) {
+    return `
+        ${renderPeriodSwitcher(
+            data.period,
+        )}
+
+        ${renderWeekdayActivity(
+            data,
+        )}
+
+        ${renderMainStats(
+            data,
+        )}
+
+        ${renderDynamics(
+            data,
+        )}
+
+        ${renderSeasonHistory(
+            seasonHistory,
+        )}
+    `;
+}
+
+
 function renderStatsContent(
     root,
     data,
@@ -1455,27 +1477,10 @@ function renderStatsContent(
             )}
 
             <main class="profile-stats-body">
-
-                ${renderPeriodSwitcher(
-                    data.period,
-                )}
-
-                ${renderWeekdayActivity(
+                ${renderProfileStatsBody(
                     data,
-                )}
-
-                ${renderMainStats(
-                    data,
-                )}
-
-                ${renderDynamics(
-                    data,
-                )}
-
-                ${renderSeasonHistory(
                     seasonHistory,
                 )}
-
             </main>
 
         </section>
@@ -1504,12 +1509,12 @@ async function loadStatsPeriod(
             data,
             seasonHistory,
         ] = await Promise.all([
-            activePublicUserId
-                ? fetchProfileStats(period, activePublicUserId)
-                : getStatsData(period),
-            activePublicUserId
-                ? fetchProfileSeasonHistory(activePublicUserId)
-                : getResource(RESOURCE_KEYS.STATS_SEASONS),
+            getStatsData(
+                period,
+            ),
+            getResource(
+                RESOURCE_KEYS.STATS_SEASONS,
+            ),
         ]);
 
         /*
@@ -1592,21 +1597,7 @@ function bindStatsEvents(
 
 export function renderProfileStatsPage(
     root,
-    {
-        userId = null,
-        headerHtml = "",
-    } = {},
 ) {
-    activePublicUserId = userId ? Number(userId) : null;
-    activePublicHeaderHtml = String(headerHtml || "");
-    currentPeriod = "week";
-
-    if (activePublicUserId) {
-        renderLoading(root);
-        loadStatsPeriod(root, currentPeriod);
-        return;
-    }
-
     const cached =
         getCachedStats(
             currentPeriod,
