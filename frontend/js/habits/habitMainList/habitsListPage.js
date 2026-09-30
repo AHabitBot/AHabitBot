@@ -385,7 +385,7 @@ export function renderHabitCard(habit = {}) {
                         class="habit-card__streak-icon"
                         aria-hidden="true"
                     >
-                        ${normalizedStreak >= 3 ? (streakFrozen ? "🧊" : "🔥") : ""}
+                        ${normalizedStreak >= 1 ? (streakFrozen ? "🧊" : "🔥") : ""}
                     </span>
 
                     <span class="habit-card__streak-value">
