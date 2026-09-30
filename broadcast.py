@@ -1,6 +1,4 @@
 import asyncio
-import html
-from datetime import date
 from typing import Any
 
 from aiogram import Bot
@@ -18,36 +16,12 @@ from backend.database.database import (
     get_connection,
 )
 
-from backend.repositories.leaderboard.season_results_repository import (
-    get_finished_season_payload,
-)
 from backend.i18n.notifications import normalize_language
 
 
 # =========================================================
-# BROADCAST — SEASON 1 RESULTS
+# BROADCAST — FRIENDS / STREAKS / PUBLIC PROFILES UPDATE
 # =========================================================
-
-
-# =========================================================
-# SEASON
-# =========================================================
-
-SEASON_NUMBER = 1
-
-SEASON_ACTIVE_START = date(
-    2026,
-    6,
-    1,
-)
-
-# Итоги рейтинга сезона были зафиксированы
-# перед финальной неделей итогов.
-SEASON_ACTIVE_END = date(
-    2026,
-    8,
-    24,
-)
 
 
 # =========================================================
@@ -64,39 +38,13 @@ DRY_RUN = False
 
 
 # =========================================================
-# SAFE TEXT
-# =========================================================
-
-def safe_text(
-    value: Any,
-    fallback: str = "—",
-) -> str:
-    if value is None:
-        return fallback
-
-    text = str(
-        value
-    ).strip()
-
-    if not text:
-        return fallback
-
-    return html.escape(
-        text
-    )
-
-
-# =========================================================
 # GET USERS
 # =========================================================
 
-async def get_all_users(
-    season_number: int,
-) -> list[dict[str, Any]]:
+async def get_all_users() -> list[dict[str, Any]]:
     """
     Возвращает всех пользователей
-    с Telegram ID, языком и их
-    финальным результатом сезона.
+    с Telegram ID и языком.
     """
 
     async with get_connection() as connection:
@@ -105,30 +53,21 @@ async def get_all_users(
             SELECT
                 u.id AS user_id,
                 u.telegram_id,
-                u.nickname,
 
                 COALESCE(
                     us.language,
                     'ru'
-                ) AS language,
-
-                sr.final_rank,
-                sr.final_xp
+                ) AS language
 
             FROM users AS u
 
             LEFT JOIN user_settings AS us
                 ON us.user_id = u.id
 
-            LEFT JOIN season_results AS sr
-                ON sr.user_id = u.id
-               AND sr.season_number = $1
-
             WHERE u.telegram_id IS NOT NULL
 
             ORDER BY u.id ASC
-            """,
-            season_number,
+            """
         )
 
     return [
@@ -143,327 +82,46 @@ async def get_all_users(
                     row["telegram_id"]
                 ),
 
-            "nickname":
-                row["nickname"],
-
             "language":
                 normalize_language(
                     row["language"]
                 ),
-
-            "final_rank": (
-                int(
-                    row["final_rank"]
-                )
-                if row["final_rank"]
-                is not None
-                else None
-            ),
-
-            "final_xp": (
-                int(
-                    row["final_xp"]
-                )
-                if row["final_xp"]
-                is not None
-                else 0
-            ),
         }
         for row in rows
     ]
 
 
 # =========================================================
-# GET COMMON SEASON DATA
-# =========================================================
-
-async def get_season_summary() -> dict[str, Any]:
-    """
-    Получает общие итоги сезона:
-    Top-3, лучший стрик,
-    популярную привычку и владельцев.
-
-    user_id=0 используется только потому,
-    что current_user здесь не нужен.
-    """
-
-    return await get_finished_season_payload(
-        season_number=
-            SEASON_NUMBER,
-
-        user_id=0,
-
-        active_start=
-            SEASON_ACTIVE_START,
-
-        active_end=
-            SEASON_ACTIVE_END,
-    )
-
-
-# =========================================================
-# FORMAT TOP 3
-# =========================================================
-
-def build_top3_lines(
-    top3: list[dict[str, Any]],
-) -> str:
-    medals = {
-        1: "🥇",
-        2: "🥈",
-        3: "🥉",
-    }
-
-    rows: list[str] = []
-
-    for item in top3:
-        rank = int(
-            item.get(
-                "rank"
-            )
-            or 0
-        )
-
-        nickname = safe_text(
-            item.get(
-                "nickname"
-            ),
-            fallback="Player",
-        )
-
-        season_xp = int(
-            item.get(
-                "season_xp"
-            )
-            or 0
-        )
-
-        medal = medals.get(
-            rank,
-            "🏅",
-        )
-
-        rows.append(
-            f"{medal} "
-            f"<b>{nickname}</b> — "
-            f"{season_xp} XP"
-        )
-
-    if not rows:
-        return "—"
-
-    return "\n".join(
-        rows
-    )
-
-
-# =========================================================
-# USER RESULT — RU
-# =========================================================
-
-def build_user_result_ru(
-    user: dict[str, Any],
-) -> str:
-    final_rank = user.get(
-        "final_rank"
-    )
-
-    final_xp = int(
-        user.get(
-            "final_xp"
-        )
-        or 0
-    )
-
-    if final_rank is None:
-        return (
-            "В этом сезоне у тебя ещё нет "
-            "зафиксированного результата."
-        )
-
-    return (
-        f"Место: <b>#{final_rank}</b>\n"
-        f"Заработано: <b>{final_xp} XP</b>"
-    )
-
-
-# =========================================================
-# USER RESULT — UK
-# =========================================================
-
-def build_user_result_uk(
-    user: dict[str, Any],
-) -> str:
-    final_rank = user.get(
-        "final_rank"
-    )
-
-    final_xp = int(
-        user.get(
-            "final_xp"
-        )
-        or 0
-    )
-
-    if final_rank is None:
-        return (
-            "У цьому сезоні в тебе ще немає "
-            "зафіксованого результату."
-        )
-
-    return (
-        f"Місце: <b>#{final_rank}</b>\n"
-        f"Зароблено: <b>{final_xp} XP</b>"
-    )
-
-
-# =========================================================
-# USER RESULT — EN
-# =========================================================
-
-def build_user_result_en(
-    user: dict[str, Any],
-) -> str:
-    final_rank = user.get(
-        "final_rank"
-    )
-
-    final_xp = int(
-        user.get(
-            "final_xp"
-        )
-        or 0
-    )
-
-    if final_rank is None:
-        return (
-            "You don't have a recorded result "
-            "for this season yet."
-        )
-
-    return (
-        f"Rank: <b>#{final_rank}</b>\n"
-        f"Earned: <b>{final_xp} XP</b>"
-    )
-
-
-# =========================================================
 # MESSAGE — RU
 # =========================================================
 
-def build_message_ru(
-    user: dict[str, Any],
-    season_data: dict[str, Any],
-) -> str:
-    top3 = (
-        season_data.get(
-            "top3"
-        )
-        or []
-    )
-
-    summary = (
-        season_data.get(
-            "summary"
-        )
-        or {}
-    )
-
-    top3_text = (
-        build_top3_lines(
-            top3
-        )
-    )
-
-    user_result = (
-        build_user_result_ru(
-            user
-        )
-    )
-
-    best_streak = int(
-        summary.get(
-            "best_streak"
-        )
-        or 0
-    )
-
-    best_streak_user = (
-        safe_text(
-            summary.get(
-                "best_streak_user"
-            ),
-            fallback="—",
-        )
-    )
-
-    popular_habit = (
-        safe_text(
-            summary.get(
-                "popular_habit"
-            ),
-            fallback="—",
-        )
-    )
-
-    popular_habit_user = (
-        safe_text(
-            summary.get(
-                "popular_habit_user"
-            ),
-            fallback="—",
-        )
-    )
-
+def build_message_ru() -> str:
     return (
-        "🏆 <b>СЕЗОН 1 ЗАВЕРШЁН</b>\n"
-        "\n"
-        "Первый сезон подошёл к концу. "
-        "Время подвести итоги 🔥\n"
+        "🚀 <b>Обновление AHabit</b>\n"
         "\n"
 
-        "🏅 <b>Победители сезона</b>\n"
-        f"{top3_text}\n"
+        "👥 <b>Привычки вместе с друзьями</b>\n"
+        "Теперь привычки можно выполнять вместе. "
+        "На карточке видно участников и кто уже выполнил привычку сегодня. "
+        "Совместный день засчитывается, когда подтвердили все участники. "
+        "О действиях друзей приходят уведомления.\n"
         "\n"
 
-        "🎁 <b>Награда за 1 место</b>\n"
-        "Победитель сезона получает "
-        "<b>персональный аватар</b>, "
-        "созданный специально для него.\n"
+        "🔥 <b>Обновили работу серий привычек</b>\n"
+        "Первый пропуск больше не обнуляет серию — "
+        "она замораживается 🧊. "
+        "Выполни привычку на следующий день, и серия восстановится 🔥. "
+        "Два пропуска подряд обнуляют серию.\n"
         "\n"
 
-        "📊 <b>Твой результат</b>\n"
-        f"{user_result}\n"
+        "🔥 <b>Личный и дружеский стрик</b>\n"
+        "Теперь отдельно отображается личный стрик "
+        "и стрик совместных привычек с друзьями.\n"
         "\n"
 
-        "🔥 <b>Самый большой стрик сезона</b>\n"
-        f"<b>{best_streak} дней</b> — "
-        f"{best_streak_user}\n"
-        "\n"
-
-        "⭐ <b>Привычка сезона</b>\n"
-        f"«{popular_habit}» — "
-        f"{popular_habit_user}\n"
-        "\n"
-
-        "📚 Позже подробную информацию "
-        "о прошедших сезонах можно будет "
-        "посмотреть в:\n"
-        "<b>Профиль → Игровые показатели → "
-        "История сезонов</b>\n"
-        "\n"
-
-        "🚀 <b>НОВЫЙ СЕЗОН — 1 СЕНТЯБРЯ</b>\n"
-        "\n"
-
-        "В новом сезоне будет ещё больше "
-        "наград за передовые места и "
-        "отдельные достижения для самых "
-        "целеустремлённых.\n"
-        "\n"
-
-        "Новый сезон. Новая борьба. "
-        "Все начинают с нуля 🔥"
+        "👤 <b>Публичные игровые профили</b>\n"
+        "Нажми на аватар пользователя в рейтинге, "
+        "чтобы открыть его профиль и посмотреть игровые показатели."
     )
 
 
@@ -471,119 +129,33 @@ def build_message_ru(
 # MESSAGE — UK
 # =========================================================
 
-def build_message_uk(
-    user: dict[str, Any],
-    season_data: dict[str, Any],
-) -> str:
-    top3 = (
-        season_data.get(
-            "top3"
-        )
-        or []
-    )
-
-    summary = (
-        season_data.get(
-            "summary"
-        )
-        or {}
-    )
-
-    top3_text = (
-        build_top3_lines(
-            top3
-        )
-    )
-
-    user_result = (
-        build_user_result_uk(
-            user
-        )
-    )
-
-    best_streak = int(
-        summary.get(
-            "best_streak"
-        )
-        or 0
-    )
-
-    best_streak_user = (
-        safe_text(
-            summary.get(
-                "best_streak_user"
-            ),
-            fallback="—",
-        )
-    )
-
-    popular_habit = (
-        safe_text(
-            summary.get(
-                "popular_habit"
-            ),
-            fallback="—",
-        )
-    )
-
-    popular_habit_user = (
-        safe_text(
-            summary.get(
-                "popular_habit_user"
-            ),
-            fallback="—",
-        )
-    )
-
+def build_message_uk() -> str:
     return (
-        "🏆 <b>СЕЗОН 1 ЗАВЕРШЕНО</b>\n"
-        "\n"
-        "Перший сезон добіг кінця. "
-        "Час підбити підсумки 🔥\n"
+        "🚀 <b>Оновлення AHabit</b>\n"
         "\n"
 
-        "🏅 <b>Переможці сезону</b>\n"
-        f"{top3_text}\n"
+        "👥 <b>Звички разом із друзями</b>\n"
+        "Тепер звички можна виконувати разом. "
+        "На картці видно учасників і хто вже виконав звичку сьогодні. "
+        "Спільний день зараховується, коли підтвердили всі учасники. "
+        "Про дії друзів надходять сповіщення.\n"
         "\n"
 
-        "🎁 <b>Нагорода за 1 місце</b>\n"
-        "Переможець сезону отримує "
-        "<b>персональний аватар</b>, "
-        "створений спеціально для нього.\n"
+        "🔥 <b>Оновили роботу серій звичок</b>\n"
+        "Перший пропуск більше не обнуляє серію — "
+        "вона заморожується 🧊. "
+        "Виконай звичку наступного дня, і серія відновиться 🔥. "
+        "Два пропуски поспіль обнуляють серію.\n"
         "\n"
 
-        "📊 <b>Твій результат</b>\n"
-        f"{user_result}\n"
+        "🔥 <b>Особистий і дружній стрік</b>\n"
+        "Тепер окремо відображається особистий стрік "
+        "і стрік спільних звичок із друзями.\n"
         "\n"
 
-        "🔥 <b>Найбільший стрік сезону</b>\n"
-        f"<b>{best_streak} днів</b> — "
-        f"{best_streak_user}\n"
-        "\n"
-
-        "⭐ <b>Звичка сезону</b>\n"
-        f"«{popular_habit}» — "
-        f"{popular_habit_user}\n"
-        "\n"
-
-        "📚 Згодом детальну інформацію "
-        "про минулі сезони можна буде "
-        "переглянути тут:\n"
-        "<b>Профіль → Ігрові показники → "
-        "Історія сезонів</b>\n"
-        "\n"
-
-        "🚀 <b>НОВИЙ СЕЗОН — 1 ВЕРЕСНЯ</b>\n"
-        "\n"
-
-        "У новому сезоні буде ще більше "
-        "нагород за провідні місця та "
-        "окремі досягнення для "
-        "найцілеспрямованіших.\n"
-        "\n"
-
-        "Новий сезон. Нова боротьба. "
-        "Усі починають з нуля 🔥"
+        "👤 <b>Публічні ігрові профілі</b>\n"
+        "Натисни на аватар користувача в рейтингу, "
+        "щоб відкрити його профіль і переглянути ігрові показники."
     )
 
 
@@ -591,119 +163,33 @@ def build_message_uk(
 # MESSAGE — EN
 # =========================================================
 
-def build_message_en(
-    user: dict[str, Any],
-    season_data: dict[str, Any],
-) -> str:
-    top3 = (
-        season_data.get(
-            "top3"
-        )
-        or []
-    )
-
-    summary = (
-        season_data.get(
-            "summary"
-        )
-        or {}
-    )
-
-    top3_text = (
-        build_top3_lines(
-            top3
-        )
-    )
-
-    user_result = (
-        build_user_result_en(
-            user
-        )
-    )
-
-    best_streak = int(
-        summary.get(
-            "best_streak"
-        )
-        or 0
-    )
-
-    best_streak_user = (
-        safe_text(
-            summary.get(
-                "best_streak_user"
-            ),
-            fallback="—",
-        )
-    )
-
-    popular_habit = (
-        safe_text(
-            summary.get(
-                "popular_habit"
-            ),
-            fallback="—",
-        )
-    )
-
-    popular_habit_user = (
-        safe_text(
-            summary.get(
-                "popular_habit_user"
-            ),
-            fallback="—",
-        )
-    )
-
+def build_message_en() -> str:
     return (
-        "🏆 <b>SEASON 1 IS OVER</b>\n"
-        "\n"
-        "The first season has come to an end. "
-        "Time to see the results 🔥\n"
+        "🚀 <b>AHabit Update</b>\n"
         "\n"
 
-        "🏅 <b>Season winners</b>\n"
-        f"{top3_text}\n"
+        "👥 <b>Habits with friends</b>\n"
+        "You can now complete habits together. "
+        "The habit card shows the participants and who has completed it today. "
+        "A shared day counts when every participant confirms the habit. "
+        "You'll also receive notifications about your friends' activity.\n"
         "\n"
 
-        "🎁 <b>1st place reward</b>\n"
-        "The season winner receives a "
-        "<b>personal avatar</b> created "
-        "especially for them.\n"
+        "🔥 <b>Updated habit streaks</b>\n"
+        "The first missed day no longer resets your streak — "
+        "it freezes 🧊. "
+        "Complete the habit the next day and the streak is restored 🔥. "
+        "Two missed days in a row reset the streak.\n"
         "\n"
 
-        "📊 <b>Your result</b>\n"
-        f"{user_result}\n"
+        "🔥 <b>Personal and friends streaks</b>\n"
+        "Your personal streak and your shared-habit streak "
+        "with friends are now shown separately.\n"
         "\n"
 
-        "🔥 <b>Longest streak of the season</b>\n"
-        f"<b>{best_streak} days</b> — "
-        f"{best_streak_user}\n"
-        "\n"
-
-        "⭐ <b>Habit of the season</b>\n"
-        f"“{popular_habit}” — "
-        f"{popular_habit_user}\n"
-        "\n"
-
-        "📚 Later, detailed information "
-        "about previous seasons will be "
-        "available in:\n"
-        "<b>Profile → Game Stats → "
-        "Season History</b>\n"
-        "\n"
-
-        "🚀 <b>NEW SEASON — SEPTEMBER 1</b>\n"
-        "\n"
-
-        "The new season will bring even "
-        "more rewards for top positions "
-        "and special achievements for "
-        "the most determined players.\n"
-        "\n"
-
-        "New season. New competition. "
-        "Everyone starts from zero 🔥"
+        "👤 <b>Public game profiles</b>\n"
+        "Tap a user's avatar in the leaderboard "
+        "to open their profile and view their game stats."
     )
 
 
@@ -713,8 +199,6 @@ def build_message_en(
 
 def get_message_text(
     language: str | None,
-    user: dict[str, Any],
-    season_data: dict[str, Any],
 ) -> str:
     safe_language = (
         normalize_language(
@@ -723,24 +207,12 @@ def get_message_text(
     )
 
     if safe_language == "uk":
-        return build_message_uk(
-            user=user,
-            season_data=
-                season_data,
-        )
+        return build_message_uk()
 
     if safe_language == "en":
-        return build_message_en(
-            user=user,
-            season_data=
-                season_data,
-        )
+        return build_message_en()
 
-    return build_message_ru(
-        user=user,
-        season_data=
-            season_data,
-    )
+    return build_message_ru()
 
 
 # =========================================================
@@ -750,7 +222,6 @@ def get_message_text(
 async def send_message_to_user(
     bot: Bot,
     user: dict[str, Any],
-    season_data: dict[str, Any],
 ) -> str:
     """
     Returns:
@@ -772,9 +243,6 @@ async def send_message_to_user(
     message_text = (
         get_message_text(
             language=language,
-            user=user,
-            season_data=
-                season_data,
         )
     )
 
@@ -799,14 +267,6 @@ async def send_message_to_user(
         print(
             f"🌐 language: "
             f"{language}"
-        )
-        print(
-            f"🏆 rank: "
-            f"{user['final_rank']}"
-        )
-        print(
-            f"⭐ XP: "
-            f"{user['final_xp']}"
         )
         print(
             "-----------------------------------------"
@@ -932,7 +392,7 @@ async def send_message_to_user(
 # BROADCAST
 # =========================================================
 
-async def broadcast_season_results() -> None:
+async def broadcast_update() -> None:
     bot = Bot(
         token=BOT_TOKEN
     )
@@ -961,74 +421,11 @@ async def broadcast_season_results() -> None:
 
 
         # =================================================
-        # COMMON SEASON DATA
-        # =================================================
-
-        season_data = (
-            await get_season_summary()
-        )
-
-        top3 = (
-            season_data.get(
-                "top3"
-            )
-            or []
-        )
-
-        summary = (
-            season_data.get(
-                "summary"
-            )
-            or {}
-        )
-
-
-        print()
-        print(
-            "========================================="
-        )
-        print(
-            f"🏆 ИТОГИ СЕЗОНА "
-            f"{SEASON_NUMBER}"
-        )
-        print(
-            "========================================="
-        )
-
-        for player in top3:
-            print(
-                f"#{player['rank']} "
-                f"{player['nickname']} — "
-                f"{player['season_xp']} XP"
-            )
-
-        print(
-            f"🔥 Стрик: "
-            f"{summary.get('best_streak')} — "
-            f"{summary.get('best_streak_user')}"
-        )
-
-        print(
-            f"⭐ Привычка: "
-            f"{summary.get('popular_habit')} — "
-            f"{summary.get('popular_habit_user')}"
-        )
-
-        print(
-            "========================================="
-        )
-        print()
-
-
-        # =================================================
         # USERS
         # =================================================
 
         users = (
-            await get_all_users(
-                season_number=
-                    SEASON_NUMBER
-            )
+            await get_all_users()
         )
 
         total = len(
@@ -1079,14 +476,15 @@ async def broadcast_season_results() -> None:
                 await send_message_to_user(
                     bot=bot,
                     user=user,
-                    season_data=
-                        season_data,
                 )
             )
 
 
             if result == "sent":
                 sent += 1
+
+                if language not in sent_by_language:
+                    language = "ru"
 
                 sent_by_language[
                     language
@@ -1097,9 +495,7 @@ async def broadcast_season_results() -> None:
                         f"✅ [{index}/{total}] "
                         f"Отправлено: "
                         f"{user['telegram_id']} "
-                        f"[{language}] "
-                        f"rank="
-                        f"{user['final_rank']}"
+                        f"[{language}]"
                     )
 
 
@@ -1192,5 +588,5 @@ async def broadcast_season_results() -> None:
 
 if __name__ == "__main__":
     asyncio.run(
-        broadcast_season_results()
+        broadcast_update()
     )

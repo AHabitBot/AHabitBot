@@ -1673,20 +1673,56 @@ async def set_habit_confirmation(
                 """,
                 habit_id,
             )
-            affected_friend_user_ids = [int(row["user_id"]) for row in shared_user_rows]
-            if user_id not in affected_friend_user_ids:
-                affected_friend_user_ids.append(user_id)
 
-            friends_states = await update_friends_streak_for_users(
-                affected_friend_user_ids,
-                confirmation_date,
-                connection,
-            )
-            own_friends_state = friends_states.get(user_id, {
-                "friends_streak": 0,
-                "friends_streak_frozen": False,
-                "friends_max_streak": 0,
-            })
+            # Дружеский стрик относится только к совместным привычкам.
+            # Для обычной привычки shared_user_rows пустой, поэтому не запускаем
+            # тяжёлый пересчёт всей истории совместных привычек пользователя.
+            if shared_user_rows:
+                affected_friend_user_ids = [
+                    int(row["user_id"])
+                    for row in shared_user_rows
+                ]
+
+                friends_states = await update_friends_streak_for_users(
+                    affected_friend_user_ids,
+                    confirmation_date,
+                    connection,
+                )
+
+                own_friends_state = friends_states.get(
+                    user_id,
+                    {
+                        "friends_streak": 0,
+                        "friends_streak_frozen": False,
+                        "friends_max_streak": 0,
+                    },
+                )
+            else:
+                own_friends_row = await connection.fetchrow(
+                    """
+                    SELECT
+                        friends_streak,
+                        friends_max_streak
+                    FROM user_stats
+                    WHERE user_id = $1
+                    """,
+                    user_id,
+                )
+
+                own_friends_state = {
+                    "friends_streak":
+                        int(own_friends_row["friends_streak"] or 0)
+                        if own_friends_row
+                        else 0,
+
+                    "friends_streak_frozen":
+                        False,
+
+                    "friends_max_streak":
+                        int(own_friends_row["friends_max_streak"] or 0)
+                        if own_friends_row
+                        else 0,
+                }
 
             previous_max_streak = (
                 await connection.fetchval(
