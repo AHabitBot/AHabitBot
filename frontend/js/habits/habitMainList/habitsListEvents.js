@@ -1107,14 +1107,82 @@ function initSingleHabitCardEvents(
         event.preventDefault()
         event.stopPropagation()
 
-        const expanded = card.classList.toggle(
-            "is-people-expanded"
-        )
+        if (!sharedPeople || card.dataset.peopleAnimating === "1") {
+            return
+        }
 
-        sharedPeople?.setAttribute(
-            "aria-expanded",
-            String(expanded)
+        const people = Array.from(
+            sharedPeople.querySelectorAll(".habit-card__person-wrap")
         )
+        const wasExpanded = card.classList.contains("is-people-expanded")
+        const firstRects = people.map((person) => person.getBoundingClientRect())
+        const firstCardHeight = card.getBoundingClientRect().height
+
+        card.dataset.peopleAnimating = "1"
+
+        if (wasExpanded) {
+            card.classList.add("is-people-collapsing")
+        }
+
+        card.classList.toggle("is-people-expanded", !wasExpanded)
+        sharedPeople.setAttribute("aria-expanded", String(!wasExpanded))
+
+        const lastRects = people.map((person) => person.getBoundingClientRect())
+        const lastCardHeight = card.getBoundingClientRect().height
+        const animations = []
+
+        people.forEach((person, index) => {
+            const first = firstRects[index]
+            const last = lastRects[index]
+
+            if (!first || !last || (first.width === 0 && last.width === 0)) {
+                return
+            }
+
+            const deltaX = first.left - last.left
+            const deltaY = first.top - last.top
+
+            /* The first avatar is our visual anchor. */
+            if (index === 0 || (Math.abs(deltaX) < 0.5 && Math.abs(deltaY) < 0.5)) {
+                return
+            }
+
+            animations.push(
+                person.animate(
+                    [
+                        { transform: `translate(${deltaX}px, ${deltaY}px)` },
+                        { transform: "translate(0, 0)" }
+                    ],
+                    {
+                        duration: 420,
+                        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+                        fill: "both"
+                    }
+                )
+            )
+        })
+
+        if (Math.abs(firstCardHeight - lastCardHeight) > 0.5) {
+            animations.push(
+                card.animate(
+                    [
+                        { height: `${firstCardHeight}px` },
+                        { height: `${lastCardHeight}px` }
+                    ],
+                    {
+                        duration: 420,
+                        easing: "cubic-bezier(0.22, 1, 0.36, 1)"
+                    }
+                )
+            )
+        }
+
+        Promise.allSettled(
+            animations.map((animation) => animation.finished)
+        ).finally(() => {
+            card.classList.remove("is-people-collapsing")
+            delete card.dataset.peopleAnimating
+        })
     }
 
     sharedPeople?.addEventListener("click", toggleSharedPeople)

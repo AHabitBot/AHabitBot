@@ -925,9 +925,8 @@
 
 /* =========================================================
    SHARED HABIT PARTICIPANTS — EXPANDABLE
-   Compact: the left avatar is visually on top.
-   Expanded: avatars smoothly slide into a horizontal row;
-   today's confirmation badge stays attached to the avatar.
+   Motion is handled with FLIP in JS: the first avatar stays
+   visually anchored, the rest glide out of / into the stack.
    ========================================================= */
 
 .habit-card__people {
@@ -939,7 +938,6 @@
     display: flex;
     align-items: flex-start;
     gap: 0;
-    transition: gap 280ms cubic-bezier(.2,.8,.2,1);
 }
 
 .habit-card__person-wrap {
@@ -953,41 +951,25 @@
     min-width: 36px;
     margin-left: -9px;
     opacity: 1;
-    transform: translateX(0);
-    transition:
-        margin-left 280ms cubic-bezier(.2,.8,.2,1),
-        width 280ms cubic-bezier(.2,.8,.2,1),
-        min-width 280ms cubic-bezier(.2,.8,.2,1),
-        opacity 180ms ease,
-        transform 280ms cubic-bezier(.2,.8,.2,1);
 }
 
 .habit-card__person-wrap:first-child {
     margin-left: 0;
 }
 
-/* Leftmost avatar is above every avatar that follows it. */
+/* Leftmost avatar stays above every avatar that follows it. */
 .habit-card__person-wrap:nth-child(1) { z-index: 6; }
 .habit-card__person-wrap:nth-child(2) { z-index: 5; }
 .habit-card__person-wrap:nth-child(3) { z-index: 4; }
 .habit-card__person-wrap:nth-child(4) { z-index: 3; }
 .habit-card__person-wrap:nth-child(5) { z-index: 2; }
 
-/* In compact mode only the first three avatars are visible.
-   Extra members stay in layout-ready state so expansion can animate. */
 .habit-card__person-wrap:nth-child(n + 4) {
     width: 0;
     min-width: 0;
     margin-left: 0;
     opacity: 0;
     pointer-events: none;
-}
-
-.habit-card__person {
-    transition:
-        width 280ms cubic-bezier(.2,.8,.2,1),
-        height 280ms cubic-bezier(.2,.8,.2,1),
-        flex-basis 280ms cubic-bezier(.2,.8,.2,1);
 }
 
 .habit-card__person-name {
@@ -1004,12 +986,10 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translateY(-2px);
     transition:
-        max-height 220ms ease,
-        margin-top 220ms ease,
-        opacity 160ms ease,
-        transform 260ms cubic-bezier(.2,.8,.2,1);
+        opacity 170ms ease-out 180ms,
+        transform 220ms ease-out 150ms;
 }
 
 .habit-card.is-people-expanded {
@@ -1066,3 +1046,14 @@
     display: none;
 }
 
+/* While collapsing, names disappear first so they do not travel with avatars. */
+.habit-card.is-people-collapsing .habit-card__person-name {
+    transition-delay: 0ms;
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .habit-card__person-name {
+        transition: none;
+    }
+}
