@@ -208,7 +208,7 @@ async def get_shared_contexts_for_habits(habit_ids: list[int], today) -> dict[in
         })
     return result
 
-async def get_shared_streak_states_for_habits(habit_ids: list[int], today, connection=None) -> dict[int, dict[str, Any]]:
+async def get_shared_streak_states_for_habits(habit_ids: list[int], today, connection=None, finalize_today: bool = False) -> dict[int, dict[str, Any]]:
     """Рассчитать личное состояние shared-streak для каждой копии привычки.
 
     Результат дня общий для активных участников (SUCCESS только если выполнили все),
@@ -294,7 +294,7 @@ async def get_shared_streak_states_for_habits(habit_ids: list[int], today, conne
                 required = [m for m in members if m["joined_on"] <= cursor and (m["left_on"] is None or cursor < m["left_on"])]
                 if required:
                     success = all(cursor in m["completed"] for m in required)
-                    if cursor == today and not success:
+                    if cursor == today and not success and not finalize_today:
                         break
                     day_results.append(success)
             cursor += timedelta(days=1)

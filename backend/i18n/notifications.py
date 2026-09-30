@@ -137,3 +137,36 @@ def achievement_text(kind: str, targets: list[int], xp: int, next_target: int | 
             next_label = f"{next_target} {word('confirmation', next_target, language)}"
         text += f"\n\n{labels['next']} — <b>{next_label}</b>"
     return text
+
+
+def shared_confirmation_text(player_name: str, title: str, only_you_left: bool, language: str) -> str:
+    language = normalize_language(language)
+    templates = {
+        "ru": '{player} подтвердил привычку «{title}»' + ('. Остался только ты' if only_you_left else ''),
+        "uk": '{player} підтвердив звичку «{title}»' + ('. Залишився тільки ти' if only_you_left else ''),
+        "en": '{player} confirmed the habit “{title}”' + ('. Only you are left' if only_you_left else ''),
+        "de": '{player} hat die Gewohnheit „{title}“ bestätigt' + ('. Nur du fehlst noch' if only_you_left else ''),
+    }
+    return templates[language].format(player=player_name, title=title)
+
+
+def shared_completed_text(title: str, restored: bool, language: str) -> str:
+    language = normalize_language(language)
+    templates = {
+        "ru": ('Все подтвердили привычку «{title}». Серия восстановлена 🔥' if restored else 'Все подтвердили привычку «{title}» 🔥'),
+        "uk": ('Усі підтвердили звичку «{title}». Серію відновлено 🔥' if restored else 'Усі підтвердили звичку «{title}» 🔥'),
+        "en": ('Everyone confirmed the habit “{title}”. Streak restored 🔥' if restored else 'Everyone confirmed the habit “{title}” 🔥'),
+        "de": ('Alle haben die Gewohnheit „{title}“ bestätigt. Serie wiederhergestellt 🔥' if restored else 'Alle haben die Gewohnheit „{title}“ bestätigt 🔥'),
+    }
+    return templates[language].format(title=title)
+
+
+def shared_frozen_text(title: str, language: str) -> str:
+    language = normalize_language(language)
+    templates = {
+        "ru": 'Привычка «{title}» пропущена. Серия заморожена 🧊',
+        "uk": 'Звичку «{title}» пропущено. Серію заморожено 🧊',
+        "en": 'The habit “{title}” was missed. Streak frozen 🧊',
+        "de": 'Die Gewohnheit „{title}“ wurde verpasst. Serie eingefroren 🧊',
+    }
+    return templates[language].format(title=title)

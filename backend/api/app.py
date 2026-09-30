@@ -1,3 +1,4 @@
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -30,14 +31,26 @@ from backend.api.settings import (
     router as settings_router,
 )
 
+from backend.services.habits.shared_habit_notification_service import (
+    run_shared_habit_freeze_loop,
+)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await connect_db()
+    shared_freeze_task = asyncio.create_task(
+        run_shared_habit_freeze_loop()
+    )
 
     try:
         yield
     finally:
+        shared_freeze_task.cancel()
+        try:
+            await shared_freeze_task
+        except asyncio.CancelledError:
+            pass
         await close_db()
 
 

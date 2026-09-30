@@ -256,6 +256,40 @@ CREATE INDEX IF NOT EXISTS idx_shared_habit_members_habit_id
     ON shared_habit_members(habit_id);
 
 
+CREATE TABLE IF NOT EXISTS shared_habit_notification_events (
+    shared_habit_id BIGINT NOT NULL,
+    recipient_user_id BIGINT NOT NULL,
+    event_date DATE NOT NULL,
+    event_type VARCHAR(32) NOT NULL,
+    actor_user_id BIGINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (
+        shared_habit_id,
+        recipient_user_id,
+        event_date,
+        event_type,
+        actor_user_id
+    ),
+
+    CONSTRAINT fk_shared_notification_shared_habit
+        FOREIGN KEY (shared_habit_id)
+        REFERENCES shared_habits(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_shared_notification_recipient
+        FOREIGN KEY (recipient_user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT chk_shared_notification_event_type
+        CHECK (event_type IN ('confirmation', 'completed', 'restored', 'frozen'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_shared_notification_events_date
+    ON shared_habit_notification_events(event_date, shared_habit_id);
+
+
 CREATE TABLE IF NOT EXISTS habit_confirmations (
     id BIGSERIAL PRIMARY KEY,
     habit_id BIGINT NOT NULL,
@@ -649,6 +683,7 @@ async def init_database() -> None:
         print("   • habits")
         print("   • shared_habits")
         print("   • shared_habit_members")
+        print("   • shared_habit_notification_events")
         print("   • habit_confirmations")
         print("   • referrals")
         print("   • user_achievements")

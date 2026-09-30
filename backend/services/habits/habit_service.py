@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Any
 
 from backend.repositories.habits import (
@@ -124,9 +125,16 @@ async def update_habit_confirmation(
         and result.get("confirmation_state_changed")
     ):
         try:
+            confirmation_date_raw = result.get("habit", {}).get("confirmation_date")
+            confirmation_date = (
+                date.fromisoformat(confirmation_date_raw)
+                if confirmation_date_raw
+                else None
+            )
             await send_shared_habit_confirmation_notifications(
                 user_id=user_id,
                 habit_id=habit_id,
+                confirmation_date=confirmation_date,
             )
         except Exception as error:
             print(
