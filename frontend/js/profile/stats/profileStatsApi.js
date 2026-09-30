@@ -21,6 +21,7 @@ const VALID_PERIODS = new Set([
 
 export async function fetchProfileStats(
     period = "week",
+    userId = null,
 ) {
     const normalizedPeriod = String(
         period || "week",
@@ -50,9 +51,9 @@ export async function fetchProfileStats(
 
     const data =
         await apiRequest(
-            `/api/profile/stats?period=${encodeURIComponent(
-                normalizedPeriod,
-            )}`,
+            userId
+                ? `/api/profile/public/${encodeURIComponent(userId)}/stats?period=${encodeURIComponent(normalizedPeriod)}`
+                : `/api/profile/stats?period=${encodeURIComponent(normalizedPeriod)}`,
             {
                 method: "GET",
             }
@@ -183,9 +184,13 @@ export async function fetchProfileStats(
    ПОЛУЧИТЬ ИСТОРИЮ СЕЗОНОВ
    ========================================================= */
 
-export async function fetchProfileSeasonHistory() {
+export async function fetchProfileSeasonHistory(
+    userId = null,
+) {
     const data = await apiRequest(
-        "/api/profile/season-history",
+        userId
+            ? `/api/profile/public/${encodeURIComponent(userId)}/season-history`
+            : "/api/profile/season-history",
         {
             method: "GET",
         }

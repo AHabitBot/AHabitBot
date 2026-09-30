@@ -73,6 +73,8 @@ export function renderProfileUserCard(
 ) {
     const isAppearancePreview =
         mode === "appearance"
+    const isPublicProfile =
+        mode === "public"
     const nickname =
         escapeProfileText(
             profile.nickname || "Player"
@@ -171,18 +173,20 @@ export function renderProfileUserCard(
             ${
                 isAppearancePreview
                     ? `data-profile-card-mode="appearance"`
-                    : `
-                        data-profile-page="appearance"
-                        role="button"
-                        tabindex="0"
-                        aria-label="${t("profile.main.menu.appearance")}"
-                    `
+                    : isPublicProfile
+                        ? `data-profile-card-mode="public"`
+                        : `
+                            data-profile-page="appearance"
+                            role="button"
+                            tabindex="0"
+                            aria-label="${t("profile.main.menu.appearance")}"
+                        `
             }
         >
             <div class="profile-user-card__overlay"></div>
 
             ${
-                isAppearancePreview
+                isAppearancePreview || isPublicProfile
                     ? ""
                     : `
                         <span

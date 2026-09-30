@@ -230,3 +230,29 @@ async def read_profile_season_history(
     return await get_profile_season_history(
         user_id=user["id"],
     )
+
+
+# =========================================================
+# ПУБЛИЧНЫЙ ИГРОВОЙ ПРОФИЛЬ
+# =========================================================
+
+@router.get("/public/{user_id}")
+async def read_public_profile(user_id: int, user: CurrentUser):
+    profile = await get_profile(user_id=user_id)
+    if profile is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Профиль пользователя не найден")
+    profile.pop("nickname_can_change", None)
+    return profile
+
+
+@router.get("/public/{user_id}/stats")
+async def read_public_profile_stats(user_id: int, user: CurrentUser, period: str = "week"):
+    try:
+        return await get_profile_stats(user_id=user_id, period=period)
+    except ValueError as error:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error))
+
+
+@router.get("/public/{user_id}/season-history")
+async def read_public_profile_season_history(user_id: int, user: CurrentUser):
+    return await get_profile_season_history(user_id=user_id)

@@ -164,7 +164,12 @@ export function renderTopThree(users = []) {
                         )}
                     </div>
 
-                    <div class="leaderboard-top-card__avatar-wrap">
+                    <div
+                        class="leaderboard-top-card__avatar-wrap"
+                        data-public-profile-user-id="${user.userId}"
+                        role="button"
+                        tabindex="0"
+                    >
                         <img
                             class="leaderboard-top-card__avatar"
                             src="${user.avatar}"
@@ -238,6 +243,9 @@ export function renderLeaderboardList(users = []) {
                     <img
                         class="leaderboard-list__avatar"
                         src="${user.avatar}"
+                        data-public-profile-user-id="${user.userId}"
+                        role="button"
+                        tabindex="0"
                         alt="${escapeHtml(getDisplayName(user))}"
                     >
 

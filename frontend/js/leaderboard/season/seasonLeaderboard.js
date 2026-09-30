@@ -196,6 +196,11 @@ function normalizeLeaderboardUser(
     user
 ) {
     return {
+        userId:
+            normalizePositiveInteger(
+                user?.user_id
+            ),
+
         rank:
             normalizePositiveInteger(
                 user?.rank

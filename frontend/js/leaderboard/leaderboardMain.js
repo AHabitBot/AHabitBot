@@ -28,6 +28,10 @@ import {
     getPluralForm
 } from "../../i18n/core/plural.js";
 
+import {
+    openPublicProfilePage
+} from "../profile/publicProfile.js";
+
 let leaderboardRoot = null;
 
 let activeRenderId = 0;
@@ -71,6 +75,10 @@ export function renderLeaderboardPage(
             ${renderLeaderboardContentShell()}
         </main>
     `;
+
+    bindPublicProfileEvents(
+        leaderboardRoot
+    );
 
     void renderActiveLeaderboardContent();
 
@@ -452,4 +460,33 @@ function escapeHtml(
 export function destroyLeaderboardPage() {
     activeRenderId += 1;
     leaderboardRoot = null;
+}
+
+
+function bindPublicProfileEvents(root) {
+    root.addEventListener(
+        "click",
+        (event) => {
+            const target = event.target.closest(
+                "[data-public-profile-user-id]"
+            );
+
+            if (!target) return;
+
+            const userId = Number(
+                target.dataset.publicProfileUserId
+            );
+
+            if (!Number.isInteger(userId) || userId <= 0) return;
+
+            void openPublicProfilePage(
+                root,
+                userId,
+                {
+                    onBack: () => renderLeaderboardPage(root)
+                }
+            );
+        },
+        { once: true }
+    );
 }
