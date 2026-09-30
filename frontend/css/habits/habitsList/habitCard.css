@@ -922,3 +922,100 @@
         animation: none;
     }
 }
+
+/* =========================================================
+   SHARED HABIT PARTICIPANTS — EXPANDABLE
+   Compact: overlapping avatars. Expanded: horizontal members
+   with today's confirmation badge and nickname below.
+   ========================================================= */
+
+.habit-card__people {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.habit-card__people-list {
+    display: flex;
+    align-items: flex-start;
+}
+
+.habit-card__person-wrap {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    min-width: 36px;
+    margin-left: -9px;
+}
+
+.habit-card__person-wrap:first-child {
+    margin-left: 0;
+}
+
+.habit-card__person-wrap:nth-child(n + 4) {
+    display: none;
+}
+
+.habit-card__person-name {
+    display: none;
+}
+
+.habit-card.is-people-expanded {
+    grid-template-rows: auto minmax(48px, 1fr) auto;
+}
+
+.habit-card.is-people-expanded .habit-card__people {
+    grid-column: 1;
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.habit-card.is-people-expanded .habit-card__people-list {
+    width: 100%;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 2px 4px;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+}
+
+.habit-card.is-people-expanded .habit-card__people-list::-webkit-scrollbar {
+    display: none;
+}
+
+.habit-card.is-people-expanded .habit-card__person-wrap {
+    display: flex;
+    width: 58px;
+    min-width: 58px;
+    margin-left: 0;
+}
+
+.habit-card.is-people-expanded .habit-card__person {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+    margin-left: 0;
+}
+
+.habit-card.is-people-expanded .habit-card__person-name {
+    display: block;
+    width: 58px;
+    margin-top: 5px;
+    color: var(--app-text-secondary);
+    font-size: 10px;
+    font-weight: 650;
+    line-height: 1.15;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.habit-card.is-people-expanded .habit-card__people-more {
+    display: none;
+}

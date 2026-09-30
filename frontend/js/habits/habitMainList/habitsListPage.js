@@ -258,14 +258,31 @@ function getHabitAvatarSrc(avatarKey) {
 function renderSharedHabitPeople(shared) {
     const members = Array.isArray(shared?.members) ? shared.members : []
     if (members.length < 2) return ""
-    const visible = members.slice(0, 3)
-    const hidden = Math.max(0, members.length - visible.length)
-    return `<div class="habit-card__people">${visible.map((member) => `
-        <span class="habit-card__person ${member.confirmedToday ? "is-completed" : ""}" title="${escapeHtml(member.nickname || "Player")}">
-            <img class="habit-card__person-avatar" src="${getHabitAvatarSrc(member.avatarKey)}" alt="">
-            ${member.confirmedToday ? `<span class="habit-card__person-check" aria-hidden="true">✓</span>` : ""}
-        </span>`).join("")}${hidden ? `<span class="habit-card__people-more">+${hidden}</span>` : ""}</div>`
+
+    const hidden = Math.max(0, members.length - 3)
+
+    return `<div
+        class="habit-card__people"
+        data-action="toggle-shared-people"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+        aria-label="Участники совместной привычки"
+    >
+        <div class="habit-card__people-list">
+            ${members.map((member) => `
+                <div class="habit-card__person-wrap">
+                    <span class="habit-card__person ${member.confirmedToday ? "is-completed" : ""}" title="${escapeHtml(member.nickname || "Player")}">
+                        <img class="habit-card__person-avatar" src="${getHabitAvatarSrc(member.avatarKey)}" alt="">
+                        ${member.confirmedToday ? `<span class="habit-card__person-check" aria-hidden="true">✓</span>` : ""}
+                    </span>
+                    <span class="habit-card__person-name">${escapeHtml(member.nickname || "Player")}</span>
+                </div>`).join("")}
+            ${hidden ? `<span class="habit-card__people-more">+${hidden}</span>` : ""}
+        </div>
+    </div>`
 }
+
 
 
 /* =========================================================

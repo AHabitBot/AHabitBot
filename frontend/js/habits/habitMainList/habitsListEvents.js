@@ -1065,6 +1065,31 @@ function initSingleHabitCardEvents(
         '[data-action="confirm-habit"]'
     )
 
+    const sharedPeople = card.querySelector(
+        '[data-action="toggle-shared-people"]'
+    )
+
+    const toggleSharedPeople = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+
+        const expanded = card.classList.toggle(
+            "is-people-expanded"
+        )
+
+        sharedPeople?.setAttribute(
+            "aria-expanded",
+            String(expanded)
+        )
+    }
+
+    sharedPeople?.addEventListener("click", toggleSharedPeople)
+    sharedPeople?.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return
+        toggleSharedPeople(event)
+    })
+
+
 
     /* ---------------------------------------------------------
        АНИМАЦИЯ НАЖАТИЯ
@@ -1117,7 +1142,12 @@ function initSingleHabitCardEvents(
                     '[data-action="confirm-habit"]'
                 )
 
-            if (clickedConfirmButton) {
+            const clickedSharedPeople =
+                event.target.closest(
+                    '[data-action="toggle-shared-people"]'
+                )
+
+            if (clickedConfirmButton || clickedSharedPeople) {
                 return
             }
 
