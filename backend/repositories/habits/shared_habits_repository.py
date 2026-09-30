@@ -178,12 +178,13 @@ async def get_shared_contexts_for_habits(habit_ids: list[int], today) -> dict[in
                 COALESCE(hc.is_confirmed, FALSE) AS confirmed_today
             FROM shared_habit_members me
             JOIN shared_habits sh ON sh.id = me.shared_habit_id
-            JOIN shared_habit_members member ON member.shared_habit_id = sh.id
+            JOIN shared_habit_members member ON member.shared_habit_id = sh.id AND member.left_at IS NULL
             JOIN users u ON u.id = member.user_id
             LEFT JOIN habit_confirmations hc
               ON hc.habit_id = member.habit_id
              AND hc.confirmation_date = $2
             WHERE me.habit_id = ANY($1::BIGINT[])
+              AND me.left_at IS NULL
             ORDER BY me.habit_id, member.joined_at, member.user_id
             """,
             habit_ids,
@@ -205,4 +206,87 @@ async def get_shared_contexts_for_habits(habit_ids: list[int], today) -> dict[in
             "avatar_key": row["avatar_key"],
             "confirmed_today": bool(row["confirmed_today"]),
         })
+    return result
+
+async def get_shared_streak_states_for_habits(habit_ids: list[int], today, connection=None) -> dict[int, dict[str, Any]]:
+    """Рассчитать единый командный streak для каждой shared-привычки одним batch-запросом."""
+    if not habit_ids:
+        return {}
+
+    from datetime import timedelta
+    from backend.services.habits.repeat_rules import calculate_streak_state, ALL_WEEKDAYS
+
+    async def _fetch_rows(conn):
+        return await conn.fetch(
+            """
+            SELECT
+                me.habit_id AS requested_habit_id,
+                me.shared_habit_id,
+                requested.repeat_type,
+                requested.repeat_days,
+                requested.repeat_started_on,
+                member.user_id,
+                member.habit_id AS member_habit_id,
+                member.joined_at,
+                member.left_at,
+                hc.confirmation_date
+            FROM shared_habit_members me
+            JOIN habits requested ON requested.id = me.habit_id
+            JOIN shared_habit_members member
+              ON member.shared_habit_id = me.shared_habit_id
+            LEFT JOIN habit_confirmations hc
+              ON hc.habit_id = member.habit_id
+             AND hc.is_confirmed = TRUE
+            WHERE me.habit_id = ANY($1::BIGINT[])
+              AND me.left_at IS NULL
+            ORDER BY me.habit_id, member.user_id, hc.confirmation_date
+            """,
+            habit_ids,
+        )
+
+    if connection is None:
+        async with get_connection() as conn:
+            rows = await _fetch_rows(conn)
+    else:
+        rows = await _fetch_rows(connection)
+
+    groups: dict[int, dict[str, Any]] = {}
+    for row in rows:
+        requested_id = int(row["requested_habit_id"])
+        group = groups.setdefault(requested_id, {
+            "repeat_type": row["repeat_type"],
+            "repeat_days": list(row["repeat_days"] or []),
+            "repeat_started_on": row["repeat_started_on"],
+            "members": {},
+        })
+        member_id = int(row["user_id"])
+        member = group["members"].setdefault(member_id, {
+            "joined_on": row["joined_at"].date(),
+            "left_on": row["left_at"].date() if row["left_at"] else None,
+            "completed": set(),
+        })
+        if row["confirmation_date"] is not None:
+            member["completed"].add(row["confirmation_date"])
+
+    result: dict[int, dict[str, Any]] = {}
+    for requested_id, group in groups.items():
+        members = list(group["members"].values())
+        if not members:
+            continue
+        group_started_on = max(group["repeat_started_on"], min(m["joined_on"] for m in members))
+        scheduled = set(ALL_WEEKDAYS if group["repeat_type"] == "challenge" else group["repeat_days"])
+        day_results: list[bool] = []
+        cursor = group_started_on
+        while cursor <= today:
+            if cursor.isoweekday() in scheduled:
+                required = [m for m in members if m["joined_on"] <= cursor and (m["left_on"] is None or cursor < m["left_on"])]
+                if required:
+                    success = all(cursor in m["completed"] for m in required)
+                    if cursor == today and not success:
+                        break
+                    day_results.append(success)
+            cursor += timedelta(days=1)
+        streak, frozen = calculate_streak_state(day_results)
+        result[requested_id] = {"streak": streak, "frozen": frozen}
+
     return result

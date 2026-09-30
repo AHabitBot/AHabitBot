@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from backend.database.database import get_connection
 from backend.repositories.habits.shared_habits_repository import (
     get_shared_contexts_for_habits,
+    get_shared_streak_states_for_habits,
 )
 from backend.services.leaderboard.season_service import (
     get_season_context,
@@ -13,7 +14,7 @@ from backend.services.leaderboard.season_service import (
 
 from backend.services.habits.repeat_rules import (
     calculate_repeat_streak,
-    calculate_weekly_streak_with_target,
+    calculate_user_streak_state,
     is_confirmation_allowed,
 )
 
@@ -271,6 +272,10 @@ async def get_user_habits(
         habit_ids=[int(row["id"]) for row in habit_rows],
         today=today,
     )
+    shared_streak_states = await get_shared_streak_states_for_habits(
+        habit_ids=[int(row["id"]) for row in habit_rows],
+        today=today,
+    )
 
     # =====================================================
     # ФОРМИРУЕМ ФИНАЛЬНЫЙ СПИСОК ПРИВЫЧЕК
@@ -309,13 +314,7 @@ async def get_user_habits(
             in habit_completed_dates
         ]
 
-        if habit["repeat_type"] == "weekly":
-            habit["streak"] = calculate_weekly_streak_with_target(
-                habit_completed_dates, today, habit["repeat_started_on"],
-                int(habit["weekly_target"]),
-            )
-        else:
-            habit["streak"] = calculate_repeat_streak(
+        habit["streak"] = calculate_repeat_streak(
                 habit["repeat_type"], list(habit["repeat_days"] or []),
                 habit_completed_dates, today, habit["repeat_started_on"],
             )
@@ -333,6 +332,19 @@ async def get_user_habits(
         habit["completed_count"] = len(
             habit_completed_dates
         )
+
+        shared_context = shared_contexts.get(int(row["id"]))
+        shared_streak_state = shared_streak_states.get(int(row["id"]))
+        if shared_streak_state:
+            habit["streak"] = int(shared_streak_state["streak"])
+            habit["streak_frozen"] = bool(shared_streak_state["frozen"])
+        else:
+            from backend.services.habits.repeat_rules import calculate_repeat_streak_state
+            _, habit_frozen = calculate_repeat_streak_state(
+                habit["repeat_type"], list(habit["repeat_days"] or []),
+                habit_completed_dates, today, habit["repeat_started_on"],
+            )
+            habit["streak_frozen"] = habit_frozen
 
         shared_context = shared_contexts.get(int(row["id"]))
         habit["shared"] = (
@@ -1054,12 +1066,7 @@ async def restore_habit(
             # Текущая серия
             # -------------------------------------------------
 
-            if row["repeat_type"] == "weekly":
-                streak = calculate_weekly_streak_with_target(
-                    completed_dates, today, row["repeat_started_on"], int(row["weekly_target"])
-                )
-            else:
-                streak = calculate_repeat_streak(
+            streak = calculate_repeat_streak(
                     row["repeat_type"], list(row["repeat_days"] or []),
                     completed_dates, today, row["repeat_started_on"],
                 )
@@ -1291,43 +1298,7 @@ def calculate_user_streak(
     confirmation_dates: list[date],
     today: date,
 ) -> int:
-    """
-    Считает общий текущий стрик пользователя.
-
-    День засчитывается, если в этот день была
-    подтверждена хотя бы одна привычка.
-
-    Несколько подтверждений в один день
-    считаются одним днём серии.
-
-    Если сегодня ещё ничего не подтверждено,
-    серия считается назад от вчерашнего дня.
-    """
-
-    if not confirmation_dates:
-        return 0
-
-    unique_dates = set(
-        confirmation_dates
-    )
-
-    if today in unique_dates:
-        current_date = today
-    else:
-        current_date = (
-            today - timedelta(days=1)
-        )
-
-    streak = 0
-
-    while current_date in unique_dates:
-        streak += 1
-
-        current_date -= timedelta(
-            days=1
-        )
-
-    return streak
+    return calculate_user_streak_state(confirmation_dates, today)[0]
 
 # =========================================================
 # УСТАНОВИТЬ СОСТОЯНИЕ ПОДТВЕРЖДЕНИЯ
@@ -1661,12 +1632,8 @@ async def set_habit_confirmation(
                 for row in user_confirmation_rows
             ]
 
-            current_streak = (
-                calculate_user_streak(
-                    confirmation_dates=
-                        user_confirmation_dates,
-                    today=confirmation_date,
-                )
+            current_streak, current_streak_frozen = calculate_user_streak_state(
+                user_confirmation_dates, confirmation_date
             )
 
             previous_max_streak = (
@@ -1913,16 +1880,15 @@ async def set_habit_confirmation(
             # СТРИК ПРИВЫЧКИ
             # =================================================
 
-            if habit["repeat_type"] == "weekly":
-                habit_streak = calculate_weekly_streak_with_target(
-                    habit_completed_dates, confirmation_date,
-                    habit["repeat_started_on"], int(habit["weekly_target"]),
-                )
-            else:
-                habit_streak = calculate_repeat_streak(
-                    habit["repeat_type"], list(habit["repeat_days"] or []),
-                    habit_completed_dates, confirmation_date, habit["repeat_started_on"],
-                )
+            from backend.services.habits.repeat_rules import calculate_repeat_streak_state
+            habit_streak, habit_streak_frozen = calculate_repeat_streak_state(
+                habit["repeat_type"], list(habit["repeat_days"] or []),
+                habit_completed_dates, confirmation_date, habit["repeat_started_on"],
+            )
+            shared_state = (await get_shared_streak_states_for_habits([habit_id], confirmation_date, connection=connection)).get(habit_id)
+            if shared_state:
+                habit_streak = int(shared_state["streak"])
+                habit_streak_frozen = bool(shared_state["frozen"])
 
             habit_max_streak = (
                 calculate_habit_max_streak(
@@ -1991,6 +1957,9 @@ async def set_habit_confirmation(
                     "streak":
                         habit_streak,
 
+                    "streak_frozen":
+                        habit_streak_frozen,
+
                     "max_streak":
                         habit_max_streak,
 
@@ -2024,6 +1993,9 @@ async def set_habit_confirmation(
                 "statistics": {
                     "current_streak":
                         current_streak,
+
+                    "current_streak_frozen":
+                        current_streak_frozen,
 
                     "max_streak":
                         max_streak,

@@ -155,11 +155,9 @@ WHERE repeat_type = 'days';
 
 UPDATE habits
 SET
-    repeat_days = ARRAY[]::SMALLINT[],
-    weekly_target = CASE
-        WHEN weekly_target BETWEEN 1 AND 7 THEN weekly_target
-        ELSE 1
-    END,
+    repeat_type = 'days',
+    repeat_days = ARRAY[1, 2, 3, 4, 5, 6, 7]::SMALLINT[],
+    weekly_target = NULL,
     challenge_target = NULL
 WHERE repeat_type = 'weekly';
 
@@ -195,11 +193,6 @@ ALTER TABLE habits
             AND weekly_target IS NULL
             AND challenge_target IS NULL)
         OR
-        (repeat_type = 'weekly'
-            AND cardinality(repeat_days) = 0
-            AND weekly_target BETWEEN 1 AND 7
-            AND challenge_target IS NULL)
-        OR
         (repeat_type = 'challenge'
             AND cardinality(repeat_days) = 0
             AND weekly_target IS NULL
@@ -222,6 +215,7 @@ CREATE TABLE IF NOT EXISTS shared_habit_members (
     user_id BIGINT NOT NULL,
     habit_id BIGINT NOT NULL,
     joined_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    left_at TIMESTAMPTZ,
 
     PRIMARY KEY (shared_habit_id, user_id),
 
@@ -243,6 +237,14 @@ CREATE TABLE IF NOT EXISTS shared_habit_members (
     CONSTRAINT uq_shared_habit_member_habit
         UNIQUE (habit_id)
 );
+
+ALTER TABLE shared_habit_members
+    ADD COLUMN IF NOT EXISTS left_at TIMESTAMPTZ;
+
+CREATE INDEX IF NOT EXISTS idx_shared_habit_members_active
+    ON shared_habit_members(shared_habit_id, user_id)
+    WHERE left_at IS NULL;
+
 
 CREATE INDEX IF NOT EXISTS idx_shared_habits_owner_user_id
     ON shared_habits(owner_user_id);
