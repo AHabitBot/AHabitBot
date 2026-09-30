@@ -1528,96 +1528,171 @@ async def set_habit_confirmation(
             # =================================================
             # ОБЩАЯ СТАТИСТИКА
             #
-            # total_confirmations:
-            # только подтверждения привычек.
+            # Раньше после КАЖДОГО клика заново считались:
+            # - все подтверждения пользователя;
+            # - весь XP привычек;
+            # - весь referral XP;
+            # - весь achievement XP.
             #
-            # total_xp:
-            # XP привычек
-            # +
-            # XP за приглашения
-            # +
-            # XP за достижения.
+            # Теперь для существующей user_stats меняем только
+            # то, что реально изменилось этим кликом.
+            #
+            # Полный старый пересчёт оставлен только как безопасный
+            # fallback, если строки user_stats почему-то ещё нет.
             # =================================================
 
-            statistics = await connection.fetchrow(
+            current_stats = await connection.fetchrow(
                 """
                 SELECT
-                    (
-                        SELECT
-                            COUNT(*)::INTEGER
-
-                        FROM habit_confirmations AS hc
-
-                        INNER JOIN habits AS h
-                            ON h.id = hc.habit_id
-
-                        WHERE h.user_id = $1
-                          AND hc.is_confirmed = TRUE
-                    ) AS total_confirmations,
-
-                    (
-                        COALESCE(
-                            (
-                                SELECT
-                                    SUM(hc.xp_amount)
-
-                                FROM habit_confirmations AS hc
-
-                                INNER JOIN habits AS h
-                                    ON h.id = hc.habit_id
-
-                                WHERE h.user_id = $1
-                                  AND hc.is_confirmed = TRUE
-                                  AND hc.xp_awarded = TRUE
-                            ),
-                            0
-                        )
-
-                        +
-
-                        COALESCE(
-                            (
-                                SELECT
-                                    SUM(r.xp_amount)
-
-                                FROM referrals AS r
-
-                                WHERE r.inviter_user_id = $1
-                                  AND r.xp_awarded = TRUE
-                            ),
-                            0
-                        )
-
-                        +
-
-                        COALESCE(
-                            (
-                                SELECT
-                                    SUM(ua.xp_amount)
-
-                                FROM user_achievements AS ua
-
-                                WHERE ua.user_id = $1
-                                  AND ua.xp_awarded = TRUE
-                            ),
-                            0
-                        )
-                    )::INTEGER AS total_xp
+                    max_streak,
+                    total_confirmations,
+                    total_xp
+                FROM user_stats
+                WHERE user_id = $1
+                FOR UPDATE
                 """,
                 user_id,
             )
 
-            total_confirmations = int(
-                statistics["total_confirmations"]
-                if statistics
-                else 0
-            )
+            if current_stats is not None:
+                confirmation_delta = 0
+                xp_delta = 0
 
-            total_xp = int(
-                statistics["total_xp"]
-                if statistics
-                else 0
-            )
+                if confirmation_state_changed:
+                    if is_confirmed:
+                        confirmation_delta = 1
+
+                        # После INSERT/UPDATE это точное количество XP,
+                        # начисленное именно текущим подтверждением.
+                        current_confirmation_xp = await connection.fetchval(
+                            """
+                            SELECT
+                                CASE
+                                    WHEN is_confirmed = TRUE
+                                     AND xp_awarded = TRUE
+                                    THEN xp_amount
+                                    ELSE 0
+                                END
+                            FROM habit_confirmations
+                            WHERE habit_id = $1
+                              AND confirmation_date = $2
+                            """,
+                            habit_id,
+                            confirmation_date,
+                        )
+
+                        xp_delta = int(
+                            current_confirmation_xp
+                            or 0
+                        )
+                    else:
+                        confirmation_delta = -1
+                        xp_delta = -int(
+                            xp_removed_today
+                            or 0
+                        )
+
+                total_confirmations = max(
+                    0,
+                    int(
+                        current_stats[
+                            "total_confirmations"
+                        ]
+                        or 0
+                    )
+                    + confirmation_delta,
+                )
+
+                total_xp = max(
+                    0,
+                    int(
+                        current_stats[
+                            "total_xp"
+                        ]
+                        or 0
+                    )
+                    + xp_delta,
+                )
+
+                previous_max_streak = int(
+                    current_stats[
+                        "max_streak"
+                    ]
+                    or 0
+                )
+
+            else:
+                # Редкий защитный сценарий для старой/неполной БД:
+                # если user_stats отсутствует, один раз считаем всё
+                # старым надёжным способом.
+                statistics = await connection.fetchrow(
+                    """
+                    SELECT
+                        (
+                            SELECT
+                                COUNT(*)::INTEGER
+                            FROM habit_confirmations AS hc
+                            INNER JOIN habits AS h
+                                ON h.id = hc.habit_id
+                            WHERE h.user_id = $1
+                              AND hc.is_confirmed = TRUE
+                        ) AS total_confirmations,
+
+                        (
+                            COALESCE(
+                                (
+                                    SELECT SUM(hc.xp_amount)
+                                    FROM habit_confirmations AS hc
+                                    INNER JOIN habits AS h
+                                        ON h.id = hc.habit_id
+                                    WHERE h.user_id = $1
+                                      AND hc.is_confirmed = TRUE
+                                      AND hc.xp_awarded = TRUE
+                                ),
+                                0
+                            )
+                            +
+                            COALESCE(
+                                (
+                                    SELECT SUM(r.xp_amount)
+                                    FROM referrals AS r
+                                    WHERE r.inviter_user_id = $1
+                                      AND r.xp_awarded = TRUE
+                                ),
+                                0
+                            )
+                            +
+                            COALESCE(
+                                (
+                                    SELECT SUM(ua.xp_amount)
+                                    FROM user_achievements AS ua
+                                    WHERE ua.user_id = $1
+                                      AND ua.xp_awarded = TRUE
+                                ),
+                                0
+                            )
+                        )::INTEGER AS total_xp
+                    """,
+                    user_id,
+                )
+
+                total_confirmations = int(
+                    statistics[
+                        "total_confirmations"
+                    ]
+                    if statistics
+                    else 0
+                )
+
+                total_xp = int(
+                    statistics[
+                        "total_xp"
+                    ]
+                    if statistics
+                    else 0
+                )
+
+                previous_max_streak = 0
 
             # =================================================
             # ОБЩИЙ СТРИК
@@ -1722,18 +1797,6 @@ async def set_habit_confirmation(
                         if own_friends_row
                         else 0,
                 }
-
-            previous_max_streak = (
-                await connection.fetchval(
-                    """
-                    SELECT max_streak
-                    FROM user_stats
-                    WHERE user_id = $1
-                    FOR UPDATE
-                    """,
-                    user_id,
-                )
-            )
 
             max_streak = max(
                 int(previous_max_streak or 0),
