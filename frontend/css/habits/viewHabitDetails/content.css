@@ -9,44 +9,30 @@
     flex-direction: column;
     align-items: center;
 
-    padding-top: 10px;
+    padding-top: 0;
 }
 
 
 /* =========================================================
-   ИКОНКА
+   ИКОНКА — ЦЕНТР ХЕДЕРА
    ========================================================= */
 
 .habit-details__icon {
-    width: 62px;
-    height: 62px;
+    grid-column: 2;
+    justify-self: center;
+
+    width: 42px;
+    height: 42px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border:
-        1px solid
-        rgba(
-            var(--habit-accent-rgb),
-            0.10
-        );
-
-    border-radius: 20px;
-
-    background:
-        color-mix(
-            in srgb,
-            var(--app-surface)
-            88%,
-            rgb(
-                var(--habit-accent-rgb)
-            )
-            12%
-        );
-
-    box-shadow:
-        var(--app-shadow);
+    color: var(--app-text-primary);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
 
     font-family:
         "Apple Color Emoji",
@@ -67,7 +53,7 @@
     max-width: 100%;
 
     margin:
-        14px
+        4px
         0
         0;
 

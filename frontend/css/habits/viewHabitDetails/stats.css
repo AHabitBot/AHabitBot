@@ -18,7 +18,7 @@
 
     gap: 10px;
 
-    margin-top: 22px;
+    margin-top: 16px;
 }
 
 
@@ -28,7 +28,7 @@
 
 .habit-details__stat {
     min-width: 0;
-    min-height: 74px;
+    min-height: 62px;
 
     display: flex;
     flex-direction: column;
@@ -37,7 +37,7 @@
     box-sizing: border-box;
 
     padding:
-        12px
+        9px
         14px;
 
     border:
@@ -98,7 +98,7 @@
    ========================================================= */
 
 .habit-details__stat-label {
-    margin-top: 6px;
+    margin-top: 4px;
 
     color:
         var(--app-text-secondary);

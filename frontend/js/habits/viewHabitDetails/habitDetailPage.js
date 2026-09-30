@@ -303,6 +303,13 @@ export function renderHabitDetailsPage(habit = {}) {
     </span>
 </button>
 
+<div
+    class="habit-details__icon"
+    aria-hidden="true"
+>
+    ${safeIcon}
+</div>
+
 <div class="habit-details__menu-wrapper">
 
     <button
@@ -388,13 +395,6 @@ export function renderHabitDetailsPage(habit = {}) {
 
 
             <main class="habit-details__content">
-
-                <div
-                    class="habit-details__icon"
-                    aria-hidden="true"
-                >
-                    ${safeIcon}
-                </div>
 
                 <h1 class="habit-details__title">
                     ${safeName}
