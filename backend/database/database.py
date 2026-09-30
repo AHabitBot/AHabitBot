@@ -23,7 +23,7 @@ async def connect_db() -> asyncpg.Pool:
         _pool = await asyncpg.create_pool(
             dsn=DATABASE_URL,
             min_size=1,
-            max_size=10,
+            max_size=5,
             command_timeout=60,
         )
 
