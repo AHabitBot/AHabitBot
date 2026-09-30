@@ -36,6 +36,7 @@ function normalizeHabit(habit = {}) {
         createdAt: habit.created_at || null,
         completedToday: Boolean(habit.completed_today),
         streak: Number(habit.streak) || 0,
+        streakFrozen: Boolean(habit.streak_frozen),
         weekProgress: Array.isArray(habit.week_progress)
             ? habit.week_progress
             : [],

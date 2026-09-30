@@ -281,6 +281,7 @@ export function renderHabitCard(habit = {}) {
         size = "large",
         completedToday = false,
         streak = 0,
+        streakFrozen = false,
         xpReward = 5,
         weekProgress = [],
         confirmationAllowedToday = true,
@@ -384,7 +385,7 @@ export function renderHabitCard(habit = {}) {
                         class="habit-card__streak-icon"
                         aria-hidden="true"
                     >
-                        🔥
+                        ${streakFrozen ? "🧊" : "🔥"}
                     </span>
 
                     <span class="habit-card__streak-value">

@@ -262,6 +262,9 @@ export async function toggleHabitConfirmation(
                 serverHabit.streak
             )
 
+        const streakFrozen =
+            Boolean(serverHabit.streak_frozen)
+
         const weekProgress =
             normalizeWeekProgress(
                 serverHabit.week_progress
@@ -274,6 +277,7 @@ export async function toggleHabitConfirmation(
                     completedToday,
                     completedDates,
                     streak,
+                    streakFrozen,
                     weekProgress,
 
                     completedAt:
@@ -841,6 +845,10 @@ function updateHabitCardVisualState(
         ".habit-card__streak-value"
     )
 
+    const streakIcon = card.querySelector(
+        ".habit-card__streak-icon"
+    )
+
     const xpReward =
         normalizePositiveInteger(
             habit.xpReward,
@@ -897,6 +905,11 @@ function updateHabitCardVisualState(
     if (streakValue) {
         streakValue.textContent =
             String(streak)
+    }
+
+    if (streakIcon) {
+        streakIcon.textContent =
+            habit.streakFrozen ? "🧊" : "🔥"
     }
 
     streakContainer?.setAttribute(
@@ -1179,6 +1192,7 @@ confirmButton?.addEventListener(
                 ? serverHabit.completed_dates
                 : []
             const serverStreak = normalizePositiveInteger(serverHabit.streak)
+            const serverStreakFrozen = Boolean(serverHabit.streak_frozen)
             const finalWeekProgress = normalizeWeekProgress(serverHabit.week_progress)
 
             const finalHabit = updateHabit(
@@ -1187,6 +1201,7 @@ confirmButton?.addEventListener(
                     completedToday: serverCompletedToday,
                     completedDates: serverCompletedDates,
                     streak: serverStreak,
+                    streakFrozen: serverStreakFrozen,
                     weekProgress: finalWeekProgress,
                     completedAt: serverCompletedToday
                         ? new Date().toISOString()

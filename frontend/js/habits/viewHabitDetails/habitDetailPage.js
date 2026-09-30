@@ -222,6 +222,7 @@ export function renderHabitDetailsPage(habit = {}) {
         color = "green",
         completedToday = false,
         streak = 0,
+        streakFrozen = false,
         xpReward = 5,
         createdAt = null,
 
@@ -414,7 +415,7 @@ export function renderHabitDetailsPage(habit = {}) {
                         <div class="habit-details__stat-main">
 
                             <span aria-hidden="true">
-                                🔥
+                                ${streakFrozen ? "🧊" : "🔥"}
                             </span>
 
                             <span>

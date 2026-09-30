@@ -60,6 +60,12 @@ export function normalizeHabit(
                 habit.streak
             ) || 0,
 
+        streakFrozen:
+            Boolean(
+                habit.streak_frozen ??
+                habit.streakFrozen
+            ),
+
         weekProgress:
             Array.isArray(
                 habit.week_progress
