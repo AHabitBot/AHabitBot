@@ -74,7 +74,7 @@ class HabitCreateRequest(BaseModel):
     )
 
     size: Literal["large"] = "large"
-    repeat_type: Literal["days", "weekly", "challenge"] = "days"
+    repeat_type: Literal["days", "challenge"] = "days"
     repeat_days: list[int] = Field(default_factory=lambda: [1, 2, 3, 4, 5, 6, 7])
     weekly_target: int | None = None
     challenge_target: int | None = None
@@ -100,7 +100,7 @@ class HabitUpdateRequest(BaseModel):
     )
 
     size: Literal["large"] = "large"
-    repeat_type: Literal["days", "weekly", "challenge"] = "days"
+    repeat_type: Literal["days", "challenge"] = "days"
     repeat_days: list[int] = Field(default_factory=lambda: [1, 2, 3, 4, 5, 6, 7])
     weekly_target: int | None = None
     challenge_target: int | None = None

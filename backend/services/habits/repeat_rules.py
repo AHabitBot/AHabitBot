@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from typing import Literal
 
-RepeatType = Literal["days", "weekly", "challenge"]
+RepeatType = Literal["days", "challenge"]
 ALL_WEEKDAYS = (1, 2, 3, 4, 5, 6, 7)
 
 
@@ -11,7 +11,7 @@ def normalize_repeat_rule(
     weekly_target: int | None,
     challenge_target: int | None,
 ) -> tuple[RepeatType, list[int], int | None, int | None]:
-    if repeat_type not in {"days", "weekly", "challenge"}:
+    if repeat_type not in {"days", "challenge"}:
         raise ValueError("Некорректный тип повторения")
 
     if repeat_type == "days":
@@ -19,12 +19,6 @@ def normalize_repeat_rule(
         if not days or any(day not in ALL_WEEKDAYS for day in days):
             raise ValueError("Нужно выбрать хотя бы один день недели")
         return "days", days, None, None
-
-    if repeat_type == "weekly":
-        target = int(weekly_target or 0)
-        if not 1 <= target <= 7:
-            raise ValueError("Недельная цель должна быть от 1 до 7 дней")
-        return "weekly", [], target, None
 
     target = int(challenge_target or 0)
     if target < 1:

@@ -94,7 +94,7 @@ export async function createHabit(
                         ),
                     repeat_type: payload.repeatType || "days",
                     repeat_days: payload.repeatDays || [1,2,3,4,5,6,7],
-                    weekly_target: payload.repeatType === "weekly" ? payload.weeklyTarget : null,
+                    weekly_target: null,
                     challenge_target: payload.repeatType === "challenge" ? payload.challengeTarget : null,
                     habit_reminder: payload.reminderTime || null
                 }
@@ -164,7 +164,7 @@ export async function updateHabitApi(
                         ),
                     repeat_type: payload.repeatType || "days",
                     repeat_days: payload.repeatDays || [1,2,3,4,5,6,7],
-                    weekly_target: payload.repeatType === "weekly" ? payload.weeklyTarget : null,
+                    weekly_target: null,
                     challenge_target: payload.repeatType === "challenge" ? payload.challengeTarget : null,
                     habit_reminder: payload.reminderTime || null
                 }

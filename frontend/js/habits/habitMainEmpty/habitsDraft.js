@@ -239,7 +239,7 @@ export function startHabitEditDraft(
                 String(
                     habit.size || "large"
                 ),
-            repeatType: habit.repeatType || "days",
+            repeatType: habit.repeatType === "challenge" ? "challenge" : "days",
             repeatDays: [...(habit.repeatDays || [1,2,3,4,5,6,7])],
             weeklyTarget: Number(habit.weeklyTarget) || 4,
             challengeTarget: Number(habit.challengeTarget) || 30,

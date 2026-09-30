@@ -61,16 +61,6 @@ export function renderHabitRepeatSelector(
         </div>
     `
 
-    const weeklyCounter = `
-        <div class="habit-repeat__counter">
-            <span>${t("habits.addHabit.repeat.weeklyValue", {
-                count: draft.weeklyTarget
-            })}</span>
-            <button type="button" data-repeat-step="weekly:-1">−</button>
-            <button type="button" data-repeat-step="weekly:1">+</button>
-        </div>
-    `
-
     const minimumChallengeTarget =
         draft.originalChallengeTarget || 1
 
@@ -98,11 +88,6 @@ export function renderHabitRepeatSelector(
             "days",
             t("habits.addHabit.repeat.days"),
             dayButtons
-        ) +
-        renderOption(
-            "weekly",
-            t("habits.addHabit.repeat.weekly"),
-            weeklyCounter
         ) +
         renderOption(
             "challenge",
@@ -180,18 +165,7 @@ export function bindHabitRepeatSelectorEvents({
             const step = Number(stepValue)
             const draft = getHabitDraft()
 
-            if (kind === "weekly") {
-                setHabitDraftValue(
-                    "weeklyTarget",
-                    Math.min(
-                        7,
-                        Math.max(
-                            1,
-                            draft.weeklyTarget + step
-                        )
-                    )
-                )
-            } else {
+            if (kind === "challenge") {
                 const minimum =
                     draft.originalChallengeTarget || 1
 
