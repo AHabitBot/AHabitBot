@@ -1,3 +1,4 @@
+import asyncio
 from datetime import date
 from typing import Any
 
@@ -20,6 +21,32 @@ from backend.services.profile.level_progression_service import (
 from backend.services.habits.shared_habit_notification_service import (
     send_shared_habit_confirmation_notifications,
 )
+
+
+async def _send_shared_confirmation_notifications_safely(
+    user_id: int,
+    habit_id: int,
+    confirmation_date: date | None,
+) -> None:
+    """
+    Уведомления друзей не входят в критический путь подтверждения.
+
+    Ошибка Telegram или уведомлений не влияет на уже сохранённое
+    подтверждение привычки и не задерживает HTTP-ответ пользователю.
+    """
+    try:
+        await send_shared_habit_confirmation_notifications(
+            user_id=user_id,
+            habit_id=habit_id,
+            confirmation_date=confirmation_date,
+        )
+    except Exception as error:
+        print(
+            "⚠️ Ошибка уведомления совместной привычки | "
+            f"User ID: {user_id} | "
+            f"Habit ID: {habit_id} | "
+            f"Ошибка: {error}"
+        )
 
 
 # =========================================================
@@ -124,25 +151,32 @@ async def update_habit_confirmation(
         is_confirmed
         and result.get("confirmation_state_changed")
     ):
-        try:
-            confirmation_date_raw = result.get("habit", {}).get("confirmation_date")
-            confirmation_date = (
-                date.fromisoformat(confirmation_date_raw)
-                if confirmation_date_raw
-                else None
+        confirmation_date_raw = (
+            result.get(
+                "habit",
+                {},
+            ).get(
+                "confirmation_date"
             )
-            await send_shared_habit_confirmation_notifications(
+        )
+
+        confirmation_date = (
+            date.fromisoformat(
+                confirmation_date_raw
+            )
+            if confirmation_date_raw
+            else None
+        )
+
+        # Не ждём Telegram перед HTTP-ответом.
+        # Сама логика уведомлений остаётся прежней.
+        asyncio.create_task(
+            _send_shared_confirmation_notifications_safely(
                 user_id=user_id,
                 habit_id=habit_id,
                 confirmation_date=confirmation_date,
             )
-        except Exception as error:
-            print(
-                "⚠️ Ошибка уведомления совместной привычки | "
-                f"User ID: {user_id} | "
-                f"Habit ID: {habit_id} | "
-                f"Ошибка: {error}"
-            )
+        )
 
     return result
 
