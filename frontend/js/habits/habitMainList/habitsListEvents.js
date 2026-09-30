@@ -556,8 +556,6 @@ async function handleHabitDetailsArchive(
 
    Используется:
    - после первого открытия;
-   - после подтверждения;
-   - после снятия подтверждения;
    - после редактирования;
    - после повторного рендера страницы.
    ========================================================= */
@@ -572,18 +570,6 @@ function initCurrentHabitDetailsEvents(
         onBack: () => {
             handleHabitDetailsBack(
                 onOpenHabitsPage
-            )
-        },
-
-        onConfirm: ({
-            keepMenuOpen = false
-        } = {}) => {
-            handleHabitDetailsConfirmation(
-                habitId,
-                {
-                    onOpenHabitsPage,
-                    keepMenuOpen
-                }
             )
         },
 
@@ -676,47 +662,6 @@ function refreshHabitDetails(
         })
     }
 }
-/* =========================================================
-   ПОДТВЕРЖДЕНИЕ ИЗ ДЕТАЛЬНОЙ СТРАНИЦЫ
-
-   Использует ту же функцию подтверждения,
-   которая используется в карточке списка.
-   ========================================================= */
-
-/* =========================================================
-   ПОДТВЕРЖДЕНИЕ ИЗ ДЕТАЛЬНОЙ СТРАНИЦЫ
-
-   Использует ту же функцию подтверждения,
-   которая используется в карточке списка.
-
-   После обновления меню остаётся открытым.
-   ========================================================= */
-
-async function handleHabitDetailsConfirmation(
-    habitId,
-    {
-        onOpenHabitsPage = null,
-        keepMenuOpen = false
-    } = {}
-) {
-    const updatedHabit =
-        await toggleHabitConfirmation(
-            habitId
-        )
-
-    if (!updatedHabit) {
-        return
-    }
-
-    refreshHabitDetails(
-        habitId,
-        {
-            onOpenHabitsPage,
-            keepMenuOpen
-        }
-    )
-}
-
 
 /* =========================================================
    ОТКРЫТЬ ДЕТАЛИ ПРИВЫЧКИ

@@ -303,13 +303,6 @@ export function renderHabitDetailsPage(habit = {}) {
     </span>
 </button>
 
-<div
-    class="habit-details__icon"
-    aria-hidden="true"
->
-    ${safeIcon}
-</div>
-
 <div class="habit-details__menu-wrapper">
 
     <button
@@ -329,24 +322,6 @@ export function renderHabitDetailsPage(habit = {}) {
         role="menu"
         aria-hidden="true"
     >
-
-        <button
-            class="habit-details__menu-item"
-            type="button"
-            data-action="confirm-habit"
-            role="menuitem"
-        >
-            <span
-                class="material-symbols-rounded habit-details__menu-icon"
-                aria-hidden="true"
-            >
-                check_circle
-            </span>
-
-            <span>
-                ${t("habits.details.menu.confirm")}
-            </span>
-        </button>
 
         <button
             class="habit-details__menu-item"
@@ -395,6 +370,13 @@ export function renderHabitDetailsPage(habit = {}) {
 
 
             <main class="habit-details__content">
+
+                <div
+                    class="habit-details__icon"
+                    aria-hidden="true"
+                >
+                    ${safeIcon}
+                </div>
 
                 <h1 class="habit-details__title">
                     ${safeName}
@@ -1037,8 +1019,6 @@ archiveButton?.focus()
    Отвечает за:
    - возврат к списку привычек;
    - открытие меню;
-   - подтверждение привычки;
-   - снятие подтверждения привычки;
    - запуск редактирования привычки;
    - запуск удаления привычки.
    ========================================================= */
@@ -1050,7 +1030,6 @@ archiveButton?.focus()
 
 export function initHabitDetailsEvents({
     onBack = null,
-    onConfirm = null,
     onEdit = null,
     onArchive = null
 } = {}) {
@@ -1079,10 +1058,6 @@ export function initHabitDetailsEvents({
         '[data-action="toggle-habit-menu"]'
     )
 
-    const confirmButton = root.querySelector(
-        '[data-action="confirm-habit"]'
-    )
-
     const editButton = root.querySelector(
         '[data-action="edit-habit"]'
     )
@@ -1098,7 +1073,6 @@ export function initHabitDetailsEvents({
 
     addPressAnimation(backButton)
     addPressAnimation(menuButton)
-    addPressAnimation(confirmButton)
     addPressAnimation(editButton)
     addPressAnimation(archiveButton)
 
@@ -1132,22 +1106,6 @@ export function initHabitDetailsEvents({
             onBack()
         }
     )
-
-
-    /* =========================================================
-       ПОДТВЕРЖДЕНИЕ / СНЯТИЕ ПОДТВЕРЖДЕНИЯ
-       ========================================================= */
-
-    confirmButton?.addEventListener(
-        "click",
-        (event) => {
-            event.preventDefault()
-            event.stopPropagation()
-
-            if (typeof onConfirm !== "function") {
-                console.warn(
-                    "Habit Details Events: не передан onConfirm"
-                )
 
                 return
             }
