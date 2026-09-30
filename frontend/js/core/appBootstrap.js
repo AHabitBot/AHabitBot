@@ -132,6 +132,9 @@ function hydrateHabits(data = {}) {
     setHabitsStatistics({
         currentStreak: Number(statistics.current_streak) || 0,
         maxStreak: Number(statistics.max_streak) || 0,
+        friendsStreak: Number(statistics.friends_streak) || 0,
+        friendsStreakFrozen: Boolean(statistics.friends_streak_frozen),
+        friendsMaxStreak: Number(statistics.friends_max_streak) || 0,
         totalConfirmations: Number(statistics.total_confirmations) || 0,
         totalXp: Number(statistics.total_xp) || 0
     })

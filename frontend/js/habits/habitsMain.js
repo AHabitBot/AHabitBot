@@ -213,6 +213,15 @@ async function openHabitsPage({
                     statistics.max_streak
                 ) || 0,
 
+            friendsStreak:
+                Number(statistics.friends_streak) || 0,
+
+            friendsStreakFrozen:
+                Boolean(statistics.friends_streak_frozen),
+
+            friendsMaxStreak:
+                Number(statistics.friends_max_streak) || 0,
+
             totalConfirmations:
                 Number(
                     statistics.total_confirmations

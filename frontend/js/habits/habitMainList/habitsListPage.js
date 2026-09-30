@@ -116,9 +116,9 @@ export function renderHabitsStats(
             statistics.currentStreak
         )
 
-    const maxStreak =
+    const friendsStreak =
         normalizeStatValue(
-            statistics.maxStreak
+            statistics.friendsStreak
         )
 
     return `
@@ -149,7 +149,7 @@ export function renderHabitsStats(
                 </div>
 
                 <div class="habits-stats__label">
-                    ${t("habits.list.stats.currentStreak")}
+                    ${t("habits.list.stats.personalStreak")}
                 </div>
 
             </article>
@@ -167,17 +167,17 @@ export function renderHabitsStats(
                         "
                         aria-hidden="true"
                     >
-                        fire_check
+                        group
                     </span>
 
                     <span class="habits-stats__value">
-                        ${formatDays(maxStreak)}
+                        ${formatDays(friendsStreak)}
                     </span>
 
                 </div>
 
                 <div class="habits-stats__label">
-                    ${t("habits.list.stats.maxStreak")}
+                    ${t("habits.list.stats.friendsStreak")}
                 </div>
 
             </article>

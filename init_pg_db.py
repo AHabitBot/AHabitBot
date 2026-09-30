@@ -316,6 +316,8 @@ CREATE TABLE IF NOT EXISTS user_stats (
     user_id BIGINT NOT NULL UNIQUE,
     current_streak INTEGER NOT NULL DEFAULT 0 CHECK (current_streak >= 0),
     max_streak INTEGER NOT NULL DEFAULT 0 CHECK (max_streak >= 0),
+    friends_streak INTEGER NOT NULL DEFAULT 0 CHECK (friends_streak >= 0),
+    friends_max_streak INTEGER NOT NULL DEFAULT 0 CHECK (friends_max_streak >= 0),
     total_confirmations INTEGER NOT NULL DEFAULT 0 CHECK (total_confirmations >= 0),
     total_xp INTEGER NOT NULL DEFAULT 0 CHECK (total_xp >= 0),
     highest_level_reached INTEGER NOT NULL DEFAULT 1 CHECK (highest_level_reached >= 1),
@@ -327,12 +329,45 @@ CREATE TABLE IF NOT EXISTS user_stats (
         ON DELETE CASCADE,
 
     CONSTRAINT chk_max_streak
-        CHECK (max_streak >= current_streak)
+        CHECK (max_streak >= current_streak),
+
+    CONSTRAINT chk_friends_max_streak
+        CHECK (friends_max_streak >= friends_streak)
 );
+
+-- Безопасно обновляем уже существующую таблицу user_stats.
+ALTER TABLE user_stats
+    ADD COLUMN IF NOT EXISTS friends_streak
+    INTEGER NOT NULL DEFAULT 0;
+
+ALTER TABLE user_stats
+    ADD COLUMN IF NOT EXISTS friends_max_streak
+    INTEGER NOT NULL DEFAULT 0;
 
 ALTER TABLE user_stats
     ADD COLUMN IF NOT EXISTS highest_level_reached
     INTEGER NOT NULL DEFAULT 1;
+
+ALTER TABLE user_stats
+    DROP CONSTRAINT IF EXISTS chk_friends_streak_non_negative;
+
+ALTER TABLE user_stats
+    ADD CONSTRAINT chk_friends_streak_non_negative
+    CHECK (friends_streak >= 0);
+
+ALTER TABLE user_stats
+    DROP CONSTRAINT IF EXISTS chk_friends_max_streak_non_negative;
+
+ALTER TABLE user_stats
+    ADD CONSTRAINT chk_friends_max_streak_non_negative
+    CHECK (friends_max_streak >= 0);
+
+ALTER TABLE user_stats
+    DROP CONSTRAINT IF EXISTS chk_friends_max_streak;
+
+ALTER TABLE user_stats
+    ADD CONSTRAINT chk_friends_max_streak
+    CHECK (friends_max_streak >= friends_streak);
 
 
 CREATE TABLE IF NOT EXISTS user_achievements (

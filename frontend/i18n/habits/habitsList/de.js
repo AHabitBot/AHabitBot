@@ -5,6 +5,8 @@ export default Object.freeze({
     "habits.list.stats.aria": "Gewohnheitsstatistik",
     "habits.list.stats.currentStreak": "Aktuelle Serie",
     "habits.list.stats.maxStreak": "Längste Serie",
+    "habits.list.stats.personalStreak": "Persönliche Serie",
+    "habits.list.stats.friendsStreak": "Freunde-Serie",
 
     "habits.list.days.one": "{count} Tag",
     "habits.list.days.few": "{count} Tage",

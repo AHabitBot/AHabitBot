@@ -299,7 +299,16 @@ export async function toggleHabitConfirmation(
                 normalizePositiveInteger(
                     response.statistics
                         ?.max_streak
-                )
+                ),
+
+            friendsStreak:
+                normalizePositiveInteger(response.statistics?.friends_streak),
+
+            friendsStreakFrozen:
+                Boolean(response.statistics?.friends_streak_frozen),
+
+            friendsMaxStreak:
+                normalizePositiveInteger(response.statistics?.friends_max_streak)
         })
 
         refreshHabitsStatsVisual()
@@ -1383,6 +1392,15 @@ confirmButton?.addEventListener(
                 ),
                 maxStreak: normalizePositiveInteger(
                     response.statistics?.max_streak
+                ),
+                friendsStreak: normalizePositiveInteger(
+                    response.statistics?.friends_streak
+                ),
+                friendsStreakFrozen: Boolean(
+                    response.statistics?.friends_streak_frozen
+                ),
+                friendsMaxStreak: normalizePositiveInteger(
+                    response.statistics?.friends_max_streak
                 )
             })
 

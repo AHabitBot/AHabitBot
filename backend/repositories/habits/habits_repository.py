@@ -7,6 +7,8 @@ from backend.database.database import get_connection
 from backend.repositories.habits.shared_habits_repository import (
     get_shared_contexts_for_habits,
     get_shared_streak_states_for_habits,
+    get_friends_streak_state,
+    update_friends_streak_for_users,
 )
 from backend.services.leaderboard.season_service import (
     get_season_context,
@@ -192,6 +194,8 @@ async def get_user_habits(
             SELECT
                 current_streak,
                 max_streak,
+                friends_streak,
+                friends_max_streak,
                 total_confirmations,
                 total_xp
             FROM user_stats
@@ -371,6 +375,19 @@ async def get_user_habits(
                 statistics["max_streak"]
                 if statistics
                 else 0
+            ),
+            "friends_streak": (
+                statistics["friends_streak"]
+                if statistics
+                else 0
+            ),
+            "friends_max_streak": (
+                statistics["friends_max_streak"]
+                if statistics
+                else 0
+            ),
+            "friends_streak_frozen": bool(
+                (await get_friends_streak_state(user_id, today))["frozen"]
             ),
             "total_confirmations": (
                 statistics[
@@ -1636,6 +1653,41 @@ async def set_habit_confirmation(
                 user_confirmation_dates, confirmation_date
             )
 
+            # =================================================
+            # ДРУЖЕСКИЙ СТРИК
+            #
+            # Если подтверждение относится к shared-привычке, результат дня
+            # мог измениться сразу для всей группы. Поэтому синхронизируем
+            # дружеский streak всех активных участников этой группы.
+            # =================================================
+
+            shared_user_rows = await connection.fetch(
+                """
+                SELECT DISTINCT member.user_id
+                FROM shared_habit_members me
+                JOIN shared_habit_members member
+                  ON member.shared_habit_id = me.shared_habit_id
+                 AND member.left_at IS NULL
+                WHERE me.habit_id = $1
+                  AND me.left_at IS NULL
+                """,
+                habit_id,
+            )
+            affected_friend_user_ids = [int(row["user_id"]) for row in shared_user_rows]
+            if user_id not in affected_friend_user_ids:
+                affected_friend_user_ids.append(user_id)
+
+            friends_states = await update_friends_streak_for_users(
+                affected_friend_user_ids,
+                confirmation_date,
+                connection,
+            )
+            own_friends_state = friends_states.get(user_id, {
+                "friends_streak": 0,
+                "friends_streak_frozen": False,
+                "friends_max_streak": 0,
+            })
+
             previous_max_streak = (
                 await connection.fetchval(
                     """
@@ -1999,6 +2051,15 @@ async def set_habit_confirmation(
 
                     "max_streak":
                         max_streak,
+
+                    "friends_streak":
+                        own_friends_state["friends_streak"],
+
+                    "friends_streak_frozen":
+                        own_friends_state["friends_streak_frozen"],
+
+                    "friends_max_streak":
+                        own_friends_state["friends_max_streak"],
 
                     "total_confirmations":
                         total_confirmations,

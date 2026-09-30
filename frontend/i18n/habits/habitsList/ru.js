@@ -5,6 +5,8 @@ export default Object.freeze({
     "habits.list.stats.aria": "Статистика привычек",
     "habits.list.stats.currentStreak": "Текущая серия",
     "habits.list.stats.maxStreak": "Максимальная серия",
+    "habits.list.stats.personalStreak": "Личный стрик",
+    "habits.list.stats.friendsStreak": "Дружеский стрик",
 
     "habits.list.days.one": "{count} день",
     "habits.list.days.few": "{count} дня",
