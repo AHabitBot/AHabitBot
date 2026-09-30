@@ -992,25 +992,26 @@
         transform 220ms ease-out 150ms;
 }
 
-.habit-card.is-people-expanded {
-    grid-template-rows: auto minmax(48px, 1fr) auto;
-}
-
+/*
+ * Expanded participants stay inside the card's existing first-row space.
+ * The card itself never changes geometry: title, schedule, progress and
+ * confirmation button remain completely still.
+ */
 .habit-card.is-people-expanded .habit-card__people {
     grid-column: 1;
     width: 100%;
-    height: auto;
+    height: 38px;
     min-width: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .habit-card.is-people-expanded .habit-card__people-list {
     width: 100%;
     gap: 12px;
     overflow-x: auto;
-    overflow-y: hidden;
-    padding: 0 2px 4px;
+    overflow-y: visible;
+    padding: 0 2px;
     scrollbar-width: none;
     overscroll-behavior-x: contain;
 }
@@ -1028,16 +1029,17 @@
     pointer-events: auto;
 }
 
+/* Avatar size is identical in collapsed and expanded states. */
 .habit-card.is-people-expanded .habit-card__person {
-    width: 42px;
-    height: 42px;
-    flex-basis: 42px;
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
     margin-left: 0;
 }
 
 .habit-card.is-people-expanded .habit-card__person-name {
-    max-height: 24px;
-    margin-top: 5px;
+    max-height: 18px;
+    margin-top: 3px;
     opacity: 1;
     transform: translateY(0);
 }
