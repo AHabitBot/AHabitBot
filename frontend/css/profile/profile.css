@@ -150,3 +150,9 @@
         padding-left: 14px;
     }
 }
+
+
+/* Public profile: compact the join between the shared header and profile card. */
+.profile-stats-page .public-profile-card {
+    margin-top: -14px;
+}
