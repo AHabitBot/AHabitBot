@@ -406,34 +406,292 @@ async def get_friends_streak_state(user_id: int, today, connection=None) -> dict
     return {"streak": streak, "frozen": frozen}
 
 
-async def update_friends_streak_for_users(user_ids: list[int], today, connection) -> dict[int, dict[str, Any]]:
-    """Пересчитать только дружеские поля user_stats для затронутых пользователей."""
-    result: dict[int, dict[str, Any]] = {}
-    for target_user_id in sorted({int(item) for item in user_ids}):
-        state = await get_friends_streak_state(target_user_id, today, connection=connection)
-        previous_max = await connection.fetchval(
-            "SELECT friends_max_streak FROM user_stats WHERE user_id = $1 FOR UPDATE",
-            target_user_id,
+async def update_friends_streak_for_users(
+    user_ids: list[int],
+    today,
+    connection,
+) -> dict[int, dict[str, Any]]:
+    """
+    Пересчитывает дружеский streak затронутых пользователей.
+
+    Важно: shared-история всех затронутых пользователей загружается
+    одним запросом. Раньше get_friends_streak_state() выполнял почти
+    одинаковый тяжёлый запрос отдельно для каждого участника группы.
+    Правила расчёта streak/frozen при этом не меняются.
+    """
+    from datetime import timedelta
+    from backend.services.habits.repeat_rules import calculate_streak_state
+
+    target_user_ids = sorted(
+        {
+            int(item)
+            for item in user_ids
+        }
+    )
+
+    if not target_user_ids:
+        return {}
+
+    rows = await connection.fetch(
+        """
+        SELECT
+            me.user_id AS target_user_id,
+            me.shared_habit_id,
+            me.joined_at AS my_joined_at,
+            me.left_at AS my_left_at,
+            member.user_id AS member_user_id,
+            member.habit_id,
+            member.joined_at,
+            member.left_at,
+            hc.confirmation_date
+        FROM shared_habit_members me
+        JOIN shared_habit_members member
+          ON member.shared_habit_id = me.shared_habit_id
+        LEFT JOIN habit_confirmations hc
+          ON hc.habit_id = member.habit_id
+         AND hc.is_confirmed = TRUE
+        WHERE me.user_id = ANY($1::BIGINT[])
+        ORDER BY
+            me.user_id,
+            me.shared_habit_id,
+            member.user_id,
+            hc.confirmation_date
+        """,
+        target_user_ids,
+    )
+
+    # Та же структура, которую раньше отдельно строил
+    # get_friends_streak_state() для каждого пользователя.
+    groups_by_user: dict[int, dict[int, dict[str, Any]]] = {
+        target_user_id: {}
+        for target_user_id in target_user_ids
+    }
+
+    for row in rows:
+        target_user_id = int(
+            row["target_user_id"]
         )
-        friends_streak = int(state["streak"])
-        friends_max_streak = max(int(previous_max or 0), friends_streak)
+        group_id = int(
+            row["shared_habit_id"]
+        )
+
+        groups = groups_by_user[
+            target_user_id
+        ]
+
+        group = groups.setdefault(
+            group_id,
+            {
+                "my_joined_on":
+                    row["my_joined_at"].date(),
+
+                "my_left_on":
+                    row["my_left_at"].date()
+                    if row["my_left_at"]
+                    else None,
+
+                "members": {},
+            },
+        )
+
+        member_id = int(
+            row["member_user_id"]
+        )
+
+        member = group[
+            "members"
+        ].setdefault(
+            member_id,
+            {
+                "joined_on":
+                    row["joined_at"].date(),
+
+                "left_on":
+                    row["left_at"].date()
+                    if row["left_at"]
+                    else None,
+
+                "completed": set(),
+            },
+        )
+
+        if row["confirmation_date"] is not None:
+            member[
+                "completed"
+            ].add(
+                row["confirmation_date"]
+            )
+
+    states: dict[int, dict[str, Any]] = {}
+
+    for target_user_id in target_user_ids:
+        groups = groups_by_user.get(
+            target_user_id,
+            {},
+        )
+
+        if not groups:
+            states[target_user_id] = {
+                "streak": 0,
+                "frozen": False,
+            }
+            continue
+
+        started_on = min(
+            group["my_joined_on"]
+            for group in groups.values()
+        )
+
+        day_results: list[bool] = []
+        cursor = started_on
+
+        while cursor <= today:
+            success = False
+            has_group_today = False
+
+            for group in groups.values():
+                if cursor < group["my_joined_on"]:
+                    continue
+
+                if (
+                    group["my_left_on"] is not None
+                    and cursor >= group["my_left_on"]
+                ):
+                    continue
+
+                required = [
+                    member
+                    for member
+                    in group["members"].values()
+                    if (
+                        member["joined_on"] <= cursor
+                        and (
+                            member["left_on"] is None
+                            or cursor < member["left_on"]
+                        )
+                    )
+                ]
+
+                if not required:
+                    continue
+
+                has_group_today = True
+
+                if all(
+                    cursor in member["completed"]
+                    for member in required
+                ):
+                    success = True
+                    break
+
+            # Полностью сохраняем прежнее правило:
+            # день без активной shared-группы не считается пропуском.
+            if not has_group_today:
+                cursor += timedelta(days=1)
+                continue
+
+            # Незавершённый сегодняшний день не фиксируем как MISS.
+            if cursor == today and not success:
+                break
+
+            day_results.append(
+                success
+            )
+            cursor += timedelta(days=1)
+
+        streak, frozen = (
+            calculate_streak_state(
+                day_results
+            )
+        )
+
+        states[target_user_id] = {
+            "streak": streak,
+            "frozen": frozen,
+        }
+
+    # Максимумы всех участников читаем одним запросом.
+    previous_rows = await connection.fetch(
+        """
+        SELECT
+            user_id,
+            friends_max_streak
+        FROM user_stats
+        WHERE user_id = ANY($1::BIGINT[])
+        FOR UPDATE
+        """,
+        target_user_ids,
+    )
+
+    previous_max_by_user = {
+        int(row["user_id"]):
+            int(
+                row["friends_max_streak"]
+                or 0
+            )
+        for row in previous_rows
+    }
+
+    result: dict[int, dict[str, Any]] = {}
+
+    # Само обновление оставляем тем же по смыслу:
+    # меняются только friends_streak / friends_max_streak.
+    for target_user_id in target_user_ids:
+        state = states[
+            target_user_id
+        ]
+
+        friends_streak = int(
+            state["streak"]
+        )
+
+        friends_max_streak = max(
+            previous_max_by_user.get(
+                target_user_id,
+                0,
+            ),
+            friends_streak,
+        )
+
         await connection.execute(
             """
-            INSERT INTO user_stats (user_id, friends_streak, friends_max_streak)
+            INSERT INTO user_stats (
+                user_id,
+                friends_streak,
+                friends_max_streak
+            )
             VALUES ($1, $2, $3)
+
             ON CONFLICT (user_id)
             DO UPDATE SET
-                friends_streak = EXCLUDED.friends_streak,
-                friends_max_streak = GREATEST(user_stats.friends_max_streak, EXCLUDED.friends_max_streak),
+                friends_streak =
+                    EXCLUDED.friends_streak,
+
+                friends_max_streak =
+                    GREATEST(
+                        user_stats.friends_max_streak,
+                        EXCLUDED.friends_max_streak
+                    ),
+
                 updated_at = NOW()
             """,
             target_user_id,
             friends_streak,
             friends_max_streak,
         )
+
         result[target_user_id] = {
-            "friends_streak": friends_streak,
-            "friends_streak_frozen": bool(state["frozen"]),
-            "friends_max_streak": friends_max_streak,
+            "friends_streak":
+                friends_streak,
+
+            "friends_streak_frozen":
+                bool(
+                    state["frozen"]
+                ),
+
+            "friends_max_streak":
+                friends_max_streak,
         }
+
     return result
+
