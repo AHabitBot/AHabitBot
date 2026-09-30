@@ -32,6 +32,11 @@ import {
     openPublicProfilePage
 } from "../profile/publicProfile.js";
 
+import {
+    mountBottomNavigation,
+    removeBottomNavigation
+} from "../navigation.js";
+
 let leaderboardRoot = null;
 
 let activeRenderId = 0;
@@ -479,11 +484,16 @@ function bindPublicProfileEvents(root) {
 
             if (!Number.isInteger(userId) || userId <= 0) return;
 
+            removeBottomNavigation();
+
             void openPublicProfilePage(
                 root,
                 userId,
                 {
-                    onBack: () => renderLeaderboardPage(root)
+                    onBack: () => {
+                        renderLeaderboardPage(root);
+                        mountBottomNavigation("leaderboard");
+                    }
                 }
             );
         }
