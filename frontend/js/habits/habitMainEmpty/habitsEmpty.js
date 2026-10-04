@@ -27,8 +27,7 @@ function formatEmptyPageDate() {
             }
         ).format(new Date());
 
-    return formatted.charAt(0).toUpperCase()
-        + formatted.slice(1);
+    return formatted.toUpperCase();
 }
 
 

@@ -9,11 +9,10 @@
     height: 96px;
 
     margin-top: 54px;
-    padding: 0 0 6px;
+    padding: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
 
     flex: 0 0 auto;
 
@@ -21,15 +20,9 @@
     border-radius: 50%;
     outline: none;
 
-    color: var(--habits-v2-blue);
+    color: var(--app-text-secondary);
 
-    background:
-        radial-gradient(
-            circle at 38% 28%,
-            #f9fcff 0%,
-            var(--habits-v2-button-bg) 60%,
-            #e8f1fc 100%
-        );
+    background: #373737;
 
     font-family:
         -apple-system,
@@ -39,8 +32,8 @@
         Arial,
         sans-serif;
 
-    font-size: 56px;
-    font-weight: 250;
+    font-size: 50px;
+    font-weight: 300;
     line-height: 1;
 
     cursor: pointer;
@@ -51,9 +44,7 @@
     appearance: none;
 
     box-shadow:
-        0 14px 26px rgba(78, 105, 140, 0.15),
-        0 5px 12px rgba(78, 105, 140, 0.08),
-        inset 0 1px 1px rgba(255, 255, 255, 0.95);
+        0 4px 10px rgba(0, 0, 0, 0.12);
 
     transition:
         transform 90ms ease,
@@ -66,14 +57,12 @@
 
 .habits-v2-empty__add-button.is-pressed,
 .habits-v2-empty__add-button:active {
-    transform: scale(0.92);
+    transform: scale(0.94);
 
     opacity: 0.88;
 
     box-shadow:
-        0 7px 14px rgba(78, 105, 140, 0.12),
-        0 2px 6px rgba(78, 105, 140, 0.07),
-        inset 0 2px 4px rgba(47, 127, 229, 0.08);
+        0 2px 6px rgba(0, 0, 0, 0.10);
 }
 
 
@@ -84,6 +73,6 @@
 
 .habits-v2-empty__add-button:focus-visible {
     box-shadow:
-        0 14px 26px rgba(78, 105, 140, 0.15),
-        0 0 0 4px rgba(47, 127, 229, 0.14);
+        0 4px 10px rgba(0, 0, 0, 0.12),
+        0 0 0 3px rgba(255, 255, 255, 0.10);
 }
