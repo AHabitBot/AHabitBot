@@ -51,9 +51,6 @@
     background:
         transparent;
 
-    color:
-        var(--habit-ref-secondary);
-
     cursor: pointer;
 
     appearance: none;
@@ -78,7 +75,7 @@
     display: block;
 
     color:
-        currentColor;
+        var(--habit-ref-secondary);
 
     font-size: 27px;
     line-height: 1;
