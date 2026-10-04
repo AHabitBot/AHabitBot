@@ -22,7 +22,7 @@
     }
 
     .habits-v2-empty__title {
-        font-size: 36px;
+        font-size: 34px;
     }
 
     .habits-v2-empty__subtitle {
@@ -30,8 +30,8 @@
     }
 
     .habits-v2-empty__add-button {
-        width: 102px;
-        height: 102px;
+        width: 68px;
+        height: 68px;
 
         margin-top: 58px;
 
@@ -74,8 +74,8 @@
     }
 
     .habits-v2-empty__add-button {
-        width: 88px;
-        height: 88px;
+        width: 59px;
+        height: 59px;
 
         margin-top: 46px;
         font-size: 46px;
@@ -128,8 +128,8 @@
     }
 
     .habits-v2-empty__add-button {
-        width: 82px;
-        height: 82px;
+        width: 55px;
+        height: 55px;
 
         margin-top: 34px;
 
