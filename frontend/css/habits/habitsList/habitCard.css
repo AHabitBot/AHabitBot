@@ -1021,94 +1021,102 @@
 }
 
 /* =========================================================
-   AHABIT CARD — QUIET DARK VISUAL REFRESH
-   Visual-only override. Card heights and interaction logic stay unchanged.
+   AHABIT CARD — REFERENCE COLOR SYSTEM
+   Только цветовая система. Геометрия и логика не меняются.
    ========================================================= */
 
 .habit-card {
-    border-color: rgba(var(--habit-accent-rgb), 0.20);
-    border-radius: 25px;
+    --habit-ref-top:
+        color-mix(in srgb, var(--habit-card-base) 94%, rgb(var(--habit-accent-rgb)) 6%);
+
+    --habit-ref-mid:
+        color-mix(in srgb, var(--habit-card-base) 84%, rgb(var(--habit-accent-rgb)) 16%);
+
+    --habit-ref-lower:
+        color-mix(in srgb, var(--habit-card-base) 72%, rgb(var(--habit-accent-rgb)) 28%);
+
+    --habit-ref-bottom:
+        color-mix(in srgb, var(--habit-card-base) 62%, rgb(var(--habit-accent-rgb)) 38%);
+
+    --habit-ref-border:
+        color-mix(in srgb, var(--habit-card-base) 58%, rgb(var(--habit-accent-rgb)) 42%);
+
+    --habit-ref-title:
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 58%, white 42%);
+
+    --habit-ref-secondary:
+        color-mix(in srgb, var(--habit-ref-bottom) 70%, white 30%);
+
+    --habit-ref-progress-empty:
+        color-mix(in srgb, var(--habit-ref-bottom) 84%, white 16%);
+
+    --habit-ref-progress-filled:
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 54%, white 46%);
+
+    border-color: var(--habit-ref-border);
+
     background:
         linear-gradient(
             180deg,
-            color-mix(in srgb, var(--habit-card-base) 91%, rgb(var(--habit-accent-rgb)) 9%) 0%,
-            color-mix(in srgb, var(--habit-card-base) 82%, rgb(var(--habit-accent-rgb)) 18%) 100%
+            var(--habit-ref-top) 0%,
+            var(--habit-ref-top) 25%,
+            var(--habit-ref-mid) 52%,
+            var(--habit-ref-lower) 76%,
+            var(--habit-ref-bottom) 100%
         );
-    box-shadow:
-        0 8px 22px rgba(0, 0, 0, 0.10),
-        inset 0 1px 0 rgba(255, 255, 255, 0.018);
 }
 
-/* Убираем отдельное декоративное свечение: цвет теперь живёт в самой поверхности. */
+/* Цвет живёт в поверхности, отдельного цветового свечения карточки нет. */
 .habit-card::before {
-    display: none;
+    content: none;
 }
 
-.habit-card.is-pressed,
-.habit-card:active {
-    box-shadow:
-        0 5px 16px rgba(0, 0, 0, 0.09),
-        inset 0 1px 0 rgba(255, 255, 255, 0.018);
+.habit-card__icon {
+    color: var(--habit-ref-title);
 }
 
-/* Верхняя иконка — спокойнее и ближе к палитре референса. */
-.habit-card__icon,
 .habit-card__icon.is-symbol {
-    color: rgba(var(--habit-accent-rgb), 0.78);
+    color: var(--habit-ref-title);
 }
 
 .habit-card__name {
-    color: rgba(var(--habit-accent-rgb), 0.84);
-    font-weight: 650;
+    color: var(--habit-ref-title);
 }
 
 .habit-card__description,
 .habit-card__description.is-completed {
-    color: rgba(var(--habit-accent-rgb), 0.52);
-    font-weight: 550;
-}
-
-/* Более тихая базовая дорожка и цельная заливка без неонового эффекта. */
-.habit-card__progress {
-    gap: 7px;
+    color: var(--habit-ref-secondary);
 }
 
 .habit-card__progress-item {
-    background: rgba(var(--habit-accent-rgb), 0.13);
-    box-shadow: none;
+    background: var(--habit-ref-progress-empty);
 }
 
 .habit-card__progress-item::after {
-    background: rgba(var(--habit-accent-rgb), 0.72);
-    box-shadow: none;
+    background: var(--habit-ref-progress-filled);
 }
 
 .habit-card__streak,
 .habit-card__streak-value {
-    color: rgba(var(--habit-accent-rgb), 0.62);
+    color: var(--habit-ref-secondary);
 }
 
-.habit-card__streak-icon {
-    opacity: 0.68;
-}
-
-/* Аватары остаются в существующей shared-habit логике, но визуально связываются с карточкой. */
+/* Shared avatars: только цветовая привязка к новой поверхности. */
 .habit-card__person {
-    background: color-mix(in srgb, var(--habit-card-base) 90%, rgb(var(--habit-accent-rgb)) 10%);
+    background: var(--habit-ref-top);
 }
 
 .habit-card__person-avatar {
-    border-color: color-mix(in srgb, var(--habit-card-base) 76%, rgb(var(--habit-accent-rgb)) 24%);
+    border-color: var(--habit-ref-mid);
 }
 
 .habit-card__person-check {
-    border-color: color-mix(in srgb, var(--habit-card-base) 78%, rgb(var(--habit-accent-rgb)) 22%);
-    background: rgba(var(--habit-accent-rgb), 0.82);
+    border-color: var(--habit-ref-mid);
 }
 
 .habit-card__people-more {
-    border-color: color-mix(in srgb, var(--habit-card-base) 76%, rgb(var(--habit-accent-rgb)) 24%);
-    background: rgba(var(--habit-accent-rgb), 0.09);
-    color: rgba(var(--habit-accent-rgb), 0.56);
+    border-color: var(--habit-ref-mid);
+    background: var(--habit-ref-top);
+    color: var(--habit-ref-secondary);
 }
 
