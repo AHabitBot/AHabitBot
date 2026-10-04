@@ -5,8 +5,8 @@
 .habits-v2-empty__add-button {
     position: relative;
 
-    width: 64px;
-    height: 64px;
+    width: 58px;
+    height: 58px;
 
     margin-top: 32px;
     padding: 0;
@@ -46,7 +46,7 @@
 .habits-v2-empty__add-icon {
     display: block;
 
-    font-size: 62px;
+    font-size: 71px;
     line-height: 1;
 
     font-variation-settings:

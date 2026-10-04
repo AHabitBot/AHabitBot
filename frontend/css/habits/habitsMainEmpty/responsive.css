@@ -30,14 +30,14 @@
     }
 
     .habits-v2-empty__add-button {
-        width: 68px;
-        height: 68px;
+        width: 61px;
+        height: 61px;
 
         margin-top: 36px;
     }
 
     .habits-v2-empty__add-icon {
-        font-size: 66px;
+        font-size: 76px;
         font-variation-settings:
             "FILL" 0,
             "wght" 300,
@@ -81,14 +81,14 @@
     }
 
     .habits-v2-empty__add-button {
-        width: 59px;
-        height: 59px;
+        width: 53px;
+        height: 53px;
 
         margin-top: 28px;
     }
 
     .habits-v2-empty__add-icon {
-        font-size: 56px;
+        font-size: 64px;
     }
 }
 
@@ -138,13 +138,13 @@
     }
 
     .habits-v2-empty__add-button {
-        width: 55px;
-        height: 55px;
+        width: 50px;
+        height: 50px;
 
         margin-top: 16px;
     }
 
     .habits-v2-empty__add-icon {
-        font-size: 54px;
+        font-size: 62px;
     }
 }
