@@ -144,3 +144,38 @@ body:has(.habit-details)
 .bottom-navigation {
     display: none !important;
 }
+
+/* =========================================================
+   DETAILS ROUNDED TYPOGRAPHY
+   Rounded font for the details page only.
+   Material Symbols and emoji keep their own fonts.
+   ========================================================= */
+
+.habit-details,
+.habit-details * {
+    font-family:
+        ui-rounded,
+        "SF Pro Rounded",
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+}
+
+.habit-details .material-symbols-rounded {
+    font-family: "Material Symbols Rounded";
+}
+
+.habit-details__icon:not(.material-symbols-rounded) {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+}
+

@@ -1060,6 +1060,13 @@
     --habit-ref-calendar-empty:
         color-mix(in srgb, var(--app-surface-soft) 82%, rgb(var(--habit-accent-rgb)) 18%);
 
+    --habit-ref-calendar-number:
+        color-mix(
+            in srgb,
+            rgb(var(--habit-accent-rgb)) 42%,
+            #8796a3 58%
+        );
+
     --habit-ref-check-top:
         color-mix(in srgb, var(--habit-ref-bottom) 76%, rgb(var(--habit-accent-rgb)) 24%);
 

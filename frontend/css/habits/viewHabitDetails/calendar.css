@@ -148,7 +148,9 @@
     min-width: 0;
 
     color:
-        var(--habit-ref-calendar-empty);
+        var(--habit-ref-calendar-number);
+
+    opacity: 0.72;
 
     font-family:
         -apple-system,
@@ -209,22 +211,11 @@
 
     box-sizing: border-box;
 
-    border:
-        1px solid
-        color-mix(
-            in srgb,
-            var(--app-border) 88%,
-            var(--habit-ref-calendar-empty) 12%
-        );
+    border: none;
 
     border-radius: 12px;
 
-    color:
-        color-mix(
-            in srgb,
-            var(--habit-ref-calendar-empty) 58%,
-            white 42%
-        );
+    color: var(--habit-ref-calendar-number);
 
     background:
         var(--habit-ref-calendar-empty);
@@ -286,8 +277,8 @@
     color:
         color-mix(
             in srgb,
-            var(--habit-ref-calendar-empty) 42%,
-            white 58%
+            var(--habit-ref-calendar-number) 72%,
+            white 28%
         );
 
     font-weight: 700;
@@ -318,8 +309,8 @@
     background:
         color-mix(
             in srgb,
-            var(--habit-ref-calendar-empty) 42%,
-            white 58%
+            var(--habit-ref-calendar-number) 72%,
+            white 28%
         );
 
     transform:
@@ -340,19 +331,7 @@
 
 .habit-calendar__day--before-created,
 .habit-calendar__day--future {
-    border-color:
-        color-mix(
-            in srgb,
-            var(--app-border) 88%,
-            var(--habit-ref-calendar-empty) 12%
-        );
-
-    color:
-        color-mix(
-            in srgb,
-            var(--habit-ref-calendar-empty) 58%,
-            white 42%
-        );
+    color: var(--habit-ref-calendar-number);
 
     background:
         var(--habit-ref-calendar-empty);
