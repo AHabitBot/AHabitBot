@@ -8,7 +8,7 @@
     width: 64px;
     height: 64px;
 
-    margin-top: 54px;
+    margin-top: 44px;
     padding: 0;
 
     display: grid;
@@ -46,7 +46,7 @@
 .habits-v2-empty__add-icon {
     display: block;
 
-    font-size: 48px;
+    font-size: 54px;
     line-height: 1;
 
     font-variation-settings:
