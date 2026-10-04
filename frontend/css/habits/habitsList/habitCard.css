@@ -1033,19 +1033,19 @@
         color-mix(in srgb, #18222d 84%, rgb(var(--habit-accent-rgb)) 16%);
 
     --habit-ref-lower:
-        color-mix(in srgb, #192633 72%, rgb(var(--habit-accent-rgb)) 28%);
+        color-mix(in srgb, #1c2935 76%, rgb(var(--habit-accent-rgb)) 24%);
 
     --habit-ref-bottom:
-        color-mix(in srgb, #1a2938 62%, rgb(var(--habit-accent-rgb)) 38%);
+        color-mix(in srgb, #1d2d3c 68%, rgb(var(--habit-accent-rgb)) 32%);
 
     --habit-ref-border:
-        color-mix(in srgb, #1a2938 58%, rgb(var(--habit-accent-rgb)) 42%);
+        color-mix(in srgb, #203244 64%, rgb(var(--habit-accent-rgb)) 36%);
 
     --habit-ref-title:
-        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 55%, #d9f0ff 45%);
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 50%, #d8f3ff 50%);
 
     --habit-ref-secondary:
-        color-mix(in srgb, var(--habit-ref-bottom) 70%, #c5def2 30%);
+        color-mix(in srgb, var(--habit-ref-bottom) 66%, #c9e5f7 34%);
 
     --habit-ref-progress-empty:
         color-mix(in srgb, var(--habit-ref-bottom) 84%, white 16%);
