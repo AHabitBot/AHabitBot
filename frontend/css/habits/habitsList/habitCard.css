@@ -1049,7 +1049,7 @@
         color-mix(in srgb, rgb(var(--habit-accent-rgb)) 58%, white 42%);
 
     --habit-ref-secondary:
-        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 34%, #8796a3 66%);
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 29%, #7f8d98 71%);
 
     --habit-ref-progress-empty:
         color-mix(in srgb, rgb(var(--habit-accent-rgb)) 25%, #314252 75%);
@@ -1058,13 +1058,13 @@
         color-mix(in srgb, rgb(var(--habit-accent-rgb)) 55%, white 45%);
 
     --habit-ref-calendar-empty:
-        color-mix(in srgb, var(--app-surface-soft) 82%, rgb(var(--habit-accent-rgb)) 18%);
+        color-mix(in srgb, var(--app-surface-soft) 89%, rgb(var(--habit-accent-rgb)) 11%);
 
     --habit-ref-calendar-number:
         color-mix(
             in srgb,
-            rgb(var(--habit-accent-rgb)) 42%,
-            #8796a3 58%
+            rgb(var(--habit-accent-rgb)) 30%,
+            #7f8c97 70%
         );
 
     --habit-ref-check-top:
