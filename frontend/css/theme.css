@@ -394,12 +394,12 @@ body.app-ready .bottom-navigation {
 
 
 /* Emoji также сохраняют системную цветную гарнитуру. */
-#app .add-habit-v2__selected-icon,
-#app .habit-details__icon,
-#app .habit-card__icon,
-#app .habit-card__streak-icon,
-#app .habits-stats__icon,
-#app .habit-icon-picker__emoji {
+#app .add-habit-v2__selected-icon:not(.material-symbols-rounded),
+#app .habit-details__icon:not(.material-symbols-rounded),
+#app .habit-card__icon:not(.material-symbols-rounded),
+#app .habit-card__streak-icon:not(.material-symbols-rounded),
+#app .habits-stats__icon:not(.material-symbols-rounded),
+#app .habit-icon-picker__emoji:not(.material-symbols-rounded) {
     font-family:
         -apple-system,
         BlinkMacSystemFont,
