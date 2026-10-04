@@ -347,3 +347,65 @@ body.app-ready .bottom-navigation {
         color 0.18s ease,
         border-color 0.18s ease;
 }
+
+/* =========================================================
+   GLOBAL ROUNDED TYPOGRAPHY
+   Весь интерфейс приложения использует rounded-системный шрифт.
+   Нижняя навигация находится вне #app и сохраняет свой текущий шрифт.
+   Material Symbols и emoji сохраняют собственные гарнитуры.
+   ========================================================= */
+
+#app,
+#app * {
+    font-family:
+        ui-rounded,
+        "SF Pro Rounded",
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+}
+
+
+/* Loader находится вне #app, но является частью интерфейса. */
+.app-loader,
+.app-loader * {
+    font-family:
+        ui-rounded,
+        "SF Pro Rounded",
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
+        Arial,
+        sans-serif;
+}
+
+
+/* Material Symbols нельзя перекрывать общим шрифтом. */
+#app .material-symbols-rounded {
+    font-family:
+        "Material Symbols Rounded";
+}
+
+
+/* Emoji также сохраняют системную цветную гарнитуру. */
+#app .add-habit-v2__selected-icon,
+#app .habit-details__icon,
+#app .habit-card__icon,
+#app .habit-card__streak-icon,
+#app .habits-stats__icon,
+#app .habit-icon-picker__emoji {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Noto Color Emoji",
+        sans-serif;
+}
+
