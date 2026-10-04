@@ -293,9 +293,7 @@
         var(--habit-accent);
 
     box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-        0 0 18px rgba(var(--habit-accent-rgb), 0.34),
-        0 0 34px rgba(var(--habit-accent-rgb), 0.16);
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 
@@ -1112,10 +1110,16 @@
 .habit-card__check.is-completed {
     background:
         linear-gradient(
-            165deg,
+            155deg,
             var(--habit-ref-check-top) 0%,
+            color-mix(in srgb, var(--habit-ref-check-top) 52%, var(--habit-ref-check-bottom) 48%) 56%,
             var(--habit-ref-check-bottom) 100%
         );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.10),
+        0 2px 5px rgba(0, 0, 0, 0.08);
 }
 
 /* Shared avatars: только цветовая привязка к новой поверхности. */
