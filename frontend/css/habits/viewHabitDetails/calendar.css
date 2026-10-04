@@ -98,7 +98,7 @@
         18px;
 
     color:
-        var(--app-text-title);
+        var(--habit-ref-secondary);
 
     font-family:
         -apple-system,
@@ -148,7 +148,7 @@
     min-width: 0;
 
     color:
-        var(--app-text-secondary);
+        var(--habit-ref-calendar-empty);
 
     font-family:
         -apple-system,
@@ -213,21 +213,21 @@
         1px solid
         color-mix(
             in srgb,
-            var(--app-border) 82%,
-            var(--habit-ref-border) 18%
+            var(--app-border) 88%,
+            var(--habit-ref-calendar-empty) 12%
         );
 
     border-radius: 12px;
 
     color:
-        rgba(235, 242, 248, 0.68);
-
-    background:
         color-mix(
             in srgb,
-            var(--app-surface-soft) 72%,
-            var(--habit-ref-progress-empty) 28%
+            var(--habit-ref-calendar-empty) 58%,
+            white 42%
         );
+
+    background:
+        var(--habit-ref-calendar-empty);
 
     font-family:
         -apple-system,
@@ -284,7 +284,11 @@
 
 .habit-calendar__day--today {
     color:
-        rgba(235, 242, 248, 0.82);
+        color-mix(
+            in srgb,
+            var(--habit-ref-calendar-empty) 42%,
+            white 58%
+        );
 
     font-weight: 700;
 }
@@ -312,7 +316,11 @@
     border-radius: 50%;
 
     background:
-        var(--app-text-primary);
+        color-mix(
+            in srgb,
+            var(--habit-ref-calendar-empty) 42%,
+            white 58%
+        );
 
     transform:
         translateX(-50%);
@@ -335,19 +343,19 @@
     border-color:
         color-mix(
             in srgb,
-            var(--app-border) 82%,
-            var(--habit-ref-border) 18%
+            var(--app-border) 88%,
+            var(--habit-ref-calendar-empty) 12%
         );
 
     color:
-        rgba(235, 242, 248, 0.68);
-
-    background:
         color-mix(
             in srgb,
-            var(--app-surface-soft) 72%,
-            var(--habit-ref-progress-empty) 28%
+            var(--habit-ref-calendar-empty) 58%,
+            white 42%
         );
+
+    background:
+        var(--habit-ref-calendar-empty);
 
     opacity: 1;
 }
