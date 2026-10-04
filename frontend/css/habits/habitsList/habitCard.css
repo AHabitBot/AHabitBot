@@ -129,8 +129,7 @@
    PRESSED
    ========================================================= */
 
-.habit-card.is-pressed,
-.habit-card:active {
+.habit-card.is-pressed {
     transform:
         scale(
             0.987
@@ -719,13 +718,19 @@
 
 /* Короткая точка успеха после обратного вращения при отмене. */
 .habit-card__check.is-unconfirm-success {
-    color: #ffffff;
-    background: var(--habit-accent);
-    box-shadow:
-        0
-        5px
-        12px
-        rgba(var(--habit-accent-rgb), 0.22);
+    color:
+        rgba(
+            var(--habit-accent-rgb),
+            0.42
+        );
+
+    background:
+        rgba(
+            var(--habit-accent-rgb),
+            0.13
+        );
+
+    box-shadow: none;
 }
 
 .habit-card__check.is-unconfirm-success .habit-card__check-mark {
