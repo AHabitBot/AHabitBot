@@ -3,6 +3,12 @@ import { t } from "../i18n/core/i18n.js";
 const NAVIGATION_ID = "bottom-navigation";
 const NAVIGATION_FADE_ID = "bottom-navigation-fade";
 
+const NAVIGATION_PAGE_INDEX = {
+    habits: 0,
+    leaderboard: 1,
+    profile: 2
+};
+
 /* =========================================================
    ПРОВЕРИТЬ ДОСТУП К ПРОФИЛЮ
    ========================================================= */
@@ -72,6 +78,7 @@ export function renderBottomNavigation(
             id="${NAVIGATION_ID}"
             class="bottom-navigation"
             aria-label="${t("common.navigation.aria")}"
+            style="--nav-active-index: ${NAVIGATION_PAGE_INDEX[activePage] ?? 0};"
         >
 
             <button
@@ -99,7 +106,7 @@ export function renderBottomNavigation(
                     "
                     aria-hidden="true"
                 >
-                    task_alt
+                    home
                 </span>
 
                 <span class="bottom-navigation__label">
@@ -197,6 +204,14 @@ export function setActiveNavigationPage(
     if (!navigation) {
         return;
     }
+
+    navigation.style.setProperty(
+        "--nav-active-index",
+        String(
+            NAVIGATION_PAGE_INDEX[activePage]
+            ?? 0
+        )
+    );
 
     const buttons =
         navigation.querySelectorAll(
