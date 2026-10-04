@@ -10,11 +10,6 @@
 .habit-details__menu-wrapper {
     position: relative;
 
-    width: 40px;
-    height: 40px;
-
-    flex: 0 0 40px;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,19 +21,18 @@
    ========================================================= */
 
 .habit-details__menu-button {
+    display: grid;
+    place-items: center;
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
     width: 40px;
     height: 40px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     margin: 0;
-
-    padding:
-        0
-        0
-        8px;
 
     border:
         1px solid
