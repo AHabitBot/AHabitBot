@@ -69,42 +69,32 @@
 
     border-radius: 25px;
 
+    /*
+     * Верх карточки почти графитовый, а к нижней границе
+     * цвет привычки постепенно усиливается. Нижний тон
+     * специально доведён до той же цветовой семьи, что и border.
+     */
     background:
         linear-gradient(
-            145deg,
+            180deg,
 
             color-mix(
                 in srgb,
-                var(--habit-card-base)
-                84%,
-                rgb(
-                    var(--habit-accent-rgb)
-                )
-                16%
-            )
-            0%,
+                var(--habit-card-base) 92%,
+                rgb(var(--habit-accent-rgb)) 8%
+            ) 0%,
 
             color-mix(
                 in srgb,
-                var(--habit-card-base)
-                91%,
-                rgb(
-                    var(--habit-accent-rgb)
-                )
-                9%
-            )
-            52%,
+                var(--habit-card-base) 84%,
+                rgb(var(--habit-accent-rgb)) 16%
+            ) 56%,
 
             color-mix(
                 in srgb,
-                var(--habit-card-base)
-                97%,
-                rgb(
-                    var(--habit-accent-rgb)
-                )
-                3%
-            )
-            100%
+                var(--habit-card-base) 72%,
+                rgb(var(--habit-accent-rgb)) 28%
+            ) 100%
         );
 
     box-shadow:
@@ -131,36 +121,7 @@
    ========================================================= */
 
 .habit-card::before {
-    content: "";
-
-    position: absolute;
-
-    top: -75px;
-    left: -65px;
-
-    width: 210px;
-    height: 210px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-
-            rgba(
-                var(--habit-accent-rgb),
-                0.085
-            )
-            0%,
-
-            rgba(
-                var(--habit-accent-rgb),
-                0
-            )
-            72%
-        );
-
-    pointer-events: none;
+    content: none;
 }
 
 
@@ -205,7 +166,7 @@
     justify-self: start;
 
     color:
-        var(--habit-accent);
+        color-mix(in srgb, var(--habit-accent) 68%, white 32%);
 
     font-family:
         -apple-system,
@@ -327,19 +288,13 @@
 
 .habit-card__check.is-completed {
     color:
-        #ffffff;
+        rgba(var(--habit-accent-rgb), 0.78);
 
     background:
-        var(--habit-accent);
+        rgba(var(--habit-accent-rgb), 0.12);
 
     box-shadow:
-        0
-        5px
-        12px
-        rgba(
-            var(--habit-accent-rgb),
-            0.22
-        );
+        inset 0 0 0 1px rgba(var(--habit-accent-rgb), 0.10);
 }
 
 
@@ -505,10 +460,14 @@
 .habit-card__progress {
     min-width: 0;
 
+    /* Референс: семь сегментов не растягиваются до стрика. */
+    width: 72%;
+    max-width: 510px;
+
     flex:
+        0
         1
-        1
-        auto;
+        72%;
 
     display: grid;
 
@@ -521,7 +480,7 @@
             )
         );
 
-    gap: 7px;
+    gap: 6px;
 }
 
 
