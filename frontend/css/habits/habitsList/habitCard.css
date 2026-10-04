@@ -1059,3 +1059,133 @@
         transition: none;
     }
 }
+
+/* =========================================================
+   AHABIT CARD — QUIET DARK VISUAL REFRESH
+   Visual-only override. Card heights and interaction logic stay unchanged.
+   ========================================================= */
+
+.habit-card {
+    border-color: rgba(var(--habit-accent-rgb), 0.20);
+    border-radius: 25px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--habit-card-base) 91%, rgb(var(--habit-accent-rgb)) 9%) 0%,
+            color-mix(in srgb, var(--habit-card-base) 82%, rgb(var(--habit-accent-rgb)) 18%) 100%
+        );
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.10),
+        inset 0 1px 0 rgba(255, 255, 255, 0.018);
+}
+
+/* Убираем отдельное декоративное свечение: цвет теперь живёт в самой поверхности. */
+.habit-card::before {
+    display: none;
+}
+
+.habit-card.is-pressed,
+.habit-card:active {
+    box-shadow:
+        0 5px 16px rgba(0, 0, 0, 0.09),
+        inset 0 1px 0 rgba(255, 255, 255, 0.018);
+}
+
+/* Верхняя иконка — спокойнее и ближе к палитре референса. */
+.habit-card__icon,
+.habit-card__icon.is-symbol {
+    color: rgba(var(--habit-accent-rgb), 0.78);
+}
+
+/* Check остаётся тем же контролом и с теми же состояниями, меняется только вид. */
+.habit-card__check {
+    border: 1px solid rgba(var(--habit-accent-rgb), 0.12);
+    color: rgba(var(--habit-accent-rgb), 0.40);
+    background: rgba(var(--habit-accent-rgb), 0.075);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.018);
+}
+
+.habit-card__check.is-completed {
+    color: rgba(var(--habit-accent-rgb), 0.78);
+    background: rgba(var(--habit-accent-rgb), 0.13);
+    border-color: rgba(var(--habit-accent-rgb), 0.16);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.02),
+        0 4px 10px rgba(0, 0, 0, 0.055);
+}
+
+.habit-card__name {
+    color: rgba(var(--habit-accent-rgb), 0.84);
+    font-weight: 650;
+}
+
+.habit-card__description,
+.habit-card__description.is-completed {
+    color: rgba(var(--habit-accent-rgb), 0.52);
+    font-weight: 550;
+}
+
+/* Более тихая базовая дорожка и цельная заливка без неонового эффекта. */
+.habit-card__progress {
+    gap: 7px;
+}
+
+.habit-card__progress-item {
+    background: rgba(var(--habit-accent-rgb), 0.13);
+    box-shadow: none;
+}
+
+.habit-card__progress-item::after {
+    background: rgba(var(--habit-accent-rgb), 0.72);
+    box-shadow: none;
+}
+
+.habit-card__streak,
+.habit-card__streak-value {
+    color: rgba(var(--habit-accent-rgb), 0.62);
+}
+
+.habit-card__streak-icon {
+    opacity: 0.68;
+}
+
+/* Аватары остаются в существующей shared-habit логике, но визуально связываются с карточкой. */
+.habit-card__person {
+    background: color-mix(in srgb, var(--habit-card-base) 90%, rgb(var(--habit-accent-rgb)) 10%);
+}
+
+.habit-card__person-avatar {
+    border-color: color-mix(in srgb, var(--habit-card-base) 76%, rgb(var(--habit-accent-rgb)) 24%);
+}
+
+.habit-card__person-check {
+    border-color: color-mix(in srgb, var(--habit-card-base) 78%, rgb(var(--habit-accent-rgb)) 22%);
+    background: rgba(var(--habit-accent-rgb), 0.82);
+}
+
+.habit-card__people-more {
+    border-color: color-mix(in srgb, var(--habit-card-base) 76%, rgb(var(--habit-accent-rgb)) 24%);
+    background: rgba(var(--habit-accent-rgb), 0.09);
+    color: rgba(var(--habit-accent-rgb), 0.56);
+}
+
+/* Сохраняем существующую анимацию подтверждения, но приглушаем дугу. */
+.habit-card__check.is-confirming::after {
+    border-top-color: rgba(var(--habit-accent-rgb), 0.76);
+    border-right-color: rgba(var(--habit-accent-rgb), 0.28);
+}
+
+.habit-card__check.is-confirming.is-unconfirming::after {
+    border-top-color: transparent;
+    border-right-color: rgba(var(--habit-accent-rgb), 0.76);
+    border-bottom-color: rgba(var(--habit-accent-rgb), 0.28);
+}
+
+.habit-card__check.is-unconfirm-success {
+    color: rgba(var(--habit-accent-rgb), 0.78);
+    background: rgba(var(--habit-accent-rgb), 0.13);
+    border-color: rgba(var(--habit-accent-rgb), 0.16);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.02),
+        0 4px 10px rgba(0, 0, 0, 0.055);
+}
