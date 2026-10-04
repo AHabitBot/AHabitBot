@@ -42,19 +42,12 @@
 
     border:
         1px solid
-        color-mix(
-            in srgb,
-            rgb(
-                var(--habit-accent-rgb)
-            )
-            11%,
-            var(--app-border)
-        );
+        var(--habit-ref-border);
 
     border-radius: 18px;
 
     background:
-        var(--app-surface);
+        var(--habit-ref-top);
 
     box-shadow:
         var(--app-shadow);
@@ -74,7 +67,7 @@
     gap: 6px;
 
     color:
-        var(--app-text-primary);
+        var(--habit-ref-title);
 
     font-family:
         -apple-system,
@@ -101,7 +94,7 @@
     margin-top: 4px;
 
     color:
-        var(--app-text-secondary);
+        var(--habit-ref-secondary);
 
     font-family:
         -apple-system,

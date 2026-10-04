@@ -1028,7 +1028,8 @@
    Только цветовая система. Геометрия и логика не меняются.
    ========================================================= */
 
-.habit-card {
+.habit-card,
+.habit-details {
     --habit-ref-top:
         color-mix(in srgb, #171d24 94%, rgb(var(--habit-accent-rgb)) 6%);
 

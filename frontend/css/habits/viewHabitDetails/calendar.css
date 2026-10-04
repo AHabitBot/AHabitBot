@@ -211,30 +211,15 @@
 
     border:
         1px solid
-        color-mix(
-            in srgb,
-            rgb(
-                var(--habit-accent-rgb)
-            )
-            4%,
-            var(--app-border)
-        );
+        var(--habit-ref-border);
 
     border-radius: 12px;
 
     color:
-        var(--app-text-primary);
+        rgba(235, 242, 248, 0.68);
 
     background:
-        color-mix(
-            in srgb,
-            var(--app-surface-soft)
-            95%,
-            rgb(
-                var(--habit-accent-rgb)
-            )
-            5%
-        );
+        var(--habit-ref-progress-empty);
 
     font-family:
         -apple-system,
@@ -270,39 +255,16 @@
 
 .habit-calendar__day--completed {
     border-color:
-        rgba(
-            var(--habit-accent-rgb),
-            0.20
-        );
+        var(--habit-ref-title);
 
     color:
-        #ffffff;
+        #12171c;
 
     background:
-        linear-gradient(
-            145deg,
-
-            rgba(
-                var(--habit-accent-rgb),
-                0.72
-            )
-            0%,
-
-            rgba(
-                var(--habit-accent-rgb),
-                0.95
-            )
-            100%
-        );
+        var(--habit-ref-title);
 
     box-shadow:
-        0
-        5px
-        12px
-        rgba(
-            var(--habit-accent-rgb),
-            0.13
-        );
+        none;
 
     font-weight: 700;
 }
@@ -314,9 +276,15 @@
 
 .habit-calendar__day--today {
     color:
-        var(--app-text-primary);
+        rgba(235, 242, 248, 0.82);
 
     font-weight: 700;
+}
+
+
+.habit-calendar__day--completed.habit-calendar__day--today {
+    color:
+        #12171c;
 }
 
 
@@ -346,7 +314,7 @@
 .habit-calendar__day--completed
 .habit-calendar__today-dot {
     background:
-        #ffffff;
+        #12171c;
 }
 
 
@@ -357,28 +325,13 @@
 .habit-calendar__day--before-created,
 .habit-calendar__day--future {
     border-color:
-        color-mix(
-            in srgb,
-            rgb(
-                var(--habit-accent-rgb)
-            )
-            4%,
-            var(--app-border)
-        );
+        var(--habit-ref-border);
 
     color:
-        var(--app-text-primary);
+        rgba(235, 242, 248, 0.68);
 
     background:
-        color-mix(
-            in srgb,
-            var(--app-surface-soft)
-            95%,
-            rgb(
-                var(--habit-accent-rgb)
-            )
-            5%
-        );
+        var(--habit-ref-progress-empty);
 
     opacity: 1;
 }
@@ -391,30 +344,13 @@
 .habit-calendar__day--completed.habit-calendar__day--before-created,
 .habit-calendar__day--completed.habit-calendar__day--future {
     border-color:
-        rgba(
-            var(--habit-accent-rgb),
-            0.20
-        );
+        var(--habit-ref-title);
 
     color:
-        #ffffff;
+        #12171c;
 
     background:
-        linear-gradient(
-            145deg,
-
-            rgba(
-                var(--habit-accent-rgb),
-                0.72
-            )
-            0%,
-
-            rgba(
-                var(--habit-accent-rgb),
-                0.95
-            )
-            100%
-        );
+        var(--habit-ref-title);
 
     opacity: 1;
 }

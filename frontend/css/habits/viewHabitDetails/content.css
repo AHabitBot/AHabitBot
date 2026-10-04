@@ -58,7 +58,7 @@
         0;
 
     color:
-        var(--app-text-title);
+        var(--habit-ref-title);
 
     font-family:
         -apple-system,
@@ -87,7 +87,7 @@
     margin-top: 6px;
 
     color:
-        var(--habit-accent);
+        var(--habit-ref-secondary);
 
     font-family:
         -apple-system,

@@ -18,29 +18,17 @@
 
     border:
         1px solid
-        color-mix(
-            in srgb,
-            rgb(var(--habit-accent-rgb))
-            22%,
-            var(--app-border)
-        );
+        var(--habit-ref-border);
 
     border-radius: 18px;
 
-    color: var(--habit-accent);
+    color: var(--habit-ref-secondary);
 
     background:
-        color-mix(
-            in srgb,
-            var(--app-surface)
-            94%,
-            rgb(var(--habit-accent-rgb))
-            6%
-        );
+        var(--habit-ref-top);
 
     box-shadow:
-        0 7px 20px
-        rgba(var(--habit-accent-rgb), 0.08);
+        none;
 
     font: inherit;
     font-size: 16px;
@@ -126,12 +114,7 @@
         );
 
     color:
-        color-mix(
-            in srgb,
-            rgb(var(--habit-accent-rgb))
-            78%,
-            var(--app-text-secondary)
-        );
+        var(--habit-ref-secondary);
 
     background:
         color-mix(
