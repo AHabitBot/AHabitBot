@@ -152,28 +152,102 @@ function initTelegramWebApp() {
 }
 
 
-function handleNavigation(event) {
+const PAGE_FADE_OUT_MS = 115
+const PAGE_FADE_IN_MS = 180
+
+let pageTransitionId = 0
+
+
+function waitForPageTransition(milliseconds) {
+    return new Promise((resolve) => {
+        window.setTimeout(resolve, milliseconds)
+    })
+}
+
+
+function getMainPageElements() {
+    return {
+        habits: document.getElementById(
+            "habits-v2-page"
+        ),
+        leaderboard: document.getElementById(
+            "leaderboard-v2-page"
+        ),
+        profile: document.getElementById(
+            "profile-v2-page"
+        )
+    }
+}
+
+
+function renderMainNavigationPage(
+    page,
+    {
+        leaderboardRoot,
+        profileRoot
+    }
+) {
+    if (page === "leaderboard") {
+        openLeaderboardPage(
+            leaderboardRoot
+        )
+
+        return true
+    }
+
+    if (page === "profile") {
+        if (!canAccessProfile()) {
+            return false
+        }
+
+        openProfilePage(
+            profileRoot
+        )
+
+        return true
+    }
+
+    if (page === "habits") {
+        openHabitsPageFromStore()
+        return true
+    }
+
+    return false
+}
+
+
+async function handleNavigation(event) {
     const page =
         event.detail?.page
 
-    const habitsPage =
-        document.getElementById(
-            "habits-v2-page"
+    const pages =
+        getMainPageElements()
+
+    const targetPage =
+        pages[page]
+
+    if (!targetPage) {
+        return
+    }
+
+    const currentPage =
+        Object.values(pages).find(
+            (pageElement) =>
+                pageElement &&
+                !pageElement.hidden &&
+                pageElement.classList.contains(
+                    "active"
+                )
         )
 
-    const leaderboardPage =
-        document.getElementById(
-            "leaderboard-v2-page"
-        )
+    if (currentPage === targetPage) {
+        setActiveNavigationPage(page)
+        return
+    }
 
     const leaderboardRoot =
         document.getElementById(
             "leaderboard-v2-root"
-        )
-
-    const profilePage =
-        document.getElementById(
-            "profile-v2-page"
         )
 
     const profileRoot =
@@ -181,102 +255,93 @@ function handleNavigation(event) {
             "profile-v2-root"
         )
 
+    const transitionId =
+        ++pageTransitionId
 
-    /* =====================================================
-       ЛИДЕРБОРД
-       ====================================================== */
+    document.body.classList.add(
+        "is-page-transitioning"
+    )
 
-    if (page === "leaderboard") {
-        habitsPage.hidden = true
-        habitsPage.classList.remove(
+    setActiveNavigationPage(page)
+
+    if (currentPage) {
+        currentPage.classList.add(
+            "is-leaving"
+        )
+        currentPage.classList.remove(
             "active"
         )
 
-        profilePage.hidden = true
-        profilePage.classList.remove(
-            "active"
+        await waitForPageTransition(
+            PAGE_FADE_OUT_MS
         )
 
-        leaderboardPage.hidden = false
-        leaderboardPage.classList.add(
-            "active"
-        )
-
-        openLeaderboardPage(
-            leaderboardRoot
-        )
-
-        setActiveNavigationPage(
-            "leaderboard"
-        )
-
-        return
-    }
-
-
-    /* =====================================================
-       ПРОФИЛЬ
-       ====================================================== */
-
-    if (page === "profile") {
-        if (!canAccessProfile()) {
+        if (transitionId !== pageTransitionId) {
             return
         }
 
-        habitsPage.hidden = true
-        habitsPage.classList.remove(
-            "active"
+        currentPage.hidden = true
+        currentPage.classList.remove(
+            "is-leaving"
+        )
+    }
+
+    targetPage.hidden = false
+    targetPage.classList.add(
+        "is-entering"
+    )
+
+    const rendered =
+        renderMainNavigationPage(
+            page,
+            {
+                leaderboardRoot,
+                profileRoot
+            }
         )
 
-        leaderboardPage.hidden = true
-        leaderboardPage.classList.remove(
-            "active"
-        )
+    if (!rendered) {
+        targetPage.hidden = true
 
-        profilePage.hidden = false
-        profilePage.classList.add(
-            "active"
-        )
+        if (currentPage) {
+            currentPage.hidden = false
+            currentPage.classList.add(
+                "active"
+            )
+        }
 
-        openProfilePage(
-            profileRoot
-        )
-
-        setActiveNavigationPage(
-            "profile"
+        document.body.classList.remove(
+            "is-page-transitioning"
         )
 
         return
     }
 
+    await new Promise((resolve) => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(resolve)
+        })
+    })
 
-    /* =====================================================
-       ПРИВЫЧКИ
-       ====================================================== */
-
-    if (page === "habits") {
-        leaderboardPage.hidden = true
-        leaderboardPage.classList.remove(
-            "active"
-        )
-
-        profilePage.hidden = true
-        profilePage.classList.remove(
-            "active"
-        )
-
-        habitsPage.hidden = false
-        habitsPage.classList.add(
-            "active"
-        )
-
-        openHabitsPageFromStore()
-
-        setActiveNavigationPage(
-            "habits"
-        )
-
+    if (transitionId !== pageTransitionId) {
         return
+    }
+
+    targetPage.classList.add(
+        "active"
+    )
+    targetPage.classList.remove(
+        "is-entering"
+    )
+
+    await waitForPageTransition(
+        PAGE_FADE_IN_MS
+    )
+
+    if (transitionId === pageTransitionId) {
+        document.body.classList.remove(
+            "is-page-transitioning"
+        )
     }
 }
 

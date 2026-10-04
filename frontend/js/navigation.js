@@ -161,8 +161,29 @@ export function renderBottomNavigation(
    ========================================================= */
 
 export function mountBottomNavigation(
-    activePage = "habits"
+    activePage = "habits",
+    { forceRemount = false } = {}
 ) {
+    const existingNavigation =
+        document.getElementById(NAVIGATION_ID);
+
+    const existingFade =
+        document.getElementById(NAVIGATION_FADE_ID);
+
+    /*
+     * При переключении основных вкладок навигацию не пересоздаём.
+     * Это сохраняет живой DOM-элемент и позволяет активной капсуле
+     * действительно доезжать от старого пункта к новому.
+     */
+    if (
+        !forceRemount &&
+        existingNavigation &&
+        existingFade
+    ) {
+        setActiveNavigationPage(activePage);
+        return;
+    }
+
     removeBottomNavigation();
 
     document.body.insertAdjacentHTML(
@@ -284,6 +305,9 @@ function handleNavigationClick(event) {
     if (
         button.classList.contains(
             "is-active"
+        ) ||
+        document.body.classList.contains(
+            "is-page-transitioning"
         )
     ) {
         return;
@@ -347,7 +371,8 @@ function refreshBottomNavigationLanguage() {
         || "habits";
 
     mountBottomNavigation(
-        activePage
+        activePage,
+        { forceRemount: true }
     );
 }
 
