@@ -1053,6 +1053,12 @@
     --habit-ref-progress-filled:
         color-mix(in srgb, rgb(var(--habit-accent-rgb)) 55%, white 45%);
 
+    --habit-ref-check-top:
+        color-mix(in srgb, var(--habit-ref-bottom) 76%, rgb(var(--habit-accent-rgb)) 24%);
+
+    --habit-ref-check-bottom:
+        color-mix(in srgb, var(--habit-ref-bottom) 62%, rgb(var(--habit-accent-rgb)) 38%);
+
     border-color: var(--habit-ref-border);
 
     background:
@@ -1099,6 +1105,17 @@
 .habit-card__streak,
 .habit-card__streak-value {
     color: var(--habit-ref-secondary);
+}
+
+/* Активная кнопка: мягкий поверхностный градиент в сторону ~5 часов.
+   Свечение, галочка, анимации и логика остаются прежними. */
+.habit-card__check.is-completed {
+    background:
+        linear-gradient(
+            165deg,
+            var(--habit-ref-check-top) 0%,
+            var(--habit-ref-check-bottom) 100%
+        );
 }
 
 /* Shared avatars: только цветовая привязка к новой поверхности. */
