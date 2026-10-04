@@ -1042,16 +1042,16 @@
         color-mix(in srgb, #2b3946 84%, rgb(var(--habit-accent-rgb)) 16%);
 
     --habit-ref-title:
-        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 37%, #d8f3ff 63%);
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 58%, white 42%);
 
     --habit-ref-secondary:
-        color-mix(in srgb, var(--habit-ref-bottom) 52%, #c9e5f7 48%);
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 46%, #aebdca 54%);
 
     --habit-ref-progress-empty:
-        color-mix(in srgb, var(--habit-ref-bottom) 84%, white 16%);
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 25%, #314252 75%);
 
     --habit-ref-progress-filled:
-        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 54%, white 46%);
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 55%, white 45%);
 
     border-color: var(--habit-ref-border);
 
