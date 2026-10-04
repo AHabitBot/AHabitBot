@@ -1059,9 +1059,9 @@
         linear-gradient(
             180deg,
             var(--habit-ref-top) 0%,
-            var(--habit-ref-top) 32%,
-            var(--habit-ref-mid) 55%,
-            var(--habit-ref-lower) 78%,
+            var(--habit-ref-top) 18%,
+            var(--habit-ref-mid) 40%,
+            var(--habit-ref-lower) 68%,
             var(--habit-ref-bottom) 100%
         );
 }
