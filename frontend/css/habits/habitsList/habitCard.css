@@ -1042,10 +1042,10 @@
         color-mix(in srgb, #2b3946 84%, rgb(var(--habit-accent-rgb)) 16%);
 
     --habit-ref-title:
-        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 50%, #d8f3ff 50%);
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 37%, #d8f3ff 63%);
 
     --habit-ref-secondary:
-        color-mix(in srgb, var(--habit-ref-bottom) 66%, #c9e5f7 34%);
+        color-mix(in srgb, var(--habit-ref-bottom) 52%, #c9e5f7 48%);
 
     --habit-ref-progress-empty:
         color-mix(in srgb, var(--habit-ref-bottom) 84%, white 16%);
