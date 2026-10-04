@@ -42,12 +42,20 @@
 
     border:
         1px solid
-        var(--habit-ref-border);
+        color-mix(
+            in srgb,
+            var(--app-border) 82%,
+            var(--habit-ref-border) 18%
+        );
 
     border-radius: 18px;
 
     background:
-        var(--habit-ref-top);
+        color-mix(
+            in srgb,
+            var(--app-surface) 94%,
+            rgb(var(--habit-accent-rgb)) 6%
+        );
 
     box-shadow:
         var(--app-shadow);
