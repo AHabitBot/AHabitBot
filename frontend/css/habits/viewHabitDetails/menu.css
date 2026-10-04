@@ -21,6 +21,22 @@
    ========================================================= */
 
 .habit-details__menu-button {
+    color: var(--habit-ref-secondary);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--habit-ref-secondary) 35%,
+            transparent 65%
+        );
+
+    background:
+        color-mix(
+            in srgb,
+            var(--habit-ref-secondary) 8%,
+            transparent 92%
+        );
+
     display: grid;
     place-items: center;
 
@@ -42,12 +58,6 @@
 
     outline: none;
 
-    color:
-        var(--app-text-primary);
-
-    background:
-        var(--app-surface);
-
     box-shadow:
         var(--app-shadow);
 
@@ -56,8 +66,7 @@
     appearance: none;
 
     -webkit-appearance: none;
-    -webkit-tap-highlight-color:
-        transparent;
+    -webkit-tap-highlight-
 
     font-family:
         -apple-system,
