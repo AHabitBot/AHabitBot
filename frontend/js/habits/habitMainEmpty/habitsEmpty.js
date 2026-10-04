@@ -54,7 +54,10 @@ export function renderHabitsEmpty() {
                     aria-label="${t("habits.empty.createAria")}"
                     data-action="open-add-habit"
                 >
-                    +
+                    <span
+                        class="material-symbols-rounded habits-v2-empty__add-icon"
+                        aria-hidden="true"
+                    >add</span>
                 </button>
 
             </div>

@@ -24,18 +24,6 @@
 
     background: #373737;
 
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        Inter,
-        Arial,
-        sans-serif;
-
-    font-size: 50px;
-    font-weight: 300;
-    line-height: 1;
-
     cursor: pointer;
     user-select: none;
 
@@ -52,6 +40,22 @@
         opacity 90ms ease;
 
     touch-action: manipulation;
+}
+
+
+.habits-v2-empty__add-icon {
+    display: block;
+
+    font-size: 48px;
+    line-height: 1;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 300,
+        "GRAD" 0,
+        "opsz" 48;
+
+    transform: translate(0, 0);
 }
 
 
