@@ -1027,25 +1027,25 @@
 
 .habit-card {
     --habit-ref-top:
-        color-mix(in srgb, var(--habit-card-base) 94%, rgb(var(--habit-accent-rgb)) 6%);
+        color-mix(in srgb, #171d24 94%, rgb(var(--habit-accent-rgb)) 6%);
 
     --habit-ref-mid:
-        color-mix(in srgb, var(--habit-card-base) 84%, rgb(var(--habit-accent-rgb)) 16%);
+        color-mix(in srgb, #18222d 84%, rgb(var(--habit-accent-rgb)) 16%);
 
     --habit-ref-lower:
-        color-mix(in srgb, var(--habit-card-base) 72%, rgb(var(--habit-accent-rgb)) 28%);
+        color-mix(in srgb, #192633 72%, rgb(var(--habit-accent-rgb)) 28%);
 
     --habit-ref-bottom:
-        color-mix(in srgb, var(--habit-card-base) 62%, rgb(var(--habit-accent-rgb)) 38%);
+        color-mix(in srgb, #1a2938 62%, rgb(var(--habit-accent-rgb)) 38%);
 
     --habit-ref-border:
-        color-mix(in srgb, var(--habit-card-base) 58%, rgb(var(--habit-accent-rgb)) 42%);
+        color-mix(in srgb, #1a2938 58%, rgb(var(--habit-accent-rgb)) 42%);
 
     --habit-ref-title:
-        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 58%, white 42%);
+        color-mix(in srgb, rgb(var(--habit-accent-rgb)) 55%, #d9f0ff 45%);
 
     --habit-ref-secondary:
-        color-mix(in srgb, var(--habit-ref-bottom) 70%, white 30%);
+        color-mix(in srgb, var(--habit-ref-bottom) 70%, #c5def2 30%);
 
     --habit-ref-progress-empty:
         color-mix(in srgb, var(--habit-ref-bottom) 84%, white 16%);
