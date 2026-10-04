@@ -52,7 +52,7 @@ export function renderBottomNavigation(
                 >
                     <span
                         class="
-                            material-symbols-rounded
+                            material-symbols-outlined
                             bottom-navigation__icon
                         "
                         aria-hidden="true"
@@ -101,7 +101,7 @@ export function renderBottomNavigation(
             >
                 <span
                     class="
-                        material-symbols-rounded
+                        material-symbols-outlined
                         bottom-navigation__icon
                     "
                     aria-hidden="true"
@@ -135,7 +135,7 @@ export function renderBottomNavigation(
             >
                 <span
                     class="
-                        material-symbols-rounded
+                        material-symbols-outlined
                         bottom-navigation__icon
                     "
                     aria-hidden="true"
