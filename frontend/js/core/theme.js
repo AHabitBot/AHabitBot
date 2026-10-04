@@ -1,5 +1,5 @@
 const STORAGE_KEY = "ahabit-theme";
-const DEFAULT_THEME = "light";
+export const DEFAULT_THEME = "dark";
 const ALLOWED_THEMES = new Set(["light", "dark"]);
 
 export function normalizeTheme(theme) {

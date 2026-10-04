@@ -18,7 +18,7 @@
 
     <meta
         name="theme-color"
-        content="#F8F9FB"
+        content="#0d1214"
     >
 
     <title>Your Ambitions</title>
@@ -28,11 +28,11 @@
         (function () {
             try {
                 const savedTheme = localStorage.getItem("ahabit-theme");
-                const theme = savedTheme === "dark" ? "dark" : "light";
+                const theme = savedTheme === "light" ? "light" : "dark";
                 document.documentElement.dataset.theme = theme;
                 document.documentElement.style.colorScheme = theme;
             } catch (error) {
-                document.documentElement.dataset.theme = "light";
+                document.documentElement.dataset.theme = "dark";
             }
         })();
     </script>

@@ -57,8 +57,7 @@ async def get_user_settings(
             or "ru",
 
         "theme":
-            row["theme"]
-            or "light",
+            row["theme"],
 
         "reminders_enabled":
             bool(
@@ -136,8 +135,7 @@ async def set_reminders_enabled(
             or "ru",
 
         "theme":
-            row["theme"]
-            or "light",
+            row["theme"],
 
         "reminders_enabled":
             bool(

@@ -60,8 +60,7 @@ async def set_user_language(
             or "ru",
 
         "theme":
-            row["theme"]
-            or "light",
+            row["theme"],
 
         "reminders_enabled":
             bool(

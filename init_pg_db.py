@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS user_settings (
     user_id BIGINT NOT NULL UNIQUE,
     timezone VARCHAR(64),
     language VARCHAR(10) NOT NULL DEFAULT 'en',
-    theme VARCHAR(10) NOT NULL DEFAULT 'light',
+    theme VARCHAR(10) NOT NULL DEFAULT 'dark',
     reminders_enabled BOOLEAN NOT NULL DEFAULT FALSE,
     last_reminder_date DATE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -63,7 +63,11 @@ CREATE TABLE IF NOT EXISTS user_settings (
 
 ALTER TABLE user_settings
     ADD COLUMN IF NOT EXISTS theme
-    VARCHAR(10) NOT NULL DEFAULT 'light';
+    VARCHAR(10) NOT NULL DEFAULT 'dark';
+
+ALTER TABLE user_settings
+    ALTER COLUMN theme
+    SET DEFAULT 'dark';
 
 ALTER TABLE user_settings
     ADD COLUMN IF NOT EXISTS reminders_enabled

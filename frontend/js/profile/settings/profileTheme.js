@@ -1,6 +1,6 @@
 import { renderProfileSectionHeader } from "../profileComponents.js";
 import { updateTheme } from "./profileSettingsApi.js";
-import { applyTheme } from "../../core/theme.js";
+import { applyTheme, DEFAULT_THEME } from "../../core/theme.js";
 import { t } from "../../../i18n/core/i18n.js";
 
 const THEME_OPTIONS = [
@@ -37,7 +37,7 @@ function renderOptions(currentTheme) {
 
 export function renderProfileThemePage(
     root,
-    { currentTheme = "light", onThemeChanged = null, onBack = null } = {}
+    { currentTheme = DEFAULT_THEME, onThemeChanged = null, onBack = null } = {}
 ) {
     root.innerHTML = `
         <section class="profile-theme-page">

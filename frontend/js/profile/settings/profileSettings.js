@@ -21,6 +21,10 @@ import {
 } from "./profileLanguage.js";
 
 import {
+    DEFAULT_THEME
+} from "../../core/theme.js";
+
+import {
     getLanguageLabel,
     normalizeLanguage,
     setLanguage,
@@ -147,7 +151,7 @@ function renderTimezoneRow(timezone = "Europe/Kyiv") {
 }
 
 
-function renderThemeRow(theme = "light") {
+function renderThemeRow(theme = DEFAULT_THEME) {
     const isDark = theme === "dark";
 
     return `
@@ -196,7 +200,7 @@ function renderSettingsContent(
         remindersEnabled = false,
         language = "ru",
         timezone = "Europe/Kyiv",
-        theme = "light",
+        theme = DEFAULT_THEME,
     } = {}
 ) {
     root.innerHTML = `
@@ -239,7 +243,7 @@ function renderCurrentSettings(root) {
         remindersEnabled: Boolean(currentSettings?.reminders_enabled),
         language: normalizeLanguage(currentSettings?.language || "ru"),
         timezone: currentSettings?.timezone || "Europe/Kyiv",
-        theme: currentSettings?.theme || "light",
+        theme: currentSettings?.theme || DEFAULT_THEME,
     });
 
     initSettingsEvents(root);
@@ -278,7 +282,7 @@ function openTimezoneSettings(root) {
 
 function openThemeSettings(root) {
     renderProfileThemePage(root, {
-        currentTheme: currentSettings?.theme || "light",
+        currentTheme: currentSettings?.theme || DEFAULT_THEME,
 
         onThemeChanged: (settings) => {
             currentSettings = settings;
@@ -349,7 +353,7 @@ export async function renderProfileSettingsPage(root) {
         remindersEnabled: false,
         language: "ru",
         timezone: "Europe/Kyiv",
-        theme: "light",
+        theme: DEFAULT_THEME,
     });
 
     try {
