@@ -2,28 +2,21 @@
    ADD HABIT V2 — HEADER
    ========================================================= */
 
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
 .add-habit-v2__header {
     width: 100%;
 
     display: grid;
-
     grid-template-columns:
-        50px
+        44px
         minmax(0, 1fr)
-        50px;
+        44px;
 
     align-items: center;
-
-    gap: 8px;
+    gap: 6px;
 
     box-sizing: border-box;
 
-    margin-bottom: 24px;
+    margin-bottom: 18px;
 }
 
 
@@ -34,12 +27,11 @@
 .add-habit-v2__back-button {
     grid-column: 1;
 
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
 
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    display: grid;
+    place-items: center start;
 
     justify-self: start;
 
@@ -51,7 +43,7 @@
 
     background: transparent;
 
-    color: var(--app-green-ui);
+    color: var(--app-text-secondary);
 
     cursor: pointer;
 
@@ -62,16 +54,12 @@
 }
 
 
-/* =========================================================
-   BACK ICON
-   ========================================================= */
-
 .add-habit-v2__back-button .back-icon {
     display: block;
 
     color: currentColor;
 
-    font-size: 27px;
+    font-size: 25px;
     line-height: 1;
 
     font-variation-settings:
@@ -95,55 +83,47 @@
 
     margin: 0;
 
-    color: var(--add-habit-primary);
+    color: var(--app-text-primary);
 
-    font-size: 23px;
+    font-size: 22px;
     font-weight: 650;
     line-height: 1.1;
 
-    letter-spacing: -0.035em;
+    letter-spacing: -0.03em;
 
     text-align: center;
-
     white-space: nowrap;
 }
 
 
 /* =========================================================
    SAVE BUTTON
+   Touch area remains large, visual surface stays quiet.
    ========================================================= */
 
 .add-habit-v2__save-button {
     grid-column: 3;
 
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
 
     justify-self: end;
 
     margin: 0;
     padding: 0;
 
-    border:
-        1px solid
-        var(--app-border);
-
+    border: 0;
     border-radius: 50%;
-
     outline: 0;
 
-    background:
-        var(--app-surface);
+    background: transparent;
 
-    color:
-        var(--app-green-active);
+    color: var(--app-text-secondary);
 
-    box-shadow:
-        var(--app-shadow);
+    box-shadow: none;
 
     cursor: pointer;
 
@@ -158,16 +138,12 @@
 }
 
 
-/* =========================================================
-   SAVE ICON
-   ========================================================= */
-
 .add-habit-v2__save-button .save-icon {
     display: block;
 
     color: currentColor;
 
-    font-size: 27px;
+    font-size: 25px;
     line-height: 1;
 
     font-variation-settings:
@@ -186,20 +162,8 @@
 .add-habit-v2__back-button.is-pressed,
 .add-habit-v2__save-button:active,
 .add-habit-v2__save-button.is-pressed {
-    transform: scale(0.91);
-
-    opacity: 0.78;
-}
-
-
-/* =========================================================
-   DARK
-   ========================================================= */
-
-:root[data-theme="dark"]
-.add-habit-v2__save-button {
-    background:
-        var(--app-surface-raised);
+    transform: scale(0.92);
+    opacity: 0.72;
 }
 
 
@@ -211,27 +175,20 @@
 
     .add-habit-v2__header {
         grid-template-columns:
-            46px
+            42px
             minmax(0, 1fr)
-            46px;
+            42px;
 
-        gap: 6px;
+        gap: 5px;
     }
 
-
-    .add-habit-v2__back-button {
-        width: 46px;
-        height: 46px;
-    }
-
-
+    .add-habit-v2__back-button,
     .add-habit-v2__save-button {
-        width: 44px;
-        height: 44px;
+        width: 42px;
+        height: 42px;
     }
-
 
     .add-habit-v2__title {
-        font-size: 22px;
+        font-size: 21px;
     }
 }

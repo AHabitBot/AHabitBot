@@ -3,53 +3,32 @@
    Название привычки и предложенные варианты
    ========================================================= */
 
-
-/* =========================================================
-   ОСНОВНОЙ КОНТЕНТ
-   ========================================================= */
-
 .add-habit-v2__content {
     width: 100%;
     max-width: 500px;
 
-    margin:
-        0
-        auto;
+    margin: 0 auto;
 }
 
-
-/* =========================================================
-   СЕКЦИЯ
-   ========================================================= */
 
 .add-habit-v2__section {
     width: 100%;
-
-    margin-bottom: 36px;
+    margin-bottom: 28px;
 }
 
-
-/* =========================================================
-   LABEL
-   ========================================================= */
 
 .add-habit-v2__section-label {
     display: block;
 
-    margin:
-        0
-        0
-        16px;
+    margin: 0 0 12px;
 
-    color:
-        var(--app-text-secondary);
+    color: var(--app-text-secondary);
 
     font-size: 15px;
     font-weight: 600;
     line-height: 1.2;
 
-    letter-spacing:
-        -0.015em;
+    letter-spacing: -0.015em;
 }
 
 
@@ -59,62 +38,38 @@
 
 .add-habit-v2__name-field {
     width: 100%;
-    min-height: 68px;
+    min-height: 62px;
 
     display: flex;
     align-items: center;
-
-    gap: 14px;
+    gap: 12px;
 
     box-sizing: border-box;
 
-    padding:
-        12px
-        18px;
+    padding: 10px 15px;
 
-    border:
-        1px solid
-        var(--app-border);
+    border: 1px solid var(--app-border);
+    border-radius: 18px;
 
-    border-radius: 20px;
+    background: var(--app-surface);
 
-    background:
-        var(--app-surface);
-
-    box-shadow:
-        var(--app-shadow);
+    box-shadow: none;
 
     transition:
         border-color 150ms ease,
-        background-color 180ms ease,
-        box-shadow 150ms ease;
+        background-color 180ms ease;
 }
 
-
-/* =========================================================
-   FOCUS
-   ========================================================= */
 
 .add-habit-v2__name-field:focus-within {
     border-color:
         color-mix(
             in srgb,
-            var(--app-green-active)
-            45%,
+            var(--app-text-secondary) 42%,
             var(--app-border)
         );
 
-    box-shadow:
-        0
-        0
-        0
-        3px
-        color-mix(
-            in srgb,
-            var(--app-green-active)
-            8%,
-            transparent
-        );
+    box-shadow: none;
 }
 
 
@@ -123,34 +78,25 @@
    ========================================================= */
 
 .add-habit-v2__name-icon {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
 
-    flex:
-        0
-        0
-        42px;
+    flex: 0 0 38px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
 
     margin: 0;
     padding: 0;
 
-    border:
-        1px solid
-        var(--app-border);
-
+    border: 0;
     border-radius: 50%;
 
     outline: none;
 
-    color:
-        var(--app-text-primary);
+    color: var(--app-text-primary);
 
-    background:
-        var(--app-surface-soft);
+    background: var(--app-surface-soft);
 
     font-size: inherit;
     line-height: 1;
@@ -162,27 +108,20 @@
     appearance: none;
     -webkit-appearance: none;
 
-    -webkit-tap-highlight-color:
-        transparent;
+    -webkit-tap-highlight-color: transparent;
 
-    touch-action:
-        manipulation;
+    touch-action: manipulation;
 
     overflow: hidden;
 }
 
 
-/* =========================================================
-   ВЫБРАННАЯ ИКОНКА
-   ========================================================= */
-
 .add-habit-v2__selected-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
 
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
 
     font-family:
         -apple-system,
@@ -192,12 +131,9 @@
         "Noto Color Emoji",
         sans-serif;
 
-    font-size: 24px;
+    font-size: 23px;
     font-weight: 400;
     line-height: 1;
-
-    transform:
-        translateZ(0);
 }
 
 
@@ -212,40 +148,30 @@
     margin: 0;
     padding: 0;
 
-    /* Убираем любое внутреннее оформление input */
     border: 0 !important;
     border-radius: 0 !important;
     outline: 0 !important;
 
-    color:
-        var(--app-text-primary);
+    color: var(--app-text-primary);
 
-    background:
-        transparent !important;
+    background: transparent !important;
+    background-color: transparent !important;
 
-    background-color:
-        transparent !important;
-
-    box-shadow:
-        none !important;
+    box-shadow: none !important;
 
     font: inherit;
 
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 570;
     line-height: 1.2;
 
-    letter-spacing:
-        -0.025em;
+    letter-spacing: -0.02em;
 
     appearance: none;
     -webkit-appearance: none;
 
-    -webkit-box-shadow:
-        none !important;
-
-    -webkit-tap-highlight-color:
-        transparent;
+    -webkit-box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -256,27 +182,16 @@
     border: 0 !important;
     outline: 0 !important;
 
-    background:
-        transparent !important;
+    background: transparent !important;
+    background-color: transparent !important;
 
-    background-color:
-        transparent !important;
-
-    box-shadow:
-        none !important;
-
-    -webkit-box-shadow:
-        none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
 }
 
-/* =========================================================
-   PLACEHOLDER
-   ========================================================= */
 
 .add-habit-v2__name-input::placeholder {
-    color:
-        var(--app-text-muted);
-
+    color: var(--app-text-muted);
     opacity: 1;
 }
 
@@ -294,16 +209,15 @@
     display: flex;
     align-items: center;
 
-    gap: 10px;
+    gap: 8px;
 
-    margin-top: 8px;
+    margin-top: 7px;
 
     overflow-x: auto;
 
     scrollbar-width: none;
 
-    -webkit-overflow-scrolling:
-        touch;
+    -webkit-overflow-scrolling: touch;
 }
 
 
@@ -312,32 +226,21 @@
 }
 
 
-/* =========================================================
-   SUGGESTION
-   ========================================================= */
-
 .add-habit-v2__suggestion {
-    flex:
-        0
-        0
-        auto;
+    flex: 0 0 auto;
 
     margin: 0;
     padding: 0;
 
     border: none;
-
     outline: none;
 
-    color:
-        var(--app-text-muted);
-
-    background:
-        transparent;
+    color: var(--app-text-muted);
+    background: transparent;
 
     font-family: inherit;
 
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     line-height: 1.2;
 
@@ -350,25 +253,16 @@
     appearance: none;
     -webkit-appearance: none;
 
-    -webkit-tap-highlight-color:
-        transparent;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
-/* =========================================================
-   DIVIDER
-   ========================================================= */
-
 .add-habit-v2__divider {
-    flex:
-        0
-        0
-        auto;
+    flex: 0 0 auto;
 
-    color:
-        var(--app-divider);
+    color: var(--app-divider);
 
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1;
 
     user-select: none;
@@ -380,8 +274,7 @@
    ========================================================= */
 
 .add-habit-v2__name-field.has-error {
-    border-color:
-        #ef6a6a;
+    border-color: #ef6a6a;
 
     animation:
         add-habit-error-shake
@@ -393,12 +286,7 @@
         0
         0
         3px
-        rgba(
-            239,
-            106,
-            106,
-            0.09
-        );
+        rgba(239, 106, 106, 0.09);
 }
 
 
@@ -406,35 +294,20 @@
 
     0%,
     100% {
-        transform:
-            translateX(0);
+        transform: translateX(0);
     }
 
     25% {
-        transform:
-            translateX(-5px);
+        transform: translateX(-5px);
     }
 
     50% {
-        transform:
-            translateX(5px);
+        transform: translateX(5px);
     }
 
     75% {
-        transform:
-            translateX(-3px);
+        transform: translateX(-3px);
     }
-}
-
-
-/* =========================================================
-   DARK
-   ========================================================= */
-
-:root[data-theme="dark"]
-.add-habit-v2__name-field {
-    background:
-        var(--app-surface);
 }
 
 
@@ -442,36 +315,26 @@
    MOBILE
    ========================================================= */
 
-@media (
-    max-width: 380px
-) {
+@media (max-width: 380px) {
 
     .add-habit-v2__section {
-        margin-bottom: 31px;
+        margin-bottom: 26px;
     }
-
 
     .add-habit-v2__name-field {
-        min-height: 72px;
-
-        padding:
-            10px
-            14px;
+        min-height: 60px;
+        padding: 9px 13px;
     }
-
 
     .add-habit-v2__name-icon {
-        width: 44px;
-        height: 44px;
-
-        flex-basis: 44px;
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
     }
-
 
     .add-habit-v2__name-input {
-        font-size: 19px;
+        font-size: 17px;
     }
-
 
     .add-habit-v2__suggestion {
         font-size: 13px;
@@ -483,17 +346,14 @@
    LOW SCREENS
    ========================================================= */
 
-@media (
-    max-height: 720px
-) {
+@media (max-height: 720px) {
 
     .add-habit-v2__section {
-        margin-bottom: 27px;
+        margin-bottom: 24px;
     }
 
-
     .add-habit-v2__name-field {
-        min-height: 68px;
+        min-height: 60px;
     }
 }
 
@@ -502,16 +362,9 @@
    MOUSE
    ========================================================= */
 
-@media (
-    hover: hover
-)
-and
-(
-    pointer: fine
-) {
+@media (hover: hover) and (pointer: fine) {
 
     .add-habit-v2__suggestion:hover {
-        color:
-            var(--app-text-secondary);
+        color: var(--app-text-secondary);
     }
 }

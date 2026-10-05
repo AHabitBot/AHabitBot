@@ -17,40 +17,6 @@
 
 
 /* =========================================================
-   ЛОКАЛЬНЫЕ ТОКЕНЫ
-
-   Экран больше не имеет собственной Light-палитры.
-   Он использует общую дизайн-систему приложения.
-   ========================================================= */
-
-:root {
-    --add-habit-bg:
-        var(--app-bg);
-
-    --add-habit-primary:
-        var(--app-text-primary);
-
-    --add-habit-secondary:
-        var(--app-text-secondary);
-
-    --add-habit-light:
-        var(--app-text-muted);
-
-    --add-habit-border:
-        var(--app-border);
-
-    --add-habit-soft:
-        var(--app-surface-soft);
-
-    --add-habit-white:
-        var(--app-surface);
-
-    --add-habit-blue:
-        var(--app-green-ui);
-}
-
-
-/* =========================================================
    ОБЩИЙ ЭКРАН
    ========================================================= */
 
@@ -80,10 +46,10 @@
     touch-action: pan-y;
 
     color:
-        var(--add-habit-primary);
+        var(--app-text-primary);
 
     background:
-        var(--add-habit-bg);
+        var(--app-bg);
 
     font-family:
         -apple-system,
@@ -124,16 +90,6 @@ body:has(.add-habit-v2)
     display: none !important;
 }
 
-
-/* =========================================================
-   DARK
-   ========================================================= */
-
-:root[data-theme="dark"]
-.add-habit-v2 {
-    background:
-        var(--app-bg);
-}
 
 
 /* =========================================================
@@ -179,11 +135,11 @@ body:has(.add-habit-v2)
     margin: 2px 0 18px;
     padding: 13px 14px;
 
-    border: 1px solid var(--add-habit-border);
+    border: 1px solid var(--app-border);
     border-radius: 14px;
 
-    background: var(--add-habit-soft);
-    color: var(--add-habit-secondary);
+    background: var(--app-surface-soft);
+    color: var(--app-text-secondary);
 
     font-size: 13px;
     font-weight: 600;
