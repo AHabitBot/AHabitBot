@@ -43,11 +43,11 @@
         color-mix(in srgb, #2b2b2d 78%, rgb(var(--habit-accent-rgb)) 22%);
     --swatch-selected-mid:
         color-mix(in srgb, #2d2d2f 64%, rgb(var(--habit-accent-rgb)) 36%);
-    --swatch-selected-bottom:
+    --swatch-selected-border:
         color-mix(in srgb, #303032 50%, rgb(var(--habit-accent-rgb)) 50%);
 
-    --swatch-selected-border:
-        color-mix(in srgb, var(--swatch-selected-bottom) 82%, white 18%);
+    --swatch-selected-bottom:
+        var(--swatch-selected-border);
     background:
         linear-gradient(
             180deg,
