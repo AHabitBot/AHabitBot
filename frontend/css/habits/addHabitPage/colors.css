@@ -7,7 +7,7 @@
     width: calc(100% + 18px);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     margin-right: -18px;
     padding: 8px 15px 8px 4px;
     box-sizing: border-box;
@@ -21,36 +21,52 @@
 .add-habit-v2__colors::-webkit-scrollbar { display: none; }
 
 .add-habit-v2__color {
+    --habit-ref-top:
+        color-mix(in srgb, #171d24 94%, rgb(var(--habit-accent-rgb)) 6%);
+
+    --habit-ref-mid:
+        color-mix(in srgb, #18222d 84%, rgb(var(--habit-accent-rgb)) 16%);
+
+    --habit-ref-lower:
+        color-mix(in srgb, #21303d 80%, rgb(var(--habit-accent-rgb)) 20%);
+
+    --habit-ref-bottom:
+        color-mix(in srgb, #253747 77%, rgb(var(--habit-accent-rgb)) 23%);
+
+    --habit-ref-border:
+        color-mix(in srgb, #2b3946 84%, rgb(var(--habit-accent-rgb)) 16%);
+
     position: relative;
-    width: 54px;
-    height: 54px;
-    flex: 0 0 54px;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
     margin: 0;
     padding: 0;
     border: 1px solid transparent;
-    border-radius: 18px;
+    border-radius: 17px;
     outline: none;
     background:
         linear-gradient(
             180deg,
             color-mix(
                 in srgb,
-                var(--app-surface) 91%,
-                rgb(var(--habit-accent-rgb)) 9%
+                #20262d 88%,
+                rgb(var(--habit-accent-rgb)) 12%
             ) 0%,
             color-mix(
                 in srgb,
-                var(--app-surface) 84%,
-                rgb(var(--habit-accent-rgb)) 16%
+                #25303a 80%,
+                rgb(var(--habit-accent-rgb)) 20%
             ) 54%,
             color-mix(
                 in srgb,
-                var(--app-surface) 76%,
-                rgb(var(--habit-accent-rgb)) 24%
+                #2a3742 70%,
+                rgb(var(--habit-accent-rgb)) 30%
             ) 100%
         );
+
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
         inset 0 -1px 0 rgba(0, 0, 0, 0.12);
     cursor: pointer;
     user-select: none;
@@ -107,34 +123,20 @@
 }
 
 .add-habit-v2__color.is-selected {
-    border-color:
-        rgba(
-            var(--habit-accent-rgb),
-            0.40
-        );
+    border-color: var(--habit-ref-border);
 
     background:
         linear-gradient(
             180deg,
-            color-mix(
-                in srgb,
-                var(--app-surface) 86%,
-                rgb(var(--habit-accent-rgb)) 14%
-            ) 0%,
-            color-mix(
-                in srgb,
-                var(--app-surface) 76%,
-                rgb(var(--habit-accent-rgb)) 24%
-            ) 54%,
-            color-mix(
-                in srgb,
-                var(--app-surface) 66%,
-                rgb(var(--habit-accent-rgb)) 34%
-            ) 100%
+            var(--habit-ref-top) 0%,
+            var(--habit-ref-top) 18%,
+            var(--habit-ref-mid) 40%,
+            var(--habit-ref-lower) 68%,
+            var(--habit-ref-bottom) 100%
         );
 
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.075),
+        inset 0 1px 0 rgba(255, 255, 255, 0.045),
         inset 0 -1px 0 rgba(0, 0, 0, 0.10);
 
     transform: none;
@@ -165,18 +167,18 @@
     display: grid;
     place-items: center;
     color: color-mix(in srgb, rgb(var(--habit-accent-rgb)) 62%, var(--app-text-secondary) 38%);
-    opacity: 0.70;
+    opacity: 0.78;
     font-size: 17px;
     line-height: 1;
     pointer-events: none;
 }
 
 @media (max-width: 380px) {
-    .add-habit-v2__colors { gap: 10px; }
+    .add-habit-v2__colors { gap: 9px; }
     .add-habit-v2__color {
-        width: 52px;
-        height: 52px;
-        flex-basis: 52px;
-        border-radius: 18px;
+        width: 48px;
+        height: 48px;
+        flex-basis: 48px;
+        border-radius: 16px;
     }
 }
