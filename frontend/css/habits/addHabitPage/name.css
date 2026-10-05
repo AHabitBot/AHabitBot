@@ -48,28 +48,57 @@
 
     padding: 10px 15px;
 
-    border: 1px solid var(--app-border);
+    border: 1px solid transparent;
     border-radius: 17px;
 
-    background: var(--app-surface);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--app-surface) 95%, white 5%) 0%,
+            var(--app-surface) 58%,
+            color-mix(in srgb, var(--app-surface) 96%, black 4%) 100%
+        )
+        padding-box,
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.105) 0%,
+            rgba(255, 255, 255, 0.045) 52%,
+            rgba(255, 255, 255, 0.012) 70%,
+            rgba(0, 0, 0, 0.20) 100%
+        )
+        border-box;
 
-    box-shadow: none;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.018),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.10);
 
     transition:
-        border-color 150ms ease,
-        background-color 180ms ease;
+        background 180ms ease,
+        box-shadow 180ms ease;
 }
 
 
 .add-habit-v2__name-field:focus-within {
-    border-color:
-        color-mix(
-            in srgb,
-            var(--app-text-secondary) 42%,
-            var(--app-border)
-        );
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--app-surface) 82%, white 18%) 0%,
+            color-mix(in srgb, var(--app-surface) 86%, white 14%) 58%,
+            color-mix(in srgb, var(--app-surface) 90%, white 10%) 100%
+        )
+        padding-box,
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.15) 0%,
+            rgba(255, 255, 255, 0.07) 52%,
+            rgba(255, 255, 255, 0.025) 70%,
+            rgba(0, 0, 0, 0.18) 100%
+        )
+        border-box;
 
-    box-shadow: none;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.035),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.10);
 }
 
 
