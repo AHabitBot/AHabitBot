@@ -48,50 +48,86 @@
 
     padding: 10px 15px;
 
-    border: 1px solid transparent;
+    position: relative;
+
+    border: 0;
     border-radius: 17px;
 
-    background:
-        linear-gradient(
-            var(--app-surface),
-            var(--app-surface)
-        )
-        padding-box,
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.070) 0%,
-            rgba(255, 255, 255, 0.038) 24%,
-            rgba(255, 255, 255, 0.016) 48%,
-            rgba(255, 255, 255, 0.004) 70%,
-            rgba(255, 255, 255, 0) 100%
-        )
-        border-box;
+    background-color:
+        color-mix(
+            in srgb,
+            var(--app-surface) 97%,
+            white 3%
+        );
 
     box-shadow: none;
 
     transition:
-        background 190ms ease;
+        background-color 190ms ease;
+}
+
+
+/*
+ * Едва заметный верхний контур.
+ * Он читается сверху и на верхних углах,
+ * а ниже плавно исчезает.
+ */
+.add-habit-v2__name-field::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    border-radius: inherit;
+
+    padding: 1px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.075) 0%,
+            rgba(255, 255, 255, 0.040) 26%,
+            rgba(255, 255, 255, 0.014) 52%,
+            rgba(255, 255, 255, 0.003) 70%,
+            rgba(255, 255, 255, 0) 100%
+        );
+
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    -webkit-mask-composite: xor;
+
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    mask-composite: exclude;
+
+    pointer-events: none;
+
+    opacity: 1;
+
+    transition:
+        opacity 190ms ease;
 }
 
 
 .add-habit-v2__name-field:focus-within {
-    background:
-        linear-gradient(
-            color-mix(in srgb, var(--app-surface) 86%, white 14%),
-            color-mix(in srgb, var(--app-surface) 86%, white 14%)
-        )
-        padding-box,
-        linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.090) 0%,
-            rgba(255, 255, 255, 0.048) 24%,
-            rgba(255, 255, 255, 0.020) 48%,
-            rgba(255, 255, 255, 0.006) 70%,
-            rgba(255, 255, 255, 0) 100%
-        )
-        border-box;
+    background-color:
+        color-mix(
+            in srgb,
+            var(--app-surface) 80%,
+            white 20%
+        );
 
     box-shadow: none;
+}
+
+
+.add-habit-v2__name-field:focus-within::before {
+    opacity: 1.18;
+}
 }
 
 
@@ -118,7 +154,16 @@
 
     color: var(--app-text-primary);
 
-    background: var(--app-surface-soft);
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface-soft) 96%,
+            white 4%
+        );
+
+    transition:
+        background-color 190ms ease,
+        background 190ms ease;
 
     font-size: inherit;
     line-height: 1;
@@ -135,6 +180,17 @@
     touch-action: manipulation;
 
     overflow: hidden;
+}
+
+
+.add-habit-v2__name-field:focus-within
+.add-habit-v2__name-icon {
+    background:
+        color-mix(
+            in srgb,
+            var(--app-surface-soft) 78%,
+            white 22%
+        );
 }
 
 
