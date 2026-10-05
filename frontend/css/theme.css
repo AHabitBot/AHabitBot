@@ -26,13 +26,21 @@
        SURFACES
        --------------------------------------------------------- */
 
-    --app-surface: #151b1c;
+    --app-surface: #1b1b1c;
 
-    --app-surface-solid: #151b1c;
+    --app-surface-solid: #1b1b1c;
 
-    --app-surface-soft: #1a2122;
+    --app-surface-soft: #202021;
 
-    --app-surface-raised: #1d2526;
+    --app-surface-raised: #242425;
+
+    --app-surface-gradient:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--app-surface) 95%, white 5%) 0%,
+            var(--app-surface) 48%,
+            color-mix(in srgb, var(--app-surface) 94%, black 6%) 100%
+        );
 
 
     /* ---------------------------------------------------------
@@ -238,6 +246,38 @@
             0,
             0.25
         );
+}
+
+
+
+
+/* =========================================================
+   HABIT COLOR PALETTE — SHARED SOURCE OF TRUTH
+   ========================================================= */
+
+:root {
+    --habit-blue-accent: #4d8ff0;
+    --habit-blue-accent-rgb: 77, 143, 240;
+    --habit-green-accent: #65b85d;
+    --habit-green-accent-rgb: 101, 184, 93;
+    --habit-purple-accent: #9872df;
+    --habit-purple-accent-rgb: 152, 114, 223;
+    --habit-orange-accent: #df9557;
+    --habit-orange-accent-rgb: 223, 149, 87;
+    --habit-red-accent: #df7470;
+    --habit-red-accent-rgb: 223, 116, 112;
+    --habit-graphite-accent: #676a70;
+    --habit-graphite-accent-rgb: 103, 106, 112;
+    --habit-cyan-accent: #42aebd;
+    --habit-cyan-accent-rgb: 66, 174, 189;
+    --habit-brown-accent: #916b4f;
+    --habit-brown-accent-rgb: 145, 107, 79;
+    --habit-pink-accent: #d66e9d;
+    --habit-pink-accent-rgb: 214, 110, 157;
+    --habit-silver-accent: #858b94;
+    --habit-silver-accent-rgb: 133, 139, 148;
+    --habit-yellow-accent: #c49c28;
+    --habit-yellow-accent-rgb: 196, 156, 40;
 }
 
 

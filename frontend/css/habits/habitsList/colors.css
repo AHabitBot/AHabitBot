@@ -1,69 +1,59 @@
 /* =========================================================
    ЦВЕТА КАРТОЧЕК
-   Совпадают с data-habit-color при создании привычки
+   Единая палитра с выбором цвета при создании привычки
    ========================================================= */
 
 .habit-card--blue {
-    --habit-accent: #4d8ff0;
-    --habit-accent-rgb: 77, 143, 240;
+    --habit-accent: var(--habit-blue-accent);
+    --habit-accent-rgb: var(--habit-blue-accent-rgb);
 }
-
 
 .habit-card--green {
-    --habit-accent: #65b85d;
-    --habit-accent-rgb: 101, 184, 93;
+    --habit-accent: var(--habit-green-accent);
+    --habit-accent-rgb: var(--habit-green-accent-rgb);
 }
-
 
 .habit-card--purple {
-    --habit-accent: #9872df;
-    --habit-accent-rgb: 152, 114, 223;
+    --habit-accent: var(--habit-purple-accent);
+    --habit-accent-rgb: var(--habit-purple-accent-rgb);
 }
-
 
 .habit-card--orange {
-    --habit-accent: #df9557;
-    --habit-accent-rgb: 223, 149, 87;
+    --habit-accent: var(--habit-orange-accent);
+    --habit-accent-rgb: var(--habit-orange-accent-rgb);
 }
-
 
 .habit-card--red {
-    --habit-accent: #df7470;
-    --habit-accent-rgb: 223, 116, 112;
+    --habit-accent: var(--habit-red-accent);
+    --habit-accent-rgb: var(--habit-red-accent-rgb);
 }
-
 
 .habit-card--graphite {
-    --habit-accent: #676a70;
-    --habit-accent-rgb: 103, 106, 112;
+    --habit-accent: var(--habit-graphite-accent);
+    --habit-accent-rgb: var(--habit-graphite-accent-rgb);
 }
-
 
 .habit-card--cyan {
-    --habit-accent: #42aebd;
-    --habit-accent-rgb: 66, 174, 189;
+    --habit-accent: var(--habit-cyan-accent);
+    --habit-accent-rgb: var(--habit-cyan-accent-rgb);
 }
-
 
 .habit-card--brown {
-    --habit-accent: #916b4f;
-    --habit-accent-rgb: 145, 107, 79;
+    --habit-accent: var(--habit-brown-accent);
+    --habit-accent-rgb: var(--habit-brown-accent-rgb);
 }
-
 
 .habit-card--pink {
-    --habit-accent: #d66e9d;
-    --habit-accent-rgb: 214, 110, 157;
+    --habit-accent: var(--habit-pink-accent);
+    --habit-accent-rgb: var(--habit-pink-accent-rgb);
 }
-
 
 .habit-card--silver {
-    --habit-accent: #858b94;
-    --habit-accent-rgb: 133, 139, 148;
+    --habit-accent: var(--habit-silver-accent);
+    --habit-accent-rgb: var(--habit-silver-accent-rgb);
 }
 
-
 .habit-card--yellow {
-    --habit-accent: #c49c28;
-    --habit-accent-rgb: 196, 156, 40;
+    --habit-accent: var(--habit-yellow-accent);
+    --habit-accent-rgb: var(--habit-yellow-accent-rgb);
 }

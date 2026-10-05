@@ -1,107 +1,92 @@
-.habit-reminder__card {
+.habit-reminder__row {
     width: 100%;
-    min-height: 68px;
-
     display: flex;
     align-items: center;
-    gap: 12px;
-
-    box-sizing: border-box;
-
-    padding: 11px 15px;
-
-    border: 1px solid var(--app-border);
-    border-radius: 19px;
-
-    background: var(--app-surface);
-
-    color: var(--app-text-primary);
-    text-align: left;
-
-    box-shadow: none;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 2px 0;
 }
 
-
-.habit-reminder__icon {
-    position: relative;
-
-    display: block;
-
-    flex: 0 0 40px;
-
-    width: 40px;
-    height: 40px;
-
-    padding: 0;
-
-    box-sizing: border-box;
-
-    border-radius: 50%;
-
-    background: var(--app-surface-soft);
-
-    color: var(--app-text-secondary);
-
-    font-size: 0;
-}
-
-
-.habit-reminder__icon::before {
-    content: "notifications";
-
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
-
-    font-family: "Material Symbols Rounded";
-    font-weight: normal;
-    font-style: normal;
-
-    font-size: 23px;
-    line-height: 1;
-
-    font-variation-settings:
-        "FILL" 0,
-        "wght" 500,
-        "GRAD" 0,
-        "opsz" 24;
-
-    -webkit-font-smoothing: antialiased;
-
-    text-align: center;
-}
-
-
-.habit-reminder__copy {
+.habit-reminder__label-button {
     min-width: 0;
     flex: 1;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 2px;
-}
-
-
-.habit-reminder__copy strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--app-text-secondary);
+    font: inherit;
     font-size: 16px;
-    font-weight: 650;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: left;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
-
-.habit-reminder__copy small {
-    font-size: 13px;
-    color: var(--app-text-secondary);
+.habit-reminder__emoji {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    font-size: 17px;
+    line-height: 1;
 }
 
-
-.habit-reminder__chevron {
-    color: var(--app-text-secondary);
+.habit-reminder__switch-button {
+    position: relative;
+    width: 52px;
+    height: 32px;
+    flex: 0 0 52px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--app-text-secondary) 44%, var(--app-border));
+    border-radius: 999px;
+    outline: 0;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 40%, rgba(0,0,0,0.08) 100%),
+        var(--app-surface-soft);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.11),
+        inset 0 -1px 0 rgba(0,0,0,0.20);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 180ms ease, border-color 180ms ease;
 }
 
+.habit-reminder__switch-button::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f4f4f4;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.24);
+    transition: transform 180ms ease;
+}
+
+.habit-reminder__switch-button.is-enabled {
+    border-color: color-mix(in srgb, var(--app-green-ui) 58%, var(--app-border));
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 38%, rgba(0,0,0,0.05) 100%),
+        color-mix(in srgb, var(--app-green-ui) 64%, var(--app-surface) 36%);
+}
+
+.habit-reminder__switch-button.is-enabled::after {
+    transform: translateX(20px);
+}
+
+@media (max-width: 380px) {
+    .habit-reminder__label-button { font-size: 15px; }
+}
 
 .habit-reminder-picker { position: fixed; inset: 0; z-index: 5000; display: flex; align-items: flex-end; }
 .habit-reminder-picker__backdrop { position: absolute; inset: 0; width: 100%; border: 0; background: rgba(0,0,0,.46); }

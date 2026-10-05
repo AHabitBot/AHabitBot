@@ -623,27 +623,26 @@ export function renderAddHabitPage() {
                     <div class="add-habit-v2__section-label">${t("habits.addHabit.repeat.label")}</div>
                     ${renderHabitRepeatSelector(getHabitDraft(), isEditing)}
                 </section>
-
                 <!-- Напоминание конкретной привычки -->
                 <section class="add-habit-v2__section habit-reminder">
-                    <div class="add-habit-v2__section-label">
-                        ${t("habits.addHabit.reminder.label")}
-                    </div>
+                    <div class="habit-reminder__row">
+                        <button
+                            class="habit-reminder__label-button"
+                            type="button"
+                            data-action="open-habit-reminder"
+                        >
+                            <span class="habit-reminder__emoji" aria-hidden="true">🔔</span>
+                            <span>${t("habits.addHabit.reminder.label")}</span>
+                        </button>
 
-                    <button
-                        class="habit-reminder__card"
-                        type="button"
-                        data-action="open-habit-reminder"
-                    >
-                        <span class="habit-reminder__icon" aria-hidden="true"></span>
-                        <span class="habit-reminder__copy">
-                            <strong>${t("habits.addHabit.reminder.title")}</strong>
-                            <small data-habit-reminder-value>
-                                ${getHabitDraftValue("reminderTime") || t("habits.addHabit.reminder.notSet")}
-                            </small>
-                        </span>
-                        <span class="material-symbols-rounded habit-reminder__chevron" aria-hidden="true">chevron_right</span>
-                    </button>
+                        <button
+                            class="habit-reminder__switch-button ${getHabitDraftValue("reminderTime") ? "is-enabled" : ""}"
+                            type="button"
+                            data-action="toggle-habit-reminder"
+                            aria-pressed="${getHabitDraftValue("reminderTime") ? "true" : "false"}"
+                            aria-label="${t("habits.addHabit.reminder.label")}"
+                        ></button>
+                    </div>
                 </section>
 
                 <!-- Размер карточки -->
@@ -1476,6 +1475,10 @@ export function initAddHabitPageEvents({
         '[data-action="open-habit-reminder"]'
     )
 
+    const reminderSwitch = root.querySelector(
+        '[data-action="toggle-habit-reminder"]'
+    )
+
 
     /* =====================================================
        АНИМАЦИИ НАЖАТИЯ
@@ -1485,6 +1488,7 @@ export function initAddHabitPageEvents({
     addPressAnimation(saveButton)
     addPressAnimation(iconButton)
     addPressAnimation(reminderButton)
+    addPressAnimation(reminderSwitch)
 
     suggestionButtons.forEach((button) => {
         addPressAnimation(button)
@@ -1678,6 +1682,28 @@ export function initAddHabitPageEvents({
         "click",
         () => {
             updateDraftFromAddHabitPage()
+            openHabitReminderPicker()
+        }
+    )
+
+    reminderSwitch?.addEventListener(
+        "click",
+        () => {
+            updateDraftFromAddHabitPage()
+
+            if (getHabitDraftValue("reminderTime")) {
+                setHabitDraftValue(
+                    "reminderTime",
+                    null
+                )
+
+                rerenderAddHabitPageWithoutScrollJump(
+                    currentAddHabitCallbacks
+                )
+
+                return
+            }
+
             openHabitReminderPicker()
         }
     )

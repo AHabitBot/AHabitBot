@@ -51,7 +51,7 @@
     border: 1px solid var(--app-border);
     border-radius: 18px;
 
-    background: var(--app-surface);
+    background: var(--app-surface-gradient, var(--app-surface));
 
     box-shadow: none;
 
@@ -117,11 +117,7 @@
 
 
 .add-habit-v2__selected-icon {
-    display: grid;
-    place-items: center;
-
-    width: 26px;
-    height: 26px;
+    display: block;
 
     font-family:
         -apple-system,
@@ -134,6 +130,9 @@
     font-size: 23px;
     font-weight: 400;
     line-height: 1;
+    text-align: center;
+
+    transform: translate(0, 0);
 }
 
 

@@ -1,144 +1,102 @@
 /* =========================================================
    ADD HABIT V2 — ВЫБОР ЦВЕТА КАРТОЧКИ
-   Плоская приглушённая палитра.
+   Использует ту же habit palette, что и карточки в списке.
    ========================================================= */
 
 .add-habit-v2__colors {
     width: calc(100% + 18px);
-
     display: flex;
     align-items: center;
     gap: 10px;
-
     margin-right: -18px;
-
     padding: 8px 15px 8px 4px;
-
     box-sizing: border-box;
-
     overflow-x: auto;
     overflow-y: hidden;
-
     scrollbar-width: none;
-
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
 }
 
-
-.add-habit-v2__colors::-webkit-scrollbar {
-    display: none;
-}
-
+.add-habit-v2__colors::-webkit-scrollbar { display: none; }
 
 .add-habit-v2__color {
     position: relative;
-
     width: 50px;
     height: 50px;
-
     flex: 0 0 50px;
-
     margin: 0;
     padding: 0;
-
-    border: 1.5px solid transparent;
+    border: 1px solid transparent;
     border-radius: 17px;
-
     outline: none;
-
-    background: var(--habit-color-swatch);
-
-    box-shadow: none;
-
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--app-surface-raised) 58%, rgb(var(--habit-accent-rgb)) 42%) 0%,
+            color-mix(in srgb, var(--app-surface) 68%, rgb(var(--habit-accent-rgb)) 32%) 100%
+        );
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.12);
     cursor: pointer;
-
     user-select: none;
-
     appearance: none;
     -webkit-appearance: none;
-
     -webkit-tap-highlight-color: transparent;
-
     touch-action: manipulation;
-
-    transition:
-        transform 140ms ease,
-        border-color 160ms ease,
-        opacity 140ms ease;
+    transition: transform 140ms ease, border-color 160ms ease, opacity 140ms ease;
 }
-
-
-/* =========================================================
-   ПАЛИТРА
-   ========================================================= */
 
 .add-habit-v2__color[data-habit-color="blue"] {
-    --habit-color-swatch: #46596a;
+    --habit-accent: var(--habit-blue-accent);
+    --habit-accent-rgb: var(--habit-blue-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="green"] {
-    --habit-color-swatch: #405b4b;
+    --habit-accent: var(--habit-green-accent);
+    --habit-accent-rgb: var(--habit-green-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="purple"] {
-    --habit-color-swatch: #494760;
+    --habit-accent: var(--habit-purple-accent);
+    --habit-accent-rgb: var(--habit-purple-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="orange"] {
-    --habit-color-swatch: #665344;
+    --habit-accent: var(--habit-orange-accent);
+    --habit-accent-rgb: var(--habit-orange-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="red"] {
-    --habit-color-swatch: #674846;
+    --habit-accent: var(--habit-red-accent);
+    --habit-accent-rgb: var(--habit-red-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="graphite"] {
-    --habit-color-swatch: #4d5055;
+    --habit-accent: var(--habit-graphite-accent);
+    --habit-accent-rgb: var(--habit-graphite-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="cyan"] {
-    --habit-color-swatch: #405c5d;
+    --habit-accent: var(--habit-cyan-accent);
+    --habit-accent-rgb: var(--habit-cyan-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="brown"] {
-    --habit-color-swatch: #584b42;
+    --habit-accent: var(--habit-brown-accent);
+    --habit-accent-rgb: var(--habit-brown-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="pink"] {
-    --habit-color-swatch: #65495d;
+    --habit-accent: var(--habit-pink-accent);
+    --habit-accent-rgb: var(--habit-pink-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="silver"] {
-    --habit-color-swatch: #5b6067;
+    --habit-accent: var(--habit-silver-accent);
+    --habit-accent-rgb: var(--habit-silver-accent-rgb);
 }
-
 .add-habit-v2__color[data-habit-color="yellow"] {
-    --habit-color-swatch: #55563d;
+    --habit-accent: var(--habit-yellow-accent);
+    --habit-accent-rgb: var(--habit-yellow-accent-rgb);
 }
-
-
-/* =========================================================
-   SELECTED
-   ========================================================= */
 
 .add-habit-v2__color.is-selected {
-    border-color:
-        color-mix(
-            in srgb,
-            var(--habit-color-swatch) 36%,
-            white 64%
-        );
-
+    border-color: rgba(var(--habit-accent-rgb), 0.22);
     transform: none;
-
-    box-shadow: none;
 }
-
-
-/* =========================================================
-   PRESS
-   ========================================================= */
 
 .add-habit-v2__color:active,
 .add-habit-v2__color.is-pressed,
@@ -147,78 +105,36 @@
     transform: scale(0.95);
 }
 
-
-/* =========================================================
-   LOCKED
-   ========================================================= */
-
-.add-habit-v2__color.is-locked {
-    cursor: default;
-}
-
+.add-habit-v2__color.is-locked { cursor: default; }
 
 .add-habit-v2__color.is-locked::after {
     content: "";
-
     position: absolute;
-
     inset: 0;
-
     border-radius: inherit;
-
-    background:
-        color-mix(
-            in srgb,
-            var(--app-bg) 18%,
-            transparent
-        );
-
+    background: color-mix(in srgb, var(--app-bg) 16%, transparent);
     pointer-events: none;
 }
-
 
 .add-habit-v2__lock {
     position: absolute;
-
     z-index: 2;
-
     inset: 0;
-
     display: grid;
     place-items: center;
-
-    color:
-        color-mix(
-            in srgb,
-            var(--app-text-secondary) 78%,
-            var(--habit-color-swatch) 22%
-        );
-
-    opacity: 0.72;
-
+    color: color-mix(in srgb, rgb(var(--habit-accent-rgb)) 62%, var(--app-text-secondary) 38%);
+    opacity: 0.78;
     font-size: 17px;
     line-height: 1;
-
     pointer-events: none;
 }
 
-
-/* =========================================================
-   SMALL SCREENS
-   ========================================================= */
-
 @media (max-width: 380px) {
-
-    .add-habit-v2__colors {
-        gap: 9px;
-    }
-
+    .add-habit-v2__colors { gap: 9px; }
     .add-habit-v2__color {
         width: 48px;
         height: 48px;
-
         flex-basis: 48px;
-
         border-radius: 16px;
     }
 }
