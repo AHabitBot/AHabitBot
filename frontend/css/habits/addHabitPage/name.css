@@ -56,8 +56,8 @@
     background-color:
         color-mix(
             in srgb,
-            var(--app-surface) 97%,
-            white 3%
+            var(--app-surface) 96%,
+            white 4%
         );
 
     box-shadow: none;
@@ -68,9 +68,9 @@
 
 
 /*
- * Едва заметный верхний контур.
- * Он читается сверху и на верхних углах,
- * а ниже плавно исчезает.
+ * Почти незаметный верхний кант.
+ * Он читается только сверху и на верхних углах,
+ * а к нижней половине практически исчезает.
  */
 .add-habit-v2__name-field::before {
     content: "";
@@ -85,10 +85,10 @@
     background:
         linear-gradient(
             180deg,
-            rgba(255, 255, 255, 0.075) 0%,
-            rgba(255, 255, 255, 0.040) 26%,
-            rgba(255, 255, 255, 0.014) 52%,
-            rgba(255, 255, 255, 0.003) 70%,
+            rgba(255, 255, 255, 0.060) 0%,
+            rgba(255, 255, 255, 0.032) 24%,
+            rgba(255, 255, 255, 0.012) 48%,
+            rgba(255, 255, 255, 0.002) 68%,
             rgba(255, 255, 255, 0) 100%
         );
 
@@ -105,20 +105,20 @@
     mask-composite: exclude;
 
     pointer-events: none;
-
-    opacity: 1;
-
-    transition:
-        opacity 190ms ease;
 }
 
 
+/*
+ * Активное состояние:
+ * светлеет сама поверхность целиком,
+ * а контур остаётся второстепенным.
+ */
 .add-habit-v2__name-field:focus-within {
     background-color:
         color-mix(
             in srgb,
-            var(--app-surface) 80%,
-            white 20%
+            var(--app-surface) 82%,
+            white 18%
         );
 
     box-shadow: none;
@@ -126,8 +126,15 @@
 
 
 .add-habit-v2__name-field:focus-within::before {
-    opacity: 1.18;
-}
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.078) 0%,
+            rgba(255, 255, 255, 0.040) 24%,
+            rgba(255, 255, 255, 0.014) 48%,
+            rgba(255, 255, 255, 0.003) 68%,
+            rgba(255, 255, 255, 0) 100%
+        );
 }
 
 
@@ -154,18 +161,17 @@
 
     color: var(--app-text-primary);
 
-    background:
+    background-color:
         color-mix(
             in srgb,
-            var(--app-surface-soft) 96%,
-            white 4%
+            var(--app-surface-soft) 95%,
+            white 5%
         );
 
     transition:
-        background-color 190ms ease,
-        background 190ms ease;
+        background-color 190ms ease;
 
-    font-size: inherit;
+    font-size: 0;
     line-height: 1;
 
     cursor: pointer;
@@ -185,11 +191,11 @@
 
 .add-habit-v2__name-field:focus-within
 .add-habit-v2__name-icon {
-    background:
+    background-color:
         color-mix(
             in srgb,
-            var(--app-surface-soft) 78%,
-            white 22%
+            var(--app-surface-soft) 80%,
+            white 20%
         );
 }
 
@@ -198,16 +204,22 @@
     display: block;
 
     font-family:
+        ui-rounded,
+        "SF Pro Rounded",
         -apple-system,
         BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
         "Apple Color Emoji",
         "Segoe UI Emoji",
         "Noto Color Emoji",
         sans-serif;
 
     font-size: 22px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 1;
+
+    text-align: center;
 
     transform: translate(0, 0);
 }
