@@ -1263,8 +1263,8 @@ function runColorScrollSpring(
 
     state.isRunning = true
 
-    const naturalFrequency = 11.0
-    const dampingRatio = 0.80
+    const naturalFrequency = 9.8
+    const dampingRatio = 0.94
 
     const tick = (now) => {
         if (!state.isRunning) {
@@ -1416,9 +1416,9 @@ function runColorScrollSpring(
             )
 
         if (
-            remaining < 0.18
+            remaining < 0.025
             &&
-            speed < 2.5
+            speed < 0.3
         ) {
             state.position =
                 state.target
@@ -1528,11 +1528,11 @@ function centerHabitColorWithSpring(
         Math.abs(
             state.target -
                 state.position
-        ) < 0.18
+        ) < 0.025
         &&
         Math.abs(
             state.velocity
-        ) < 2.5
+        ) < 0.3
     ) {
         state.position =
             state.target
