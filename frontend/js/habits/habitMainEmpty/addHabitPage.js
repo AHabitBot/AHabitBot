@@ -1142,46 +1142,318 @@ function showNameValidationError(
 }
 
 
+
 /* =========================================================
-   ПЛАВНО ЦЕНТРИРОВАТЬ ВЫБРАННЫЙ ЦВЕТ
+   ПЛАВНОЕ ЦЕНТРИРОВАНИЕ ЦВЕТОВ
+
+   Непрерывная spring-модель:
+   - без фиксированной duration;
+   - сохраняет скорость между быстрыми выборами;
+   - мягко меняет направление на лету;
+   - не мешает ручному свайпу;
+   - на краях не пытается прокручиваться дальше.
    ========================================================= */
 
-let habitColorScrollFrame = null
-let habitColorScrollToken = 0
+const colorScrollSpringStates =
+    new WeakMap()
 
-function cancelHabitColorScrollAnimation() {
-    habitColorScrollToken += 1
-
-    if (habitColorScrollFrame !== null) {
-        cancelAnimationFrame(
-            habitColorScrollFrame
+function getColorScrollSpringState(
+    container
+) {
+    let state =
+        colorScrollSpringStates.get(
+            container
         )
 
-        habitColorScrollFrame = null
+    if (state) {
+        return state
     }
+
+    state = {
+        position:
+            container.scrollLeft,
+
+        velocity:
+            0,
+
+        target:
+            container.scrollLeft,
+
+        min:
+            0,
+
+        max:
+            Math.max(
+                0,
+                container.scrollWidth -
+                    container.clientWidth
+            ),
+
+        frameId:
+            null,
+
+        lastTime:
+            null,
+
+        isRunning:
+            false
+    }
+
+    colorScrollSpringStates.set(
+        container,
+        state
+    )
+
+    return state
 }
 
-function animateHabitColorToCenter(
+function stopColorScrollSpring(
+    container
+) {
+    const state =
+        colorScrollSpringStates.get(
+            container
+        )
+
+    if (!state) {
+        return
+    }
+
+    if (state.frameId !== null) {
+        cancelAnimationFrame(
+            state.frameId
+        )
+    }
+
+    state.frameId = null
+    state.lastTime = null
+    state.isRunning = false
+    state.position =
+        container.scrollLeft
+    state.target =
+        container.scrollLeft
+    state.velocity = 0
+}
+
+function clampColorScrollPosition(
+    value,
+    min,
+    max
+) {
+    return Math.min(
+        max,
+        Math.max(
+            min,
+            value
+        )
+    )
+}
+
+function runColorScrollSpring(
+    container
+) {
+    const state =
+        getColorScrollSpringState(
+            container
+        )
+
+    if (state.isRunning) {
+        return
+    }
+
+    state.isRunning = true
+
+    const naturalFrequency = 11.0
+    const dampingRatio = 0.80
+
+    const tick = (now) => {
+        if (!state.isRunning) {
+            return
+        }
+
+        if (state.lastTime === null) {
+            state.lastTime = now
+        }
+
+        const deltaSeconds =
+            Math.min(
+                0.032,
+                Math.max(
+                    0.001,
+                    (now - state.lastTime) /
+                        1000
+                )
+            )
+
+        state.lastTime = now
+
+        const displacement =
+            state.position -
+            state.target
+
+        const omega0 =
+            naturalFrequency
+
+        const damping =
+            dampingRatio
+
+        const decay =
+            damping *
+            omega0
+
+        const omegaD =
+            omega0 *
+            Math.sqrt(
+                Math.max(
+                    0.0001,
+                    1 -
+                        damping *
+                            damping
+                )
+            )
+
+        const expTerm =
+            Math.exp(
+                -decay *
+                    deltaSeconds
+            )
+
+        const cosTerm =
+            Math.cos(
+                omegaD *
+                    deltaSeconds
+            )
+
+        const sinTerm =
+            Math.sin(
+                omegaD *
+                    deltaSeconds
+            )
+
+        const velocityFactor =
+            (
+                state.velocity +
+                decay *
+                    displacement
+            ) /
+            omegaD
+
+        const nextDisplacement =
+            expTerm *
+            (
+                displacement *
+                    cosTerm +
+                velocityFactor *
+                    sinTerm
+            )
+
+        const nextVelocity =
+            expTerm *
+            (
+                -decay *
+                    (
+                        displacement *
+                            cosTerm +
+                        velocityFactor *
+                            sinTerm
+                    ) +
+                -displacement *
+                    omegaD *
+                    sinTerm +
+                velocityFactor *
+                    omegaD *
+                    cosTerm
+            )
+
+        state.position =
+            state.target +
+            nextDisplacement
+
+        state.velocity =
+            nextVelocity
+
+        if (
+            state.position <=
+                state.min
+            &&
+            state.velocity < 0
+        ) {
+            state.position =
+                state.min
+            state.velocity = 0
+        }
+
+        if (
+            state.position >=
+                state.max
+            &&
+            state.velocity > 0
+        ) {
+            state.position =
+                state.max
+            state.velocity = 0
+        }
+
+        state.position =
+            clampColorScrollPosition(
+                state.position,
+                state.min,
+                state.max
+            )
+
+        container.scrollLeft =
+            state.position
+
+        const remaining =
+            Math.abs(
+                state.target -
+                    state.position
+            )
+
+        const speed =
+            Math.abs(
+                state.velocity
+            )
+
+        if (
+            remaining < 0.18
+            &&
+            speed < 2.5
+        ) {
+            state.position =
+                state.target
+            state.velocity = 0
+            state.lastTime = null
+            state.frameId = null
+            state.isRunning = false
+
+            container.scrollLeft =
+                state.target
+
+            return
+        }
+
+        state.frameId =
+            requestAnimationFrame(
+                tick
+            )
+    }
+
+    state.frameId =
+        requestAnimationFrame(
+            tick
+        )
+}
+
+function centerHabitColorWithSpring(
     selectedButton
 ) {
     const container =
-        selectedButton?.closest(
+        selectedButton.closest(
             ".add-habit-v2__colors"
         )
 
     if (!container) {
-        return
-    }
-
-    cancelHabitColorScrollAnimation()
-
-    const maxScroll = Math.max(
-        0,
-        container.scrollWidth -
-            container.clientWidth
-    )
-
-    if (maxScroll <= 0) {
         return
     }
 
@@ -1191,174 +1463,130 @@ function animateHabitColorToCenter(
     const buttonRect =
         selectedButton.getBoundingClientRect()
 
-    const styles =
-        window.getComputedStyle(container)
-
-    const paddingLeft =
-        Number.parseFloat(
-            styles.paddingLeft
-        ) || 0
-
-    const paddingRight =
-        Number.parseFloat(
-            styles.paddingRight
-        ) || 0
-
-    const visibleWidth = Math.max(
-        0,
-        container.clientWidth -
-            paddingLeft -
-            paddingRight
-    )
-
-    const visibleCenter =
-        containerRect.left +
-        paddingLeft +
-        visibleWidth / 2
-
-    const buttonCenter =
+    const selectedCenter =
         buttonRect.left +
         buttonRect.width / 2
 
-    const startScroll =
-        container.scrollLeft
+    const visibleCenter =
+        containerRect.left +
+        containerRect.width / 2
 
-    const unclampedTarget =
-        startScroll +
-        (buttonCenter - visibleCenter)
+    const offsetToCenter =
+        selectedCenter -
+        visibleCenter
 
-    const targetScroll = Math.min(
-        maxScroll,
+    const maxScroll =
         Math.max(
             0,
-            unclampedTarget
+            container.scrollWidth -
+                container.clientWidth
         )
-    )
 
-    const distance =
-        targetScroll - startScroll
+    const target =
+        clampColorScrollPosition(
+            container.scrollLeft +
+                offsetToCenter,
+            0,
+            maxScroll
+        )
 
-    if (Math.abs(distance) < 1.5) {
-        container.scrollLeft =
-            targetScroll
-
-        return
-    }
-
-    const prefersReducedMotion =
-        window.matchMedia?.(
+    if (
+        window.matchMedia(
             "(prefers-reduced-motion: reduce)"
-        )?.matches
+        ).matches
+    ) {
+        stopColorScrollSpring(
+            container
+        )
 
-    if (prefersReducedMotion) {
         container.scrollLeft =
-            targetScroll
+            target
 
         return
     }
 
-    const direction =
-        Math.sign(distance)
-
-    const overshootAmount = 3
-
-    const overshootScroll = Math.min(
-        maxScroll,
-        Math.max(
-            0,
-            targetScroll +
-                direction *
-                    overshootAmount
-        )
-    )
-
-    const animationToken =
-        habitColorScrollToken
-
-    const duration = 460
-    const overshootPoint = 0.76
-    const startedAt =
-        performance.now()
-
-    const easeOutQuart = (value) =>
-        1 - Math.pow(1 - value, 4)
-
-    const easeInOutCubic = (value) =>
-        value < 0.5
-            ? 4 * value * value * value
-            : 1 -
-                Math.pow(
-                    -2 * value + 2,
-                    3
-                ) / 2
-
-    const tick = (now) => {
-        if (
-            animationToken !==
-            habitColorScrollToken
-        ) {
-            return
-        }
-
-        const progress = Math.min(
-            1,
-            (now - startedAt) / duration
+    const state =
+        getColorScrollSpringState(
+            container
         )
 
-        if (progress <= overshootPoint) {
-            const phaseProgress =
-                progress /
-                overshootPoint
+    state.min = 0
+    state.max =
+        maxScroll
 
-            const eased =
-                easeOutQuart(
-                    phaseProgress
-                )
-
-            container.scrollLeft =
-                startScroll +
-                (
-                    overshootScroll -
-                    startScroll
-                ) * eased
-        } else {
-            const phaseProgress =
-                (
-                    progress -
-                    overshootPoint
-                ) /
-                (1 - overshootPoint)
-
-            const eased =
-                easeInOutCubic(
-                    phaseProgress
-                )
-
-            container.scrollLeft =
-                overshootScroll +
-                (
-                    targetScroll -
-                    overshootScroll
-                ) * eased
-        }
-
-        if (progress < 1) {
-            habitColorScrollFrame =
-                requestAnimationFrame(tick)
-
-            return
-        }
-
-        container.scrollLeft =
-            targetScroll
-
-        habitColorScrollFrame = null
+    if (!state.isRunning) {
+        state.position =
+            container.scrollLeft
+        state.velocity = 0
+        state.lastTime = null
     }
 
-    habitColorScrollFrame =
-        requestAnimationFrame(tick)
+    state.target =
+        target
+
+    if (
+        Math.abs(
+            state.target -
+                state.position
+        ) < 0.18
+        &&
+        Math.abs(
+            state.velocity
+        ) < 2.5
+    ) {
+        state.position =
+            state.target
+        state.velocity = 0
+        container.scrollLeft =
+            state.target
+
+        return
+    }
+
+    runColorScrollSpring(
+        container
+    )
 }
 
+function bindColorScrollSpringInterruptions(
+    container
+) {
+    if (
+        !container
+        ||
+        container.dataset
+            .colorSpringBound ===
+            "true"
+    ) {
+        return
+    }
+
+    container.dataset
+        .colorSpringBound =
+        "true"
+
+    const interrupt = () => {
+        stopColorScrollSpring(
+            container
+        )
+    }
+
+    container.addEventListener(
+        "pointerdown",
+        interrupt,
+        {
+            passive: true
+        }
+    )
+
+    container.addEventListener(
+        "wheel",
+        interrupt,
+        {
+            passive: true
+        }
+    )
+}
 
 /* =========================================================
    ВЫБРАТЬ ЦВЕТ
@@ -1684,6 +1912,11 @@ export function initAddHabitPageEvents({
             "[data-habit-color]"
         )
 
+    const colorScrollContainer =
+        root.querySelector(
+            ".add-habit-v2__colors"
+        )
+
     const sizeButtons =
         root.querySelectorAll(
             "[data-habit-size]"
@@ -1715,6 +1948,10 @@ export function initAddHabitPageEvents({
     colorButtons.forEach((button) => {
         addPressAnimation(button)
     })
+
+    bindColorScrollSpringInterruptions(
+        colorScrollContainer
+    )
 
     sizeButtons.forEach((button) => {
         addPressAnimation(button)
@@ -1866,23 +2103,6 @@ export function initAddHabitPageEvents({
        ВЫБОР ЦВЕТА
        ===================================================== */
 
-    const colorScroller =
-        root.querySelector(
-            ".add-habit-v2__colors"
-        )
-
-    colorScroller?.addEventListener(
-        "pointerdown",
-        cancelHabitColorScrollAnimation,
-        { passive: true }
-    )
-
-    colorScroller?.addEventListener(
-        "wheel",
-        cancelHabitColorScrollAnimation,
-        { passive: true }
-    )
-
     colorButtons.forEach((button) => {
         button.addEventListener(
             "click",
@@ -1900,7 +2120,7 @@ export function initAddHabitPageEvents({
                     return
                 }
 
-                animateHabitColorToCenter(
+                centerHabitColorWithSpring(
                     button
                 )
             }
