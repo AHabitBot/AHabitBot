@@ -1143,6 +1143,224 @@ function showNameValidationError(
 
 
 /* =========================================================
+   ПЛАВНО ЦЕНТРИРОВАТЬ ВЫБРАННЫЙ ЦВЕТ
+   ========================================================= */
+
+let habitColorScrollFrame = null
+let habitColorScrollToken = 0
+
+function cancelHabitColorScrollAnimation() {
+    habitColorScrollToken += 1
+
+    if (habitColorScrollFrame !== null) {
+        cancelAnimationFrame(
+            habitColorScrollFrame
+        )
+
+        habitColorScrollFrame = null
+    }
+}
+
+function animateHabitColorToCenter(
+    selectedButton
+) {
+    const container =
+        selectedButton?.closest(
+            ".add-habit-v2__colors"
+        )
+
+    if (!container) {
+        return
+    }
+
+    cancelHabitColorScrollAnimation()
+
+    const maxScroll = Math.max(
+        0,
+        container.scrollWidth -
+            container.clientWidth
+    )
+
+    if (maxScroll <= 0) {
+        return
+    }
+
+    const containerRect =
+        container.getBoundingClientRect()
+
+    const buttonRect =
+        selectedButton.getBoundingClientRect()
+
+    const styles =
+        window.getComputedStyle(container)
+
+    const paddingLeft =
+        Number.parseFloat(
+            styles.paddingLeft
+        ) || 0
+
+    const paddingRight =
+        Number.parseFloat(
+            styles.paddingRight
+        ) || 0
+
+    const visibleWidth = Math.max(
+        0,
+        container.clientWidth -
+            paddingLeft -
+            paddingRight
+    )
+
+    const visibleCenter =
+        containerRect.left +
+        paddingLeft +
+        visibleWidth / 2
+
+    const buttonCenter =
+        buttonRect.left +
+        buttonRect.width / 2
+
+    const startScroll =
+        container.scrollLeft
+
+    const unclampedTarget =
+        startScroll +
+        (buttonCenter - visibleCenter)
+
+    const targetScroll = Math.min(
+        maxScroll,
+        Math.max(
+            0,
+            unclampedTarget
+        )
+    )
+
+    const distance =
+        targetScroll - startScroll
+
+    if (Math.abs(distance) < 1.5) {
+        container.scrollLeft =
+            targetScroll
+
+        return
+    }
+
+    const prefersReducedMotion =
+        window.matchMedia?.(
+            "(prefers-reduced-motion: reduce)"
+        )?.matches
+
+    if (prefersReducedMotion) {
+        container.scrollLeft =
+            targetScroll
+
+        return
+    }
+
+    const direction =
+        Math.sign(distance)
+
+    const overshootAmount = 3
+
+    const overshootScroll = Math.min(
+        maxScroll,
+        Math.max(
+            0,
+            targetScroll +
+                direction *
+                    overshootAmount
+        )
+    )
+
+    const animationToken =
+        habitColorScrollToken
+
+    const duration = 460
+    const overshootPoint = 0.76
+    const startedAt =
+        performance.now()
+
+    const easeOutQuart = (value) =>
+        1 - Math.pow(1 - value, 4)
+
+    const easeInOutCubic = (value) =>
+        value < 0.5
+            ? 4 * value * value * value
+            : 1 -
+                Math.pow(
+                    -2 * value + 2,
+                    3
+                ) / 2
+
+    const tick = (now) => {
+        if (
+            animationToken !==
+            habitColorScrollToken
+        ) {
+            return
+        }
+
+        const progress = Math.min(
+            1,
+            (now - startedAt) / duration
+        )
+
+        if (progress <= overshootPoint) {
+            const phaseProgress =
+                progress /
+                overshootPoint
+
+            const eased =
+                easeOutQuart(
+                    phaseProgress
+                )
+
+            container.scrollLeft =
+                startScroll +
+                (
+                    overshootScroll -
+                    startScroll
+                ) * eased
+        } else {
+            const phaseProgress =
+                (
+                    progress -
+                    overshootPoint
+                ) /
+                (1 - overshootPoint)
+
+            const eased =
+                easeInOutCubic(
+                    phaseProgress
+                )
+
+            container.scrollLeft =
+                overshootScroll +
+                (
+                    targetScroll -
+                    overshootScroll
+                ) * eased
+        }
+
+        if (progress < 1) {
+            habitColorScrollFrame =
+                requestAnimationFrame(tick)
+
+            return
+        }
+
+        container.scrollLeft =
+            targetScroll
+
+        habitColorScrollFrame = null
+    }
+
+    habitColorScrollFrame =
+        requestAnimationFrame(tick)
+}
+
+
+/* =========================================================
    ВЫБРАТЬ ЦВЕТ
    ========================================================= */
 
@@ -1648,13 +1866,42 @@ export function initAddHabitPageEvents({
        ВЫБОР ЦВЕТА
        ===================================================== */
 
+    const colorScroller =
+        root.querySelector(
+            ".add-habit-v2__colors"
+        )
+
+    colorScroller?.addEventListener(
+        "pointerdown",
+        cancelHabitColorScrollAnimation,
+        { passive: true }
+    )
+
+    colorScroller?.addEventListener(
+        "wheel",
+        cancelHabitColorScrollAnimation,
+        { passive: true }
+    )
+
     colorButtons.forEach((button) => {
         button.addEventListener(
             "click",
             () => {
+                const isLocked =
+                    button.dataset.locked ===
+                    "true"
+
                 selectHabitColor(
                     button,
                     colorButtons
+                )
+
+                if (isLocked) {
+                    return
+                }
+
+                animateHabitColorToCenter(
+                    button
                 )
             }
         )
