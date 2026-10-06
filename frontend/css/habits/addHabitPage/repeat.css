@@ -8,6 +8,10 @@
     gap: 10px;
 }
 
+.habit-repeat > .add-habit-v2__section-label {
+    margin-bottom: -2px;
+}
+
 .habit-repeat__card {
     overflow: hidden;
     border: 1px solid var(--app-border);
