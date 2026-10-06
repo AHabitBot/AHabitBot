@@ -33,18 +33,18 @@
 
     /* Нейтральный graphite + habit accent. */
     --swatch-inactive-top:
-        color-mix(in srgb, #242426 84%, rgb(var(--habit-accent-rgb)) 16%);
+        color-mix(in srgb, #262628 72%, rgb(var(--habit-accent-rgb)) 28%);
     --swatch-inactive-mid:
-        color-mix(in srgb, #262628 74%, rgb(var(--habit-accent-rgb)) 26%);
+        color-mix(in srgb, #262628 71%, rgb(var(--habit-accent-rgb)) 29%);
     --swatch-inactive-bottom:
-        color-mix(in srgb, #28282a 64%, rgb(var(--habit-accent-rgb)) 36%);
+        color-mix(in srgb, #262628 70%, rgb(var(--habit-accent-rgb)) 30%);
 
     --swatch-selected-top:
-        color-mix(in srgb, #2b2b2d 78%, rgb(var(--habit-accent-rgb)) 22%);
+        color-mix(in srgb, #2b2b2d 70%, rgb(var(--habit-accent-rgb)) 30%);
     --swatch-selected-mid:
-        color-mix(in srgb, #2d2d2f 64%, rgb(var(--habit-accent-rgb)) 36%);
+        color-mix(in srgb, #2d2d2f 54%, rgb(var(--habit-accent-rgb)) 46%);
     --swatch-selected-bottom:
-        color-mix(in srgb, #303032 50%, rgb(var(--habit-accent-rgb)) 50%);
+        color-mix(in srgb, #303032 38%, rgb(var(--habit-accent-rgb)) 62%);
 
     --swatch-selected-border:
         color-mix(in srgb, var(--swatch-selected-bottom) 82%, white 18%);
