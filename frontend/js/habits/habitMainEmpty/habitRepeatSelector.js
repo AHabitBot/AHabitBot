@@ -53,7 +53,15 @@ export function renderHabitRepeatSelector(
                     </span>
                     <span class="habit-repeat__radio"></span>
                 </button>
-                ${isSelected ? body : ""}
+
+                <div
+                    class="habit-repeat__body"
+                    style="height: ${isSelected ? "auto" : "0px"};"
+                >
+                    <div class="habit-repeat__body-inner">
+                        ${body}
+                    </div>
+                </div>
             </div>
         `
     }
@@ -109,6 +117,169 @@ export function renderHabitRepeatSelector(
 }
 
 
+function setRepeatCardExpanded(
+    card,
+    expanded
+) {
+    if (!card) {
+        return
+    }
+
+    const body =
+        card.querySelector(
+            ".habit-repeat__body"
+        )
+
+    const inner =
+        card.querySelector(
+            ".habit-repeat__body-inner"
+        )
+
+    if (!body || !inner) {
+        card.classList.toggle(
+            "is-selected",
+            expanded
+        )
+        return
+    }
+
+    const prefersReducedMotion =
+        window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches
+
+    body.dataset.animationToken =
+        String(
+            Number(
+                body.dataset.animationToken || 0
+            ) + 1
+        )
+
+    const token =
+        body.dataset.animationToken
+
+    if (prefersReducedMotion) {
+        card.classList.toggle(
+            "is-selected",
+            expanded
+        )
+
+        body.style.height =
+            expanded
+                ? "auto"
+                : "0px"
+
+        return
+    }
+
+    if (expanded) {
+        card.classList.add(
+            "is-selected"
+        )
+
+        const targetHeight =
+            inner.scrollHeight
+
+        const currentHeight =
+            body.getBoundingClientRect().height
+
+        body.style.height =
+            `${currentHeight}px`
+
+        requestAnimationFrame(() => {
+            if (
+                body.dataset.animationToken !==
+                token
+            ) {
+                return
+            }
+
+            body.style.height =
+                `${targetHeight}px`
+        })
+
+        const onExpanded = (event) => {
+            if (
+                event.propertyName !== "height"
+                ||
+                body.dataset.animationToken !==
+                    token
+            ) {
+                return
+            }
+
+            body.removeEventListener(
+                "transitionend",
+                onExpanded
+            )
+
+            if (
+                card.classList.contains(
+                    "is-selected"
+                )
+            ) {
+                body.style.height =
+                    "auto"
+            }
+        }
+
+        body.addEventListener(
+            "transitionend",
+            onExpanded
+        )
+
+        return
+    }
+
+    const currentHeight =
+        body.getBoundingClientRect().height
+
+    body.style.height =
+        `${currentHeight}px`
+
+    card.classList.remove(
+        "is-selected"
+    )
+
+    requestAnimationFrame(() => {
+        if (
+            body.dataset.animationToken !==
+            token
+        ) {
+            return
+        }
+
+        body.style.height =
+            "0px"
+    })
+}
+
+
+function selectRepeatTypeLocally(
+    root,
+    nextType
+) {
+    root.querySelectorAll(
+        ".habit-repeat__card"
+    ).forEach((card) => {
+        const button =
+            card.querySelector(
+                "[data-repeat-type]"
+            )
+
+        if (!button) {
+            return
+        }
+
+        setRepeatCardExpanded(
+            card,
+            button.dataset.repeatType ===
+                nextType
+        )
+    })
+}
+
+
 export function bindHabitRepeatSelectorEvents({
     root,
     savePageDraft,
@@ -118,14 +289,31 @@ export function bindHabitRepeatSelectorEvents({
         "[data-repeat-type]"
     ).forEach((button) => {
         button.addEventListener("click", () => {
+            const nextType =
+                button.dataset.repeatType
+
+            const currentType =
+                getHabitDraft().repeatType
+
+            if (
+                !nextType
+                ||
+                nextType === currentType
+            ) {
+                return
+            }
+
             savePageDraft()
 
             setHabitDraftValue(
                 "repeatType",
-                button.dataset.repeatType
+                nextType
             )
 
-            rerenderPage()
+            selectRepeatTypeLocally(
+                root,
+                nextType
+            )
         })
     })
 

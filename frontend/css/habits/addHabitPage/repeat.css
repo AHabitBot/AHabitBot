@@ -264,6 +264,49 @@
 
 
 /* =========================================================
+   ПЛАВНОЕ РАСКРЫТИЕ / СХЛОПЫВАНИЕ
+   Высота карточки и проявление контента идут одновременно.
+   ========================================================= */
+
+.habit-repeat__body {
+    position: relative;
+    z-index: 1;
+
+    height: 0;
+
+    overflow: hidden;
+
+    transition:
+        height 320ms
+        cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.habit-repeat__body-inner {
+    opacity: 0;
+
+    transition:
+        opacity 200ms ease;
+}
+
+
+.habit-repeat__card.is-selected
+.habit-repeat__body-inner {
+    opacity: 1;
+
+    transition-delay: 24ms;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    .habit-repeat__body,
+    .habit-repeat__body-inner {
+        transition: none;
+    }
+}
+
+
+/* =========================================================
    ДНИ НЕДЕЛИ
    Мягкий graphite, почти ровная поверхность,
    лёгкий свет сверху и минимальная глубина снизу.
