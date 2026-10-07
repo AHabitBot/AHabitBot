@@ -1400,9 +1400,6 @@ function animateColorScrollTo(
                 eased
 
         if (progress >= 1) {
-            container.scrollLeft =
-                target
-
             colorScrollAnimations.delete(
                 container
             )
@@ -1460,12 +1457,28 @@ function centerHabitColorSmoothly(
                 container.clientWidth
         )
 
+    const edgeInset =
+        0.75
+
+    const minScroll =
+        maxScroll >
+            edgeInset * 2
+            ? edgeInset
+            : 0
+
+    const maxScrollSoft =
+        maxScroll >
+            edgeInset * 2
+            ? maxScroll -
+                edgeInset
+            : maxScroll
+
     const target =
         clampColorScrollPosition(
             container.scrollLeft +
                 offsetToCenter,
-            0,
-            maxScroll
+            minScroll,
+            maxScrollSoft
         )
 
     if (
