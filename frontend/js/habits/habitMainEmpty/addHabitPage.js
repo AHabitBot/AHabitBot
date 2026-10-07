@@ -1154,11 +1154,11 @@ function showNameValidationError(
    - ручной свайп сразу отменяет автопрокрутку.
    ========================================================= */
 
-const colorScrollAnimations =
+const horizontalScrollAnimations =
     new WeakMap()
 
 
-function clampColorScrollPosition(
+function clampHorizontalScrollPosition(
     value,
     min,
     max
@@ -1180,7 +1180,7 @@ function clampColorScrollPosition(
  * Smoothstep сохраняет мягкий старт/финиш,
  * но не убивает скорость слишком рано.
  */
-function easeColorScroll(
+function easeHorizontalScroll(
     progress
 ) {
     const t =
@@ -1203,11 +1203,11 @@ function easeColorScroll(
 }
 
 
-function stopColorScrollAnimation(
+function stopHorizontalScrollAnimation(
     container
 ) {
     const state =
-        colorScrollAnimations.get(
+        horizontalScrollAnimations.get(
             container
         )
 
@@ -1221,17 +1221,17 @@ function stopColorScrollAnimation(
         )
     }
 
-    colorScrollAnimations.delete(
+    horizontalScrollAnimations.delete(
         container
     )
 }
 
 
-function animateColorScrollTo(
+function animateHorizontalScrollTo(
     container,
     target
 ) {
-    stopColorScrollAnimation(
+    stopHorizontalScrollAnimation(
         container
     )
 
@@ -1273,14 +1273,14 @@ function animateColorScrollTo(
         startTime: null
     }
 
-    colorScrollAnimations.set(
+    horizontalScrollAnimations.set(
         container,
         state
     )
 
     const tick = (now) => {
         if (
-            colorScrollAnimations.get(
+            horizontalScrollAnimations.get(
                 container
             ) !== state
         ) {
@@ -1303,7 +1303,7 @@ function animateColorScrollTo(
             )
 
         const eased =
-            easeColorScroll(
+            easeHorizontalScroll(
                 progress
             )
 
@@ -1313,7 +1313,7 @@ function animateColorScrollTo(
                 eased
 
         if (progress >= 1) {
-            colorScrollAnimations.delete(
+            horizontalScrollAnimations.delete(
                 container
             )
 
@@ -1333,34 +1333,30 @@ function animateColorScrollTo(
 }
 
 
-function centerHabitColorSmoothly(
-    selectedButton
+function centerHorizontalItemSmoothly(
+    container,
+    item
 ) {
-    const container =
-        selectedButton.closest(
-            ".add-habit-v2__colors"
-        )
-
-    if (!container) {
+    if (!container || !item) {
         return
     }
 
     const containerRect =
         container.getBoundingClientRect()
 
-    const buttonRect =
-        selectedButton.getBoundingClientRect()
+    const itemRect =
+        item.getBoundingClientRect()
 
-    const selectedCenter =
-        buttonRect.left +
-        buttonRect.width / 2
+    const itemCenter =
+        itemRect.left +
+        itemRect.width / 2
 
     const visibleCenter =
         containerRect.left +
         containerRect.width / 2
 
     const offsetToCenter =
-        selectedCenter -
+        itemCenter -
         visibleCenter
 
     const maxScroll =
@@ -1371,7 +1367,7 @@ function centerHabitColorSmoothly(
         )
 
     const target =
-        clampColorScrollPosition(
+        clampHorizontalScrollPosition(
             container.scrollLeft +
                 offsetToCenter,
             0,
@@ -1383,7 +1379,7 @@ function centerHabitColorSmoothly(
             "(prefers-reduced-motion: reduce)"
         ).matches
     ) {
-        stopColorScrollAnimation(
+        stopHorizontalScrollAnimation(
             container
         )
 
@@ -1393,32 +1389,32 @@ function centerHabitColorSmoothly(
         return
     }
 
-    animateColorScrollTo(
+    animateHorizontalScrollTo(
         container,
         target
     )
 }
 
 
-function bindColorScrollInterruptions(
+function bindHorizontalScrollInterruptions(
     container
 ) {
     if (
         !container
         ||
         container.dataset
-            .colorSmoothScrollBound ===
+            .horizontalSmoothScrollBound ===
             "true"
     ) {
         return
     }
 
     container.dataset
-        .colorSmoothScrollBound =
+        .horizontalSmoothScrollBound =
         "true"
 
     const interrupt = () => {
-        stopColorScrollAnimation(
+        stopHorizontalScrollAnimation(
             container
         )
     }
@@ -1714,6 +1710,53 @@ function rerenderAddHabitPageWithoutScrollJump(
     initAddHabitPageEvents(eventOptions)
 }
 
+const suggestionHighlightTimers =
+    new WeakMap()
+
+
+function flashHabitSuggestion(
+    button
+) {
+    const previousTimer =
+        suggestionHighlightTimers.get(
+            button
+        )
+
+    if (previousTimer) {
+        window.clearTimeout(
+            previousTimer
+        )
+    }
+
+    button.classList.remove(
+        "is-highlighted"
+    )
+
+    // Перезапускаем подсветку даже при быстром повторном нажатии.
+    void button.offsetWidth
+
+    button.classList.add(
+        "is-highlighted"
+    )
+
+    const timer =
+        window.setTimeout(() => {
+            button.classList.remove(
+                "is-highlighted"
+            )
+
+            suggestionHighlightTimers.delete(
+                button
+            )
+        }, 1000)
+
+    suggestionHighlightTimers.set(
+        button,
+        timer
+    )
+}
+
+
 export function initAddHabitPageEvents({
     onOpenHabitsPage = null,
     onHabitSaved = null,
@@ -1760,6 +1803,11 @@ export function initAddHabitPageEvents({
             "[data-habit-suggestion]"
         )
 
+    const suggestionsScrollContainer =
+        root.querySelector(
+            ".add-habit-v2__suggestions"
+        )
+
     const colorButtons =
         root.querySelectorAll(
             "[data-habit-color]"
@@ -1802,7 +1850,11 @@ export function initAddHabitPageEvents({
         addPressAnimation(button)
     })
 
-    bindColorScrollInterruptions(
+    bindHorizontalScrollInterruptions(
+        suggestionsScrollContainer
+    )
+
+    bindHorizontalScrollInterruptions(
         colorScrollContainer
     )
 
@@ -1947,6 +1999,15 @@ export function initAddHabitPageEvents({
                         }
                     )
                 )
+
+                flashHabitSuggestion(
+                    button
+                )
+
+                centerHorizontalItemSmoothly(
+                    suggestionsScrollContainer,
+                    button
+                )
             }
         )
     })
@@ -1973,7 +2034,8 @@ export function initAddHabitPageEvents({
                     return
                 }
 
-                centerHabitColorSmoothly(
+                centerHorizontalItemSmoothly(
+                    colorScrollContainer,
                     button
                 )
             }

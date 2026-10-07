@@ -294,18 +294,27 @@
    ========================================================= */
 
 .add-habit-v2__suggestions {
+    width: calc(100% + 18px);
+
     display: flex;
     align-items: center;
 
     gap: 8px;
 
     margin-top: 13px;
+    margin-right: -18px;
+
+    padding-right: 15px;
+
+    box-sizing: border-box;
 
     overflow-x: auto;
+    overflow-y: hidden;
 
     scrollbar-width: none;
 
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
 }
 
 
@@ -344,7 +353,18 @@
     -webkit-appearance: none;
 
     -webkit-tap-highlight-color: transparent;
+
+    transition:
+        color 180ms ease,
+        opacity 180ms ease;
 }
+
+
+.add-habit-v2__suggestion.is-highlighted {
+    color: var(--app-text-primary);
+    opacity: 1;
+}
+
 
 
 .add-habit-v2__divider {
