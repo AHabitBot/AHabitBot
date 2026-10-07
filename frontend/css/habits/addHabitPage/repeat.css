@@ -281,7 +281,6 @@
 }
 
 
-.habit-repeat__days button,
 .habit-repeat__counter button {
     border:
         1px solid
@@ -322,8 +321,56 @@
 }
 
 
+/*
+ * Inactive-день:
+ * спокойный тёмный graphite, почти плоская поверхность,
+ * мягкий верхний свет и приглушённый текст.
+ */
 .habit-repeat__days button {
     aspect-ratio: 1;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--app-text-secondary) 14%,
+            var(--app-border) 86%
+        );
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.045) 0%,
+            rgba(255, 255, 255, 0.012) 36%,
+            rgba(0, 0, 0, 0.018) 100%
+        ),
+        color-mix(
+            in srgb,
+            var(--app-surface-soft) 94%,
+            white 6%
+        );
+
+    color:
+        color-mix(
+            in srgb,
+            var(--app-text-secondary) 92%,
+            white 8%
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.055),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.045);
+
+    transition:
+        background 170ms ease,
+        color 170ms ease,
+        border-color 170ms ease,
+        box-shadow 170ms ease,
+        transform 120ms ease;
+
+    -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -335,28 +382,28 @@
     border-color:
         color-mix(
             in srgb,
-            var(--app-text-secondary) 34%,
-            var(--app-border) 66%
+            var(--app-text-secondary) 46%,
+            var(--app-border) 54%
         );
 
     background:
         linear-gradient(
             180deg,
-            rgba(255, 255, 255, 0.085) 0%,
-            rgba(255, 255, 255, 0.030) 38%,
-            rgba(0, 0, 0, 0.030) 100%
+            rgba(255, 255, 255, 0.110) 0%,
+            rgba(255, 255, 255, 0.040) 36%,
+            rgba(0, 0, 0, 0.022) 100%
         ),
         color-mix(
             in srgb,
-            var(--app-surface-soft) 85%,
-            white 15%
+            var(--app-surface-soft) 76%,
+            white 24%
         );
 
     color: var(--app-text-primary);
 
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.105),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.075);
+        inset 0 1px 0 rgba(255, 255, 255, 0.125),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.055);
 }
 
 
