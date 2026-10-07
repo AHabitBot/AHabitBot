@@ -1748,7 +1748,7 @@ function flashHabitSuggestion(
             suggestionHighlightTimers.delete(
                 button
             )
-        }, 1000)
+        }, 500)
 
     suggestionHighlightTimers.set(
         button,
