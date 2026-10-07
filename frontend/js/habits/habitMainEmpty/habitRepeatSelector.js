@@ -31,6 +31,11 @@ export function renderHabitRepeatSelector(
             challengeIsLocked &&
             type !== "challenge"
 
+        const iconName =
+            type === "days"
+                ? "calendar_month"
+                : "track_changes"
+
         return `
             <div class="habit-repeat__card ${isSelected ? "is-selected" : ""} ${isLocked ? "is-locked" : ""}">
                 <button
@@ -39,7 +44,13 @@ export function renderHabitRepeatSelector(
                     data-repeat-type="${type}"
                     ${isLocked ? "disabled" : ""}
                 >
-                    <span>${title}</span>
+                    <span class="habit-repeat__label">
+                        <span
+                            class="material-symbols-rounded habit-repeat__icon"
+                            aria-hidden="true"
+                        >${iconName}</span>
+                        <span class="habit-repeat__title">${title}</span>
+                    </span>
                     <span class="habit-repeat__radio"></span>
                 </button>
                 ${isSelected ? body : ""}
