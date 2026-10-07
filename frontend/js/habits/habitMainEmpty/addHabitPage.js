@@ -1174,118 +1174,31 @@ function clampColorScrollPosition(
 
 
 /*
- * cubic-bezier(0.22, 1, 0.36, 1)
- * Та же кривая, что используется
- * для раскрытия repeat-карточек.
+ * Лёгкая easing-функция для мобильного WebView.
+ * Без Newton-итераций и без длинного "ползучего" хвоста.
+ *
+ * Smoothstep сохраняет мягкий старт/финиш,
+ * но не убивает скорость слишком рано.
  */
 function easeColorScroll(
     progress
 ) {
-    const x1 = 0.22
-    const y1 = 1
-    const x2 = 0.36
-    const y2 = 1
-
-    const sampleCurve = (
-        t,
-        a1,
-        a2
-    ) => {
-        const inverse =
-            1 - t
-
-        return (
-            3 *
-                inverse *
-                inverse *
-                t *
-                a1
-            +
-            3 *
-                inverse *
-                t *
-                t *
-                a2
-            +
-            t * t * t
-        )
-    }
-
-    const sampleDerivative = (
-        t,
-        a1,
-        a2
-    ) => {
-        const inverse =
-            1 - t
-
-        return (
-            3 *
-                inverse *
-                inverse *
-                a1
-            +
-            6 *
-                inverse *
-                t *
-                (a2 - a1)
-            +
-            3 *
-                t *
-                t *
-                (1 - a2)
-        )
-    }
-
-    let t =
-        progress
-
-    for (
-        let index = 0;
-        index < 5;
-        index += 1
-    ) {
-        const currentX =
-            sampleCurve(
-                t,
-                x1,
-                x2
-            ) -
-            progress
-
-        const derivative =
-            sampleDerivative(
-                t,
-                x1,
-                x2
+    const t =
+        Math.min(
+            1,
+            Math.max(
+                0,
+                progress
             )
+        )
 
-        if (
-            Math.abs(
-                derivative
-            ) < 0.0001
-        ) {
-            break
-        }
-
-        t -=
-            currentX /
-            derivative
-
-        t =
-            Math.min(
-                1,
-                Math.max(
-                    0,
-                    t
-                )
-            )
-    }
-
-    return sampleCurve(
-        t,
-        y1,
-        y2
+    return (
+        t *
+        t *
+        (
+            3 -
+            2 * t
+        )
     )
 }
 
@@ -1345,13 +1258,13 @@ function animateColorScrollTo(
      */
     const duration =
         Math.min(
-            420,
+            350,
             Math.max(
-                285,
-                285 +
+                250,
+                250 +
                     Math.abs(
                         distance
-                    ) * 0.72
+                    ) * 0.48
             )
         )
 
@@ -1457,28 +1370,12 @@ function centerHabitColorSmoothly(
                 container.clientWidth
         )
 
-    const edgeInset =
-        0.75
-
-    const minScroll =
-        maxScroll >
-            edgeInset * 2
-            ? edgeInset
-            : 0
-
-    const maxScrollSoft =
-        maxScroll >
-            edgeInset * 2
-            ? maxScroll -
-                edgeInset
-            : maxScroll
-
     const target =
         clampColorScrollPosition(
             container.scrollLeft +
                 offsetToCenter,
-            minScroll,
-            maxScrollSoft
+            0,
+            maxScroll
         )
 
     if (
