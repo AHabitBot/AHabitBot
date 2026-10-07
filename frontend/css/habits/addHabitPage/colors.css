@@ -153,19 +153,19 @@
     position: absolute;
     z-index: 2;
 
-    top: 8px;
-    right: 8px;
+    top: 7px;
+    right: 7px;
 
     color:
         color-mix(
             in srgb,
-            var(--app-text-secondary) 78%,
-            white 22%
+            var(--app-text-secondary) 45%,
+            white 55%
         );
 
     opacity: 1;
 
-    font-size: 16px;
+    font-size: 8px;
     line-height: 1;
 
     font-variation-settings:
