@@ -1146,94 +1146,17 @@ function showNameValidationError(
 /* =========================================================
    ПЛАВНОЕ ЦЕНТРИРОВАНИЕ ЦВЕТОВ
 
-   Непрерывная spring-модель:
-   - без фиксированной duration;
-   - сохраняет скорость между быстрыми выборами;
-   - мягко меняет направление на лету;
-   - не мешает ручному свайпу;
-   - на краях не пытается прокручиваться дальше.
+   Тот же motion-язык, что у раскрытия "Повторения":
+   - одно цельное скольжение;
+   - без spring / bounce / маятника;
+   - длинное мягкое торможение;
+   - новый клик продолжает движение от текущего scrollLeft;
+   - ручной свайп сразу отменяет автопрокрутку.
    ========================================================= */
 
-const colorScrollSpringStates =
+const colorScrollAnimations =
     new WeakMap()
 
-function getColorScrollSpringState(
-    container
-) {
-    let state =
-        colorScrollSpringStates.get(
-            container
-        )
-
-    if (state) {
-        return state
-    }
-
-    state = {
-        position:
-            container.scrollLeft,
-
-        velocity:
-            0,
-
-        target:
-            container.scrollLeft,
-
-        min:
-            0,
-
-        max:
-            Math.max(
-                0,
-                container.scrollWidth -
-                    container.clientWidth
-            ),
-
-        frameId:
-            null,
-
-        lastTime:
-            null,
-
-        isRunning:
-            false
-    }
-
-    colorScrollSpringStates.set(
-        container,
-        state
-    )
-
-    return state
-}
-
-function stopColorScrollSpring(
-    container
-) {
-    const state =
-        colorScrollSpringStates.get(
-            container
-        )
-
-    if (!state) {
-        return
-    }
-
-    if (state.frameId !== null) {
-        cancelAnimationFrame(
-            state.frameId
-        )
-    }
-
-    state.frameId = null
-    state.lastTime = null
-    state.isRunning = false
-    state.position =
-        container.scrollLeft
-    state.target =
-        container.scrollLeft
-    state.velocity = 0
-}
 
 function clampColorScrollPosition(
     value,
@@ -1249,186 +1172,240 @@ function clampColorScrollPosition(
     )
 }
 
-function runColorScrollSpring(
+
+/*
+ * cubic-bezier(0.22, 1, 0.36, 1)
+ * Та же кривая, что используется
+ * для раскрытия repeat-карточек.
+ */
+function easeColorScroll(
+    progress
+) {
+    const x1 = 0.22
+    const y1 = 1
+    const x2 = 0.36
+    const y2 = 1
+
+    const sampleCurve = (
+        t,
+        a1,
+        a2
+    ) => {
+        const inverse =
+            1 - t
+
+        return (
+            3 *
+                inverse *
+                inverse *
+                t *
+                a1
+            +
+            3 *
+                inverse *
+                t *
+                t *
+                a2
+            +
+            t * t * t
+        )
+    }
+
+    const sampleDerivative = (
+        t,
+        a1,
+        a2
+    ) => {
+        const inverse =
+            1 - t
+
+        return (
+            3 *
+                inverse *
+                inverse *
+                a1
+            +
+            6 *
+                inverse *
+                t *
+                (a2 - a1)
+            +
+            3 *
+                t *
+                t *
+                (1 - a2)
+        )
+    }
+
+    let t =
+        progress
+
+    for (
+        let index = 0;
+        index < 5;
+        index += 1
+    ) {
+        const currentX =
+            sampleCurve(
+                t,
+                x1,
+                x2
+            ) -
+            progress
+
+        const derivative =
+            sampleDerivative(
+                t,
+                x1,
+                x2
+            )
+
+        if (
+            Math.abs(
+                derivative
+            ) < 0.0001
+        ) {
+            break
+        }
+
+        t -=
+            currentX /
+            derivative
+
+        t =
+            Math.min(
+                1,
+                Math.max(
+                    0,
+                    t
+                )
+            )
+    }
+
+    return sampleCurve(
+        t,
+        y1,
+        y2
+    )
+}
+
+
+function stopColorScrollAnimation(
     container
 ) {
     const state =
-        getColorScrollSpringState(
+        colorScrollAnimations.get(
             container
         )
 
-    if (state.isRunning) {
+    if (!state) {
         return
     }
 
-    state.isRunning = true
+    if (state.frameId !== null) {
+        cancelAnimationFrame(
+            state.frameId
+        )
+    }
 
-    const naturalFrequency = 11.0
-    const dampingRatio = 0.80
+    colorScrollAnimations.delete(
+        container
+    )
+}
+
+
+function animateColorScrollTo(
+    container,
+    target
+) {
+    stopColorScrollAnimation(
+        container
+    )
+
+    const start =
+        container.scrollLeft
+
+    const distance =
+        target - start
+
+    if (
+        Math.abs(
+            distance
+        ) < 0.5
+    ) {
+        container.scrollLeft =
+            target
+
+        return
+    }
+
+    /*
+     * Короткий переход не должен тянуться,
+     * дальний — не должен лететь слишком быстро.
+     */
+    const duration =
+        Math.min(
+            420,
+            Math.max(
+                285,
+                285 +
+                    Math.abs(
+                        distance
+                    ) * 0.72
+            )
+        )
+
+    const state = {
+        frameId: null,
+        startTime: null
+    }
+
+    colorScrollAnimations.set(
+        container,
+        state
+    )
 
     const tick = (now) => {
-        if (!state.isRunning) {
+        if (
+            colorScrollAnimations.get(
+                container
+            ) !== state
+        ) {
             return
         }
 
-        if (state.lastTime === null) {
-            state.lastTime = now
+        if (state.startTime === null) {
+            state.startTime =
+                now
         }
 
-        const deltaSeconds =
+        const progress =
             Math.min(
-                0.032,
-                Math.max(
-                    0.001,
-                    (now - state.lastTime) /
-                        1000
-                )
+                1,
+                (
+                    now -
+                    state.startTime
+                ) /
+                duration
             )
 
-        state.lastTime = now
-
-        const displacement =
-            state.position -
-            state.target
-
-        const omega0 =
-            naturalFrequency
-
-        const damping =
-            dampingRatio
-
-        const decay =
-            damping *
-            omega0
-
-        const omegaD =
-            omega0 *
-            Math.sqrt(
-                Math.max(
-                    0.0001,
-                    1 -
-                        damping *
-                            damping
-                )
-            )
-
-        const expTerm =
-            Math.exp(
-                -decay *
-                    deltaSeconds
-            )
-
-        const cosTerm =
-            Math.cos(
-                omegaD *
-                    deltaSeconds
-            )
-
-        const sinTerm =
-            Math.sin(
-                omegaD *
-                    deltaSeconds
-            )
-
-        const velocityFactor =
-            (
-                state.velocity +
-                decay *
-                    displacement
-            ) /
-            omegaD
-
-        const nextDisplacement =
-            expTerm *
-            (
-                displacement *
-                    cosTerm +
-                velocityFactor *
-                    sinTerm
-            )
-
-        const nextVelocity =
-            expTerm *
-            (
-                -decay *
-                    (
-                        displacement *
-                            cosTerm +
-                        velocityFactor *
-                            sinTerm
-                    ) +
-                -displacement *
-                    omegaD *
-                    sinTerm +
-                velocityFactor *
-                    omegaD *
-                    cosTerm
-            )
-
-        state.position =
-            state.target +
-            nextDisplacement
-
-        state.velocity =
-            nextVelocity
-
-        if (
-            state.position <=
-                state.min
-            &&
-            state.velocity < 0
-        ) {
-            state.position =
-                state.min
-            state.velocity = 0
-        }
-
-        if (
-            state.position >=
-                state.max
-            &&
-            state.velocity > 0
-        ) {
-            state.position =
-                state.max
-            state.velocity = 0
-        }
-
-        state.position =
-            clampColorScrollPosition(
-                state.position,
-                state.min,
-                state.max
+        const eased =
+            easeColorScroll(
+                progress
             )
 
         container.scrollLeft =
-            state.position
+            start +
+            distance *
+                eased
 
-        const remaining =
-            Math.abs(
-                state.target -
-                    state.position
-            )
-
-        const speed =
-            Math.abs(
-                state.velocity
-            )
-
-        if (
-            remaining < 0.18
-            &&
-            speed < 2.5
-        ) {
-            state.position =
-                state.target
-            state.velocity = 0
-            state.lastTime = null
-            state.frameId = null
-            state.isRunning = false
-
+        if (progress >= 1) {
             container.scrollLeft =
-                state.target
+                target
+
+            colorScrollAnimations.delete(
+                container
+            )
 
             return
         }
@@ -1445,7 +1422,8 @@ function runColorScrollSpring(
         )
 }
 
-function centerHabitColorWithSpring(
+
+function centerHabitColorSmoothly(
     selectedButton
 ) {
     const container =
@@ -1495,7 +1473,7 @@ function centerHabitColorWithSpring(
             "(prefers-reduced-motion: reduce)"
         ).matches
     ) {
-        stopColorScrollSpring(
+        stopColorScrollAnimation(
             container
         )
 
@@ -1505,68 +1483,32 @@ function centerHabitColorWithSpring(
         return
     }
 
-    const state =
-        getColorScrollSpringState(
-            container
-        )
-
-    state.min = 0
-    state.max =
-        maxScroll
-
-    if (!state.isRunning) {
-        state.position =
-            container.scrollLeft
-        state.velocity = 0
-        state.lastTime = null
-    }
-
-    state.target =
+    animateColorScrollTo(
+        container,
         target
-
-    if (
-        Math.abs(
-            state.target -
-                state.position
-        ) < 0.18
-        &&
-        Math.abs(
-            state.velocity
-        ) < 2.5
-    ) {
-        state.position =
-            state.target
-        state.velocity = 0
-        container.scrollLeft =
-            state.target
-
-        return
-    }
-
-    runColorScrollSpring(
-        container
     )
 }
 
-function bindColorScrollSpringInterruptions(
+
+function bindColorScrollInterruptions(
     container
 ) {
     if (
         !container
         ||
         container.dataset
-            .colorSpringBound ===
+            .colorSmoothScrollBound ===
             "true"
     ) {
         return
     }
 
     container.dataset
-        .colorSpringBound =
+        .colorSmoothScrollBound =
         "true"
 
     const interrupt = () => {
-        stopColorScrollSpring(
+        stopColorScrollAnimation(
             container
         )
     }
@@ -1587,6 +1529,7 @@ function bindColorScrollSpringInterruptions(
         }
     )
 }
+
 
 /* =========================================================
    ВЫБРАТЬ ЦВЕТ
@@ -1949,7 +1892,7 @@ export function initAddHabitPageEvents({
         addPressAnimation(button)
     })
 
-    bindColorScrollSpringInterruptions(
+    bindColorScrollInterruptions(
         colorScrollContainer
     )
 
@@ -2120,7 +2063,7 @@ export function initAddHabitPageEvents({
                     return
                 }
 
-                centerHabitColorWithSpring(
+                centerHabitColorSmoothly(
                     button
                 )
             }
