@@ -152,13 +152,28 @@
 .add-habit-v2__lock {
     position: absolute;
     z-index: 2;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    color: color-mix(in srgb, rgb(var(--habit-accent-rgb)) 62%, var(--app-text-secondary) 38%);
-    opacity: 0.70;
-    font-size: 17px;
+
+    top: 8px;
+    right: 8px;
+
+    color:
+        color-mix(
+            in srgb,
+            var(--app-text-secondary) 78%,
+            white 22%
+        );
+
+    opacity: 1;
+
+    font-size: 16px;
     line-height: 1;
+
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 500,
+        "GRAD" 0,
+        "opsz" 20;
+
     pointer-events: none;
 }
 

@@ -512,10 +512,10 @@ export function renderAddHabitPage() {
                             aria-label="${t("habits.addHabit.color.orangePremium")}"
                         >
                             <span
-                                class="add-habit-v2__lock"
+                                class="material-symbols-rounded add-habit-v2__lock"
                                 aria-hidden="true"
                             >
-                                🔒
+                                lock
                             </span>
                         </button>
 
