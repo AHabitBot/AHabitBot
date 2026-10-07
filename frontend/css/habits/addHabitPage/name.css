@@ -360,12 +360,6 @@
 }
 
 
-.add-habit-v2__suggestion.is-highlighted {
-    color: var(--app-text-primary);
-    opacity: 1;
-}
-
-
 
 .add-habit-v2__divider {
     flex: 0 0 auto;

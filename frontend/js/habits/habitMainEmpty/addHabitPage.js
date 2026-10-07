@@ -1710,50 +1710,101 @@ function rerenderAddHabitPageWithoutScrollJump(
     initAddHabitPageEvents(eventOptions)
 }
 
-const suggestionHighlightTimers =
+const suggestionHighlightAnimations =
     new WeakMap()
 
 
 function flashHabitSuggestion(
     button
 ) {
-    const previousTimer =
-        suggestionHighlightTimers.get(
+    const previousAnimation =
+        suggestionHighlightAnimations.get(
             button
         )
 
-    if (previousTimer) {
-        window.clearTimeout(
-            previousTimer
-        )
+    if (previousAnimation) {
+        previousAnimation.cancel()
     }
 
-    button.classList.remove(
-        "is-highlighted"
-    )
+    const buttonStyles =
+        window.getComputedStyle(
+            button
+        )
 
-    // Перезапускаем подсветку даже при быстром повторном нажатии.
-    void button.offsetWidth
+    const rootStyles =
+        window.getComputedStyle(
+            document.documentElement
+        )
 
-    button.classList.add(
-        "is-highlighted"
-    )
+    const startColor =
+        buttonStyles.color
 
-    const timer =
-        window.setTimeout(() => {
-            button.classList.remove(
-                "is-highlighted"
+    const startOpacity =
+        Number.parseFloat(
+            buttonStyles.opacity
+        ) || 0.62
+
+    const highlightColor =
+        rootStyles
+            .getPropertyValue(
+                "--app-text-primary"
             )
+            .trim() ||
+        startColor
 
-            suggestionHighlightTimers.delete(
-                button
-            )
-        }, 300)
+    const animation =
+        button.animate(
+            [
+                {
+                    color:
+                        startColor,
+                    opacity:
+                        startOpacity,
+                    offset: 0,
+                    easing:
+                        "cubic-bezier(0.2, 0.8, 0.3, 1)"
+                },
+                {
+                    color:
+                        highlightColor,
+                    opacity:
+                        0.90,
+                    offset: 0.32,
+                    easing:
+                        "cubic-bezier(0.22, 1, 0.36, 1)"
+                },
+                {
+                    color:
+                        startColor,
+                    opacity:
+                        startOpacity,
+                    offset: 1
+                }
+            ],
+            {
+                duration: 340,
+                fill: "none"
+            }
+        )
 
-    suggestionHighlightTimers.set(
+    suggestionHighlightAnimations.set(
         button,
-        timer
+        animation
     )
+
+    animation.finished
+        .catch(() => {})
+        .finally(() => {
+            if (
+                suggestionHighlightAnimations.get(
+                    button
+                ) === animation
+            ) {
+                suggestionHighlightAnimations.delete(
+                    button
+                )
+            }
+        })
 }
 
 
