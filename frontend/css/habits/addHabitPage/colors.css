@@ -153,29 +153,18 @@
     position: absolute;
     z-index: 2;
 
-    top: 7px;
-    right: 7px;
+    top: 8px;
+    right: 8px;
 
-    width: 6px;
-    height: 5px;
+    width: 7px;
+    height: 6px;
 
-    border-radius: 1.6px;
+    border-radius: 1.8px;
 
-    background:
-        color-mix(
-            in srgb,
-            var(--app-text-secondary) 38%,
-            white 62%
-        );
+    background: currentColor;
+    color: #fff;
 
-    color:
-        color-mix(
-            in srgb,
-            var(--app-text-secondary) 38%,
-            white 62%
-        );
-
-    opacity: 0.82;
+    opacity: 0.60;
 
     pointer-events: none;
 }
@@ -187,10 +176,10 @@
     position: absolute;
 
     left: 1px;
-    top: -4px;
+    top: -5px;
 
-    width: 4px;
-    height: 4px;
+    width: 5px;
+    height: 5px;
 
     box-sizing: border-box;
 
@@ -200,7 +189,7 @@
     border-bottom: 0;
 
     border-radius:
-        3px 3px 0 0;
+        3.5px 3.5px 0 0;
 }
 
 @media (max-width: 380px) {
