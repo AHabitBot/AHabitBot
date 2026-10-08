@@ -156,25 +156,51 @@
     top: 7px;
     right: 7px;
 
+    width: 6px;
+    height: 5px;
+
+    border-radius: 1.6px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--app-text-secondary) 38%,
+            white 62%
+        );
+
     color:
         color-mix(
             in srgb,
-            var(--app-text-secondary) 45%,
-            white 55%
+            var(--app-text-secondary) 38%,
+            white 62%
         );
 
-    opacity: 1;
-
-    font-size: 8px;
-    line-height: 1;
-
-    font-variation-settings:
-        "FILL" 1,
-        "wght" 500,
-        "GRAD" 0,
-        "opsz" 20;
+    opacity: 0.82;
 
     pointer-events: none;
+}
+
+
+.add-habit-v2__lock::before {
+    content: "";
+
+    position: absolute;
+
+    left: 1px;
+    top: -4px;
+
+    width: 4px;
+    height: 4px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid currentColor;
+
+    border-bottom: 0;
+
+    border-radius:
+        3px 3px 0 0;
 }
 
 @media (max-width: 380px) {

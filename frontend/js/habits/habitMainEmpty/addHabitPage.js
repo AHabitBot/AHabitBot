@@ -512,11 +512,9 @@ export function renderAddHabitPage() {
                             aria-label="${t("habits.addHabit.color.orangePremium")}"
                         >
                             <span
-                                class="material-symbols-rounded add-habit-v2__lock"
+                                class="add-habit-v2__lock"
                                 aria-hidden="true"
-                            >
-                                lock
-                            </span>
+                            ></span>
                         </button>
 
                         <!-- 5. Доступен -->
@@ -550,11 +548,9 @@ export function renderAddHabitPage() {
                             aria-label="${t("habits.addHabit.color.cyanPremium")}"
                         >
                             <span
-                                class="material-symbols-rounded add-habit-v2__lock"
+                                class="add-habit-v2__lock"
                                 aria-hidden="true"
-                            >
-                                lock
-                            </span>
+                            ></span>
                         </button>
 
                         <!-- 8. Доступен -->
@@ -578,11 +574,9 @@ export function renderAddHabitPage() {
                             aria-label="${t("habits.addHabit.color.pinkPremium")}"
                         >
                             <span
-                                class="material-symbols-rounded add-habit-v2__lock"
+                                class="add-habit-v2__lock"
                                 aria-hidden="true"
-                            >
-                                lock
-                            </span>
+                            ></span>
                         </button>
 
                         <!-- 10. Доступен -->
@@ -606,11 +600,9 @@ export function renderAddHabitPage() {
                             aria-label="${t("habits.addHabit.color.yellowPremium")}"
                         >
                             <span
-                                class="material-symbols-rounded add-habit-v2__lock"
+                                class="add-habit-v2__lock"
                                 aria-hidden="true"
-                            >
-                                lock
-                            </span>
+                            ></span>
                         </button>
 
                     </div>
