@@ -49,6 +49,7 @@ export default Object.freeze({
 
     "habits.addHabit.size.label": "Kartengröße",
     "habits.addHabit.size.large.title": "Groß",
+    "habits.addHabit.size.small.title": "Klein",
     "habits.addHabit.size.large.description": "Ideal für ausführliche Beschreibungen<br>und Motivation",
 
     "habits.addHabit.error.save": "Gewohnheit konnte nicht gespeichert werden",

@@ -49,6 +49,7 @@ export default Object.freeze({
 
     "habits.addHabit.size.label": "Размер карточки",
     "habits.addHabit.size.large.title": "Большая",
+    "habits.addHabit.size.small.title": "Маленькая",
     "habits.addHabit.size.large.description": "Подходит для подробного описания<br>и мотивации",
 
     "habits.addHabit.error.save": "Не удалось сохранить привычку",

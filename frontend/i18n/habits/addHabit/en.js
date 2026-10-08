@@ -49,6 +49,7 @@ export default Object.freeze({
 
     "habits.addHabit.size.label": "Card size",
     "habits.addHabit.size.large.title": "Large",
+    "habits.addHabit.size.small.title": "Small",
     "habits.addHabit.size.large.description": "Best for detailed descriptions<br>and motivation",
 
     "habits.addHabit.error.save": "Could not save habit",

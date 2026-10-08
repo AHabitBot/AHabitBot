@@ -5,10 +5,16 @@
 .habits-v2-list__cards {
     width: 100%;
 
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-    gap: 14px;
+    grid-auto-flow: row;
+
+    gap: 14px 12px;
 }
 
 
@@ -630,16 +636,163 @@
    ========================================================= */
 
 .habit-card--large {
+    grid-column: 1 / -1;
+
     min-height: 168px;
 }
 
 
+/*
+ * Small — та же самая карточка и тот же DOM.
+ * Меняется только геометрия: одна колонка списка вместо двух.
+ */
 .habit-card--small {
-    min-height: 138px;
+    grid-column: span 1;
 
-    padding-top: 15px;
+    min-width: 0;
+    min-height: 168px;
 
-    padding-bottom: 14px;
+    grid-template-columns:
+        minmax(0, 1fr)
+        36px;
+
+    grid-template-rows:
+        38px
+        minmax(46px, 1fr)
+        auto;
+
+    column-gap: 8px;
+    row-gap: 4px;
+
+    padding:
+        13px
+        12px
+        13px;
+
+    border-radius: 23px;
+}
+
+
+.habit-card--small .habit-card__icon {
+    width: 30px;
+    height: 30px;
+
+    font-size: 20px;
+}
+
+.habit-card--small .habit-card__icon.is-symbol {
+    font-size: 26px;
+}
+
+
+.habit-card--small .habit-card__check {
+    width: 36px;
+    height: 36px;
+
+    font-size: 21px;
+}
+
+
+.habit-card--small .habit-card__content {
+    padding:
+        2px
+        0
+        3px;
+}
+
+
+.habit-card--small .habit-card__name {
+    font-size: 17px;
+    line-height: 1.16;
+}
+
+
+.habit-card--small .habit-card__description {
+    margin-top: 4px;
+
+    font-size: 13px;
+}
+
+
+.habit-card--small .habit-card__footer {
+    gap: 7px;
+
+    margin-top: 5px;
+}
+
+
+/* Small: те же 7 progress items становятся квадратами. */
+.habit-card--small .habit-card__progress {
+    width: auto;
+    max-width: none;
+
+    flex: 0 0 auto;
+
+    grid-template-columns:
+        repeat(7, 8px);
+
+    gap: 4px;
+}
+
+
+.habit-card--small .habit-card__progress-item {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 2.5px;
+}
+
+
+.habit-card--small .habit-card__progress-item::after {
+    background: var(--habit-ref-progress-filled);
+
+    transform: scaleX(0);
+}
+
+
+.habit-card--small .habit-card__streak {
+    gap: 3px;
+
+    font-size: 14px;
+}
+
+
+.habit-card--small .habit-card__streak-icon {
+    font-size: 15px;
+}
+
+
+.habit-card--small .habit-card__xp-reward {
+    top: 13px;
+    right: 54px;
+
+    font-size: 13px;
+}
+
+
+/* Shared habit остаётся тем же компонентом — только компактнее. */
+.habit-card--small .habit-card__people {
+    min-width: 31px;
+    height: 31px;
+}
+
+.habit-card--small .habit-card__person {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+}
+
+.habit-card--small .habit-card__person-wrap {
+    width: 30px;
+    min-width: 30px;
+    margin-left: -8px;
+}
+
+.habit-card--small .habit-card__person-check {
+    width: 13px;
+    height: 13px;
+
+    font-size: 8px;
 }
 
 /* Совместная привычка: участники вместо emoji */

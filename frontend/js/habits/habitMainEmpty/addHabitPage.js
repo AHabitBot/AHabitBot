@@ -91,6 +91,10 @@ export function renderAddHabitPage() {
             )
         )
 
+    const selectedHabitSize =
+        getHabitDraftValue("size") ||
+        "large"
+
 
     /* =====================================================
        РАЗМЕТКА
@@ -634,33 +638,55 @@ export function renderAddHabitPage() {
                         ${t("habits.addHabit.size.label")}
                     </div>
 
-                    <button
-                        class="add-habit-v2__size-card is-selected"
-                        type="button"
-                        data-habit-size="large"
-                        aria-pressed="true"
+                    <div
+                        class="add-habit-v2__size-options"
+                        role="group"
+                        aria-label="${t("habits.addHabit.size.label")}"
                     >
 
-                        <div
-                            class="add-habit-v2__size-icon"
-                            aria-hidden="true"
+                        <button
+                            class="add-habit-v2__size-card add-habit-v2__size-card--large ${selectedHabitSize === "large" ? "is-selected" : ""}"
+                            type="button"
+                            data-habit-size="large"
+                            aria-pressed="${String(selectedHabitSize === "large")}"
+                            aria-label="${t("habits.addHabit.size.large.title")}"
                         >
-                            ⛶
-                        </div>
+                            <span
+                                class="add-habit-v2__size-preview-icon"
+                                aria-hidden="true"
+                            ></span>
 
-                        <div class="add-habit-v2__size-copy">
+                            <span
+                                class="add-habit-v2__size-preview-lines"
+                                aria-hidden="true"
+                            >
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </button>
 
-                            <div class="add-habit-v2__size-title">
-                                ${t("habits.addHabit.size.large.title")}
-                            </div>
+                        <button
+                            class="add-habit-v2__size-card add-habit-v2__size-card--small ${selectedHabitSize === "small" ? "is-selected" : ""}"
+                            type="button"
+                            data-habit-size="small"
+                            aria-pressed="${String(selectedHabitSize === "small")}"
+                            aria-label="${t("habits.addHabit.size.small.title")}"
+                        >
+                            <span
+                                class="add-habit-v2__size-preview-icon"
+                                aria-hidden="true"
+                            ></span>
 
-                            <div class="add-habit-v2__size-description">
-                                ${t("habits.addHabit.size.large.description")}
-                            </div>
+                            <span
+                                class="add-habit-v2__size-preview-lines"
+                                aria-hidden="true"
+                            >
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </button>
 
-                        </div>
-
-                    </button>
+                    </div>
 
                 </section>
 

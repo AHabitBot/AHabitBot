@@ -162,6 +162,88 @@
     .habit-card__streak-icon {
         font-size: 17px;
     }
+
+    /* Small сохраняет компактную геометрию даже на узком экране. */
+    .habit-card--small {
+        min-height: 158px;
+
+        padding:
+            12px
+            10px
+            12px;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            34px;
+
+        grid-template-rows:
+            36px
+            minmax(44px, 1fr)
+            auto;
+
+        column-gap: 7px;
+    }
+
+    .habit-card--small .habit-card__icon {
+        width: 29px;
+        height: 29px;
+
+        font-size: 19px;
+    }
+
+    .habit-card--small .habit-card__icon.is-symbol {
+        font-size: 25px;
+    }
+
+    .habit-card--small .habit-card__check {
+        width: 34px;
+        height: 34px;
+
+        font-size: 20px;
+    }
+
+    .habit-card--small .habit-card__name {
+        font-size: 16px;
+    }
+
+    .habit-card--small .habit-card__description {
+        font-size: 12px;
+    }
+
+    .habit-card--small .habit-card__footer {
+        gap: 5px;
+    }
+
+    .habit-card--small .habit-card__progress {
+        grid-template-columns:
+            repeat(7, 7px);
+
+        gap: 3px;
+    }
+
+    .habit-card--small .habit-card__progress-item {
+        width: 7px;
+        height: 7px;
+
+        border-radius: 2px;
+    }
+
+    .habit-card--small .habit-card__streak {
+        gap: 2px;
+
+        font-size: 13px;
+    }
+
+    .habit-card--small .habit-card__streak-icon {
+        font-size: 14px;
+    }
+
+    .habit-card--small .habit-card__xp-reward {
+        top: 12px;
+        right: 49px;
+
+        font-size: 12px;
+    }
 }
 
 
@@ -197,6 +279,10 @@
 
     .habit-card,
     .habit-card--large {
+        min-height: 158px;
+    }
+
+    .habit-card--small {
         min-height: 158px;
     }
 }
