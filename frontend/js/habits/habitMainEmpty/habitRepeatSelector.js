@@ -4,11 +4,27 @@ import {
 } from "./habitsDraft.js"
 
 import {
+    getLanguage,
     t
 } from "../../../i18n/core/i18n.js"
 
 
 const WEEKDAYS = [1, 2, 3, 4, 5, 6, 7]
+
+
+function getChallengeValueText(
+    count
+) {
+    const pluralCategory =
+        new Intl.PluralRules(
+            getLanguage()
+        ).select(count)
+
+    return t(
+        `habits.addHabit.repeat.challengeValue.${pluralCategory}`,
+        { count }
+    )
+}
 
 
 export function renderHabitRepeatSelector(
@@ -85,9 +101,9 @@ export function renderHabitRepeatSelector(
 
     const challengeCounter = `
         <div class="habit-repeat__counter">
-            <span>${t("habits.addHabit.repeat.challengeValue", {
-                count: draft.challengeTarget
-            })}</span>
+            <span data-repeat-challenge-value>${getChallengeValueText(
+                draft.challengeTarget
+            )}</span>
             <button
                 type="button"
                 data-repeat-step="challenge:-1"
@@ -282,8 +298,7 @@ function selectRepeatTypeLocally(
 
 export function bindHabitRepeatSelectorEvents({
     root,
-    savePageDraft,
-    rerenderPage
+    savePageDraft
 }) {
     root.querySelectorAll(
         "[data-repeat-type]"
@@ -356,28 +371,59 @@ export function bindHabitRepeatSelectorEvents({
         "[data-repeat-step]"
     ).forEach((button) => {
         button.addEventListener("click", () => {
-            savePageDraft()
-
             const [kind, stepValue] =
                 button.dataset.repeatStep.split(":")
 
-            const step = Number(stepValue)
-            const draft = getHabitDraft()
-
-            if (kind === "challenge") {
-                const minimum =
-                    draft.originalChallengeTarget || 1
-
-                setHabitDraftValue(
-                    "challengeTarget",
-                    Math.max(
-                        minimum,
-                        draft.challengeTarget + step
-                    )
-                )
+            if (kind !== "challenge") {
+                return
             }
 
-            rerenderPage()
+            savePageDraft()
+
+            const step = Number(stepValue)
+            const draft = getHabitDraft()
+            const minimum =
+                draft.originalChallengeTarget || 1
+
+            const nextTarget =
+                Math.max(
+                    minimum,
+                    draft.challengeTarget + step
+                )
+
+            if (
+                nextTarget ===
+                draft.challengeTarget
+            ) {
+                return
+            }
+
+            setHabitDraftValue(
+                "challengeTarget",
+                nextTarget
+            )
+
+            const valueElement =
+                root.querySelector(
+                    "[data-repeat-challenge-value]"
+                )
+
+            if (valueElement) {
+                valueElement.textContent =
+                    getChallengeValueText(
+                        nextTarget
+                    )
+            }
+
+            const decreaseButton =
+                root.querySelector(
+                    '[data-repeat-step="challenge:-1"]'
+                )
+
+            if (decreaseButton) {
+                decreaseButton.disabled =
+                    nextTarget <= minimum
+            }
         })
     })
 }
