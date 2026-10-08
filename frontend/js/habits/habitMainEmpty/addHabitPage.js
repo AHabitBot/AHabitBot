@@ -605,33 +605,6 @@ export function renderAddHabitPage() {
 
 
                 <!-- Размер карточки -->
-                <section class="add-habit-v2__section habit-repeat">
-                    <div class="add-habit-v2__section-label">${t("habits.addHabit.repeat.label")}</div>
-                    ${renderHabitRepeatSelector(getHabitDraft(), isEditing)}
-                </section>
-                <!-- Напоминание конкретной привычки -->
-                <section class="add-habit-v2__section habit-reminder">
-                    <div class="habit-reminder__row">
-                        <button
-                            class="habit-reminder__label-button"
-                            type="button"
-                            data-action="open-habit-reminder"
-                        >
-                            <span class="habit-reminder__emoji" aria-hidden="true">🔔</span>
-                            <span>${t("habits.addHabit.reminder.label")}</span>
-                        </button>
-
-                        <button
-                            class="habit-reminder__switch-button ${getHabitDraftValue("reminderTime") ? "is-enabled" : ""}"
-                            type="button"
-                            data-action="toggle-habit-reminder"
-                            aria-pressed="${getHabitDraftValue("reminderTime") ? "true" : "false"}"
-                            aria-label="${t("habits.addHabit.reminder.label")}"
-                        ></button>
-                    </div>
-                </section>
-
-                <!-- Размер карточки -->
                 <section class="add-habit-v2__section">
 
                     <div class="add-habit-v2__section-label">
@@ -688,6 +661,34 @@ export function renderAddHabitPage() {
 
                     </div>
 
+                </section>
+
+
+                <!-- Повторение -->
+                <section class="add-habit-v2__section habit-repeat">
+                    <div class="add-habit-v2__section-label">${t("habits.addHabit.repeat.label")}</div>
+                    ${renderHabitRepeatSelector(getHabitDraft(), isEditing)}
+                </section>
+                <!-- Напоминание конкретной привычки -->
+                <section class="add-habit-v2__section habit-reminder">
+                    <div class="habit-reminder__row">
+                        <button
+                            class="habit-reminder__label-button"
+                            type="button"
+                            data-action="open-habit-reminder"
+                        >
+                            <span class="habit-reminder__emoji" aria-hidden="true">🔔</span>
+                            <span>${t("habits.addHabit.reminder.label")}</span>
+                        </button>
+
+                        <button
+                            class="habit-reminder__switch-button ${getHabitDraftValue("reminderTime") ? "is-enabled" : ""}"
+                            type="button"
+                            data-action="toggle-habit-reminder"
+                            aria-pressed="${getHabitDraftValue("reminderTime") ? "true" : "false"}"
+                            aria-label="${t("habits.addHabit.reminder.label")}"
+                        ></button>
+                    </div>
                 </section>
 
             </div>

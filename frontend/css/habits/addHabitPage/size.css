@@ -28,27 +28,19 @@
 
     overflow: hidden;
 
-    border:
-        1px solid
-        color-mix(
-            in srgb,
-            var(--app-text-secondary) 16%,
-            var(--app-border) 84%
-        );
-
+    border: 0;
     border-radius: 22px;
 
     outline: none;
 
-    background:
+    background-color:
         color-mix(
             in srgb,
             var(--app-surface) 96%,
             white 4%
         );
 
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    box-shadow: none;
 
     appearance: none;
     -webkit-appearance: none;
@@ -60,29 +52,72 @@
 
     transition:
         transform 110ms ease,
-        border-color 180ms ease,
-        background-color 180ms ease,
-        box-shadow 180ms ease;
+        background-color 190ms ease;
+}
+
+
+/*
+ * Тот же мягкий верхний кант, что у поля "Название"
+ * и карточек блока "Повторение".
+ */
+.add-habit-v2__size-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    border-radius: inherit;
+    padding: 1px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.060) 0%,
+            rgba(255, 255, 255, 0.032) 24%,
+            rgba(255, 255, 255, 0.012) 48%,
+            rgba(255, 255, 255, 0.002) 68%,
+            rgba(255, 255, 255, 0) 100%
+        );
+
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    -webkit-mask-composite: xor;
+
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    mask-composite: exclude;
+
+    pointer-events: none;
 }
 
 
 .add-habit-v2__size-card.is-selected {
-    border-color:
-        color-mix(
-            in srgb,
-            var(--app-text-secondary) 38%,
-            var(--app-border) 62%
-        );
-
-    background:
+    background-color:
         color-mix(
             in srgb,
             var(--app-surface) 82%,
             white 18%
         );
 
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.065);
+    box-shadow: none;
+}
+
+
+.add-habit-v2__size-card.is-selected::before {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.078) 0%,
+            rgba(255, 255, 255, 0.040) 24%,
+            rgba(255, 255, 255, 0.014) 48%,
+            rgba(255, 255, 255, 0.003) 68%,
+            rgba(255, 255, 255, 0) 100%
+        );
 }
 
 
@@ -95,6 +130,7 @@
 /* Кружок-иконка внутри preview. */
 .add-habit-v2__size-preview-icon {
     position: absolute;
+    z-index: 1;
     top: 20px;
     left: 20px;
 
@@ -115,6 +151,7 @@
 /* Две декоративные строки внизу — как на референсе. */
 .add-habit-v2__size-preview-lines {
     position: absolute;
+    z-index: 1;
     left: 20px;
     right: 20px;
     bottom: 22px;
