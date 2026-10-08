@@ -721,39 +721,36 @@
 }
 
 
-/* Small: те же 7 progress items становятся квадратами. */
+/*
+ * Small: streak остаётся только в подробностях.
+ * Все семь дней занимают всю ширину footer.
+ * Состояние completed использует тот же accent-fill,
+ * что и большая карточка — отдельной логики нет.
+ */
 .habit-card--small .habit-card__progress {
-    width: auto;
+    width: 100%;
     max-width: none;
 
-    flex: 0 0 auto;
+    flex: 1 1 100%;
 
     grid-template-columns:
-        repeat(7, 8px);
+        repeat(7, minmax(0, 1fr));
 
-    gap: 4px;
+    gap: 5px;
 }
 
 
 .habit-card--small .habit-card__progress-item {
-    width: 8px;
-    height: 8px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
 
-    border-radius: 2.5px;
-}
-
-
-.habit-card--small .habit-card__progress-item::after {
-    background: var(--habit-ref-progress-filled);
-
-    transform: scaleX(0);
+    border-radius: 3px;
 }
 
 
 .habit-card--small .habit-card__streak {
-    gap: 3px;
-
-    font-size: 14px;
+    display: none;
 }
 
 
