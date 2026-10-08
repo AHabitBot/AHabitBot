@@ -527,16 +527,6 @@ export function renderAddHabitPage() {
                             aria-label="${t("habits.addHabit.color.red")}"
                         ></button>
 
-                        <!-- 6. Доступен -->
-                        <button
-                            class="add-habit-v2__color"
-                            type="button"
-                            data-habit-color="graphite"
-                            role="radio"
-                            aria-checked="false"
-                            aria-label="${t("habits.addHabit.color.graphite")}"
-                        ></button>
-
                         <!-- 7. Закрыт -->
                         <button
                             class="add-habit-v2__color is-locked"
