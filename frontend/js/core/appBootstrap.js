@@ -265,7 +265,7 @@ export async function bootstrapApp({ onProgress } = {}) {
         typeof data !== "object" ||
         !data.habits ||
         !data.profile ||
-        !data.leaderboard ||
+        !data.weekly_leaderboard ||
         !data.stats
     ) {
         throw new Error(
