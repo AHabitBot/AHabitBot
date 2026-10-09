@@ -13,7 +13,7 @@ import {
 } from "../habits/habitsStore.js"
 
 import {
-    buildSeasonLeaderboardResource
+    buildWeeklyLeaderboardResource
 } from "../leaderboard/season/seasonLeaderboard.js"
 
 import {
@@ -176,21 +176,13 @@ function hydrateResources(data) {
         data.stats.year
     )
 
-    setResource(
-        RESOURCE_KEYS.STATS_SEASONS,
-        Array.isArray(data.stats.seasons)
-            ? data.stats.seasons
-            : []
-    )
-
-
-    /*
+/*
      * Лидерборды
      */
     setResource(
-        RESOURCE_KEYS.LEADERBOARD_SEASON,
-        buildSeasonLeaderboardResource(
-            data.leaderboard
+        RESOURCE_KEYS.LEADERBOARD_WEEK,
+        buildWeeklyLeaderboardResource(
+            data.weekly_leaderboard
         )
     )
 

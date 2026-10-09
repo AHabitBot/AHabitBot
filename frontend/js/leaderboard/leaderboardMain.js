@@ -10,15 +10,11 @@ import {
 } from "./leaderboardComponents.js";
 
 import {
-    loadSeasonLeaderboard,
-    renderSeasonLeaderboard
+    loadWeeklyLeaderboard,
+    renderWeeklyLeaderboard
 }
 from "./season/seasonLeaderboard.js";
 
-import {
-    renderFinishedSeason,
-    bindFinishedSeasonEvents
-} from "./season/seasonFinished.js";
 
 import {
     t
@@ -113,7 +109,7 @@ async function renderActiveLeaderboardContent() {
     }
 
     resetLeaderboardScroll();
-    await renderSeasonLeaderboardContent({
+    await renderWeeklyLeaderboardContent({
         content,
         currentUserSlot,
         renderId: currentRenderId
@@ -125,14 +121,14 @@ async function renderActiveLeaderboardContent() {
    СЕЗОННЫЙ РЕЙТИНГ
    ========================================================= */
 
-async function renderSeasonLeaderboardContent({
+async function renderWeeklyLeaderboardContent({
     content,
     currentUserSlot,
     renderId
 }) {
     if (
         !hasResource(
-            RESOURCE_KEYS.LEADERBOARD_SEASON
+            RESOURCE_KEYS.LEADERBOARD_WEEK
         )
     ) {
         setLeaderboardLoading({
@@ -143,7 +139,7 @@ async function renderSeasonLeaderboardContent({
 
     try {
         const result =
-            await loadSeasonLeaderboard();
+            await loadWeeklyLeaderboard();
 
         if (
             !isRenderCurrent(renderId)
@@ -151,8 +147,7 @@ async function renderSeasonLeaderboardContent({
             return;
         }
 
-        const isFinished =
-            result?.season?.status === "finished";
+        const isFinished = false;
 
         const isEmptySeason =
             !isFinished
@@ -162,13 +157,13 @@ async function renderSeasonLeaderboardContent({
         setEmptySeasonLayout(isEmptySeason);
 
         content.innerHTML = isFinished
-            ? renderFinishedSeason(result)
-            : renderSeasonLeaderboard(result.users, result.currentUser);
+            ? renderWeeklyLeaderboard(result.users, result.currentUser)
+            : renderWeeklyLeaderboard(result.users, result.currentUser);
 
         if (isEmptySeason) {
             hideLeagueHeading();
         } else {
-            renderLeagueHeading(result.season);
+            hideLeagueHeading();
         }
 
         if (currentUserSlot) {
@@ -178,9 +173,6 @@ async function renderSeasonLeaderboardContent({
                     : renderCurrentUser(result.currentUser);
         }
 
-        if (isFinished) {
-            bindFinishedSeasonEvents(content);
-        }
 
     } catch (error) {
         if (

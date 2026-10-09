@@ -3,7 +3,7 @@ import {
 } from "../../../i18n/core/i18n.js";
 
 import {
-    fetchSeasonLeaderboard
+    fetchWeeklyLeaderboard
 } from "../leaderboardApi.js";
 
 import {
@@ -26,8 +26,8 @@ const DEFAULT_AVATAR_KEY =
    ========================================================= */
 
 registerResource(
-    RESOURCE_KEYS.LEADERBOARD_SEASON,
-    fetchAndBuildSeasonLeaderboard
+    RESOURCE_KEYS.LEADERBOARD_WEEK,
+    fetchAndBuildWeeklyLeaderboard
 );
 
 
@@ -35,13 +35,13 @@ registerResource(
    ЗАГРУЗИТЬ СЕЗОННЫЙ РЕЙТИНГ
    ========================================================= */
 
-export function loadSeasonLeaderboard(
+export function loadWeeklyLeaderboard(
     {
         refresh = false
     } = {}
 ) {
     return getResource(
-        RESOURCE_KEYS.LEADERBOARD_SEASON,
+        RESOURCE_KEYS.LEADERBOARD_WEEK,
         {
             force: refresh
         }
@@ -53,15 +53,15 @@ export function loadSeasonLeaderboard(
    ПОЛУЧИТЬ И СОБРАТЬ СЕЗОННЫЙ РЕЙТИНГ
    ========================================================= */
 
-async function fetchAndBuildSeasonLeaderboard() {
+async function fetchAndBuildWeeklyLeaderboard() {
     const response =
-        await fetchSeasonLeaderboard();
+        await fetchWeeklyLeaderboard();
 
-    return buildSeasonLeaderboardResource(response);
+    return buildWeeklyLeaderboardResource(response);
 }
 
 
-export function buildSeasonLeaderboardResource(response) {
+export function buildWeeklyLeaderboardResource(response) {
     const leaderboardUsers =
         Array.isArray(response?.users)
             ? response.users.map(
@@ -75,19 +75,19 @@ export function buildSeasonLeaderboardResource(response) {
         );
 
     const season =
-        normalizeSeason(
-            response?.season
+        normalizeWeek(
+            response?.week
         );
 
     return {
         users: leaderboardUsers,
         currentUser,
-        season,
+        week: season,
         top3: Array.isArray(response?.top3)
             ? response.top3.map(normalizeLeaderboardUser)
             : [],
         summary: response?.summary || {},
-        nextSeason: normalizeSeason(response?.next_season)
+        nextSeason: null
     };
 }
 
@@ -96,7 +96,7 @@ export function buildSeasonLeaderboardResource(response) {
    ОТРЕНДЕРИТЬ СЕЗОННЫЙ РЕЙТИНГ
    ========================================================= */
 
-export function renderSeasonLeaderboard(
+export function renderWeeklyLeaderboard(
     users = [],
     currentUser = null
 ) {
@@ -218,7 +218,7 @@ function normalizeLeaderboardUser(
 
         xp:
             normalizeNonNegativeInteger(
-                getSeasonXp(user)
+                getWeeklyXp(user)
             ),
 
         streak:
@@ -238,14 +238,14 @@ function normalizeLeaderboardUser(
    XP СЕЗОНА
    ========================================================= */
 
-function getSeasonXp(
+function getWeeklyXp(
     user
 ) {
     if (
-        user?.season_xp !==
+        user?.weekly_xp !==
         undefined
     ) {
-        return user.season_xp;
+        return user.weekly_xp;
     }
 
     if (
@@ -287,7 +287,7 @@ function normalizeCurrentUser(
 
         xp:
             normalizeNonNegativeInteger(
-                getSeasonXp(user)
+                getWeeklyXp(user)
             ),
 
         streak:
@@ -307,7 +307,7 @@ function normalizeCurrentUser(
    СЕЗОН
    ========================================================= */
 
-function normalizeSeason(
+function normalizeWeek(
     season
 ) {
     if (!season) {
@@ -335,7 +335,7 @@ function normalizeSeason(
 
     return {
         number,
-        status: String(season.status || "active"),
+        status: "active",
         startDate,
         rankingEndDate: normalizeDate(season.ranking_end_date ?? season.rankingEndDate),
         endDate
@@ -424,7 +424,7 @@ function normalizePositiveInteger(
         !Number.isFinite(number)
         || number < 1
     ) {
-        return 1;
+        return null;
     }
 
     return Math.floor(number);

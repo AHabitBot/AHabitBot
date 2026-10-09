@@ -25,7 +25,6 @@ from backend.services.achievements.achievements_service import (
 )
 
 from backend.services.stats import (
-    get_profile_season_history,
     get_profile_stats,
 )
 
@@ -219,18 +218,6 @@ async def read_profile_stats(
                 str(error),
         )
 
-# =========================================================
-# ИСТОРИЯ СЕЗОНОВ
-# =========================================================
-
-@router.get("/season-history")
-async def read_profile_season_history(
-    user: CurrentUser,
-):
-    return await get_profile_season_history(
-        user_id=user["id"],
-    )
-
 
 # =========================================================
 # ПУБЛИЧНЫЙ ИГРОВОЙ ПРОФИЛЬ
@@ -252,7 +239,3 @@ async def read_public_profile_stats(user_id: int, user: CurrentUser, period: str
     except ValueError as error:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error))
 
-
-@router.get("/public/{user_id}/season-history")
-async def read_public_profile_season_history(user_id: int, user: CurrentUser):
-    return await get_profile_season_history(user_id=user_id)

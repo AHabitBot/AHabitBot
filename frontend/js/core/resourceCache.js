@@ -18,9 +18,8 @@ export const RESOURCE_KEYS = Object.freeze({
     STATS_WEEK: "stats:week",
     STATS_MONTH: "stats:month",
     STATS_YEAR: "stats:year",
-    STATS_SEASONS: "stats:seasons",
 
-    LEADERBOARD_SEASON: "leaderboard:season",
+    LEADERBOARD_WEEK: "leaderboard:week",
 
     ACHIEVEMENTS: "achievements",
     REFERRAL: "referral",
@@ -203,7 +202,17 @@ export async function getResource(
         !force &&
         resource.hasData
     ) {
-        return resource.data
+        if (key === RESOURCE_KEYS.LEADERBOARD_WEEK) {
+            const endDate = resource.data?.week?.endDate
+                ?? resource.data?.week?.end_date;
+            // The API provides an ISO 8601 timestamp with Kyiv offset.
+            if (!endDate || !Number.isFinite(Date.parse(endDate))
+                || Date.now() >= Date.parse(endDate)) {
+                resource.hasData = false;
+                resource.data = null;
+            }
+        }
+        if (resource.hasData) return resource.data
     }
 
 

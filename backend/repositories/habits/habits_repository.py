@@ -1,3 +1,4 @@
+from backend.repositories.leaderboard.weekly_xp_repository import refresh_user_weekly_xp
 from datetime import date, datetime, timedelta
 import secrets
 from typing import Any
@@ -10,10 +11,6 @@ from backend.repositories.habits.shared_habits_repository import (
     get_friends_streak_state,
     update_friends_streak_for_users,
 )
-from backend.services.leaderboard.season_service import (
-    get_season_context,
-)
-
 from backend.services.habits.repeat_rules import (
     calculate_repeat_streak,
     calculate_user_streak_state,
@@ -1380,10 +1377,6 @@ async def set_habit_confirmation(
             ):
                 raise ValueError("Сегодня привычка не запланирована")
 
-            season_context = get_season_context()
-            season_number = season_context.number
-            season_starts_on = season_context.start_date
-            season_ends_on = season_context.ranking_end_date
 
             # -------------------------------------------------
             # Текущее подтверждение за сегодня.
@@ -1395,7 +1388,8 @@ async def set_habit_confirmation(
                     id,
                     is_confirmed,
                     xp_awarded,
-                    xp_amount
+                    xp_amount,
+                    xp_awarded_at
                 FROM habit_confirmations
                 WHERE habit_id = $1
                   AND confirmation_date = $2
@@ -1478,14 +1472,16 @@ async def set_habit_confirmation(
                             confirmation_date,
                             is_confirmed,
                             xp_awarded,
-                            xp_amount
+                            xp_amount,
+                            xp_awarded_at
                         )
                         VALUES (
                             $1,
                             $2,
                             TRUE,
                             $3,
-                            $4
+                            $4,
+                            CASE WHEN $3 THEN NOW() ELSE NULL END
                         )
 
                         ON CONFLICT (
@@ -1498,6 +1494,7 @@ async def set_habit_confirmation(
                                 EXCLUDED.xp_awarded,
                             xp_amount =
                                 EXCLUDED.xp_amount,
+                            xp_awarded_at = EXCLUDED.xp_awarded_at,
                             updated_at = NOW()
                         """,
                         habit_id,
@@ -1519,6 +1516,7 @@ async def set_habit_confirmation(
                             is_confirmed = FALSE,
                             xp_awarded = FALSE,
                             xp_amount = 0,
+                            xp_awarded_at = NULL,
                             updated_at = NOW()
                         WHERE id = $1
                         """,
@@ -1850,114 +1848,13 @@ async def set_habit_confirmation(
                 total_xp,
             )
 
-            # =================================================
-            # СЕЗОННЫЙ XP
-            #
-            # XP привычек текущего сезона
-            # +
-            # XP за рефералов текущего сезона
-            # +
-            # XP за достижения текущего сезона.
-            # =================================================
-
-            season_xp = await connection.fetchval(
-                """
-                SELECT
-                    (
-                        COALESCE(
-                            (
-                                SELECT
-                                    SUM(hc.xp_amount)
-
-                                FROM habit_confirmations AS hc
-
-                                INNER JOIN habits AS h
-                                    ON h.id = hc.habit_id
-
-                                WHERE h.user_id = $1
-                                  AND (hc.created_at AT TIME ZONE 'Europe/Kyiv')::DATE
-                                      BETWEEN $2 AND $3
-                                  AND hc.is_confirmed = TRUE
-                                  AND hc.xp_awarded = TRUE
-                            ),
-                            0
-                        )
-
-                        +
-
-                        COALESCE(
-                            (
-                                SELECT
-                                    SUM(r.xp_amount)
-
-                                FROM referrals AS r
-
-                                WHERE r.inviter_user_id = $1
-                                  AND r.xp_awarded = TRUE
-                                  AND (r.created_at AT TIME ZONE 'Europe/Kyiv')::DATE
-                                      BETWEEN $2 AND $3
-                            ),
-                            0
-                        )
-
-                        +
-
-                        COALESCE(
-                            (
-                                SELECT
-                                    SUM(ua.xp_amount)
-
-                                FROM user_achievements AS ua
-
-                                WHERE ua.user_id = $1
-                                  AND ua.xp_awarded = TRUE
-                                  AND (ua.earned_at AT TIME ZONE 'Europe/Kyiv')::DATE
-                                      BETWEEN $2 AND $3
-                            ),
-                            0
-                        )
-                    )::INTEGER
-                """,
-                user_id,
-                season_starts_on,
-                season_ends_on,
-            )
-
-            season_xp = int(
-                season_xp or 0
-            )
-
-            # =================================================
-            # ОБНОВЛЯЕМ USER_SEASON_STATS
-            # =================================================
-
-            if season_context.xp_active:
-                await connection.execute(
-                    """
-                    INSERT INTO user_season_stats (
-                        season_number,
-                        user_id,
-                        season_xp
-                    )
-                    VALUES (
-                        $1,
-                        $2,
-                        $3
-                    )
-
-                    ON CONFLICT (
-                        season_number,
-                        user_id
-                    )
-                    DO UPDATE SET
-                        season_xp =
-                            EXCLUDED.season_xp,
-
-                        updated_at = NOW()
-                    """,
-                    season_number,
-                    user_id,
-                    season_xp,
+            # Недельный рейтинг; общий XP уже обновлён выше.
+            await refresh_user_weekly_xp(connection, user_id)
+            # A cancellation must also update the week that received the award.
+            if (not is_confirmed and confirmation is not None
+                    and confirmation["xp_awarded"] and confirmation["xp_awarded_at"]):
+                await refresh_user_weekly_xp(
+                    connection, user_id, at=confirmation["xp_awarded_at"]
                 )
 
             # =================================================

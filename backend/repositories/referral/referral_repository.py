@@ -1,11 +1,7 @@
+from backend.repositories.leaderboard.weekly_xp_repository import refresh_user_weekly_xp
 import asyncpg
 
 from backend.database.database import get_connection
-from backend.services.leaderboard.season_service import (
-    get_season_context,
-)
-
-
 # ============================================================================
 # Создание реферальной связи
 # ============================================================================
@@ -20,7 +16,7 @@ async def create_referral(
 
     XP начисляется:
     - в общий user_stats.total_xp;
-    - в user_season_stats текущего сезона.
+    - в недельный рейтинг после запуска соревнования.
 
     Один invited_user_id может существовать
     в таблице referrals только один раз.
@@ -34,11 +30,9 @@ async def create_referral(
         return None
 
     # ------------------------------------------------------------------------
-    # Определяем текущий сезон по дате Europe/Kyiv.
+    # Недельный период определяется сервисом рейтинга.
     # ------------------------------------------------------------------------
 
-    season_context = get_season_context()
-    season_number = season_context.number
 
     async with get_connection() as connection:
         async with connection.transaction():
@@ -112,23 +106,7 @@ async def create_referral(
                 xp_amount,
             )
 
-            # ----------------------------------------------------------------
-            # Season XP начисляется только в активную часть сезона.
-            # В итоговую неделю global XP продолжает начисляться выше.
-            # ----------------------------------------------------------------
-
-            if season_context.xp_active:
-                await connection.execute(
-                    """
-                    INSERT INTO user_season_stats (season_number, user_id, season_xp)
-                    VALUES ($1, $2, $3)
-                    ON CONFLICT (season_number, user_id)
-                    DO UPDATE SET
-                        season_xp = user_season_stats.season_xp + EXCLUDED.season_xp,
-                        updated_at = NOW()
-                    """,
-                    season_number, inviter_user_id, xp_amount,
-                )
+            await refresh_user_weekly_xp(connection, inviter_user_id)
 
             return referral
 

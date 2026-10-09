@@ -3,7 +3,6 @@ import {
 } from "../profileComponents.js";
 
 import {
-    fetchProfileSeasonHistory,
     fetchProfileStats
 } from "./profileStatsApi.js";
 
@@ -72,12 +71,6 @@ PERIODS.forEach((period) => {
         () => fetchProfileStats(period),
     );
 });
-
-
-registerResource(
-    RESOURCE_KEYS.STATS_SEASONS,
-    () => fetchProfileSeasonHistory(),
-);
 
 
 async function getStatsData(
@@ -1438,7 +1431,6 @@ function renderSeasonHistory(history) {
 
 export function renderProfileStatsBody(
     data,
-    seasonHistory = [],
 ) {
     return `
         ${renderPeriodSwitcher(
@@ -1456,10 +1448,6 @@ export function renderProfileStatsBody(
         ${renderDynamics(
             data,
         )}
-
-        ${renderSeasonHistory(
-            seasonHistory,
-        )}
     `;
 }
 
@@ -1467,7 +1455,6 @@ export function renderProfileStatsBody(
 function renderStatsContent(
     root,
     data,
-    seasonHistory = [],
 ) {
     root.innerHTML = `
         <section class="profile-stats-page">
@@ -1479,7 +1466,6 @@ function renderStatsContent(
             <main class="profile-stats-body">
                 ${renderProfileStatsBody(
                     data,
-                    seasonHistory,
                 )}
             </main>
 
@@ -1505,17 +1491,7 @@ async function loadStatsPeriod(
 
     try {
 
-        const [
-            data,
-            seasonHistory,
-        ] = await Promise.all([
-            getStatsData(
-                period,
-            ),
-            getResource(
-                RESOURCE_KEYS.STATS_SEASONS,
-            ),
-        ]);
+        const data = await getStatsData(period);
 
         /*
          * Пользователь мог переключиться
@@ -1532,7 +1508,6 @@ async function loadStatsPeriod(
         renderStatsContent(
             root,
             data,
-            seasonHistory,
         );
 
     } catch (error) {
@@ -1604,20 +1579,8 @@ export function renderProfileStatsPage(
         );
 
     if (cached) {
-        const cachedSeasons =
-            peekResource(
-                RESOURCE_KEYS.STATS_SEASONS,
-            );
-
-        if (cachedSeasons) {
-            renderStatsContent(
-                root,
-                cached,
-                cachedSeasons,
-            );
-
-            return;
-        }
+        renderStatsContent(root, cached);
+        return;
     }
 
     renderLoading(

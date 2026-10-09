@@ -8,7 +8,6 @@ import {
 } from "./profileComponents.js";
 
 import {
-    fetchProfileSeasonHistory,
     fetchProfileStats
 } from "./stats/profileStatsApi.js";
 
@@ -42,10 +41,8 @@ function getUserCache(userId) {
             key,
             {
                 profile: null,
-                seasons: null,
                 stats: new Map(),
                 requests: new Map(),
-                seasonsRequest: null,
                 profileRequest: null
             }
         );
@@ -85,36 +82,6 @@ function loadProfile(
     return cache.profileRequest;
 }
 
-
-function loadSeasons(
-    userId,
-    cache
-) {
-    if (cache.seasons) {
-        return Promise.resolve(
-            cache.seasons
-        );
-    }
-
-    if (!cache.seasonsRequest) {
-        cache.seasonsRequest =
-            fetchProfileSeasonHistory(
-                userId
-            )
-                .then((seasons) => {
-                    cache.seasons =
-                        seasons;
-
-                    return seasons;
-                })
-                .finally(() => {
-                    cache.seasonsRequest =
-                        null;
-                });
-    }
-
-    return cache.seasonsRequest;
-}
 
 
 function loadStats(
@@ -213,8 +180,7 @@ function renderShell(
 
 function renderPublicStats(
     root,
-    data,
-    seasons
+    data
 ) {
     const statsRoot =
         root.querySelector(
@@ -227,8 +193,7 @@ function renderPublicStats(
 
     statsRoot.innerHTML =
         renderProfileStatsBody(
-            data,
-            seasons
+            data
         );
 }
 
@@ -283,8 +248,7 @@ function bindPeriods(
             if (cached) {
                 renderPublicStats(
                     root,
-                    cached,
-                    cache.seasons || []
+                    cached
                 );
 
                 return;
@@ -300,8 +264,7 @@ function bindPeriods(
 
                 renderPublicStats(
                     root,
-                    data,
-                    cache.seasons || []
+                    data
                 );
             } catch (error) {
                 console.error(
@@ -385,21 +348,7 @@ export async function openPublicProfilePage(
                 cache
             );
 
-        const seasonsPromise =
-            loadSeasons(
-                userId,
-                cache
-            );
-
-        const [
-            profile,
-            week,
-            seasons
-        ] = await Promise.all([
-            profilePromise,
-            weekPromise,
-            seasonsPromise
-        ]);
+        const [profile, week] = await Promise.all([profilePromise, weekPromise]);
 
         const cardRoot =
             root.querySelector(
@@ -418,8 +367,7 @@ export async function openPublicProfilePage(
 
         renderPublicStats(
             root,
-            week,
-            seasons
+            week
         );
 
         prefetchOtherPeriods(

@@ -301,6 +301,7 @@ CREATE TABLE IF NOT EXISTS habit_confirmations (
     is_confirmed BOOLEAN NOT NULL DEFAULT TRUE,
     xp_awarded BOOLEAN NOT NULL DEFAULT TRUE,
     xp_amount INTEGER NOT NULL DEFAULT 5 CHECK (xp_amount >= 0),
+    xp_awarded_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
@@ -316,6 +317,11 @@ CREATE TABLE IF NOT EXISTS habit_confirmations (
         CHECK (NOT xp_awarded OR is_confirmed)
 );
 
+
+-- Existing installations: retain the original award time as a legacy fallback.
+ALTER TABLE habit_confirmations ADD COLUMN IF NOT EXISTS xp_awarded_at TIMESTAMPTZ;
+UPDATE habit_confirmations SET xp_awarded_at = created_at
+WHERE xp_awarded_at IS NULL AND is_confirmed AND xp_awarded;
 
 CREATE TABLE IF NOT EXISTS referrals (
     id BIGSERIAL PRIMARY KEY,
@@ -434,120 +440,34 @@ CREATE TABLE IF NOT EXISTS user_achievements (
         )
 );
 
-CREATE TABLE IF NOT EXISTS user_season_stats (
-    season_number INTEGER NOT NULL,
-    user_id BIGINT NOT NULL,
-    season_xp INTEGER NOT NULL DEFAULT 0,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+-- Weekly competition ranking.
+CREATE TABLE IF NOT EXISTS user_weekly_xp (
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    week_start DATE NOT NULL,
+    weekly_xp INTEGER NOT NULL DEFAULT 0 CHECK (weekly_xp >= 0),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-    PRIMARY KEY (
-        season_number,
-        user_id
-    ),
-
-    CONSTRAINT fk_user_season_stats_user
-        FOREIGN KEY (user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE,
-
-    CONSTRAINT chk_season_number_positive
-        CHECK (season_number >= 1),
-
-    CONSTRAINT chk_season_xp_non_negative
-        CHECK (season_xp >= 0)
+    PRIMARY KEY (user_id, week_start)
 );
 
-CREATE INDEX IF NOT EXISTS
-idx_user_season_stats_leaderboard
-ON user_season_stats (
-    season_number,
-    season_xp DESC,
-    user_id ASC
+CREATE INDEX IF NOT EXISTS idx_user_weekly_xp_ranking
+    ON user_weekly_xp (week_start, weekly_xp DESC, user_id ASC);
+
+-- Launch timestamp is recorded exactly once when this initializer is first run.
+-- Earlier earned XP never enters the new competition.
+CREATE TABLE IF NOT EXISTS weekly_competition_config (
+    id SMALLINT PRIMARY KEY CHECK (id = 1),
+    launched_at TIMESTAMPTZ NOT NULL
 );
 
-
-CREATE TABLE IF NOT EXISTS season_results (
-    season_number INTEGER NOT NULL,
-    user_id BIGINT NOT NULL,
-    final_rank INTEGER NOT NULL,
-    final_xp INTEGER NOT NULL,
-    season_start_date DATE NOT NULL,
-    season_end_date DATE NOT NULL,
-    finalized_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-    PRIMARY KEY (
-        season_number,
-        user_id
-    ),
-
-    CONSTRAINT fk_season_results_user
-        FOREIGN KEY (user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE,
-
-    CONSTRAINT chk_season_results_number
-        CHECK (season_number >= 1),
-
-    CONSTRAINT chk_season_results_rank
-        CHECK (final_rank >= 1),
-
-    CONSTRAINT chk_season_results_xp
-        CHECK (final_xp > 0),
-
-    CONSTRAINT chk_season_results_dates
-        CHECK (season_end_date >= season_start_date)
-);
-
-CREATE UNIQUE INDEX IF NOT EXISTS
-idx_season_results_unique_rank
-ON season_results (
-    season_number,
-    final_rank
-);
-
-CREATE INDEX IF NOT EXISTS
-idx_season_results_user_history
-ON season_results (
-    user_id,
-    season_number DESC
-);
-
-
-CREATE TABLE IF NOT EXISTS leaderboard_rank_snapshots (
-    snapshot_date DATE NOT NULL,
-    leaderboard_type VARCHAR(16) NOT NULL,
-    season_number INTEGER NOT NULL DEFAULT 0,
-    user_id BIGINT NOT NULL,
-    rank INTEGER NOT NULL CHECK (rank >= 1),
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-    PRIMARY KEY (
-        snapshot_date,
-        leaderboard_type,
-        season_number,
-        user_id
-    ),
-
-    CONSTRAINT fk_leaderboard_rank_snapshots_user
-        FOREIGN KEY (user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE,
-
-    CONSTRAINT chk_leaderboard_rank_snapshot_type
-        CHECK (leaderboard_type = 'season'),
-
-    CONSTRAINT chk_leaderboard_rank_snapshot_season
-        CHECK (leaderboard_type = 'season' AND season_number >= 1)
-);
-
-CREATE INDEX IF NOT EXISTS idx_leaderboard_rank_snapshots_lookup
-    ON leaderboard_rank_snapshots (
-        leaderboard_type,
-        season_number,
-        snapshot_date DESC,
-        user_id
-    );
+-- First rollout only: clear trial scores from earlier weekly stages.
+-- Subsequent init runs do not reset competition data.
+WITH first_launch AS (
+    INSERT INTO weekly_competition_config (id, launched_at)
+    VALUES (1, clock_timestamp())
+    ON CONFLICT (id) DO NOTHING
+    RETURNING id
+)
+DELETE FROM user_weekly_xp WHERE EXISTS (SELECT 1 FROM first_launch);
 
 
 CREATE INDEX IF NOT EXISTS idx_habits_user_id
@@ -692,9 +612,8 @@ async def init_database() -> None:
         print("   • referrals")
         print("   • user_achievements")
         print("   • user_stats")
-        print("   • user_season_stats")
-        print("   • season_results")
-        print("   • leaderboard_rank_snapshots")
+        print("   • user_weekly_xp")
+        print("   • weekly_competition_config")
 
     finally:
         await connection.close()
