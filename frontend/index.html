@@ -23,18 +23,11 @@
 
     <title>Your Ambitions</title>
 
-    <!-- Применяем сохранённую тему до загрузки CSS/JS, чтобы не было белой вспышки. -->
+    <!-- Единственная тема AHabit — тёмная, до загрузки CSS. -->
     <script>
-        (function () {
-            try {
-                const savedTheme = localStorage.getItem("ahabit-theme");
-                const theme = savedTheme === "light" ? "light" : "dark";
-                document.documentElement.dataset.theme = theme;
-                document.documentElement.style.colorScheme = theme;
-            } catch (error) {
-                document.documentElement.dataset.theme = "dark";
-            }
-        })();
+        document.documentElement.dataset.theme = "dark";
+        document.documentElement.style.colorScheme = "dark";
+        try { localStorage.removeItem("ahabit-theme"); } catch (_) {}
     </script>
 
 

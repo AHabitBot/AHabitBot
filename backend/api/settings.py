@@ -17,7 +17,6 @@ from backend.repositories.settings import (
     get_user_settings,
     set_reminders_enabled,
     set_user_timezone,
-    set_user_theme,
     set_user_language,
 )
 
@@ -42,12 +41,6 @@ class TimezoneUpdateRequest(
     BaseModel
 ):
     timezone: str
-
-
-class ThemeUpdateRequest(
-    BaseModel
-):
-    theme: str
 
 
 class LanguageUpdateRequest(
@@ -122,29 +115,6 @@ async def update_timezone(
     )
 
     return settings
-
-# =========================================================
-# ИЗМЕНИТЬ ТЕМУ
-# =========================================================
-
-@router.patch("/theme")
-async def update_theme(
-    payload: ThemeUpdateRequest,
-    user: CurrentUser,
-):
-    theme = payload.theme.strip().lower()
-
-    if theme not in {"light", "dark"}:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Недоступная тема",
-        )
-
-    return await set_user_theme(
-        user_id=user["id"],
-        theme=theme,
-    )
-
 
 # =========================================================
 # ИЗМЕНИТЬ ЯЗЫК

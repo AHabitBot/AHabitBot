@@ -17,7 +17,7 @@ import {
 } from "../leaderboard/season/seasonLeaderboard.js"
 
 import {
-    syncThemeFromSettings
+    applyDarkTheme
 } from "./theme.js"
 
 import {
@@ -285,7 +285,7 @@ export async function bootstrapApp({ onProgress } = {}) {
 
     reportProgress(80)
 
-    syncThemeFromSettings(data.settings || {})
+    applyDarkTheme()
 
     reportProgress(86)
 

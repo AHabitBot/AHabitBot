@@ -94,10 +94,6 @@ import settingsTimezoneUk from "../profile/settings/timezone/uk.js";
 import settingsTimezoneEn from "../profile/settings/timezone/en.js";
 import settingsTimezoneDe from "../profile/settings/timezone/de.js";
 
-import settingsThemeRu from "../profile/settings/theme/ru.js";
-import settingsThemeUk from "../profile/settings/theme/uk.js";
-import settingsThemeEn from "../profile/settings/theme/en.js";
-import settingsThemeDe from "../profile/settings/theme/de.js";
 
 export const SUPPORTED_LANGUAGES = Object.freeze(["ru", "uk", "en", "de"]);
 
@@ -128,7 +124,6 @@ const dictionaries = Object.freeze({
         settingsMainRu,
         settingsLanguageRu,
         settingsTimezoneRu,
-        settingsThemeRu,
         habitsEmptyRu,
         habitsListRu,
         habitDetailsRu,
@@ -150,7 +145,6 @@ const dictionaries = Object.freeze({
         settingsMainUk,
         settingsLanguageUk,
         settingsTimezoneUk,
-        settingsThemeUk,
         habitsEmptyUk,
         habitsListUk,
         habitDetailsUk,
@@ -172,7 +166,6 @@ const dictionaries = Object.freeze({
         settingsMainEn,
         settingsLanguageEn,
         settingsTimezoneEn,
-        settingsThemeEn,
         habitsEmptyEn,
         habitsListEn,
         habitDetailsEn,
@@ -194,7 +187,6 @@ const dictionaries = Object.freeze({
         settingsMainDe,
         settingsLanguageDe,
         settingsTimezoneDe,
-        settingsThemeDe,
         habitsEmptyDe,
         habitsListDe,
         habitDetailsDe,

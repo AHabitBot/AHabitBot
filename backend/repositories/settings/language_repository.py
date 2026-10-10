@@ -38,7 +38,6 @@ async def set_user_language(
                 user_id,
                 timezone,
                 language,
-                theme,
                 reminders_enabled,
                 last_reminder_date
             """,
@@ -58,9 +57,6 @@ async def set_user_language(
         "language":
             row["language"]
             or "ru",
-
-        "theme":
-            row["theme"],
 
         "reminders_enabled":
             bool(

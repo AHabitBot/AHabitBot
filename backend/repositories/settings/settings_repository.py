@@ -36,7 +36,6 @@ async def get_user_settings(
                 user_id,
                 timezone,
                 language,
-                theme,
                 reminders_enabled,
                 last_reminder_date
             """,
@@ -55,9 +54,6 @@ async def get_user_settings(
         "language":
             row["language"]
             or "ru",
-
-        "theme":
-            row["theme"],
 
         "reminders_enabled":
             bool(
@@ -113,7 +109,6 @@ async def set_reminders_enabled(
                 user_id,
                 timezone,
                 language,
-                theme,
                 reminders_enabled,
                 last_reminder_date
             """,
@@ -133,9 +128,6 @@ async def set_reminders_enabled(
         "language":
             row["language"]
             or "ru",
-
-        "theme":
-            row["theme"],
 
         "reminders_enabled":
             bool(

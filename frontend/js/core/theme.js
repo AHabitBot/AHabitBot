@@ -1,51 +1,24 @@
-const STORAGE_KEY = "ahabit-theme";
+// Единая тёмная тема AHabit. Системные цвета Telegram сохраняем.
 export const DEFAULT_THEME = "dark";
-const ALLOWED_THEMES = new Set(["light", "dark"]);
 
-export function normalizeTheme(theme) {
-    return ALLOWED_THEMES.has(theme) ? theme : DEFAULT_THEME;
-}
-
-export function getCurrentTheme() {
-    return normalizeTheme(
-        document.documentElement.dataset.theme ||
-        localStorage.getItem(STORAGE_KEY) ||
-        DEFAULT_THEME
-    );
-}
-
-export function applyTheme(theme, { persist = true } = {}) {
-    const normalized = normalizeTheme(theme);
+export function applyDarkTheme() {
     const root = document.documentElement;
+    root.dataset.theme = "dark";
+    root.style.colorScheme = "dark";
 
-    root.dataset.theme = normalized;
-    root.style.colorScheme = normalized;
-
-    if (persist) {
-        localStorage.setItem(STORAGE_KEY, normalized);
-    }
+    try { localStorage.removeItem("ahabit-theme"); } catch (_) {}
 
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) {
-        meta.setAttribute(
-            "content",
-            normalized === "dark" ? "#0d1214" : "#f8f9fb"
-        );
-    }
+    if (meta) meta.setAttribute("content", "#0d1214");
 
     const telegram = window.Telegram?.WebApp;
     if (telegram) {
         try {
-            telegram.setHeaderColor(normalized === "dark" ? "#0d1214" : "#f8f9fb");
-            telegram.setBackgroundColor(normalized === "dark" ? "#0d1214" : "#f8f9fb");
+            telegram.setHeaderColor("#0d1214");
+            telegram.setBackgroundColor("#0d1214");
         } catch (error) {
             console.debug("Telegram theme colors are unavailable", error);
         }
     }
-
-    return normalized;
-}
-
-export function syncThemeFromSettings(settings = {}) {
-    return applyTheme(settings.theme || DEFAULT_THEME);
+    return DEFAULT_THEME;
 }

@@ -8,8 +8,8 @@ export default Object.freeze({
     "profile.settings.language.description": "Язык интерфейса",
     "profile.settings.timezone.title": "Часовой пояс",
     "profile.settings.timezone.description": "Для расчёта дня и напоминаний",
-    "profile.settings.theme.title": "Тема",
-    "profile.settings.theme.description": "Оформление приложения",
-    "profile.settings.theme.light": "Светлая",
-    "profile.settings.theme.dark": "Тёмная"
+
+
+
+
 });

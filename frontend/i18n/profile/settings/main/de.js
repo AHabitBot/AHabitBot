@@ -8,8 +8,8 @@ export default Object.freeze({
     "profile.settings.language.description": "Sprache der Benutzeroberfläche",
     "profile.settings.timezone.title": "Zeitzone",
     "profile.settings.timezone.description": "Wird für Tagesberechnung und Erinnerungen verwendet",
-    "profile.settings.theme.title": "Design",
-    "profile.settings.theme.description": "Erscheinungsbild der App",
-    "profile.settings.theme.light": "Hell",
-    "profile.settings.theme.dark": "Dunkel"
+
+
+
+
 });
