@@ -232,7 +232,6 @@ export function renderLeaderboardList(users = [], currentUserId = null) {
                     <div class="leaderboard-list__rank-wrap">
                         <span class="leaderboard-list__rank leaderboard-list__rank--${user.rank <= 3 ? `medal-${user.rank}` : "normal"}">
                             ${user.rank <= 3 ? renderMaterialIcon("workspace_premium", "leaderboard-list__medal") : user.rank}
-                            ${user.rank <= 3 ? `<span class="leaderboard-list__medal-number">${user.rank}</span>` : ""}
                         </span>
 
                         ${renderRankChange(

@@ -76,6 +76,14 @@ export function renderLeaderboardPage(
         </main>
     `;
 
+    const scrollArea = leaderboardRoot.querySelector(".leaderboard-scroll-area");
+    const page = leaderboardRoot.querySelector(".leaderboard-page");
+    if (scrollArea && page) {
+        scrollArea.addEventListener("scroll", () => {
+            page.classList.toggle("leaderboard-page--scrolled", scrollArea.scrollTop > 0);
+        }, { passive: true });
+    }
+
     bindPublicProfileEvents(
         leaderboardRoot
     );
