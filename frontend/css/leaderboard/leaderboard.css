@@ -1,7 +1,5 @@
 @import url("./leaderboardHeader.css");
-@import url("./topThree.css");
 @import url("./leaderboardList.css");
-@import url("./currentUser.css");
 @import url("./seasonFinished.css");
 
 
@@ -238,4 +236,19 @@
 
 .leaderboard-page--empty-season .leaderboard-scroll-area {
     top: 0;
+}
+
+/* Duolingo-like open ranking: league heading + one uninterrupted list */
+.leaderboard-page { padding-top: max(18px, env(safe-area-inset-top)); }
+.leaderboard-scroll-area {
+    top: 155px;
+    bottom: calc(86px + env(safe-area-inset-bottom));
+    left: 12px; right: 12px; padding-right: 0;
+    scrollbar-width: none;
+}
+.leaderboard-scroll-area::-webkit-scrollbar { display: none; }
+.leaderboard-content { margin-top: 0; }
+.leaderboard-current-user-slot { display: none; }
+@media (max-width: 480px) {
+    .leaderboard-scroll-area { left: 12px; right: 12px; padding-right: 0; }
 }

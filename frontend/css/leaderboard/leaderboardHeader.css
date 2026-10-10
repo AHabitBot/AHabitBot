@@ -159,3 +159,16 @@
         height: 46px;
     }
 }
+
+/* Open header without surrounding card */
+.leaderboard-league-heading { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; margin-bottom: 14px; }
+.leaderboard-league-heading__remaining { font-size: 13px; font-weight: 750; color: var(--app-text-secondary); }
+.leaderboard-league-heading__remaining[hidden] { display: none; }
+.leaderboard-leagues-card {
+    border: 0; border-radius: 0; background: transparent; box-shadow: none;
+    padding: 0; margin: 0; overflow-x: auto;
+}
+.leaderboard-league { height: 65px; }
+.leaderboard-league__badge, .leaderboard-league__icon { width: 49px; height: 49px; }
+.leaderboard-league--current .leaderboard-league__badge,
+.leaderboard-league--current .leaderboard-league__icon { width: 59px; height: 59px; }

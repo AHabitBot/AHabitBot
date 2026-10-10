@@ -104,18 +104,9 @@ export function renderWeeklyLeaderboard(
         return renderEmptySeason();
     }
 
-    const topUsers =
-        getTopThree(users);
-
-    const listUsers =
-        users.filter(
-            (user) =>
-                user.rank >= 4
-        );
-
     return renderLeaderboardSection({
-        topUsers,
-        users: listUsers
+        users,
+        currentUserId: currentUser.userId
     });
 }
 
@@ -159,33 +150,6 @@ function renderEmptySeason() {
     `;
 }
 
-
-/* =========================================================
-   ПОРЯДОК ТОП-3
-
-   Отображение:
-   2 место | 1 место | 3 место
-   ========================================================= */
-
-function getTopThree(
-    users = []
-) {
-    const usersByRank =
-        new Map(
-            users.map(
-                (user) => [
-                    user.rank,
-                    user
-                ]
-            )
-        );
-
-    return [
-        usersByRank.get(2),
-        usersByRank.get(1),
-        usersByRank.get(3)
-    ].filter(Boolean);
-}
 
 
 /* =========================================================
@@ -272,6 +236,9 @@ function normalizeCurrentUser(
     }
 
     return {
+        userId:
+            normalizePositiveInteger(user.user_id),
+
         rank:
             normalizePositiveInteger(
                 user.rank

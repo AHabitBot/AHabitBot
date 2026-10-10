@@ -397,3 +397,41 @@
 .leaderboard-rank-change__value {
     transform: translateY(0.5px);
 }
+/* Unified leaderboard, positions 1 through N */
+.leaderboard-list {
+    margin-top: 6px; border: 0; border-radius: 0;
+    background: transparent; box-shadow: none; overflow: visible;
+}
+.leaderboard-list__row,
+.leaderboard-list__row:has(.leaderboard-rank-change) {
+    grid-template-columns: 38px 52px minmax(0, 1fr) auto;
+    column-gap: 10px; min-height: 83px; padding: 9px 8px;
+    border: 0; border-radius: 15px;
+}
+.leaderboard-list__row--self {
+    background: color-mix(in srgb, var(--app-green-active) 10%, transparent);
+}
+.leaderboard-list__rank-wrap { display: flex; justify-content: center; align-items: center; }
+.leaderboard-list__rank { position: relative; width: 36px; min-width: 36px; height: 38px; font-weight: 750; }
+.leaderboard-list__rank--medal-1 { color: #ffcf47; }
+.leaderboard-list__rank--medal-2 { color: #9db5c8; }
+.leaderboard-list__rank--medal-3 { color: #d68a53; }
+.leaderboard-list__medal { font-size: 37px; font-variation-settings: "FILL" 1; }
+.leaderboard-list__medal-number {
+    position: absolute; top: 11px; left: 0; right: 0;
+    color: #24303b; font-size: 12px; font-weight: 900; text-align: center;
+}
+.leaderboard-list__rank-change { display: none; }
+.leaderboard-list__avatar { width: 52px; height: 52px; background: var(--app-surface-soft); }
+.leaderboard-list__name { font-size: 16px; font-weight: 750; }
+.leaderboard-list__xp { font-size: 14px; font-weight: 650; }
+.leaderboard-list__xp-icon { display: none; }
+.leaderboard-list__xp-value::after { content: " XP"; }
+@media (max-width: 360px) {
+    .leaderboard-list__row, .leaderboard-list__row:has(.leaderboard-rank-change) {
+        grid-template-columns: 32px 44px minmax(0, 1fr) auto; gap: 7px; padding: 8px 3px;
+    }
+    .leaderboard-list__avatar { width: 44px; height: 44px; }
+    .leaderboard-list__name { font-size: 14px; }
+    .leaderboard-list__xp { font-size: 12px; }
+}

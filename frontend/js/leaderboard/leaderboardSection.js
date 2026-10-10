@@ -1,17 +1,5 @@
-import {
-    renderTopThree,
-    renderLeaderboardList
-} from "./leaderboardComponents.js";
+import { renderLeaderboardList } from "./leaderboardComponents.js";
 
-
-export function renderLeaderboardSection({
-    topUsers = [],
-    users = []
-}) {
-    return `
-        <div class="leaderboard-section">
-            ${renderTopThree(topUsers)}
-            ${renderLeaderboardList(users)}
-        </div>
-    `;
+export function renderLeaderboardSection({ users = [], currentUserId = null }) {
+    return `<div class="leaderboard-section">${renderLeaderboardList(users, currentUserId)}</div>`;
 }

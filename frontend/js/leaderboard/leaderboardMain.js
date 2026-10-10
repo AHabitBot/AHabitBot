@@ -5,8 +5,7 @@ import {
 
 import {
     renderLeaderboardHeader,
-    renderLeaderboardContentShell,
-    renderCurrentUser
+    renderLeaderboardContentShell
 } from "./leaderboardComponents.js";
 
 import {
@@ -147,32 +146,16 @@ async function renderWeeklyLeaderboardContent({
             return;
         }
 
-        const isFinished = false;
-
-        const isEmptySeason =
-            !isFinished
-            && (!result?.currentUser || result.currentUser.xp <= 0);
-
-        setFinishedSeasonLayout(isFinished);
+        const isEmptySeason = !result?.currentUser || result.currentUser.xp <= 0;
+        setFinishedSeasonLayout(false);
         setEmptySeasonLayout(isEmptySeason);
-
-        content.innerHTML = isFinished
-            ? renderWeeklyLeaderboard(result.users, result.currentUser)
-            : renderWeeklyLeaderboard(result.users, result.currentUser);
-
+        content.innerHTML = renderWeeklyLeaderboard(result.users, result.currentUser);
         if (isEmptySeason) {
             hideLeagueHeading();
         } else {
-            hideLeagueHeading();
+            renderLeagueHeading(result.week);
         }
-
-        if (currentUserSlot) {
-            currentUserSlot.innerHTML =
-                isFinished || !result?.currentUser || result.currentUser.xp <= 0
-                    ? ""
-                    : renderCurrentUser(result.currentUser);
-        }
-
+        if (currentUserSlot) currentUserSlot.innerHTML = "";
 
     } catch (error) {
         if (
@@ -206,12 +189,12 @@ function renderLeagueHeading(season) {
             "[data-season-remaining]"
         );
 
-    if (!remaining || !season?.endDate) {
+    if (!remaining || !season) {
         hideLeagueHeading();
         return;
     }
 
-    const days = getRemainingSeasonDays(season.endDate);
+    const days = getRemainingSeasonDays();
 
     remaining.textContent = formatRemainingDays(days);
     remaining.hidden = false;
@@ -230,22 +213,20 @@ function hideLeagueHeading() {
 }
 
 
-function getRemainingSeasonDays(endDate) {
-    // endDate приходит из /api/leaderboard/season в формате YYYY-MM-DD.
-    // Считаем календарные дни включительно: в последний день сезона
-    // пользователь видит «Остался 1 день», а не 0.
-    const end = new Date(`${endDate}T23:59:59`);
-
-    if (Number.isNaN(end.getTime())) {
-        return 0;
-    }
-
-    const now = new Date();
-    const diff = end.getTime() - now.getTime();
-
-    return Math.max(0, Math.ceil(diff / 86400000));
+function getRemainingSeasonDays() {
+    // Следующий понедельник, 00:01 по Europe/Kyiv.
+    // Используем календарные дни Киева, не локальный часовой пояс телефона.
+    const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/Kyiv", year: "numeric", month: "2-digit",
+        day: "2-digit", weekday: "short", hour: "2-digit", minute: "2-digit",
+        hourCycle: "h23"
+    }).formatToParts(new Date());
+    const value = key => parts.find(part => part.type === key)?.value;
+    const day = { Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 }[value("weekday")];
+    if (day === undefined) return 0;
+    const elapsedMinutes = Number(value("hour")) * 60 + Number(value("minute"));
+    return day === 0 && elapsedMinutes < 1 ? 0 : (7 - day);
 }
-
 
 function formatRemainingDays(days) {
     const pluralForm = getPluralForm(days);

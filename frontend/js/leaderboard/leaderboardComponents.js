@@ -216,7 +216,7 @@ export function renderTopThree(users = []) {
    LEADERBOARD LIST — МЕСТА 4–100
    ========================================================= */
 
-export function renderLeaderboardList(users = []) {
+export function renderLeaderboardList(users = [], currentUserId = null) {
     if (!users.length) {
         return "";
     }
@@ -227,11 +227,12 @@ export function renderLeaderboardList(users = []) {
             aria-label="${t("leaderboard.common.participantsAria")}"
         >
             ${users.map((user) => `
-                <article class="leaderboard-list__row">
+                <article class="leaderboard-list__row${currentUserId && user.userId === currentUserId ? " leaderboard-list__row--self" : ""}">
 
                     <div class="leaderboard-list__rank-wrap">
-                        <span class="leaderboard-list__rank">
-                            ${user.rank}
+                        <span class="leaderboard-list__rank leaderboard-list__rank--${user.rank <= 3 ? `medal-${user.rank}` : "normal"}">
+                            ${user.rank <= 3 ? renderMaterialIcon("workspace_premium", "leaderboard-list__medal") : user.rank}
+                            ${user.rank <= 3 ? `<span class="leaderboard-list__medal-number">${user.rank}</span>` : ""}
                         </span>
 
                         ${renderRankChange(
