@@ -13,16 +13,8 @@ import {
 } from "./profileTimezone.js";
 
 import {
-    renderProfileThemePage
-} from "./profileTheme.js";
-
-import {
     renderProfileLanguagePage
 } from "./profileLanguage.js";
-
-import {
-    DEFAULT_THEME
-} from "../../core/theme.js";
 
 import {
     getLanguageLabel,
@@ -151,56 +143,12 @@ function renderTimezoneRow(timezone = "Europe/Kyiv") {
 }
 
 
-function renderThemeRow(theme = DEFAULT_THEME) {
-    const isDark = theme === "dark";
-
-    return `
-        <button
-            type="button"
-            class="profile-settings-row profile-settings-row--button"
-            data-settings-theme
-        >
-            <div
-                class="profile-settings-row__icon profile-settings-row__icon--theme"
-                aria-hidden="true"
-            >
-                <span class="material-symbols-rounded">
-                    ${isDark ? "dark_mode" : "light_mode"}
-                </span>
-            </div>
-
-            <div class="profile-settings-row__content">
-                <div class="profile-settings-row__title">
-                    ${t("profile.settings.theme.title")}
-                </div>
-                <div class="profile-settings-row__description">
-                    ${t("profile.settings.theme.description")}
-                </div>
-            </div>
-
-            <div class="profile-settings-row__right">
-                <span class="profile-settings-row__value">
-                    ${isDark ? t("profile.settings.theme.dark") : t("profile.settings.theme.light")}
-                </span>
-                <span
-                    class="material-symbols-rounded profile-settings-row__chevron"
-                    aria-hidden="true"
-                >
-                    chevron_right
-                </span>
-            </div>
-        </button>
-    `;
-}
-
-
 function renderSettingsContent(
     root,
     {
         remindersEnabled = false,
         language = "ru",
         timezone = "Europe/Kyiv",
-        theme = DEFAULT_THEME,
     } = {}
 ) {
     root.innerHTML = `
@@ -215,7 +163,6 @@ function renderSettingsContent(
                     <div class="profile-settings-divider"></div>
                     ${renderTimezoneRow(timezone)}
                     <div class="profile-settings-divider"></div>
-                    ${renderThemeRow(theme)}
                 </div>
             </main>
         </section>
@@ -243,7 +190,6 @@ function renderCurrentSettings(root) {
         remindersEnabled: Boolean(currentSettings?.reminders_enabled),
         language: normalizeLanguage(currentSettings?.language || "ru"),
         timezone: currentSettings?.timezone || "Europe/Kyiv",
-        theme: currentSettings?.theme || DEFAULT_THEME,
     });
 
     initSettingsEvents(root);
@@ -270,21 +216,6 @@ function openTimezoneSettings(root) {
         currentTimezone: currentSettings?.timezone || "Europe/Kyiv",
 
         onTimezoneChanged: (settings) => {
-            currentSettings = settings;
-        },
-
-        onBack: () => {
-            renderCurrentSettings(root);
-        },
-    });
-}
-
-
-function openThemeSettings(root) {
-    renderProfileThemePage(root, {
-        currentTheme: currentSettings?.theme || DEFAULT_THEME,
-
-        onThemeChanged: (settings) => {
             currentSettings = settings;
         },
 
@@ -336,10 +267,6 @@ function initSettingsEvents(root) {
         () => openTimezoneSettings(root)
     );
 
-    root.querySelector("[data-settings-theme]")?.addEventListener(
-        "click",
-        () => openThemeSettings(root)
-    );
 }
 
 
@@ -353,7 +280,6 @@ export async function renderProfileSettingsPage(root) {
         remindersEnabled: false,
         language: "ru",
         timezone: "Europe/Kyiv",
-        theme: DEFAULT_THEME,
     });
 
     try {
@@ -371,7 +297,6 @@ export async function renderProfileSettingsPage(root) {
             "[data-settings-reminders-toggle]",
             "[data-settings-language]",
             "[data-settings-timezone]",
-            "[data-settings-theme]",
         ].forEach((selector) => {
             const element = root.querySelector(selector);
             if (element) element.disabled = true;
