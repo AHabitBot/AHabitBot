@@ -259,17 +259,19 @@
     padding-bottom: calc(112px + env(safe-area-inset-bottom));
     overscroll-behavior-y: contain;
 }
-/* A divider appears only after the participants list has been scrolled. */
-.leaderboard-header::after {
+/* Divider sits exactly on the scrolling list's top boundary. */
+.leaderboard-header::after { display: none; }
+.leaderboard-page::after {
     content: "";
     position: absolute;
-    left: -16px;
-    right: -16px;
-    bottom: -9px;
-    height: 1px;
+    z-index: 11;
+    top: 155px; /* matches .leaderboard-scroll-area top */
+    left: 0;
+    right: 0;
+    height: 1.5px;
     background: var(--app-text-secondary);
     opacity: 0;
     transition: opacity 160ms ease;
     pointer-events: none;
 }
-.leaderboard-page--scrolled .leaderboard-header::after { opacity: .42; }
+.leaderboard-page--scrolled::after { opacity: .42; }
