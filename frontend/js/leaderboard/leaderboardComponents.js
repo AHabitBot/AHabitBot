@@ -59,7 +59,7 @@ export function renderLeaderboardHeader() {
                 </h1>
 
                 <span class="leaderboard-league-heading__remaining-wrap">
-                    ${renderMaterialIcon("av_timer", "leaderboard-league-heading__timer-icon")}
+                    ${renderMaterialIcon("schedule", "leaderboard-league-heading__timer-icon")}
                     <span
                         class="leaderboard-league-heading__remaining"
                         data-season-remaining
