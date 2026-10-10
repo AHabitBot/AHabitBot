@@ -27,6 +27,7 @@ from backend.repositories.stats.profile_stats_repository import (
     get_daily_confirmation_counts,
     get_referral_xp_for_period,
     get_user_timezone_name,
+    get_profile_streaks,
 )
 
 from backend.services.achievements.achievements_config import (
@@ -1063,6 +1064,7 @@ async def get_profile_stats(
         previous_xp,
         achievement_rows,
         daily_rows,
+        streak_counters,
     ) = await asyncio.gather(
 
         get_confirmation_count_for_period(
@@ -1108,6 +1110,8 @@ async def get_profile_stats(
             date_from=current_start,
             date_to=current_end,
         ),
+
+        get_profile_streaks(user_id),
     )
 
     # =====================================================
@@ -1189,6 +1193,10 @@ async def get_profile_stats(
     # =====================================================
 
     return {
+        "streaks": {
+            "personal": {"current": streak_counters["personal"]},
+            "friends": {"current": streak_counters["friends"]},
+        },
         "period":
             normalized_period,
 

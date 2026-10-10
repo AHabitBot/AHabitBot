@@ -18,6 +18,8 @@ import {
     t
 } from "../../../i18n/core/i18n.js";
 
+import { renderHabitsStats } from "../../habits/habitMainList/habitsListPage.js";
+
 import {
     getPluralForm
 } from "../../../i18n/core/plural.js";
@@ -1440,6 +1442,11 @@ export function renderProfileStatsBody(
         ${renderWeekdayActivity(
             data,
         )}
+
+        ${renderHabitsStats({
+            currentStreak: data.streaks?.personal?.current ?? 0,
+            friendsStreak: data.streaks?.friends?.current ?? 0,
+        })}
 
         ${renderMainStats(
             data,

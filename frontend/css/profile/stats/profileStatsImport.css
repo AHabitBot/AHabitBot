@@ -8,3 +8,6 @@
 @import url("./profileStatsActivity.css");
 @import url("./profileStatsMetrics.css");
 @import url("./profileStatsDynamics.css");
+
+/* Reuse the original habit streak cards in profile stats. */
+@import url("../../habits/habitsList/habitsStats.css");

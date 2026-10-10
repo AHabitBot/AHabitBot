@@ -231,3 +231,5 @@
     }
 
 }
+/* Keep original card design, adapt only spacing to the stats layout. */
+.profile-stats-body > .habits-stats { margin: 0; }

@@ -436,3 +436,19 @@ async def get_user_timezone_name(
         if timezone_name
         else "Europe/Kyiv"
     )
+
+async def get_profile_streaks(user_id: int) -> dict[str, int]:
+    """Current streak counters for the requested profile, not the viewer."""
+    async with get_connection() as connection:
+        row = await connection.fetchrow(
+            """
+            SELECT current_streak, friends_streak
+            FROM user_stats
+            WHERE user_id = $1
+            """,
+            user_id,
+        )
+    return {
+        "personal": max(0, int(row["current_streak"] or 0)) if row else 0,
+        "friends": max(0, int(row["friends_streak"] or 0)) if row else 0,
+    }

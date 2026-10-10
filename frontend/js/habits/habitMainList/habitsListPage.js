@@ -44,8 +44,6 @@ export function renderHabitsList(
             </header>
 
 
-            ${renderHabitsStats(statistics)}
-
 
             <div class="habits-v2-list__cards">
                 ${habits.map(renderHabitCard).join("")}
