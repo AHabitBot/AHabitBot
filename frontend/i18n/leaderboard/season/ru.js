@@ -18,10 +18,10 @@ export default Object.freeze({
 
     "leaderboard.league.bronze": "Бронзовая лига",
     "leaderboard.league.aria": "Лиги",
-    "leaderboard.league.remaining.one": "Остался {count} день",
-    "leaderboard.league.remaining.few": "Осталось {count} дня",
-    "leaderboard.league.remaining.many": "Осталось {count} дней",
-    "leaderboard.league.remaining.other": "Осталось {count} дней",
+    "leaderboard.league.remaining.one": "{count} день",
+    "leaderboard.league.remaining.few": "{count} дня",
+    "leaderboard.league.remaining.many": "{count} дней",
+    "leaderboard.league.remaining.other": "{count} дней",
 
     "leaderboard.common.loading": "Загрузка рейтинга…",
 

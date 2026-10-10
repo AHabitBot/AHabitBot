@@ -18,10 +18,10 @@ export default Object.freeze({
 
     "leaderboard.league.bronze": "Bronze League",
     "leaderboard.league.aria": "Leagues",
-    "leaderboard.league.remaining.one": "{count} day left",
-    "leaderboard.league.remaining.few": "{count} days left",
-    "leaderboard.league.remaining.many": "{count} days left",
-    "leaderboard.league.remaining.other": "{count} days left",
+    "leaderboard.league.remaining.one": "{count} day",
+    "leaderboard.league.remaining.few": "{count} days",
+    "leaderboard.league.remaining.many": "{count} days",
+    "leaderboard.league.remaining.other": "{count} days",
 
     "leaderboard.common.loading": "Loading leaderboard…",
 

@@ -241,7 +241,7 @@
 /* Duolingo-like open ranking: league heading + one uninterrupted list */
 .leaderboard-page { padding-top: max(18px, env(safe-area-inset-top)); }
 .leaderboard-scroll-area {
-    top: 155px;
+    top: var(--leaderboard-list-top, 155px);
     bottom: calc(86px + env(safe-area-inset-bottom));
     left: 12px; right: 12px; padding-right: 0;
     scrollbar-width: none;
@@ -265,7 +265,7 @@
     content: "";
     position: absolute;
     z-index: 11;
-    top: 155px; /* matches .leaderboard-scroll-area top */
+    top: var(--leaderboard-list-top, 155px); /* actual bottom of the league header */
     left: 0;
     right: 0;
     height: 1.5px;
@@ -275,3 +275,12 @@
     pointer-events: none;
 }
 .leaderboard-page--scrolled::after { opacity: .42; }
+
+/* V4: attach the scrolling viewport to the actual league header edge. */
+.leaderboard-page:not(.leaderboard-page--empty-season) .leaderboard-scroll-area {
+    top: var(--leaderboard-list-top, 155px);
+}
+.leaderboard-page:not(.leaderboard-page--empty-season) .leaderboard-content,
+.leaderboard-page:not(.leaderboard-page--empty-season) .leaderboard-list {
+    margin-top: 0;
+}

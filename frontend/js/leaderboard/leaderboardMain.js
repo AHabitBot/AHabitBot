@@ -35,6 +35,7 @@ import {
 let leaderboardRoot = null;
 
 let activeRenderId = 0;
+let leagueHeaderObserver = null;
 
 
 /* =========================================================
@@ -75,6 +76,26 @@ export function renderLeaderboardPage(
             ${renderLeaderboardContentShell()}
         </main>
     `;
+
+    // Keep the list clipping edge and divider attached to the actual header,
+    // rather than two hardcoded pixel positions that leave a dark gap.
+    const leagueHeader = leaderboardRoot.querySelector(".leaderboard-header");
+    const leaderboardPage = leaderboardRoot.querySelector(".leaderboard-page");
+    if (leagueHeader && leaderboardPage) {
+        const syncHeaderEdge = () => {
+            const headerBottom = leagueHeader.getBoundingClientRect().bottom;
+            const pageTop = leaderboardPage.getBoundingClientRect().top;
+            leaderboardPage.style.setProperty(
+                "--leaderboard-list-top",
+                `${Math.max(0, headerBottom - pageTop)}px`
+            );
+        };
+        syncHeaderEdge();
+        if (typeof ResizeObserver !== "undefined") {
+            leagueHeaderObserver = new ResizeObserver(syncHeaderEdge);
+            leagueHeaderObserver.observe(leagueHeader);
+        }
+    }
 
     const scrollArea = leaderboardRoot.querySelector(".leaderboard-scroll-area");
     const page = leaderboardRoot.querySelector(".leaderboard-page");
@@ -444,6 +465,8 @@ function escapeHtml(
    ========================================================= */
 
 export function destroyLeaderboardPage() {
+    leagueHeaderObserver?.disconnect();
+    leagueHeaderObserver = null;
     activeRenderId += 1;
     leaderboardRoot = null;
 }

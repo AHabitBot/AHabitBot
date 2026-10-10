@@ -172,3 +172,16 @@
 .leaderboard-league__badge, .leaderboard-league__icon { width: 49px; height: 49px; }
 .leaderboard-league--current .leaderboard-league__badge,
 .leaderboard-league--current .leaderboard-league__icon { width: 59px; height: 59px; }
+
+/* V4: Google Material Symbols timer replaces the remaining-time prefix. */
+.leaderboard-league-heading__remaining-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--app-text-secondary);
+}
+.leaderboard-league-heading__timer-icon {
+    font-size: 17px;
+    line-height: 1;
+    font-variation-settings: "FILL" 0, "wght" 550, "GRAD" 0, "opsz" 20;
+}
