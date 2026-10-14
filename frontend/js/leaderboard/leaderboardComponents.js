@@ -1,4 +1,3 @@
-import { renderStatusBubble } from "./leaderboardStatus.js";
 
 import {
     getLanguage,
