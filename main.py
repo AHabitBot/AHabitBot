@@ -24,10 +24,6 @@ from backend.services.habits.habit_reminder_service import (
     run_habit_reminder_loop,
 )
 
-from backend.services.leaderboard import (
-    run_rank_snapshot_loop,
-)
-
 
 async def main() -> None:
     bot = Bot(
@@ -42,7 +38,6 @@ async def main() -> None:
 
     reminder_task = None
     habit_reminder_task = None
-    rank_snapshot_task = None
 
     try:
         await connect_db()
@@ -76,20 +71,6 @@ async def main() -> None:
 
         print(
             "✅ Сервис напоминаний привычек запущен"
-        )
-
-        # =================================================
-        # SNAPSHOT ПОЗИЦИЙ РЕЙТИНГА
-        # =================================================
-
-        rank_snapshot_task = (
-            asyncio.create_task(
-                run_rank_snapshot_loop()
-            )
-        )
-
-        print(
-            "✅ Сервис позиций рейтинга запущен"
         )
 
         print(
@@ -131,20 +112,6 @@ async def main() -> None:
 
             try:
                 await habit_reminder_task
-
-            except asyncio.CancelledError:
-                pass
-
-
-        # =================================================
-        # ОСТАНОВКА SNAPSHOT РЕЙТИНГА
-        # =================================================
-
-        if rank_snapshot_task is not None:
-            rank_snapshot_task.cancel()
-
-            try:
-                await rank_snapshot_task
 
             except asyncio.CancelledError:
                 pass

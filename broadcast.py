@@ -20,7 +20,7 @@ from backend.i18n.notifications import normalize_language
 
 
 # =========================================================
-# BROADCAST — FRIENDS / STREAKS / PUBLIC PROFILES UPDATE
+# BROADCAST — SMALL CARDS / GAME STATS / WEEKLY COMPETITIONS
 # =========================================================
 
 
@@ -97,31 +97,18 @@ async def get_all_users() -> list[dict[str, Any]]:
 
 def build_message_ru() -> str:
     return (
-        "🚀 <b>Обновление AHabit</b>\n"
-        "\n"
-
-        "👥 <b>Привычки вместе с друзьями</b>\n"
-        "Теперь привычки можно выполнять вместе. "
-        "На карточке видно участников и кто уже выполнил привычку сегодня. "
-        "Совместный день засчитывается, когда подтвердили все участники. "
-        "О действиях друзей приходят уведомления.\n"
-        "\n"
-
-        "🔥 <b>Обновили работу серий привычек</b>\n"
-        "Первый пропуск больше не обнуляет серию — "
-        "она замораживается 🧊. "
-        "Выполни привычку на следующий день, и серия восстановится 🔥. "
-        "Два пропуска подряд обнуляют серию.\n"
-        "\n"
-
-        "🔥 <b>Личный и дружеский стрик</b>\n"
-        "Теперь отдельно отображается личный стрик "
-        "и стрик совместных привычек с друзьями.\n"
-        "\n"
-
-        "👤 <b>Публичные игровые профили</b>\n"
-        "Нажми на аватар пользователя в рейтинге, "
-        "чтобы открыть его профиль и посмотреть игровые показатели."
+        '🚀 <b>AHabit — новое обновление!</b>\n'
+        '\n'
+        'Продолжаем совершенствовать приложение, чтобы развивать привычки было ещё удобнее и интереснее.\n'
+        '\n'
+        '🟦 <b>Маленькие карточки привычек</b>\n'
+        'Теперь доступны два размера карточек — большой и маленький. Две маленькие карточки занимают место одной большой. Настраивай главный экран под себя!\n'
+        '\n'
+        '📊 <b>Обновлённые игровые показатели</b>\n'
+        'Личный и дружеский стрики теперь находятся в разделе игровых показателей. Вся важная статистика собрана в одном месте — следи за своим прогрессом и достижениями друзей!\n'
+        '\n'
+        '🏆 <b>Недельные состязания</b>\n'
+        'Мы убрали сезоны и перевели систему лиг на формат еженедельных соревнований. Теперь развитие рейтинга будет строиться вокруг недельного прогресса.'
     )
 
 
@@ -131,31 +118,18 @@ def build_message_ru() -> str:
 
 def build_message_uk() -> str:
     return (
-        "🚀 <b>Оновлення AHabit</b>\n"
-        "\n"
-
-        "👥 <b>Звички разом із друзями</b>\n"
-        "Тепер звички можна виконувати разом. "
-        "На картці видно учасників і хто вже виконав звичку сьогодні. "
-        "Спільний день зараховується, коли підтвердили всі учасники. "
-        "Про дії друзів надходять сповіщення.\n"
-        "\n"
-
-        "🔥 <b>Оновили роботу серій звичок</b>\n"
-        "Перший пропуск більше не обнуляє серію — "
-        "вона заморожується 🧊. "
-        "Виконай звичку наступного дня, і серія відновиться 🔥. "
-        "Два пропуски поспіль обнуляють серію.\n"
-        "\n"
-
-        "🔥 <b>Особистий і дружній стрік</b>\n"
-        "Тепер окремо відображається особистий стрік "
-        "і стрік спільних звичок із друзями.\n"
-        "\n"
-
-        "👤 <b>Публічні ігрові профілі</b>\n"
-        "Натисни на аватар користувача в рейтингу, "
-        "щоб відкрити його профіль і переглянути ігрові показники."
+        '🚀 <b>AHabit — нове оновлення!</b>\n'
+        '\n'
+        'Продовжуємо вдосконалювати застосунок, щоб розвивати звички було ще зручніше та цікавіше.\n'
+        '\n'
+        '🟦 <b>Маленькі картки звичок</b>\n'
+        'Тепер доступні два розміри карток — великий і маленький. Дві маленькі картки займають місце однієї великої. Налаштовуй головний екран під себе!\n'
+        '\n'
+        '📊 <b>Оновлені ігрові показники</b>\n'
+        'Особистий і дружній стріки тепер знаходяться в розділі ігрових показників. Уся важлива статистика зібрана в одному місці — стеж за своїм прогресом і досягненнями друзів!\n'
+        '\n'
+        '🏆 <b>Тижневі змагання</b>\n'
+        'Ми прибрали сезони й перевели систему ліг на формат щотижневих змагань. Тепер розвиток рейтингу будуватиметься навколо тижневого прогресу.'
     )
 
 
@@ -165,31 +139,35 @@ def build_message_uk() -> str:
 
 def build_message_en() -> str:
     return (
-        "🚀 <b>AHabit Update</b>\n"
-        "\n"
+        '🚀 <b>AHabit — New Update!</b>\n'
+        '\n'
+        "We're continuing to improve the app to make building habits easier and more engaging.\n"
+        '\n'
+        '🟦 <b>Small Habit Cards</b>\n'
+        'Habit cards now come in two sizes: large and small. Two small cards take up the space of one large card. Customize your home screen your way!\n'
+        '\n'
+        '📊 <b>Updated Game Stats</b>\n'
+        'Personal and friends streaks are now in Game Stats. All your key stats are in one place — track your progress and see how your friends are doing!\n'
+        '\n'
+        '🏆 <b>Weekly Competitions</b>\n'
+        "We've removed seasons and shifted the league system to a weekly competition format. Rankings will now focus on weekly progress."
+    )
 
-        "👥 <b>Habits with friends</b>\n"
-        "You can now complete habits together. "
-        "The habit card shows the participants and who has completed it today. "
-        "A shared day counts when every participant confirms the habit. "
-        "You'll also receive notifications about your friends' activity.\n"
-        "\n"
 
-        "🔥 <b>Updated habit streaks</b>\n"
-        "The first missed day no longer resets your streak — "
-        "it freezes 🧊. "
-        "Complete the habit the next day and the streak is restored 🔥. "
-        "Two missed days in a row reset the streak.\n"
-        "\n"
-
-        "🔥 <b>Personal and friends streaks</b>\n"
-        "Your personal streak and your shared-habit streak "
-        "with friends are now shown separately.\n"
-        "\n"
-
-        "👤 <b>Public game profiles</b>\n"
-        "Tap a user's avatar in the leaderboard "
-        "to open their profile and view their game stats."
+def build_message_de() -> str:
+    return (
+        '🚀 <b>AHabit — Neues Update!</b>\n'
+        '\n'
+        'Wir verbessern die App weiter, damit es noch einfacher und motivierender wird, Gewohnheiten aufzubauen.\n'
+        '\n'
+        '🟦 <b>Kleine Gewohnheitskarten</b>\n'
+        'Jetzt gibt es zwei Kartengrößen: groß und klein. Zwei kleine Karten benötigen so viel Platz wie eine große. Gestalte deinen Startbildschirm nach deinen Wünschen!\n'
+        '\n'
+        '📊 <b>Aktualisierte Spielstatistiken</b>\n'
+        'Deine persönliche Serie und die Freundeserie findest du jetzt in den Spielstatistiken. Alle wichtigen Werte sind an einem Ort — verfolge deine Fortschritte und die deiner Freunde!\n'
+        '\n'
+        '🏆 <b>Wöchentliche Wettbewerbe</b>\n'
+        'Wir haben die Saisons entfernt und das Ligasystem auf wöchentliche Wettbewerbe umgestellt. Künftig steht der Fortschritt innerhalb einer Woche im Mittelpunkt der Rangliste.'
     )
 
 
@@ -211,6 +189,9 @@ def get_message_text(
 
     if safe_language == "en":
         return build_message_en()
+
+    if safe_language == "de":
+        return build_message_de()
 
     return build_message_ru()
 
@@ -405,6 +386,7 @@ async def broadcast_update() -> None:
         "ru": 0,
         "uk": 0,
         "en": 0,
+        "de": 0,
     }
 
 
@@ -554,6 +536,10 @@ async def broadcast_update() -> None:
         print(
             f"   🇬🇧 EN:          "
             f"{sent_by_language['en']}"
+        )
+        print(
+            f"   🇩🇪 DE:          "
+            f"{sent_by_language['de']}"
         )
         print(
             f"🚫 Заблокировали:  "
