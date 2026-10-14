@@ -1,4 +1,3 @@
-
 import {
     getLanguage,
     t
@@ -246,16 +245,17 @@ export function renderLeaderboardList(users = [], currentUserId = null) {
                         )}
                     </div>
 
-                    <img
-                        class="leaderboard-list__avatar"
-                        src="${user.avatar}"
-                        data-public-profile-user-id="${user.userId}"
-                        role="button"
-                        tabindex="0"
-                        alt="${escapeHtml(getDisplayName(user))}"
-                    >
-
-                    ${renderStatusBubble(user, currentUserId)}
+                    <div class="lb-status-avatar-wrap">
+                        <img
+                            class="leaderboard-list__avatar"
+                            src="${user.avatar}"
+                            data-public-profile-user-id="${user.userId}"
+                            role="button"
+                            tabindex="0"
+                            alt="${escapeHtml(getDisplayName(user))}"
+                        >
+                        ${renderStatusBubble(user, currentUserId)}
+                    </div>
 
                     <div class="leaderboard-list__info">
 

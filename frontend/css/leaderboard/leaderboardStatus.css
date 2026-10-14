@@ -1,1 +1,49 @@
 .lb-status-bubble{flex:0 0 auto;align-self:center;position:relative;border:1px solid #45484e;background:#30343a;color:#fff;border-radius:12px;min-width:30px;height:28px;padding:0 5px;font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer;margin-left:-5px;margin-right:1px}.lb-status-bubble:before{content:"";position:absolute;left:-5px;top:10px;width:8px;height:8px;background:#30343a;border-left:1px solid #45484e;border-bottom:1px solid #45484e;transform:rotate(45deg)}.lb-status-bubble:disabled{opacity:1;cursor:default}.lb-status-bubble--own{border-color:#6b82a0}.lb-status-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.68);display:flex;align-items:flex-end;justify-content:center}.lb-status-sheet{box-sizing:border-box;width:100%;max-width:560px;background:#24262b;color:#fff;border-radius:24px 24px 0 0;padding:22px 18px max(20px,env(safe-area-inset-bottom));max-height:85dvh;overflow-y:auto}.lb-status-heading{display:flex;align-items:center;justify-content:space-between;font-size:19px}.lb-status-close{font-size:28px;color:#fff;background:none;border:0}.lb-status-preview{font-size:44px;text-align:center;margin:12px}.lb-status-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px}.lb-status-choice{border:2px solid transparent;background:#34383e;border-radius:10px;font-size:23px;aspect-ratio:1;min-width:0}.lb-status-choice.is-selected{border-color:#70b8ff}.lb-status-save,.lb-status-clear{display:block;width:100%;border:0;border-radius:13px;padding:13px;margin-top:14px;font-weight:750}.lb-status-save{background:#58cc02;color:#fff}.lb-status-clear{background:#363a40;color:#fff}@media(max-width:360px){.lb-status-grid{grid-template-columns:repeat(7,minmax(0,1fr))}}
+
+/* Compact avatar badge, Duolingo-inspired. No extra leaderboard grid column. */
+.lb-status-avatar-wrap {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 auto;
+    overflow: visible;
+}
+.lb-status-avatar-wrap .leaderboard-list__avatar {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.lb-status-avatar-wrap .lb-status-bubble {
+    position: absolute;
+    z-index: 2;
+    top: -6px;
+    right: -7px;
+    left: auto;
+    bottom: auto;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    width: 27px;
+    min-width: 27px;
+    height: 27px;
+    padding: 0;
+    margin: 0;
+    border: 2px solid var(--app-bg, #121213);
+    border-radius: 50%;
+    background: #238fbc;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1;
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
+    cursor: pointer;
+}
+.lb-status-avatar-wrap .lb-status-bubble::before { display: none; }
+.lb-status-avatar-wrap .lb-status-bubble:disabled { cursor: default; opacity: 1; }
+.lb-status-avatar-wrap .lb-status-bubble--own { border-color: var(--app-bg, #121213); }
+@media (max-width: 360px) {
+    .lb-status-avatar-wrap { width: 44px; height: 44px; }
+    .lb-status-avatar-wrap .lb-status-bubble {
+        width: 25px; min-width: 25px; height: 25px;
+        font-size: 15px; top: -5px; right: -6px;
+    }
+}
