@@ -8,7 +8,7 @@ async def get_weekly_leaderboard(week_start, user_id: int, limit: int = 100) -> 
         rows = await connection.fetch(
             """
             SELECT ROW_NUMBER() OVER (ORDER BY w.weekly_xp DESC, w.user_id ASC)::INTEGER AS rank,
-                   u.id AS user_id, u.nickname, u.avatar_key,
+                   u.id AS user_id, u.nickname, u.avatar_key, u.status_emoji,
                    w.weekly_xp::INTEGER AS weekly_xp, s.current_streak
             FROM user_weekly_xp w
             JOIN users u ON u.id = w.user_id
@@ -21,7 +21,7 @@ async def get_weekly_leaderboard(week_start, user_id: int, limit: int = 100) -> 
         own = await connection.fetchrow(
             """
             WITH me AS (
-                SELECT u.id AS user_id, u.nickname, u.avatar_key,
+                SELECT u.id AS user_id, u.nickname, u.avatar_key, u.status_emoji,
                        COALESCE(w.weekly_xp, 0)::INTEGER AS weekly_xp,
                        s.current_streak
                 FROM users u

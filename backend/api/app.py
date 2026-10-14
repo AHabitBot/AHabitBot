@@ -19,6 +19,8 @@ from backend.database.database import (
     connect_db,
 )
 
+from backend.api.leaderboard_status import router as leaderboard_status_router
+
 from backend.api.leaderboard import (
     router as leaderboard_router,
 )
@@ -89,6 +91,7 @@ app.include_router(
 app.include_router(
     leaderboard_router
 )
+app.include_router(leaderboard_status_router)
 
 app.include_router(
     profile_router

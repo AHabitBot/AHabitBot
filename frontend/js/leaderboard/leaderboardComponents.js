@@ -1,7 +1,11 @@
+import { renderStatusBubble } from "./leaderboardStatus.js";
+
 import {
     getLanguage,
     t
 } from "../../i18n/core/i18n.js";
+
+import { renderStatusBubble } from "./leaderboardStatus.js";
 
 import {
     getPluralForm
@@ -251,6 +255,8 @@ export function renderLeaderboardList(users = [], currentUserId = null) {
                         tabindex="0"
                         alt="${escapeHtml(getDisplayName(user))}"
                     >
+
+                    ${renderStatusBubble(user, currentUserId)}
 
                     <div class="leaderboard-list__info">
 

@@ -17,11 +17,14 @@ CREATE TABLE IF NOT EXISTS users (
     first_name VARCHAR(255),
     username VARCHAR(255),
     referral_link VARCHAR(255) UNIQUE,
+    status_emoji VARCHAR(16),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS status_emoji VARCHAR(16);
 
 -- Гарантируем правильный default и для уже существующей таблицы users.
 -- CREATE TABLE IF NOT EXISTS не меняет DEFAULT у ранее созданной колонки.

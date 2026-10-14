@@ -190,6 +190,8 @@ function normalizeLeaderboardUser(
                 user?.current_streak
             ),
 
+        statusEmoji: user?.status_emoji || null,
+
         avatar:
             getAvatarPath(
                 user?.avatar_key
@@ -261,6 +263,8 @@ function normalizeCurrentUser(
             normalizeNonNegativeInteger(
                 user.current_streak
             ),
+
+        statusEmoji: user.status_emoji || null,
 
         avatar:
             getAvatarPath(

@@ -1,3 +1,5 @@
+import { bindLeaderboardStatuses } from "./leaderboardStatus.js";
+
 import {
     RESOURCE_KEYS,
     hasResource
@@ -179,6 +181,7 @@ async function renderWeeklyLeaderboardContent({
         setFinishedSeasonLayout(false);
         setEmptySeasonLayout(isEmptySeason);
         content.innerHTML = renderWeeklyLeaderboard(result.users, result.currentUser);
+        bindLeaderboardStatuses(leaderboardRoot, result.currentUser);
         if (isEmptySeason) {
             hideLeagueHeading();
         } else {
