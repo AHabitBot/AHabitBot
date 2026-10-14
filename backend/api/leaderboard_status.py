@@ -7,10 +7,7 @@ from backend.repositories.leaderboard.leaderboard_status_repository import save_
 router = APIRouter(prefix="/api/leaderboard", tags=["leaderboard-status"])
 
 ALLOWED_EMOJI = (
-    "🔥", "💪", "😎", "🚀", "🏆", "⚡", "🎯", "👑", "🧠", "❤️",
-    "🥇", "⭐", "🌟", "💎", "🦁", "🐺", "🐉", "🦊", "🐻", "🐼",
-    "😈", "👻", "🤖", "🥷", "🤩", "🥳", "😍", "🤔", "😴", "😂",
-    "💯", "🍀", "🌈", "🌙", "☀️", "🌸", "🎮", "🎸", "☕", "🧊",
+    "🔥","💪","😎","🚀","💩","🏆","⚡","👑","🧠","🥇","🦁","🦊",
 )
 
 class StatusPayload(BaseModel):
