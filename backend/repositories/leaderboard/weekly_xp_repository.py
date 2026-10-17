@@ -1,24 +1,44 @@
-"""Recompute weekly XP from awards, respecting the one-time launch timestamp."""
+"""Пересчёт недельного XP по событиям начисления, без изменения общего XP."""
 from datetime import datetime
-from backend.services.leaderboard.week_service import get_week_bounds, WEEK_TIMEZONE
+
+from backend.services.leaderboard.week_service import get_competition_bounds
 
 
 async def refresh_user_weekly_xp(connection, user_id: int, *, at: datetime | None = None) -> int:
-    """Refresh the competition containing `at` (defaults to now).
+    """Пересчитать XP за неделю события `at` (по умолчанию текущую).
 
-    Caller must already be inside a transaction. A canceled award may require
-    refreshing the week in which it was originally awarded.
+    Вызывать внутри существующей транзакции. Недельные начисления принимаются
+    только с понедельника 00:01 (включительно) до воскресенья 23:00
+    (не включительно), по Europe/Kyiv. Общий XP эта функция не изменяет.
+
+    После фиксации недели итоговую запись больше не меняем.
     """
-    start, end = get_week_bounds(at)
+    start, end = get_competition_bounds(at)
+    # Общий замок с закрытием лиги: блокировка должна быть первой в транзакции.
+    await connection.execute("SELECT pg_advisory_xact_lock($1)", 8400172301)
     await connection.execute("SELECT pg_advisory_xact_lock($1)", int(user_id))
+
+    # Не перезаписываем результаты недели после её окончательной фиксации.
+    # Проверка находится в той же транзакции, что и пересчёт.
+    closed = await connection.fetchval(
+        "SELECT 1 FROM league_week_closures WHERE week_start = $1",
+        start.date(),
+    )
+    if closed:
+        return int(await connection.fetchval(
+            "SELECT COALESCE((SELECT weekly_xp FROM user_weekly_xp "
+            "WHERE user_id = $1 AND week_start = $2), 0)",
+            user_id, start.date(),
+        ) or 0)
+
     launched_at = await connection.fetchval(
         "SELECT launched_at FROM weekly_competition_config WHERE id = 1"
     )
     if launched_at is None:
         raise RuntimeError("Weekly competition not initialized: run updated init_pg_db.py")
-    # No score can exist for a competition entirely before launch.
     if end <= launched_at:
         return 0
+
     effective_start = max(start, launched_at)
     score = await connection.fetchval(
         """

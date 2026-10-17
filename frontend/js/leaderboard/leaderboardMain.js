@@ -1,3 +1,5 @@
+import { normalizeLeagueLevel, leagueNameKey } from "./leagueConfig.js";
+
 import { bindLeaderboardStatuses } from "./leaderboardStatus.js";
 
 import {
@@ -177,6 +179,17 @@ async function renderWeeklyLeaderboardContent({
             return;
         }
 
+        // Шапка лиги обновляется по серверным данным даже при нулевом XP.
+        const leagueLevel = normalizeLeagueLevel(result?.leagueLevel);
+        const leagueTitle = leaderboardRoot.querySelector("[data-league-title]");
+        if (leagueTitle) leagueTitle.textContent = t(leagueNameKey(leagueLevel));
+        leaderboardRoot.querySelectorAll("[data-league-index]").forEach((element) => {
+            const index = Number(element.dataset.leagueIndex);
+            element.classList.remove("leaderboard-league--completed", "leaderboard-league--current", "leaderboard-league--locked");
+            element.classList.add(`leaderboard-league--${index < leagueLevel - 1 ? "completed" : index === leagueLevel - 1 ? "current" : "locked"}`);
+            const lock = element.querySelector(".leaderboard-league__lock");
+            if (lock) lock.hidden = index <= leagueLevel - 1;
+        });
         const isEmptySeason = !result?.currentUser || result.currentUser.xp <= 0;
         setFinishedSeasonLayout(false);
         setEmptySeasonLayout(isEmptySeason);
@@ -246,7 +259,7 @@ function hideLeagueHeading() {
 
 
 function getRemainingSeasonDays() {
-    // Следующий понедельник, 00:01 по Europe/Kyiv.
+    // Завершение рейтинга: воскресенье, 23:00 по Europe/Kyiv.
     // Используем календарные дни Киева, не локальный часовой пояс телефона.
     const parts = new Intl.DateTimeFormat("en-GB", {
         timeZone: "Europe/Kyiv", year: "numeric", month: "2-digit",
@@ -257,7 +270,7 @@ function getRemainingSeasonDays() {
     const day = { Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 }[value("weekday")];
     if (day === undefined) return 0;
     const elapsedMinutes = Number(value("hour")) * 60 + Number(value("minute"));
-    return day === 0 && elapsedMinutes < 1 ? 0 : (7 - day);
+    return day === 6 && elapsedMinutes >= 23 * 60 ? 0 : (6 - day);
 }
 
 function formatRemainingDays(days) {

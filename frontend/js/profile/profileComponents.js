@@ -1,3 +1,5 @@
+import { LEAGUE_ICON, leagueNameKey } from "../leaderboard/leagueConfig.js";
+
 import {
     getProfileAvatar,
     getDefaultProfileAvatar
@@ -136,15 +138,10 @@ export function renderProfileUserCard(
         )
 
 
-    /* =====================================================
-       TEMPORARY LEAGUE
-       Пока всем пользователям показываем Bronze.
-       Позже этот блок заменяется данными profile.league.
-       ===================================================== */
-
+    // Реальная лига из профиля; все 10 пока используют один бронзовый PNG.
     const league = {
-        title: t("profile.main.leagueBronze"),
-        image: "/img/profile/league/league_bronze.png"
+        title: t(leagueNameKey(profile.league_level, "profile")),
+        image: LEAGUE_ICON
     }
 
     const avatarFrame =

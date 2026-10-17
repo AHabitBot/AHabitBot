@@ -206,6 +206,8 @@ async def get_profile(
         "user_id":
             int(user_id),
 
+        "league_level": int(profile_data.get("league_level") or 1),
+
         "nickname": (
             profile_data.get(
                 "nickname"

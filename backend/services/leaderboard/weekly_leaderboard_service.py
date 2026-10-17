@@ -10,6 +10,7 @@ async def build_weekly_leaderboard(user_id: int) -> dict:
     week_start = start.date()
     data = await get_weekly_leaderboard(week_start, user_id)
     return {
+        "league_level": int((data.get("current_user") or {}).get("league_level") or 1),
         "week": {"start_date": start.isoformat(), "end_date": end.isoformat(),
                  "week_start": week_start.isoformat()},
         **data,

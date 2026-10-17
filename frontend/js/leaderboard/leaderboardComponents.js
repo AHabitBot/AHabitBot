@@ -3,6 +3,8 @@ import {
     t
 } from "../../i18n/core/i18n.js";
 
+import { LEAGUE_ICON, leagueNameKey, normalizeLeagueLevel } from "./leagueConfig.js";
+
 import { renderStatusBubble } from "./leaderboardStatus.js";
 
 import {
@@ -36,19 +38,13 @@ function renderMaterialIcon(
    LEAGUE HEADER
    ========================================================= */
 
-const LEAGUE_ICON = "/img/profile/league/league_bronze.png";
-
-// Шаблон на 10 лиг. Пока все используют бронзовую эмблему.
-// Позже достаточно заменить name/icon и передавать currentLeagueIndex
-// из реальных данных — верстка останется прежней.
 const LEAGUES = Array.from({ length: 10 }, (_, index) => ({
     id: index + 1,
-    nameKey: index === 0 ? "leaderboard.league.bronze" : "leaderboard.league.bronze",
     icon: LEAGUE_ICON
 }));
 
-export function renderLeaderboardHeader() {
-    const currentLeagueIndex = 0;
+export function renderLeaderboardHeader(leagueLevel = 1) {
+    const currentLeagueIndex = normalizeLeagueLevel(leagueLevel) - 1;
 
     return `
         <header class="leaderboard-header">
@@ -57,7 +53,7 @@ export function renderLeaderboardHeader() {
                     class="leaderboard-league-heading__title"
                     data-league-title
                 >
-                    ${t(LEAGUES[currentLeagueIndex].nameKey)}
+                    ${t(leagueNameKey(leagueLevel))}
                 </h1>
 
                 <span class="leaderboard-league-heading__remaining-wrap">

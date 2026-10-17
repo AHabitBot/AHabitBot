@@ -1,4 +1,15 @@
 export default Object.freeze({
+    "leaderboard.league.bronze": "Bronze League",
+    "leaderboard.league.silver": "Silver League",
+    "leaderboard.league.gold": "Gold League",
+    "leaderboard.league.emerald": "Emerald League",
+    "leaderboard.league.sapphire": "Sapphire League",
+    "leaderboard.league.ruby": "Ruby League",
+    "leaderboard.league.amethyst": "Amethyst League",
+    "leaderboard.league.platinum": "Platinum League",
+    "leaderboard.league.diamond": "Diamond League",
+    "leaderboard.league.brilliant": "Brilliant League",
+
 "leaderboard.common.title": "Leaderboard",
 
     "leaderboard.common.topThreeAria": "Top three participants",

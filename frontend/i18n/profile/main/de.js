@@ -1,4 +1,15 @@
 export default Object.freeze({
+    "profile.main.league.bronze": "Bronze",
+    "profile.main.league.silver": "Silber",
+    "profile.main.league.gold": "Gold",
+    "profile.main.league.emerald": "Smaragd",
+    "profile.main.league.sapphire": "Saphir",
+    "profile.main.league.ruby": "Rubin",
+    "profile.main.league.amethyst": "Amethyst",
+    "profile.main.league.platinum": "Platin",
+    "profile.main.league.diamond": "Diamant",
+    "profile.main.league.brilliant": "Brillant",
+
     "profile.main.title": "Profil",
 
     "profile.main.avatarAlt": "Benutzeravatar",

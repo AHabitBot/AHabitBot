@@ -1,3 +1,4 @@
+from backend.services.leaderboard.league_lock import lock_league_week
 from backend.repositories.leaderboard.weekly_xp_repository import refresh_user_weekly_xp
 import asyncpg
 
@@ -36,6 +37,8 @@ async def create_referral(
 
     async with get_connection() as connection:
         async with connection.transaction():
+            await lock_league_week(connection)
+
 
             # ----------------------------------------------------------------
             # Создаём реферальную связь.

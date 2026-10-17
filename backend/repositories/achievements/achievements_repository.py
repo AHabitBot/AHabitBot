@@ -1,3 +1,4 @@
+from backend.services.leaderboard.league_lock import lock_league_week
 from typing import Any
 
 from backend.database.database import get_connection
@@ -97,7 +98,9 @@ async def create_user_achievement(
     """
 
     async with get_connection() as connection:
-        row = await connection.fetchrow(
+        async with connection.transaction():
+            await lock_league_week(connection)
+            row = await connection.fetchrow(
             """
             INSERT INTO user_achievements (
                 user_id,
@@ -129,7 +132,7 @@ async def create_user_achievement(
             user_id,
             achievement_code,
             xp_amount,
-        )
+            )
 
     if row is None:
         return None

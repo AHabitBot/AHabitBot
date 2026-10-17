@@ -1,3 +1,4 @@
+from backend.services.leaderboard.league_lock import lock_league_week
 from backend.repositories.leaderboard.weekly_xp_repository import refresh_user_weekly_xp
 from datetime import date, datetime, timedelta
 import secrets
@@ -1330,6 +1331,8 @@ async def set_habit_confirmation(
 ) -> dict[str, Any] | None:
     async with get_connection() as connection:
         async with connection.transaction():
+            await lock_league_week(connection)
+
 
             # -------------------------------------------------
             # Проверяем привычку.

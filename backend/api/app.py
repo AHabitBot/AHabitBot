@@ -33,6 +33,8 @@ from backend.api.settings import (
     router as settings_router,
 )
 
+from backend.services.leaderboard.league_week_scheduler import run_league_week_loop
+
 from backend.services.habits.shared_habit_notification_service import (
     run_shared_habit_freeze_loop,
 )
@@ -45,9 +47,16 @@ async def lifespan(app: FastAPI):
         run_shared_habit_freeze_loop()
     )
 
+    league_task = asyncio.create_task(run_league_week_loop())
+
     try:
         yield
     finally:
+        league_task.cancel()
+        try:
+            await league_task
+        except asyncio.CancelledError:
+            pass
         shared_freeze_task.cancel()
         try:
             await shared_freeze_task

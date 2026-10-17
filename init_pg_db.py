@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(255),
     referral_link VARCHAR(255) UNIQUE,
     status_emoji VARCHAR(16),
+    league_level SMALLINT NOT NULL DEFAULT 1 CHECK (league_level BETWEEN 1 AND 10),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -25,6 +26,12 @@ CREATE TABLE IF NOT EXISTS users (
 
 
 ALTER TABLE users ADD COLUMN IF NOT EXISTS status_emoji VARCHAR(16);
+
+-- League rank is separate from cosmetic frame_key. Existing users start Bronze.
+ALTER TABLE users ADD COLUMN IF NOT EXISTS league_level SMALLINT NOT NULL DEFAULT 1;
+ALTER TABLE users DROP CONSTRAINT IF EXISTS users_league_level_range;
+ALTER TABLE users ADD CONSTRAINT users_league_level_range CHECK (league_level BETWEEN 1 AND 10);
+
 
 -- Гарантируем правильный default и для уже существующей таблицы users.
 -- CREATE TABLE IF NOT EXISTS не меняет DEFAULT у ранее созданной колонки.
@@ -462,6 +469,37 @@ CREATE TABLE IF NOT EXISTS weekly_competition_config (
     launched_at TIMESTAMPTZ NOT NULL
 );
 
+-- Activation is intentionally NULL until the league transition mechanism is tested.
+-- Set it to the Monday date of the FIRST week eligible for league changes.
+ALTER TABLE weekly_competition_config
+    ADD COLUMN IF NOT EXISTS league_activation_week DATE;
+
+-- One immutable close marker per competition week (week_start = Monday).
+-- The service will insert the marker and the results in the same transaction.
+CREATE TABLE IF NOT EXISTS league_week_closures (
+    week_start DATE PRIMARY KEY,
+    frozen_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    applied_at TIMESTAMPTZ,
+    CONSTRAINT league_closure_applied_after_freeze CHECK (
+        applied_at IS NULL OR applied_at >= frozen_at
+    )
+);
+
+-- Final standings, independent of later changes to habit confirmations.
+CREATE TABLE IF NOT EXISTS league_week_results (
+    week_start DATE NOT NULL REFERENCES league_week_closures(week_start) ON DELETE RESTRICT,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    league_before SMALLINT NOT NULL CHECK (league_before BETWEEN 1 AND 10),
+    league_after SMALLINT NOT NULL CHECK (league_after BETWEEN 1 AND 10),
+    place INTEGER NOT NULL CHECK (place >= 1),
+    weekly_xp INTEGER NOT NULL CHECK (weekly_xp > 0),
+    PRIMARY KEY (week_start, user_id),
+    UNIQUE (week_start, league_before, place),
+    CHECK (abs(league_after - league_before) <= 1)
+);
+CREATE INDEX IF NOT EXISTS idx_league_week_results_user
+    ON league_week_results(user_id, week_start DESC);
+
 -- First rollout only: clear trial scores from earlier weekly stages.
 -- Subsequent init runs do not reset competition data.
 WITH first_launch AS (
@@ -617,6 +655,8 @@ async def init_database() -> None:
         print("   • user_stats")
         print("   • user_weekly_xp")
         print("   • weekly_competition_config")
+        print("   • league_week_closures")
+        print("   • league_week_results")
 
     finally:
         await connection.close()

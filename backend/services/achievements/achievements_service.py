@@ -1,3 +1,4 @@
+from backend.services.leaderboard.league_lock import lock_league_week
 from backend.repositories.leaderboard.weekly_xp_repository import refresh_user_weekly_xp
 from typing import Any
 
@@ -751,6 +752,8 @@ async def recalculate_user_xp(
 
     async with get_connection() as connection:
         async with connection.transaction():
+            await lock_league_week(connection)
+
 
             # =================================================
             # ОБЩИЙ XP

@@ -82,6 +82,7 @@ export function buildWeeklyLeaderboardResource(response) {
     return {
         users: leaderboardUsers,
         currentUser,
+        leagueLevel: Number(response?.league_level ?? response?.current_user?.league_level ?? 1),
         week: season,
         top3: Array.isArray(response?.top3)
             ? response.top3.map(normalizeLeaderboardUser)

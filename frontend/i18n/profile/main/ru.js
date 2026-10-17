@@ -1,4 +1,15 @@
 export default Object.freeze({
+    "profile.main.league.bronze": "Бронзовая",
+    "profile.main.league.silver": "Серебряная",
+    "profile.main.league.gold": "Золотая",
+    "profile.main.league.emerald": "Изумрудная",
+    "profile.main.league.sapphire": "Сапфировая",
+    "profile.main.league.ruby": "Рубиновая",
+    "profile.main.league.amethyst": "Аметистовая",
+    "profile.main.league.platinum": "Платиновая",
+    "profile.main.league.diamond": "Алмазная",
+    "profile.main.league.brilliant": "Бриллиантовая",
+
     "profile.main.title": "Профиль",
 
     "profile.main.avatarAlt": "Аватар пользователя",

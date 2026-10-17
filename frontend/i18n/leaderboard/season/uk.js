@@ -1,4 +1,15 @@
 export default Object.freeze({
+    "leaderboard.league.bronze": "Бронзова ліга",
+    "leaderboard.league.silver": "Срібна ліга",
+    "leaderboard.league.gold": "Золота ліга",
+    "leaderboard.league.emerald": "Смарагдова ліга",
+    "leaderboard.league.sapphire": "Сапфірова ліга",
+    "leaderboard.league.ruby": "Рубінова ліга",
+    "leaderboard.league.amethyst": "Аметистова ліга",
+    "leaderboard.league.platinum": "Платинова ліга",
+    "leaderboard.league.diamond": "Алмазна ліга",
+    "leaderboard.league.brilliant": "Діамантова ліга",
+
 "leaderboard.common.title": "Лідерборд",
 
     "leaderboard.common.topThreeAria": "Три найкращі учасники",

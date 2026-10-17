@@ -30,3 +30,16 @@ def get_week_bounds(now: datetime | None = None) -> tuple[datetime, datetime]:
     start = datetime.combine(monday, WEEK_START_TIME, WEEK_TIMEZONE)
     end = datetime.combine(monday + timedelta(days=7), WEEK_START_TIME, WEEK_TIMEZONE)
     return start, end
+
+
+# Future league competition cut-off; the existing get_week_bounds() is
+# intentionally unchanged until the XP and closing code is deployed together.
+COMPETITION_END_WEEKDAY = 6  # Sunday
+COMPETITION_END_TIME = time(23, 0)
+
+def get_competition_bounds(now: datetime | None = None) -> tuple[datetime, datetime]:
+    """Monday 00:01 (inclusive) to Sunday 23:00 (exclusive), Kyiv local time."""
+    monday = get_week_start(now)
+    start = datetime.combine(monday, WEEK_START_TIME, WEEK_TIMEZONE)
+    end = datetime.combine(monday + timedelta(days=6), COMPETITION_END_TIME, WEEK_TIMEZONE)
+    return start, end
