@@ -7,7 +7,6 @@ process_due_weeks с connection из asyncpg pool.
 from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from backend.repositories.leaderboard.weekly_xp_repository import refresh_user_weekly_xp
 from backend.services.leaderboard.week_service import get_competition_bounds
 
 KYIV = ZoneInfo('Europe/Kyiv')
@@ -59,31 +58,49 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
         return False
     if await connection.fetchval('SELECT 1 FROM league_week_closures WHERE week_start=$1', week):
         return False
-    # Refresh all participants under the same lock as event writers.
-    ids = await connection.fetch('''
-        SELECT DISTINCT user_id FROM (
-            SELECT user_id FROM user_weekly_xp WHERE week_start=$1
-            UNION ALL
-            SELECT h.user_id FROM habit_confirmations hc JOIN habits h ON h.id=hc.habit_id
-              WHERE hc.is_confirmed AND hc.xp_awarded AND hc.xp_awarded_at >= $2 AND hc.xp_awarded_at < $3
-            UNION ALL
-            SELECT inviter_user_id FROM referrals
-              WHERE xp_awarded AND created_at >= $2 AND created_at < $3
-            UNION ALL
-            SELECT user_id FROM user_achievements
-              WHERE xp_awarded AND earned_at >= $2 AND earned_at < $3
-        ) sources
-        ORDER BY user_id
-    ''', week, start, end)
-    for item in ids:
-        await refresh_user_weekly_xp(connection, item['user_id'], at=start)
+    # Reconstruct the standings AS OF Sunday 23:00 from immutable award history.
+    # A later cancellation cannot rewrite the score of a finished week.
+    launched_at = await connection.fetchval(
+        'SELECT launched_at FROM weekly_competition_config WHERE id=1')
+    effective_start = max(start, launched_at)
     rows = await connection.fetch('''
-        SELECT u.id, u.league_level, w.weekly_xp
-        FROM user_weekly_xp w JOIN users u ON u.id=w.user_id
-        WHERE w.week_start=$1 AND w.weekly_xp>0
-    ''', week)
+        WITH xp AS (
+            SELECT user_id, SUM(xp_amount)::BIGINT AS points
+            FROM league_habit_xp_events
+            WHERE awarded_at >= $1 AND awarded_at < $2
+              AND (revoked_at IS NULL OR revoked_at >= $2)
+            GROUP BY user_id
+            UNION ALL
+            SELECT inviter_user_id, SUM(xp_amount)::BIGINT
+            FROM referrals
+            WHERE xp_awarded AND created_at >= $1 AND created_at < $2
+            GROUP BY inviter_user_id
+            UNION ALL
+            SELECT user_id, SUM(xp_amount)::BIGINT
+            FROM user_achievements
+            WHERE xp_awarded AND earned_at >= $1 AND earned_at < $2
+            GROUP BY user_id
+        )
+        SELECT u.id, u.league_level, SUM(xp.points)::INTEGER AS weekly_xp
+        FROM xp JOIN users u ON u.id=xp.user_id
+        GROUP BY u.id, u.league_level
+        HAVING SUM(xp.points) > 0
+    ''', effective_start, end)
+    # The final weekly score must match the frozen result as well.
+    for r in rows:
+        await connection.execute('''
+            INSERT INTO user_weekly_xp (user_id, week_start, weekly_xp)
+            VALUES ($1,$2,$3)
+            ON CONFLICT (user_id, week_start)
+            DO UPDATE SET weekly_xp=EXCLUDED.weekly_xp, updated_at=clock_timestamp()
+        ''', r['id'], week, r['weekly_xp'])
+    # Remove stale live scores from users with no points at the cutoff.
+    await connection.execute('''
+        UPDATE user_weekly_xp SET weekly_xp=0, updated_at=clock_timestamp()
+        WHERE week_start=$1 AND NOT (user_id=ANY($2::BIGINT[]))
+    ''', week, [r['id'] for r in rows])
     result = calculate_transitions([(r['id'], r['league_level'], r['weekly_xp']) for r in rows])
-    await connection.execute('INSERT INTO league_week_closures(week_start) VALUES($1)', week)
+    await connection.execute('INSERT INTO league_week_closures(week_start, frozen_at) VALUES($1, clock_timestamp())', week)
     if result:
         await connection.executemany('''
             INSERT INTO league_week_results

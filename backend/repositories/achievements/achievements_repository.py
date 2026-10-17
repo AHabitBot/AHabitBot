@@ -106,13 +106,15 @@ async def create_user_achievement(
                 user_id,
                 achievement_code,
                 xp_awarded,
-                xp_amount
+                xp_amount,
+                earned_at
             )
             VALUES (
                 $1,
                 $2,
                 TRUE,
-                $3
+                $3,
+                clock_timestamp()
             )
 
             ON CONFLICT (

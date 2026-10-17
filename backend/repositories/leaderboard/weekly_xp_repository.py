@@ -44,11 +44,11 @@ async def refresh_user_weekly_xp(connection, user_id: int, *, at: datetime | Non
         """
         SELECT (
             COALESCE((
-                SELECT SUM(hc.xp_amount)
-                FROM habit_confirmations hc
-                JOIN habits h ON h.id = hc.habit_id
-                WHERE h.user_id = $1 AND hc.is_confirmed AND hc.xp_awarded
-                  AND hc.xp_awarded_at >= $2 AND hc.xp_awarded_at < $3
+                SELECT SUM(ev.xp_amount)
+                FROM league_habit_xp_events ev
+                WHERE ev.user_id = $1
+                  AND ev.awarded_at >= $2 AND ev.awarded_at < $3
+                  AND ev.revoked_at IS NULL
             ), 0)
             + COALESCE((
                 SELECT SUM(r.xp_amount) FROM referrals r

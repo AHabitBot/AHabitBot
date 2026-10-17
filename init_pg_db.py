@@ -500,6 +500,70 @@ CREATE TABLE IF NOT EXISTS league_week_results (
 CREATE INDEX IF NOT EXISTS idx_league_week_results_user
     ON league_week_results(user_id, week_start DESC);
 
+-- Append-only history of XP awards for reliable recovery after downtime.
+-- The trigger records each award and its revocation without modifying general XP.
+CREATE TABLE IF NOT EXISTS league_habit_xp_events (
+    id BIGSERIAL PRIMARY KEY,
+    confirmation_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    xp_amount INTEGER NOT NULL CHECK (xp_amount >= 0),
+    awarded_at TIMESTAMPTZ NOT NULL,
+    revoked_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS idx_league_habit_xp_events_window
+    ON league_habit_xp_events(awarded_at, user_id);
+CREATE INDEX IF NOT EXISTS idx_league_habit_xp_events_confirmation
+    ON league_habit_xp_events(confirmation_id) WHERE revoked_at IS NULL;
+
+CREATE OR REPLACE FUNCTION record_league_habit_xp_event()
+RETURNS TRIGGER AS $league_event$
+DECLARE
+    was_active BOOLEAN := FALSE;
+    is_active BOOLEAN := FALSE;
+    changed_award BOOLEAN := FALSE;
+    award_user_id BIGINT;
+BEGIN
+    -- INSERT has no OLD; DELETE has no NEW.
+    IF TG_OP = 'INSERT' THEN
+        is_active := NEW.is_confirmed AND NEW.xp_awarded
+            AND NEW.xp_amount > 0 AND NEW.xp_awarded_at IS NOT NULL;
+    ELSIF TG_OP = 'DELETE' THEN
+        was_active := OLD.is_confirmed AND OLD.xp_awarded
+            AND OLD.xp_amount > 0 AND OLD.xp_awarded_at IS NOT NULL;
+    ELSIF TG_OP = 'UPDATE' THEN
+        was_active := OLD.is_confirmed AND OLD.xp_awarded
+            AND OLD.xp_amount > 0 AND OLD.xp_awarded_at IS NOT NULL;
+        is_active := NEW.is_confirmed AND NEW.xp_awarded
+            AND NEW.xp_amount > 0 AND NEW.xp_awarded_at IS NOT NULL;
+        changed_award := OLD.xp_awarded_at IS DISTINCT FROM NEW.xp_awarded_at
+            OR OLD.xp_amount IS DISTINCT FROM NEW.xp_amount
+            OR OLD.habit_id IS DISTINCT FROM NEW.habit_id;
+    END IF;
+
+    IF was_active AND (NOT is_active OR changed_award) THEN
+        UPDATE league_habit_xp_events
+        SET revoked_at = clock_timestamp()
+        WHERE confirmation_id = OLD.id AND revoked_at IS NULL;
+    END IF;
+
+    IF is_active AND (NOT was_active OR changed_award) THEN
+        SELECT user_id INTO award_user_id FROM habits WHERE id = NEW.habit_id;
+        IF award_user_id IS NULL THEN
+            RAISE EXCEPTION 'Cannot find owner for habit %', NEW.habit_id;
+        END IF;
+        INSERT INTO league_habit_xp_events
+            (confirmation_id, user_id, xp_amount, awarded_at)
+        VALUES (NEW.id, award_user_id, NEW.xp_amount, NEW.xp_awarded_at);
+    END IF;
+    RETURN NULL;
+END;
+$league_event$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_league_habit_xp_event ON habit_confirmations;
+CREATE TRIGGER trg_league_habit_xp_event
+AFTER INSERT OR UPDATE OR DELETE ON habit_confirmations
+FOR EACH ROW EXECUTE FUNCTION record_league_habit_xp_event();
+
 -- First rollout only: clear trial scores from earlier weekly stages.
 -- Subsequent init runs do not reset competition data.
 WITH first_launch AS (
@@ -657,6 +721,7 @@ async def init_database() -> None:
         print("   • weekly_competition_config")
         print("   • league_week_closures")
         print("   • league_week_results")
+        print("   • league_habit_xp_events")
 
     finally:
         await connection.close()

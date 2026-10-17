@@ -54,13 +54,15 @@ async def create_referral(
                     inviter_user_id,
                     invited_user_id,
                     xp_awarded,
-                    xp_amount
+                    xp_amount,
+                    created_at
                 )
                 VALUES (
                     $1,
                     $2,
                     TRUE,
-                    $3
+                    $3,
+                    clock_timestamp()
                 )
 
                 ON CONFLICT (invited_user_id)
@@ -109,7 +111,7 @@ async def create_referral(
                 xp_amount,
             )
 
-            await refresh_user_weekly_xp(connection, inviter_user_id)
+            await refresh_user_weekly_xp(connection, inviter_user_id, at=referral["created_at"])
 
             return referral
 

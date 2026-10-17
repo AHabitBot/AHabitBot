@@ -1484,7 +1484,7 @@ async def set_habit_confirmation(
                             TRUE,
                             $3,
                             $4,
-                            CASE WHEN $3 THEN NOW() ELSE NULL END
+                            CASE WHEN $3 THEN clock_timestamp() ELSE NULL END
                         )
 
                         ON CONFLICT (
