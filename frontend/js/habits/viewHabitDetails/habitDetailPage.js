@@ -237,6 +237,8 @@ export function renderHabitDetailsPage(habit = {}) {
             name || t("habits.details.unnamed")
         )
 
+    const safeDescription = escapeHabitDetailsHtml(habit.description || "")
+
     const safeIcon =
         escapeHabitDetailsHtml(icon)
 
@@ -386,6 +388,8 @@ export function renderHabitDetailsPage(habit = {}) {
                     ${statusText}
                 </div>
 
+
+                ${safeDescription ? `<p class="habit-details__description">${safeDescription}</p>` : ""}
 
                 <section
                     class="habit-details__stats"

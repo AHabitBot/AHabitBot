@@ -210,6 +210,17 @@ export function renderAddHabitPage() {
                     </div>
 
 
+                    <!-- Необязательное описание привычки -->
+                    <div class="add-habit-v2__description-wrap">
+                        <button type="button" class="add-habit-v2__description-toggle" id="add-habit-description-toggle" aria-expanded="false" aria-controls="add-habit-description-field" ${isSharedParticipantLocked ? 'disabled' : ''}>
+                            <span>≡ &nbsp;${t("habits.addHabit.description.add")}</span><span aria-hidden="true">＋</span>
+                        </button>
+                        <div id="add-habit-description-field" class="add-habit-v2__description-field" hidden>
+                            <textarea id="add-habit-description" maxlength="200" rows="3" placeholder="${t("habits.addHabit.description.placeholder")}" ${isSharedParticipantLocked ? 'disabled' : ''}></textarea>
+                            <div class="add-habit-v2__description-count"><span id="add-habit-description-count">0</span>/200</div>
+                        </div>
+                    </div>
+
                     <!-- Быстрые варианты названия -->
                     <div class="add-habit-v2__suggestions">
 
@@ -783,6 +794,7 @@ export function updateDraftFromAddHabitPage() {
     updateHabitDraft({
         name:
             nameInput?.value ?? "",
+        description: root.querySelector("#add-habit-description")?.value ?? getHabitDraftValue("description") ?? "",
 
         icon:
             iconValue ||
@@ -843,8 +855,18 @@ export function restoreDraftToAddHabitPage() {
        --------------------------------------------------------- */
 
     if (nameInput) {
-        nameInput.value =
-            draft.name
+        nameInput.value = draft.name
+    }
+    const descriptionInput = root.querySelector("#add-habit-description")
+    const descriptionField = root.querySelector("#add-habit-description-field")
+    const descriptionToggle = root.querySelector("#add-habit-description-toggle")
+    if (descriptionInput) {
+        descriptionInput.value = draft.description || ""
+        root.querySelector("#add-habit-description-count").textContent = String(descriptionInput.value.length)
+        if (descriptionInput.value) {
+            descriptionField.hidden = false
+            descriptionToggle.setAttribute("aria-expanded", "true")
+        }
     }
 
 
@@ -1020,6 +1042,7 @@ export async function updateHabitFromDraft() {
             editingHabitId,
             {
                 title: habitName,
+                description: draft.description,
                 emoji: draft.icon || "✱",
                 color: draft.color || "blue",
                 size: draft.size || "large",
@@ -1039,6 +1062,7 @@ export async function updateHabitFromDraft() {
         editingHabitId,
         {
             name: response.title,
+            description: response.description ?? "",
             icon: response.emoji,
             color: response.color,
             size: response.size,
@@ -1940,6 +1964,20 @@ export function initAddHabitPageEvents({
        ВВОД НАЗВАНИЯ
        ===================================================== */
 
+    const descriptionInput = root.querySelector("#add-habit-description")
+    const descriptionField = root.querySelector("#add-habit-description-field")
+    const descriptionToggle = root.querySelector("#add-habit-description-toggle")
+    descriptionToggle?.addEventListener("click", () => {
+        const expanded = descriptionToggle.getAttribute("aria-expanded") === "true"
+        descriptionToggle.setAttribute("aria-expanded", String(!expanded))
+        descriptionField.hidden = expanded
+        if (!expanded) descriptionInput?.focus()
+    })
+    descriptionInput?.addEventListener("input", () => {
+        setHabitDraftValue("description", descriptionInput.value)
+        root.querySelector("#add-habit-description-count").textContent = String(descriptionInput.value.length)
+    })
+
     nameInput?.addEventListener(
         "input",
         () => {
@@ -2193,6 +2231,7 @@ saveButton?.addEventListener(
                     await createHabitApi({
                         title:
                             habitName,
+                        description: draft.description,
 
                         emoji:
                             draft.icon || "✱",

@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS habits (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
     title VARCHAR(255) NOT NULL,
+    description VARCHAR(200),
     emoji VARCHAR(32) NOT NULL DEFAULT '✱',
     color VARCHAR(64) NOT NULL,
     size VARCHAR(32) NOT NULL DEFAULT 'large',
@@ -119,6 +120,8 @@ CREATE TABLE IF NOT EXISTS habits (
         REFERENCES users(id)
         ON DELETE CASCADE
 );
+
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS description VARCHAR(200);
 
 ALTER TABLE habits
     ADD COLUMN IF NOT EXISTS archived_at TIMESTAMPTZ;

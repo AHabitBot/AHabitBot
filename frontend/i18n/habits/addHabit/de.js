@@ -1,4 +1,6 @@
 export default Object.freeze({
+    "habits.addHabit.description.add": "Beschreibung hinzufügen",
+    "habits.addHabit.description.placeholder": "Wofür ist diese Gewohnheit?",
     "habits.addHabit.create.title": "Neue Gewohnheit",
     "habits.addHabit.edit.title": "Gewohnheit bearbeiten",
 

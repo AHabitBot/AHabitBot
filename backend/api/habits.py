@@ -61,6 +61,8 @@ class HabitCreateRequest(BaseModel):
         max_length=60,
     )
 
+    description: str | None = Field(default=None, max_length=200)
+
     emoji: str = Field(
         default="✱",
         min_length=1,
@@ -86,6 +88,8 @@ class HabitUpdateRequest(BaseModel):
         min_length=1,
         max_length=60,
     )
+
+    description: str | None = Field(default=None, max_length=200)
 
     emoji: str = Field(
         default="✱",
@@ -210,6 +214,7 @@ async def add_habit(
     habit = await create_habit(
         user_id=user["id"],
         title=payload.title.strip(),
+        description=(payload.description.strip() or None) if payload.description else None,
         emoji=payload.emoji,
         color=payload.color,
         size=payload.size,
@@ -266,6 +271,7 @@ async def update_existing_habit(
             user_id=user["id"],
             habit_id=habit_id,
             title=payload.title.strip(),
+        description=(payload.description.strip() or None) if payload.description else None,
             emoji=payload.emoji,
             color=payload.color,
             size=payload.size,

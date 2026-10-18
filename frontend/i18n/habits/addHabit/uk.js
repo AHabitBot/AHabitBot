@@ -1,4 +1,6 @@
 export default Object.freeze({
+    "habits.addHabit.description.add": "Додати опис",
+    "habits.addHabit.description.placeholder": "Для чого ця звичка?",
     "habits.addHabit.create.title": "Нова звичка",
     "habits.addHabit.edit.title": "Редагування звички",
 

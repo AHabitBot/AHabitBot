@@ -131,12 +131,12 @@ async def join_shared_habit(invite_token: str, user_id: int) -> dict[str, Any] |
             new_habit_id = await connection.fetchval(
                 """
                 INSERT INTO habits (
-                    user_id, title, emoji, color, size, xp_reward,
+                    user_id, title, description, emoji, color, size, xp_reward,
                     repeat_type, repeat_days, weekly_target, challenge_target,
                     repeat_started_on, habit_reminder, invite_token
                 )
                 VALUES (
-                    $1, $2, $3, $4, $5, $6,
+                    $1, $2, $12, $3, $4, $5, $6,
                     $7, $8, $9, $10,
                     CURRENT_DATE, NULL, $11
                 )
@@ -146,6 +146,7 @@ async def join_shared_habit(invite_token: str, user_id: int) -> dict[str, Any] |
                 source["title"], source["emoji"], source["color"], source["size"], source["xp_reward"],
                 source["repeat_type"], source["repeat_days"], source["weekly_target"], source["challenge_target"],
                 new_token,
+                source["description"],
             )
 
             await connection.execute(

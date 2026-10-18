@@ -17,6 +17,7 @@
 
 const DEFAULT_HABIT_DRAFT = {
     name: "",
+    description: "",
     icon: "✱",
     color: "blue",
     size: "large",
@@ -224,6 +225,7 @@ export function startHabitEditDraft(
                 String(
                     habit.name ?? ""
                 ),
+            description: String(habit.description ?? ""),
 
             icon:
                 String(

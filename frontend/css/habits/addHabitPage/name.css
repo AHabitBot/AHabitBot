@@ -472,3 +472,12 @@
         color: var(--app-text-secondary);
     }
 }
+
+/* Раскрываемое необязательное описание */
+.add-habit-v2__description-wrap { margin-top: 12px; }
+.add-habit-v2__description-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; background: transparent; border: 0; padding: 10px 4px; color: var(--app-text-secondary, #999); font: inherit; cursor: pointer; }
+.add-habit-v2__description-toggle:disabled { opacity: .45; cursor: default; }
+.add-habit-v2__description-field[hidden] { display: none; }
+.add-habit-v2__description-field textarea { box-sizing: border-box; width: 100%; resize: vertical; min-height: 84px; border-radius: 16px; padding: 13px 15px; background: #252525; color: #f3f3f3; border: 1px solid #353535; font: inherit; line-height: 1.4; outline: none; }
+.add-habit-v2__description-field textarea:focus { border-color: #777; }
+.add-habit-v2__description-count { text-align: right; color: #858585; font-size: 12px; margin-top: 5px; }

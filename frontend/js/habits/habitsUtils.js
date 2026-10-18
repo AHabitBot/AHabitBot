@@ -25,6 +25,8 @@ export function normalizeHabit(
             habit.name ||
             "",
 
+        description: habit.description ?? "",
+
         icon:
             habit.emoji ||
             habit.icon ||

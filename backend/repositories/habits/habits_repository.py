@@ -68,6 +68,7 @@ async def get_user_habits(
                 h.id,
                 h.user_id,
                 h.title,
+                h.description,
                 h.emoji,
                 h.color,
                 h.size,
@@ -410,6 +411,7 @@ async def get_user_habits(
 async def create_habit(
     user_id: int,
     title: str,
+    description: str | None,
     emoji: str,
     color: str,
     size: str,
@@ -427,6 +429,7 @@ async def create_habit(
             INSERT INTO habits (
                 user_id,
                 title,
+                description,
                 emoji,
                 color,
                 size,
@@ -438,11 +441,12 @@ async def create_habit(
                 habit_reminder,
                 invite_token
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11::TIME, $12)
+            VALUES ($1, $2, $13, $3, $4, $5, $6, $7, $8, $9, $10, $11::TIME, $12)
             RETURNING
                 id,
                 user_id,
                 title,
+                description,
                 emoji,
                 color,
                 size,
@@ -466,6 +470,7 @@ async def create_habit(
             )),
             habit_reminder,
             invite_token,
+            description,
         )
 
     if row is None:
@@ -484,6 +489,7 @@ async def update_habit(
     user_id: int,
     habit_id: int,
     title: str,
+    description: str | None,
     emoji: str,
     color: str,
     size: str,
@@ -553,7 +559,7 @@ async def update_habit(
                       AND user_id = $2
                       AND is_archived = FALSE
                     RETURNING
-                        id, user_id, title, emoji, color, size,
+                        id, user_id, title, description, emoji, color, size,
                         xp_reward, is_archived, created_at, updated_at,
                         repeat_type, repeat_days, weekly_target,
                         challenge_target, repeat_started_on,
@@ -612,6 +618,7 @@ async def update_habit(
                     UPDATE habits AS h
                     SET
                         title = $2,
+                        description = $11,
                         emoji = $3,
                         color = $4,
                         size = $5,
@@ -636,6 +643,7 @@ async def update_habit(
                     weekly_target,
                     challenge_target,
                     new_repeat_started_on,
+                    description,
                 )
 
                 # Напоминание владельца остаётся персональным.
@@ -655,7 +663,7 @@ async def update_habit(
                       AND user_id = $2
                       AND is_archived = FALSE
                     RETURNING
-                        id, user_id, title, emoji, color, size,
+                        id, user_id, title, description, emoji, color, size,
                         xp_reward, is_archived, created_at, updated_at,
                         repeat_type, repeat_days, weekly_target,
                         challenge_target, repeat_started_on,
@@ -673,6 +681,7 @@ async def update_habit(
                 UPDATE habits
                 SET
                     title = $3,
+                    description = $13,
                     emoji = $4,
                     color = $5,
                     size = $6,
@@ -693,7 +702,7 @@ async def update_habit(
                   AND user_id = $2
                   AND is_archived = FALSE
                 RETURNING
-                    id, user_id, title, emoji, color, size,
+                    id, user_id, title, description, emoji, color, size,
                     xp_reward, is_archived, created_at, updated_at,
                     repeat_type, repeat_days, weekly_target,
                     challenge_target, repeat_started_on,
@@ -711,6 +720,7 @@ async def update_habit(
                 challenge_target,
                 new_repeat_started_on,
                 habit_reminder,
+                description,
             )
             return dict(row) if row else None
 

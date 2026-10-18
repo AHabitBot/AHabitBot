@@ -101,3 +101,16 @@
     font-weight: 550;
     line-height: 1.15;
 }
+/* Описание: без отдельной карточки */
+.habit-details__description {
+    max-width: 100%;
+    margin: 14px 0 0;
+    padding: 0 8px;
+    color: var(--habit-ref-secondary);
+    font-size: 14px;
+    line-height: 1.45;
+    font-weight: 400;
+    text-align: center;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
