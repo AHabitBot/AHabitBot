@@ -28,11 +28,15 @@ def calculate_transitions(rows):
         members.sort(key=lambda item: (-item[1], item[0]))
         n = len(members)
         count = transition_count(n)
+        # Boundary ties have the same outcome; user ID only makes places stable.
+        # With >=9 participants, promotion and demotion zones cannot overlap.
+        promote_cutoff = members[count - 1][1] if count else None
+        demote_cutoff = members[n - count][1] if count else None
         for index, (uid, xp) in enumerate(members):
             after = league
-            if count and index < count and league < 10:
+            if count and xp >= promote_cutoff and league < 10:
                 after += 1
-            elif count and index >= n - count and league > 1:
+            elif count and xp <= demote_cutoff and league > 1:
                 after -= 1
             results.append((uid, league, after, index + 1, xp))
     return results

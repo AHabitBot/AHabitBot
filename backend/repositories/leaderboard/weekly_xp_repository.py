@@ -1,5 +1,6 @@
 """Пересчёт недельного XP по событиям начисления, без изменения общего XP."""
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from backend.services.leaderboard.week_service import get_competition_bounds
 
@@ -14,6 +15,9 @@ async def refresh_user_weekly_xp(connection, user_id: int, *, at: datetime | Non
     После фиксации недели итоговую запись больше не меняем.
     """
     start, end = get_competition_bounds(at)
+    # Never rewrite a finished week during the Sunday 23:00–Monday 00:01 gap
+    # or after it. The league closer reconstructs and freezes final standings.
+    now = datetime.now(ZoneInfo("Europe/Kyiv"))
     # Общий замок с закрытием лиги: блокировка должна быть первой в транзакции.
     await connection.execute("SELECT pg_advisory_xact_lock($1)", 8400172301)
     await connection.execute("SELECT pg_advisory_xact_lock($1)", int(user_id))
@@ -24,7 +28,7 @@ async def refresh_user_weekly_xp(connection, user_id: int, *, at: datetime | Non
         "SELECT 1 FROM league_week_closures WHERE week_start = $1",
         start.date(),
     )
-    if closed:
+    if closed or now >= end:
         return int(await connection.fetchval(
             "SELECT COALESCE((SELECT weekly_xp FROM user_weekly_xp "
             "WHERE user_id = $1 AND week_start = $2), 0)",

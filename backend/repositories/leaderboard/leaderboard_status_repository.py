@@ -1,10 +1,10 @@
 """Persistence and current-week eligibility for leaderboard emoji status."""
 from datetime import datetime
 from backend.database.database import get_connection
-from backend.services.leaderboard.week_service import WEEK_TIMEZONE, get_week_bounds
+from backend.services.leaderboard.week_service import WEEK_TIMEZONE, get_competition_bounds
 
 async def save_status(user_id: int, emoji: str | None) -> str | None:
-    week_start = get_week_bounds(datetime.now(WEEK_TIMEZONE))[0].date()
+    week_start = get_competition_bounds(datetime.now(WEEK_TIMEZONE))[0].date()
     async with get_connection() as connection:
         async with connection.transaction():
             # The weekly XP record, not the visible top-100 page, defines membership.
