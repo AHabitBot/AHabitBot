@@ -210,17 +210,6 @@ export function renderAddHabitPage() {
                     </div>
 
 
-                    <!-- Необязательное описание привычки -->
-                    <div class="add-habit-v2__description-wrap">
-                        <button type="button" class="add-habit-v2__description-toggle" id="add-habit-description-toggle" aria-expanded="false" aria-controls="add-habit-description-field" ${isSharedParticipantLocked ? 'disabled' : ''}>
-                            <span>≡ &nbsp;${t("habits.addHabit.description.add")}</span><span aria-hidden="true">＋</span>
-                        </button>
-                        <div id="add-habit-description-field" class="add-habit-v2__description-field" hidden>
-                            <textarea id="add-habit-description" maxlength="200" rows="3" placeholder="${t("habits.addHabit.description.placeholder")}" ${isSharedParticipantLocked ? 'disabled' : ''}></textarea>
-                            <div class="add-habit-v2__description-count"><span id="add-habit-description-count">0</span>/200</div>
-                        </div>
-                    </div>
-
                     <!-- Быстрые варианты названия -->
                     <div class="add-habit-v2__suggestions">
 
@@ -468,6 +457,17 @@ export function renderAddHabitPage() {
                             🚿 ${t("habits.addHabit.suggestions.morningShower")}
                         </button>
 
+                    </div>
+
+                    <!-- Необязательное описание привычки -->
+                    <div class="add-habit-v2__description-wrap">
+                        <button type="button" class="add-habit-v2__description-toggle" id="add-habit-description-toggle" aria-expanded="false" aria-controls="add-habit-description-field" ${isSharedParticipantLocked ? 'disabled' : ''}>
+                            <span>≡ &nbsp;${t("habits.addHabit.description.add")}</span><span aria-hidden="true">＋</span>
+                        </button>
+                        <div id="add-habit-description-field" class="add-habit-v2__description-field" hidden>
+                            <textarea id="add-habit-description" maxlength="200" rows="3" placeholder="${t("habits.addHabit.description.placeholder")}" ${isSharedParticipantLocked ? 'disabled' : ''}></textarea>
+                            <div class="add-habit-v2__description-count"><span id="add-habit-description-count">0</span>/200</div>
+                        </div>
                     </div>
 
                 </section>
