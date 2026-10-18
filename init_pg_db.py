@@ -491,12 +491,17 @@ CREATE TABLE IF NOT EXISTS league_week_results (
     user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     league_before SMALLINT NOT NULL CHECK (league_before BETWEEN 1 AND 10),
     league_after SMALLINT NOT NULL CHECK (league_after BETWEEN 1 AND 10),
-    place INTEGER NOT NULL CHECK (place >= 1),
-    weekly_xp INTEGER NOT NULL CHECK (weekly_xp > 0),
+    place INTEGER CHECK (place >= 1),
+    weekly_xp INTEGER NOT NULL CHECK (weekly_xp >= 0),
     PRIMARY KEY (week_start, user_id),
     UNIQUE (week_start, league_before, place),
     CHECK (abs(league_after - league_before) <= 1)
 );
+-- Allow historical records for inactive users, without an assigned place.
+ALTER TABLE league_week_results ALTER COLUMN place DROP NOT NULL;
+ALTER TABLE league_week_results DROP CONSTRAINT IF EXISTS league_week_results_weekly_xp_check;
+ALTER TABLE league_week_results ADD CONSTRAINT league_week_results_weekly_xp_check CHECK (weekly_xp >= 0);
+
 CREATE INDEX IF NOT EXISTS idx_league_week_results_user
     ON league_week_results(user_id, week_start DESC);
 

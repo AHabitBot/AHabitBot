@@ -17,29 +17,33 @@ def transition_count(n: int) -> int:
     return (n + 2) // 5 if n >= 9 else 0
 
 
-def calculate_transitions(rows):
-    """rows: (user_id, league_level, weekly_xp); XP > 0."""
+def calculate_transitions(rows, *, transitions_enabled=True):
+    """Rows: (user_id, league_level, weekly_xp, confirmed_habit_this_week).
+
+    Places and the 20% quota are based ONLY on confirmed habits, not bonus XP.
+    Equal XP is ordered by user_id; it never expands the quota.
+    """
     groups = {level: [] for level in range(1, 11)}
-    for uid, league, xp in rows:
-        if xp > 0:
-            groups[int(league)].append((int(uid), int(xp)))
+    inactive = []
+    for uid, league, xp, active in rows:
+        uid, league, xp = int(uid), int(league), int(xp)
+        if active:
+            groups[league].append((uid, xp))
+        else:
+            inactive.append((uid, league, league, None, xp))
     results = []
     for league, members in groups.items():
         members.sort(key=lambda item: (-item[1], item[0]))
         n = len(members)
-        count = transition_count(n)
-        # Boundary ties have the same outcome; user ID only makes places stable.
-        # With >=9 participants, promotion and demotion zones cannot overlap.
-        promote_cutoff = members[count - 1][1] if count else None
-        demote_cutoff = members[n - count][1] if count else None
+        count = transition_count(n) if transitions_enabled else 0
         for index, (uid, xp) in enumerate(members):
             after = league
-            if count and xp >= promote_cutoff and league < 10:
+            if count and index < count and league < 10:
                 after += 1
-            elif count and xp <= demote_cutoff and league > 1:
+            elif count and index >= n - count and league > 1:
                 after -= 1
             results.append((uid, league, after, index + 1, xp))
-    return results
+    return results + inactive
 
 
 def _bounds(week: date):
@@ -58,8 +62,6 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
     await connection.execute('SELECT pg_advisory_xact_lock($1)', LEAGUE_LOCK)
     activated = await connection.fetchval(
         'SELECT league_activation_week FROM weekly_competition_config WHERE id=1')
-    if activated is None or week < activated:
-        return False
     if await connection.fetchval('SELECT 1 FROM league_week_closures WHERE week_start=$1', week):
         return False
     # Reconstruct the standings AS OF Sunday 23:00 from immutable award history.
@@ -84,11 +86,22 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
             FROM user_achievements
             WHERE xp_awarded AND earned_at >= $1 AND earned_at < $2
             GROUP BY user_id
+        ), totals AS (
+            SELECT user_id, SUM(points)::INTEGER AS weekly_xp
+            FROM xp GROUP BY user_id
+        ), active AS (
+            SELECT DISTINCT user_id
+            FROM league_habit_xp_events
+            WHERE awarded_at >= $1 AND awarded_at < $2
+              AND (revoked_at IS NULL OR revoked_at >= $2)
         )
-        SELECT u.id, u.league_level, SUM(xp.points)::INTEGER AS weekly_xp
-        FROM xp JOIN users u ON u.id=xp.user_id
-        GROUP BY u.id, u.league_level
-        HAVING SUM(xp.points) > 0
+        SELECT u.id, u.league_level,
+               COALESCE(t.weekly_xp, 0)::INTEGER AS weekly_xp,
+               (a.user_id IS NOT NULL) AS active
+        FROM users u
+        LEFT JOIN totals t ON t.user_id=u.id
+        LEFT JOIN active a ON a.user_id=u.id
+        ORDER BY u.id
     ''', effective_start, end)
     # The final weekly score must match the frozen result as well.
     for r in rows:
@@ -103,7 +116,7 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
         UPDATE user_weekly_xp SET weekly_xp=0, updated_at=clock_timestamp()
         WHERE week_start=$1 AND NOT (user_id=ANY($2::BIGINT[]))
     ''', week, [r['id'] for r in rows])
-    result = calculate_transitions([(r['id'], r['league_level'], r['weekly_xp']) for r in rows])
+    result = calculate_transitions([(r['id'], r['league_level'], r['weekly_xp'], r['active']) for r in rows], transitions_enabled=(activated is not None and week >= activated))
     await connection.execute('INSERT INTO league_week_closures(week_start, frozen_at) VALUES($1, clock_timestamp())', week)
     if result:
         await connection.executemany('''
@@ -138,15 +151,16 @@ async def apply_week(connection, week: date, *, now: datetime | None = None) -> 
 
 
 async def process_due_weeks(pool, *, now: datetime | None = None):
-    """Вызов из будущего планировщика; пока НЕ подключён к startup."""
+    """Archive every due week and apply eligible transitions once."""
     now = now or datetime.now(KYIV)
     async with pool.acquire() as conn:
-        activated = await conn.fetchval(
-            'SELECT league_activation_week FROM weekly_competition_config WHERE id=1')
-        if activated is None:
+        launched_at = await conn.fetchval(
+            'SELECT launched_at FROM weekly_competition_config WHERE id=1')
+        if launched_at is None:
             return
-        # Each week committed separately, preserving order after outages.
-        week = activated
+        # Every week is archived, even before league transitions are activated.
+        local_launch = launched_at.astimezone(KYIV).date()
+        week = local_launch - timedelta(days=local_launch.weekday())
         while week <= now.astimezone(KYIV).date():
             async with conn.transaction():
                 await freeze_week(conn, week, now=now)
