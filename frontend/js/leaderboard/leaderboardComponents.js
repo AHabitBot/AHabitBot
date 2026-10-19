@@ -217,7 +217,22 @@ export function renderTopThree(users = []) {
    LEADERBOARD LIST — МЕСТА 4–100
    ========================================================= */
 
-export function renderLeaderboardList(users = [], currentUserId = null) {
+function renderLeagueZone(kind) {
+    const labels = {
+        promotion: "leaderboard.zones.promotion",
+        demotion: "leaderboard.zones.demotion",
+        minimum: "leaderboard.zones.minimum"
+    };
+    const icon = kind === "promotion" ? "arrow_upward" : kind === "demotion" ? "arrow_downward" : "info";
+    return `<div class="leaderboard-zone leaderboard-zone--${kind}" role="note">
+        ${kind !== "minimum" ? '<span class="leaderboard-zone__line"></span>' : ''}
+        ${renderMaterialIcon(icon, "leaderboard-zone__icon")}
+        <span>${escapeHtml(t(labels[kind]))}</span>
+        ${kind !== "minimum" ? '<span class="leaderboard-zone__line"></span>' : ''}
+    </div>`;
+}
+
+export function renderLeaderboardList(users = [], currentUserId = null, zones = null) {
     if (!users.length) {
         return "";
     }
@@ -228,6 +243,8 @@ export function renderLeaderboardList(users = [], currentUserId = null) {
             aria-label="${t("leaderboard.common.participantsAria")}"
         >
             ${users.map((user) => `
+                ${zones?.transitions_enabled && zones.promotion_count > 0 && user.rank === zones.promotion_count + 1 ? renderLeagueZone("promotion") : ""}
+                ${zones?.transitions_enabled && zones.demotion_count > 0 && user.rank === zones.active_count - zones.demotion_count + 1 ? renderLeagueZone("demotion") : ""}
                 <article class="leaderboard-list__row${currentUserId && user.userId === currentUserId ? " leaderboard-list__row--self" : ""}">
 
                     <div class="leaderboard-list__rank-wrap">
@@ -288,6 +305,7 @@ export function renderLeaderboardList(users = [], currentUserId = null) {
 
                 </article>
             `).join("")}
+            ${zones?.transitions_enabled && zones.active_count > 0 && zones.active_count < 9 && users.some(user => user.rank === zones.active_count) ? renderLeagueZone("minimum") : ""}
         </section>
     `;
 }

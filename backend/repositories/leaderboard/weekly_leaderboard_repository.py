@@ -1,5 +1,6 @@
 """Current weekly standings, scoped to the requesting user's league."""
 from backend.database.database import get_connection
+from backend.services.leaderboard.league_transition_service import transition_count
 
 
 async def get_weekly_leaderboard(week_start, user_id: int, limit: int = 100) -> dict:
@@ -10,7 +11,17 @@ async def get_weekly_leaderboard(week_start, user_id: int, limit: int = 100) -> 
             "SELECT league_level FROM users WHERE id = $1", user_id
         )
         if league is None:
-            return {"users": [], "current_user": None}
+            return {"users": [], "current_user": None, "zones": {"active_count": 0, "promotion_count": 0, "demotion_count": 0}}
+        activation_week = await connection.fetchval(
+            "SELECT league_activation_week FROM weekly_competition_config WHERE id=1"
+        )
+        transitions_enabled = activation_week is not None and week_start >= activation_week
+        active_count = await connection.fetchval(
+            """SELECT COUNT(*) FROM user_weekly_xp w
+               JOIN users u ON u.id=w.user_id
+               WHERE w.week_start=$1 AND w.weekly_xp>0 AND u.league_level=$2""",
+            week_start, league,
+        )
         rows = await connection.fetch(
             """
             SELECT ROW_NUMBER() OVER (ORDER BY w.weekly_xp DESC, w.user_id ASC)::INTEGER AS rank,
@@ -47,4 +58,15 @@ async def get_weekly_leaderboard(week_start, user_id: int, limit: int = 100) -> 
             FROM me
             """, week_start, user_id,
         )
-    return {"users": [dict(row) for row in rows], "current_user": dict(own) if own else None}
+    count = int(active_count or 0)
+    quota = transition_count(count) if transitions_enabled else 0
+    return {
+        "users": [dict(row) for row in rows],
+        "current_user": dict(own) if own else None,
+        "zones": {
+            "active_count": count,
+            "transitions_enabled": transitions_enabled,
+            "promotion_count": quota if league < 10 else 0,
+            "demotion_count": quota if league > 1 else 0,
+        },
+    }

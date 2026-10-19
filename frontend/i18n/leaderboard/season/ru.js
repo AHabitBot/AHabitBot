@@ -1,4 +1,7 @@
 export default Object.freeze({
+    "leaderboard.zones.promotion": "ЗОНА ПОВЫШЕНИЯ",
+    "leaderboard.zones.demotion": "ЗОНА ПОНИЖЕНИЯ",
+    "leaderboard.zones.minimum": "Для переходов нужно минимум 9 активных участников",
     "leaderboard.league.bronze": "Бронзовая лига",
     "leaderboard.league.silver": "Серебряная лига",
     "leaderboard.league.gold": "Золотая лига",

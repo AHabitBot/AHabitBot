@@ -435,3 +435,11 @@
     .leaderboard-list__name { font-size: 14px; }
     .leaderboard-list__xp { font-size: 12px; }
 }
+
+/* Weekly promotion/demotion boundaries, supplied by the backend. */
+.leaderboard-zone { display:flex; align-items:center; justify-content:center; gap:7px; padding:13px 10px; font-size:11px; font-weight:700; letter-spacing:.035em; text-align:center; color:#a1a1aa; }
+.leaderboard-zone__line { flex:1; height:1px; background:currentColor; opacity:.4; }
+.leaderboard-zone__icon { font-size:17px; }
+.leaderboard-zone--promotion { color:#79c54c; }
+.leaderboard-zone--demotion { color:#e87979; }
+.leaderboard-zone--minimum { color:#96969c; font-size:12px; font-weight:500; letter-spacing:0; padding:17px 12px; border-top:1px solid rgba(160,160,160,.12); }

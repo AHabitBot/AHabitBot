@@ -1,4 +1,7 @@
 export default Object.freeze({
+    "leaderboard.zones.promotion": "AUFSTIEGSZONE",
+    "leaderboard.zones.demotion": "ABSTIEGSZONE",
+    "leaderboard.zones.minimum": "Für Ligawechsel sind mindestens 9 aktive Teilnehmer erforderlich",
     "leaderboard.league.bronze": "Bronze Liga",
     "leaderboard.league.silver": "Silber Liga",
     "leaderboard.league.gold": "Gold Liga",

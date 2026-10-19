@@ -84,6 +84,7 @@ export function buildWeeklyLeaderboardResource(response) {
         currentUser,
         leagueLevel: Number(response?.league_level ?? response?.current_user?.league_level ?? 1),
         week: season,
+        zones: response?.zones || null,
         top3: Array.isArray(response?.top3)
             ? response.top3.map(normalizeLeaderboardUser)
             : [],
@@ -99,7 +100,8 @@ export function buildWeeklyLeaderboardResource(response) {
 
 export function renderWeeklyLeaderboard(
     users = [],
-    currentUser = null
+    currentUser = null,
+    zones = null
 ) {
     if (!currentUser || currentUser.xp <= 0) {
         return renderEmptySeason();
@@ -107,7 +109,8 @@ export function renderWeeklyLeaderboard(
 
     return renderLeaderboardSection({
         users,
-        currentUserId: currentUser.userId
+        currentUserId: currentUser.userId,
+        zones
     });
 }
 

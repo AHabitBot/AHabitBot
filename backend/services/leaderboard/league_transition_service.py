@@ -18,16 +18,16 @@ def transition_count(n: int) -> int:
 
 
 def calculate_transitions(rows, *, transitions_enabled=True):
-    """Rows: (user_id, league_level, weekly_xp, confirmed_habit_this_week).
+    """Rows: (user_id, league_level, weekly_xp, active).
 
-    Places and the 20% quota are based ONLY on confirmed habits, not bonus XP.
+    Any positive weekly XP qualifies, regardless of its source.
     Equal XP is ordered by user_id; it never expands the quota.
     """
     groups = {level: [] for level in range(1, 11)}
     inactive = []
     for uid, league, xp, active in rows:
         uid, league, xp = int(uid), int(league), int(xp)
-        if active:
+        if xp > 0:
             groups[league].append((uid, xp))
         else:
             inactive.append((uid, league, league, None, xp))
@@ -89,18 +89,11 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
         ), totals AS (
             SELECT user_id, SUM(points)::INTEGER AS weekly_xp
             FROM xp GROUP BY user_id
-        ), active AS (
-            SELECT DISTINCT user_id
-            FROM league_habit_xp_events
-            WHERE awarded_at >= $1 AND awarded_at < $2
-              AND (revoked_at IS NULL OR revoked_at >= $2)
         )
         SELECT u.id, u.league_level,
-               COALESCE(t.weekly_xp, 0)::INTEGER AS weekly_xp,
-               (a.user_id IS NOT NULL) AS active
+               COALESCE(t.weekly_xp, 0)::INTEGER AS weekly_xp
         FROM users u
         LEFT JOIN totals t ON t.user_id=u.id
-        LEFT JOIN active a ON a.user_id=u.id
         ORDER BY u.id
     ''', effective_start, end)
     # The final weekly score must match the frozen result as well.
@@ -116,7 +109,7 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
         UPDATE user_weekly_xp SET weekly_xp=0, updated_at=clock_timestamp()
         WHERE week_start=$1 AND NOT (user_id=ANY($2::BIGINT[]))
     ''', week, [r['id'] for r in rows])
-    result = calculate_transitions([(r['id'], r['league_level'], r['weekly_xp'], r['active']) for r in rows], transitions_enabled=(activated is not None and week >= activated))
+    result = calculate_transitions([(r['id'], r['league_level'], r['weekly_xp'], r['weekly_xp'] > 0) for r in rows], transitions_enabled=(activated is not None and week >= activated))
     await connection.execute('INSERT INTO league_week_closures(week_start, frozen_at) VALUES($1, clock_timestamp())', week)
     if result:
         await connection.executemany('''

@@ -1,4 +1,7 @@
 export default Object.freeze({
+    "leaderboard.zones.promotion": "PROMOTION ZONE",
+    "leaderboard.zones.demotion": "DEMOTION ZONE",
+    "leaderboard.zones.minimum": "At least 9 active participants are needed for league changes",
     "leaderboard.league.bronze": "Bronze League",
     "leaderboard.league.silver": "Silver League",
     "leaderboard.league.gold": "Gold League",

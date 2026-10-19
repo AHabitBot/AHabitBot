@@ -193,7 +193,7 @@ async function renderWeeklyLeaderboardContent({
         const isEmptySeason = !result?.currentUser || result.currentUser.xp <= 0;
         setFinishedSeasonLayout(false);
         setEmptySeasonLayout(isEmptySeason);
-        content.innerHTML = renderWeeklyLeaderboard(result.users, result.currentUser);
+        content.innerHTML = renderWeeklyLeaderboard(result.users, result.currentUser, result.zones);
         bindLeaderboardStatuses(leaderboardRoot, result.currentUser);
         if (isEmptySeason) {
             hideLeagueHeading();
