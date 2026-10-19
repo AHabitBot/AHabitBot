@@ -29,6 +29,7 @@ function normalizeHabit(habit = {}) {
     return {
         id: String(habit.id),
         name: habit.title || "",
+        description: habit.description ?? "",
         icon: habit.emoji || "✱",
         color: habit.color || "green",
         size: habit.size || "large",
