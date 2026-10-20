@@ -2,6 +2,7 @@ import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from backend.admin.routes import router as admin_router
 from fastapi.middleware.cors import (
     CORSMiddleware,
 )
@@ -88,6 +89,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+app.include_router(admin_router)
 
 app.include_router(
     bootstrap_router

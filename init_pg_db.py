@@ -6,6 +6,21 @@ from backend.database.database import DATABASE_URL
 
 
 CREATE_TABLES_SQL = """
+-- Isolated administrator session and failed-login records.
+CREATE TABLE IF NOT EXISTS admin_sessions (
+    id BIGSERIAL PRIMARY KEY,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_admin_sessions_expires ON admin_sessions(expires_at);
+CREATE TABLE IF NOT EXISTS admin_login_attempts (
+    id BIGSERIAL PRIMARY KEY,
+    ip TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_admin_login_attempts_ip_time ON admin_login_attempts(ip, created_at);
+
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     telegram_id BIGINT NOT NULL UNIQUE,

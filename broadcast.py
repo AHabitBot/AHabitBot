@@ -20,7 +20,7 @@ from backend.i18n.notifications import normalize_language
 
 
 # =========================================================
-# BROADCAST — SMALL CARDS / GAME STATS / WEEKLY COMPETITIONS
+# BROADCAST — LEAGUE PROMOTION / RELEGATION ZONES
 # =========================================================
 
 
@@ -97,77 +97,41 @@ async def get_all_users() -> list[dict[str, Any]]:
 
 def build_message_ru() -> str:
     return (
-        '🚀 <b>AHabit — новое обновление!</b>\n'
+        '🏆 <b>В AHabit появились зоны повышения и понижения!</b>\n'
         '\n'
-        'Продолжаем совершенствовать приложение, чтобы развивать привычки было ещё удобнее и интереснее.\n'
+        'Теперь в недельном рейтинге ты можешь увидеть, кто претендует на переход в высшую лигу, а кто рискует опуститься ниже.\n'
         '\n'
-        '🟦 <b>Маленькие карточки привычек</b>\n'
-        'Теперь доступны два размера карточек — большой и маленький. Две маленькие карточки занимают место одной большой. Настраивай главный экран под себя!\n'
-        '\n'
-        '📊 <b>Обновлённые игровые показатели</b>\n'
-        'Личный и дружеский стрики теперь находятся в разделе игровых показателей. Вся важная статистика собрана в одном месте — следи за своим прогрессом и достижениями друзей!\n'
-        '\n'
-        '🏆 <b>Недельные состязания</b>\n'
-        'Мы убрали сезоны и перевели систему лиг на формат еженедельных соревнований. Теперь развитие рейтинга будет строиться вокруг недельного прогресса.'
+        '<b>Заходи в AHabit и проверь, попадаешь ли ты в зону повышения!</b> 🚀'
     )
 
-
-# =========================================================
-# MESSAGE — UK
-# =========================================================
 
 def build_message_uk() -> str:
     return (
-        '🚀 <b>AHabit — нове оновлення!</b>\n'
+        '🏆 <b>В AHabit з’явилися зони підвищення та пониження!</b>\n'
         '\n'
-        'Продовжуємо вдосконалювати застосунок, щоб розвивати звички було ще зручніше та цікавіше.\n'
+        'Тепер у тижневому рейтингу ти можеш побачити, хто претендує на перехід до вищої ліги, а хто ризикує опуститися нижче.\n'
         '\n'
-        '🟦 <b>Маленькі картки звичок</b>\n'
-        'Тепер доступні два розміри карток — великий і маленький. Дві маленькі картки займають місце однієї великої. Налаштовуй головний екран під себе!\n'
-        '\n'
-        '📊 <b>Оновлені ігрові показники</b>\n'
-        'Особистий і дружній стріки тепер знаходяться в розділі ігрових показників. Уся важлива статистика зібрана в одному місці — стеж за своїм прогресом і досягненнями друзів!\n'
-        '\n'
-        '🏆 <b>Тижневі змагання</b>\n'
-        'Ми прибрали сезони й перевели систему ліг на формат щотижневих змагань. Тепер розвиток рейтингу будуватиметься навколо тижневого прогресу.'
+        '<b>Заходь в AHabit і перевір, чи потрапляєш ти до зони підвищення!</b> 🚀'
     )
 
 
-# =========================================================
-# MESSAGE — EN
-# =========================================================
-
 def build_message_en() -> str:
     return (
-        '🚀 <b>AHabit — New Update!</b>\n'
+        '🏆 <b>Promotion and relegation zones are now in AHabit!</b>\n'
         '\n'
-        "We're continuing to improve the app to make building habits easier and more engaging.\n"
+        'You can now see in the weekly leaderboard who is in line for promotion to a higher league and who risks dropping to a lower one.\n'
         '\n'
-        '🟦 <b>Small Habit Cards</b>\n'
-        'Habit cards now come in two sizes: large and small. Two small cards take up the space of one large card. Customize your home screen your way!\n'
-        '\n'
-        '📊 <b>Updated Game Stats</b>\n'
-        'Personal and friends streaks are now in Game Stats. All your key stats are in one place — track your progress and see how your friends are doing!\n'
-        '\n'
-        '🏆 <b>Weekly Competitions</b>\n'
-        "We've removed seasons and shifted the league system to a weekly competition format. Rankings will now focus on weekly progress."
+        '<b>Open AHabit and check whether you’re in the promotion zone!</b> 🚀'
     )
 
 
 def build_message_de() -> str:
     return (
-        '🚀 <b>AHabit — Neues Update!</b>\n'
+        '🏆 <b>Aufstiegs- und Abstiegszonen gibt es jetzt in AHabit!</b>\n'
         '\n'
-        'Wir verbessern die App weiter, damit es noch einfacher und motivierender wird, Gewohnheiten aufzubauen.\n'
+        'In der wöchentlichen Rangliste siehst du jetzt, wer in eine höhere Liga aufsteigen könnte und wer Gefahr läuft, abzusteigen.\n'
         '\n'
-        '🟦 <b>Kleine Gewohnheitskarten</b>\n'
-        'Jetzt gibt es zwei Kartengrößen: groß und klein. Zwei kleine Karten benötigen so viel Platz wie eine große. Gestalte deinen Startbildschirm nach deinen Wünschen!\n'
-        '\n'
-        '📊 <b>Aktualisierte Spielstatistiken</b>\n'
-        'Deine persönliche Serie und die Freundeserie findest du jetzt in den Spielstatistiken. Alle wichtigen Werte sind an einem Ort — verfolge deine Fortschritte und die deiner Freunde!\n'
-        '\n'
-        '🏆 <b>Wöchentliche Wettbewerbe</b>\n'
-        'Wir haben die Saisons entfernt und das Ligasystem auf wöchentliche Wettbewerbe umgestellt. Künftig steht der Fortschritt innerhalb einer Woche im Mittelpunkt der Rangliste.'
+        '<b>Öffne AHabit und prüfe, ob du in der Aufstiegszone bist!</b> 🚀'
     )
 
 
