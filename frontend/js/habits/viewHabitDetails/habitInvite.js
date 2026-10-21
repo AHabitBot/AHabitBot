@@ -73,7 +73,19 @@ export function initHabitInvite(root) {
 
     button.addEventListener("click", () => {
         const inviteToken = button.dataset.habitInviteToken || ""
-        if (!inviteToken) return
+        const telegramWebApp = window.Telegram?.WebApp
+
+        console.info("[AHabit invite] click", {
+            hasToken: Boolean(inviteToken),
+            hasTelegramWebApp: Boolean(telegramWebApp),
+            hasOpenTelegramLink: typeof telegramWebApp?.openTelegramLink === "function"
+        })
+
+        if (!inviteToken) {
+            console.error("[AHabit invite] Missing inviteToken in button data attribute")
+            window.alert("Не удалось получить ссылку приглашения. Попробуйте перезапустить приложение.")
+            return
+        }
 
         const inviteLink =
             "https://t.me/AHabitBot?startapp=habit_"
@@ -84,6 +96,12 @@ export function initHabitInvite(root) {
             duration: button.dataset.habitDuration || ""
         })
 
-        shareReferralLink(inviteLink, shareText)
+        try {
+            shareReferralLink(inviteLink, shareText)
+            console.info("[AHabit invite] shareReferralLink invoked")
+        } catch (error) {
+            console.error("[AHabit invite] Failed to open share link", error)
+            window.alert("Не удалось открыть приглашение. Попробуйте снова.")
+        }
     })
 }
