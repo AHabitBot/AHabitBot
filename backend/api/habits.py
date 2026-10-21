@@ -33,6 +33,10 @@ from backend.services.habits.habit_service import (
     update_habit_confirmation,
 )
 
+from backend.services.habits.shared_habit_notification_service import (
+    send_shared_habit_join_notification,
+)
+
 from backend.services.habits.repeat_rules import (
     normalize_repeat_rule,
 )
@@ -249,6 +253,13 @@ async def join_shared_habit_endpoint(invite_token: str, user: CurrentUser):
         raise HTTPException(status_code=404, detail="Приглашение не найдено")
     if result.get("status") == "full":
         raise HTTPException(status_code=409, detail="В совместной привычке уже 5 участников")
+    if result.get("status") == "joined":
+        try:
+            await send_shared_habit_join_notification(
+                int(result["shared_habit_id"]), int(user["id"])
+            )
+        except Exception:
+            logger.exception("Failed to notify owner about shared habit join")
     return result
 
 

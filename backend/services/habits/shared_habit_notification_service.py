@@ -280,3 +280,45 @@ async def run_shared_habit_freeze_loop() -> None:
         except Exception:
             logger.exception("Shared Habit Freeze Service: ошибка проверки")
         await asyncio.sleep(FREEZE_CHECK_INTERVAL_SECONDS)
+
+async def send_shared_habit_join_notification(shared_habit_id: int, joining_user_id: int) -> None:
+    """Notify the owner after a successful new membership; never mutate membership."""
+    async with get_connection() as connection:
+        row = await connection.fetchrow(
+            """
+            SELECT owner.telegram_id, COALESCE(settings.language, 'ru') AS language,
+                   COALESCE(joiner.nickname, joiner.first_name, 'Player') AS joining_name,
+                   owner_habit.title
+            FROM shared_habits sh
+            JOIN users owner ON owner.id = sh.owner_user_id
+            JOIN users joiner ON joiner.id = $2
+            JOIN shared_habit_members member
+              ON member.shared_habit_id = sh.id AND member.user_id = sh.owner_user_id
+            JOIN habits owner_habit ON owner_habit.id = member.habit_id
+            LEFT JOIN user_settings settings ON settings.user_id = owner.id
+            WHERE sh.id = $1
+              AND EXISTS (
+                SELECT 1 FROM shared_habit_members m
+                WHERE m.shared_habit_id = sh.id AND m.user_id = $2 AND m.left_at IS NULL
+              )
+            """,
+            shared_habit_id, joining_user_id,
+        )
+    if row is None or row['telegram_id'] is None:
+        return
+
+    language = normalize_language(row['language'])
+    name = str(row['joining_name'])
+    title = str(row['title'])
+    templates = {
+        'ru': '👥 Новый участник!\n\n{name} присоединился к твоей привычке «{title}».',
+        'uk': '👥 Новий учасник!\n\n{name} приєднався до твоєї звички «{title}».',
+        'en': '👥 New participant!\n\n{name} joined your habit “{title}”.',
+        'de': '👥 Neues Mitglied!\n\n{name} ist deiner Gewohnheit „{title}“ beigetreten.',
+    }
+    message = templates.get(language, templates['ru']).format(name=name, title=title)
+    bot = Bot(token=BOT_TOKEN)
+    try:
+        await bot.send_message(chat_id=int(row['telegram_id']), text=message)
+    finally:
+        await bot.session.close()
