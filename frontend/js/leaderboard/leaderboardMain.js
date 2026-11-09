@@ -190,7 +190,7 @@ async function renderWeeklyLeaderboardContent({
             const icon = element.querySelector(".leaderboard-league__icon");
             if (icon) icon.src = leagueIcon(index + 1);
             const lock = element.querySelector(".leaderboard-league__lock");
-            if (lock) lock.hidden = index <= leagueLevel - 1;
+            if (lock && index <= leagueLevel - 1) lock.remove();
         });
         const isEmptySeason = !result?.currentUser || result.currentUser.xp <= 0;
         setFinishedSeasonLayout(false);
