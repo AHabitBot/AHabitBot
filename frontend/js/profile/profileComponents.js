@@ -1,4 +1,4 @@
-import { LEAGUE_ICON, leagueNameKey } from "../leaderboard/leagueConfig.js";
+import { leagueIcon, leagueNameKey } from "../leaderboard/leagueConfig.js";
 
 import {
     getProfileAvatar,
@@ -138,10 +138,10 @@ export function renderProfileUserCard(
         )
 
 
-    // Реальная лига из профиля; все 10 пока используют один бронзовый PNG.
+    // Значок соответствует реальному уровню лиги пользователя.
     const league = {
         title: t(leagueNameKey(profile.league_level, "profile")),
-        image: LEAGUE_ICON
+        image: leagueIcon(profile.league_level)
     }
 
     const avatarFrame =

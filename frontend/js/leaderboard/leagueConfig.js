@@ -1,5 +1,9 @@
 // Единый справочник лиг: изображения можно заменить независимо от логики.
 export const LEAGUE_ICON = "/img/profile/league/league_bronze.png";
+// Existing art assets: use silver for level 2, bronze as a placeholder elsewhere.
+export function leagueIcon(level) {
+    return `/img/profile/league/league_${normalizeLeagueLevel(level) === 2 ? "silver" : "bronze"}.png`;
+}
 export const LEAGUE_KEYS = [
     "bronze", "silver", "gold", "emerald", "sapphire",
     "ruby", "amethyst", "platinum", "diamond", "brilliant"

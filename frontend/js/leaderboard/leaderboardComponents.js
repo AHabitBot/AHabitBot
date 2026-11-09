@@ -3,7 +3,7 @@ import {
     t
 } from "../../i18n/core/i18n.js";
 
-import { LEAGUE_ICON, leagueNameKey, normalizeLeagueLevel } from "./leagueConfig.js";
+import { leagueIcon, leagueNameKey, normalizeLeagueLevel } from "./leagueConfig.js";
 
 import { renderStatusBubble } from "./leaderboardStatus.js";
 
@@ -40,7 +40,7 @@ function renderMaterialIcon(
 
 const LEAGUES = Array.from({ length: 10 }, (_, index) => ({
     id: index + 1,
-    icon: LEAGUE_ICON
+    icon: leagueIcon(index + 1)
 }));
 
 export function renderLeaderboardHeader(leagueLevel = 1) {

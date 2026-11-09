@@ -1,4 +1,4 @@
-import { normalizeLeagueLevel, leagueNameKey } from "./leagueConfig.js";
+import { normalizeLeagueLevel, leagueNameKey, leagueIcon } from "./leagueConfig.js";
 
 import { bindLeaderboardStatuses } from "./leaderboardStatus.js";
 
@@ -187,6 +187,8 @@ async function renderWeeklyLeaderboardContent({
             const index = Number(element.dataset.leagueIndex);
             element.classList.remove("leaderboard-league--completed", "leaderboard-league--current", "leaderboard-league--locked");
             element.classList.add(`leaderboard-league--${index < leagueLevel - 1 ? "completed" : index === leagueLevel - 1 ? "current" : "locked"}`);
+            const icon = element.querySelector(".leaderboard-league__icon");
+            if (icon) icon.src = leagueIcon(index + 1);
             const lock = element.querySelector(".leaderboard-league__lock");
             if (lock) lock.hidden = index <= leagueLevel - 1;
         });
