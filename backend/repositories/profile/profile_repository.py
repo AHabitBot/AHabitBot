@@ -16,6 +16,7 @@ async def get_profile_data(
             """
             SELECT
                 u.nickname,
+                u.league_level,
                 u.nickname_changed_at,
                 u.avatar_key,
                 u.background_key,
