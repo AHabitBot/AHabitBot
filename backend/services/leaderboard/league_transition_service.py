@@ -8,6 +8,7 @@ from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from backend.services.leaderboard.week_service import get_competition_bounds
+from backend.services.leaderboard.league_activity import ACTIVE_HABIT_USERS_CTE
 
 KYIV = ZoneInfo('Europe/Kyiv')
 from backend.services.leaderboard.league_lock import LEAGUE_LOCK
@@ -20,14 +21,14 @@ def transition_count(n: int) -> int:
 def calculate_transitions(rows, *, transitions_enabled=True):
     """Rows: (user_id, league_level, weekly_xp, active).
 
-    Any positive weekly XP qualifies, regardless of its source.
+    Only a habit XP event qualifies a participant as active.
     Equal XP is ordered by user_id; it never expands the quota.
     """
     groups = {level: [] for level in range(1, 11)}
     inactive = []
     for uid, league, xp, active in rows:
         uid, league, xp = int(uid), int(league), int(xp)
-        if xp > 0:
+        if active:
             groups[league].append((uid, xp))
         else:
             inactive.append((uid, league, league, None, xp))
@@ -69,7 +70,7 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
     launched_at = await connection.fetchval(
         'SELECT launched_at FROM weekly_competition_config WHERE id=1')
     effective_start = max(start, launched_at)
-    rows = await connection.fetch('''
+    rows = await connection.fetch(f'''
         WITH xp AS (
             SELECT user_id, SUM(xp_amount)::BIGINT AS points
             FROM league_habit_xp_events
@@ -89,13 +90,15 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
         ), totals AS (
             SELECT user_id, SUM(points)::INTEGER AS weekly_xp
             FROM xp GROUP BY user_id
-        )
+        ), {ACTIVE_HABIT_USERS_CTE}
         SELECT u.id, u.league_level,
-               COALESCE(t.weekly_xp, 0)::INTEGER AS weekly_xp
+               COALESCE(t.weekly_xp, 0)::INTEGER AS weekly_xp,
+               (a.user_id IS NOT NULL) AS active
         FROM users u
         LEFT JOIN totals t ON t.user_id=u.id
+        LEFT JOIN active_users a ON a.user_id=u.id
         ORDER BY u.id
-    ''', effective_start, end)
+    ''', effective_start, end, True)
     # The final weekly score must match the frozen result as well.
     for r in rows:
         await connection.execute('''
@@ -109,7 +112,7 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
         UPDATE user_weekly_xp SET weekly_xp=0, updated_at=clock_timestamp()
         WHERE week_start=$1 AND NOT (user_id=ANY($2::BIGINT[]))
     ''', week, [r['id'] for r in rows])
-    result = calculate_transitions([(r['id'], r['league_level'], r['weekly_xp'], r['weekly_xp'] > 0) for r in rows], transitions_enabled=(activated is not None and week >= activated))
+    result = calculate_transitions([(r['id'], r['league_level'], r['weekly_xp'], r['active']) for r in rows], transitions_enabled=(activated is not None and week >= activated))
     await connection.execute('INSERT INTO league_week_closures(week_start, frozen_at) VALUES($1, clock_timestamp())', week)
     if result:
         await connection.executemany('''
@@ -139,7 +142,7 @@ async def apply_week(connection, week: date, *, now: datetime | None = None) -> 
         FROM league_week_results r
         WHERE r.week_start=$1 AND r.user_id=u.id
     ''', week)
-    await connection.execute('UPDATE league_week_closures SET applied_at=NOW() WHERE week_start=$1', week)
+    await connection.execute('UPDATE league_week_closures SET applied_at=clock_timestamp() WHERE week_start=$1', week)
     return True
 
 
