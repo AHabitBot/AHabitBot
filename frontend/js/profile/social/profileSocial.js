@@ -16,12 +16,14 @@ export function openSocialList(root, { userId = null, initialTab = "following", 
     const path = userId == null ? "/api/follows/me/list" : `/api/follows/users/${encodeURIComponent(userId)}/list`;
     const showShell = () => {
         root.innerHTML = `<section class="profile-social-page">
-          ${renderProfileSectionHeader(t("profile.social.following"))}
+          ${renderProfileSectionHeader(t("profile.social.friends"))}
+          <div class="profile-social-page__panel">
           <div class="profile-social-page__tabs" role="tablist">
             <button type="button" data-social-tab="following" role="tab" aria-selected="${tab === "following"}" class="${tab === "following" ? "is-active" : ""}">${t("profile.social.following")}</button>
             <button type="button" data-social-tab="followers" role="tab" aria-selected="${tab === "followers"}" class="${tab === "followers" ? "is-active" : ""}">${t("profile.social.followers")}</button>
           </div>
           <div class="profile-social-page__list" aria-live="polite"></div>
+          </div>
           <button type="button" class="profile-social-page__more" data-social-more hidden>${t("profile.social.more")}</button>
           <button type="button" class="profile-social-page__find" data-social-find><span class="material-symbols-rounded" aria-hidden="true">person_add</span>${t("profile.social.find")}</button>
         </section>`;

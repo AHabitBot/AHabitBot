@@ -1,4 +1,5 @@
 export default Object.freeze({
+    "profile.social.friends": "Друзья",
     "profile.social.aria": "Подписки пользователя",
     "profile.social.following": "Подписки",
     "profile.social.followers": "Подписчики",

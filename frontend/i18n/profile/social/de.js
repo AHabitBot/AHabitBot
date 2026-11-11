@@ -1,4 +1,5 @@
 export default Object.freeze({
+    "profile.social.friends": "Freunde",
     "profile.social.aria": "Abonnements des Nutzers",
     "profile.social.following": "Abonniert",
     "profile.social.followers": "Follower",
