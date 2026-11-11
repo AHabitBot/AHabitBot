@@ -13,6 +13,10 @@ function createSuggestions(root, container, { full = false, onUser } = {}) {
     let shown = 0;
     const pageSize = full ? PAGE_SIZE : 3;
     const empty = () => `<p class="profile-find-friends__empty">${escape(t("profile.social.suggestionsSoon"))}</p>`;
+    const section = full ? null : root.querySelector("[data-find-suggestions-section]");
+    const syncSection = () => {
+        if (section) section.hidden = shown === 0;
+    };
     const load = async () => {
         if (loading || finished || !container.isConnected) return;
         loading = true;
@@ -65,11 +69,13 @@ function createSuggestions(root, container, { full = false, onUser } = {}) {
                 container.append(card);
                 shown++;
             }
-            if (!shown) container.innerHTML = empty();
+            if (!shown && full) container.innerHTML = empty();
+            syncSection();
             if (more) more.hidden = finished;
         } catch (error) {
             console.error("Friend suggestions:", error);
-            if (!shown && container.isConnected) container.innerHTML = `<p class="profile-find-friends__empty">${escape(t("profile.social.loadError"))}</p>`;
+            if (!shown && full && container.isConnected) container.innerHTML = `<p class="profile-find-friends__empty">${escape(t("profile.social.loadError"))}</p>`;
+            syncSection();
         } finally {
             loading = false;
             if (more?.isConnected) more.disabled = false;
@@ -80,6 +86,7 @@ function createSuggestions(root, container, { full = false, onUser } = {}) {
         container.innerHTML = "";
         offset = 0;
         shown = 0;
+        syncSection();
         finished = false;
         if (loading) { // Wait for the in-flight request before refreshing.
             return;
@@ -97,8 +104,10 @@ export function openFindFriendsPage(root, { onBack, onSearch, onInvite, onUser, 
         <button type="button" class="profile-find-friends__action" data-find-search><span class="material-symbols-rounded" aria-hidden="true">search</span><span class="profile-find-friends__action-text"><strong>${t("profile.social.searchByName")}</strong></span><span class="material-symbols-rounded" aria-hidden="true">chevron_right</span></button>
         <button type="button" class="profile-find-friends__action" data-find-invite><span class="material-symbols-rounded" aria-hidden="true">person_add</span><span class="profile-find-friends__action-text"><strong>${t("profile.social.inviteFriend")}</strong></span><span class="material-symbols-rounded" aria-hidden="true">chevron_right</span></button>
       </div>
-      <div class="profile-find-friends__heading-row"><h2 class="profile-find-friends__heading">${t("profile.social.suggestions")}</h2><button type="button" class="profile-find-friends__all" data-find-all>${t("profile.social.seeAll")}</button></div>
-      <div class="profile-find-friends__suggestions" aria-live="polite"></div>
+      <div data-find-suggestions-section hidden>
+        <div class="profile-find-friends__heading-row"><h2 class="profile-find-friends__heading">${t("profile.social.suggestions")}</h2><button type="button" class="profile-find-friends__all" data-find-all>${t("profile.social.seeAll")}</button></div>
+        <div class="profile-find-friends__suggestions" aria-live="polite"></div>
+      </div>
     </section>`;
     root.querySelector("[data-profile-back]")?.addEventListener("click", e => { e.stopPropagation(); onBack?.(); });
     root.querySelector("[data-find-search]")?.addEventListener("click", () => onSearch?.());
