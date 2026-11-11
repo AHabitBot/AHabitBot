@@ -1,10 +1,48 @@
 
 .profile-user-card__social-count { appearance:none; border:0; background:none; color:inherit; font:inherit; cursor:pointer; padding:0; display:flex; flex-direction:column; align-items:center; }
 .profile-social-page { min-height:100%; padding:0 16px 28px; color:#f5f5f5; }
-.profile-social-page__tabs { display:grid; grid-template-columns:1fr 1fr; margin:18px 0 20px; border:1px solid #414444; border-radius:17px; }
-.profile-social-page__tabs button { background:transparent; border:0; padding:15px 5px; color:#c7c7c7; font-size:15px; font-weight:650; position:relative; }
-.profile-social-page__tabs button.is-active { color:#a6ed72; }
-.profile-social-page__tabs button.is-active::after { content:""; position:absolute; height:3px; background:#a6ed72; border-radius:3px 3px 0 0; bottom:0; left:10%; right:10%; }
+/* Match the shared profile section header's positioning: no nested inset. */
+.profile-social-page > .profile-section-header {
+    margin-left: -16px;
+    width: calc(100% + 32px);
+}
+/* Same flat underline treatment as Avatar / Appearance tabs. */
+.profile-social-page__tabs {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 14px -16px 20px;
+    width: calc(100% + 32px);
+    border: 0;
+    border-bottom: 1px solid var(--app-divider, #303333);
+    border-radius: 0;
+}
+.profile-social-page__tabs button {
+    position: relative;
+    height: 52px;
+    padding: 0 10px;
+    border: 0;
+    background: transparent;
+    color: var(--app-text-secondary, #aaa);
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+.profile-social-page__tabs button.is-active {
+    color: var(--app-green-active, #a6ed72);
+}
+.profile-social-page__tabs button.is-active::after {
+    content: "";
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    bottom: -1px;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: var(--app-green-active, #a6ed72);
+}
 .profile-social-page__list { border-top:1px solid #282b2b; }
 .profile-social-page__user { display:flex; align-items:center; gap:14px; width:100%; padding:13px 2px; background:none; border:0; border-bottom:1px solid #303333; color:inherit; text-align:left; }
 .profile-social-page__avatar { position:relative; width:58px; height:58px; flex:none; }
