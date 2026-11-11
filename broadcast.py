@@ -20,7 +20,7 @@ from backend.i18n.notifications import normalize_language
 
 
 # =========================================================
-# BROADCAST — LEAGUE PROMOTION / RELEGATION ZONES
+# BROADCAST — FRIENDS AND FOLLOWING UPDATE
 # =========================================================
 
 
@@ -97,41 +97,73 @@ async def get_all_users() -> list[dict[str, Any]]:
 
 def build_message_ru() -> str:
     return (
-        '🏆 <b>В AHabit появились зоны повышения и понижения!</b>\n'
+        '🚀 <b>AHabit — новое обновление!</b>\n'
         '\n'
-        'Теперь в недельном рейтинге ты можешь увидеть, кто претендует на переход в высшую лигу, а кто рискует опуститься ниже.\n'
+        'Развивать привычки вместе интереснее, но раньше найти друзей в AHabit было непросто.\n'
         '\n'
-        '<b>Заходи в AHabit и проверь, попадаешь ли ты в зону повышения!</b> 🚀'
+        '👥 <b>Теперь всё изменилось!</b>\n'
+        '\n'
+        '🔍 Находи друзей по никнейму или Telegram ID.\n'
+        '\n'
+        '🤝 Получай рекомендации людей, с которыми у тебя есть общие друзья.\n'
+        '\n'
+        '👤 Подписывайся на пользователей и следи за своими подписками и подписчиками.\n'
+        '\n'
+        '<b>Теперь AHabit — это не только развитие привычек, но и возможность окружить себя людьми, которые тоже стремятся стать лучше.</b> 🐜'
     )
 
 
 def build_message_uk() -> str:
     return (
-        '🏆 <b>В AHabit з’явилися зони підвищення та пониження!</b>\n'
+        '🚀 <b>AHabit — нове оновлення!</b>\n'
         '\n'
-        'Тепер у тижневому рейтингу ти можеш побачити, хто претендує на перехід до вищої ліги, а хто ризикує опуститися нижче.\n'
+        'Розвивати звички разом цікавіше, але раніше знайти друзів в AHabit було непросто.\n'
         '\n'
-        '<b>Заходь в AHabit і перевір, чи потрапляєш ти до зони підвищення!</b> 🚀'
+        '👥 <b>Тепер усе змінилося!</b>\n'
+        '\n'
+        '🔍 Знаходь друзів за нікнеймом або Telegram ID.\n'
+        '\n'
+        '🤝 Отримуй рекомендації людей, з якими у тебе є спільні друзі.\n'
+        '\n'
+        '👤 Підписуйся на користувачів і стеж за своїми підписками та підписниками.\n'
+        '\n'
+        '<b>Тепер AHabit — це не лише розвиток звичок, а й можливість оточити себе людьми, які теж прагнуть стати кращими.</b> 🐜'
     )
 
 
 def build_message_en() -> str:
     return (
-        '🏆 <b>Promotion and relegation zones are now in AHabit!</b>\n'
+        '🚀 <b>AHabit — new update!</b>\n'
         '\n'
-        'You can now see in the weekly leaderboard who is in line for promotion to a higher league and who risks dropping to a lower one.\n'
+        'Building habits together is more fun, but finding friends in AHabit used to be difficult.\n'
         '\n'
-        '<b>Open AHabit and check whether you’re in the promotion zone!</b> 🚀'
+        '👥 <b>That has changed!</b>\n'
+        '\n'
+        '🔍 Find friends by nickname or Telegram ID.\n'
+        '\n'
+        '🤝 Get recommendations for people you have mutual friends with.\n'
+        '\n'
+        '👤 Follow other users and keep track of your following and followers.\n'
+        '\n'
+        '<b>AHabit is now more than building habits — it’s a way to surround yourself with people who also want to become better.</b> 🐜'
     )
 
 
 def build_message_de() -> str:
     return (
-        '🏆 <b>Aufstiegs- und Abstiegszonen gibt es jetzt in AHabit!</b>\n'
+        '🚀 <b>AHabit — neues Update!</b>\n'
         '\n'
-        'In der wöchentlichen Rangliste siehst du jetzt, wer in eine höhere Liga aufsteigen könnte und wer Gefahr läuft, abzusteigen.\n'
+        'Gemeinsam Gewohnheiten aufzubauen macht mehr Spaß, aber bisher war es nicht leicht, Freunde in AHabit zu finden.\n'
         '\n'
-        '<b>Öffne AHabit und prüfe, ob du in der Aufstiegszone bist!</b> 🚀'
+        '👥 <b>Das hat sich jetzt geändert!</b>\n'
+        '\n'
+        '🔍 Finde Freunde über ihren Nickname oder ihre Telegram-ID.\n'
+        '\n'
+        '🤝 Entdecke Personen, mit denen du gemeinsame Freunde hast.\n'
+        '\n'
+        '👤 Folge anderen Nutzern und behalte deine Abos und Follower im Blick.\n'
+        '\n'
+        '<b>AHabit hilft dir jetzt nicht nur dabei, Gewohnheiten zu entwickeln, sondern auch, dich mit Menschen zu umgeben, die sich ebenfalls verbessern wollen.</b> 🐜'
     )
 
 
