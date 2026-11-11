@@ -545,43 +545,7 @@ export function renderProfileMenu(
             </button>
 
 
-            <button
-                type="button"
-                class="profile-menu__item"
-                data-profile-page="referral"
-            >
-                <div class="profile-menu__left">
 
-                    <span
-                        class="
-                            material-symbols-rounded
-                            profile-menu__icon
-                            profile-menu__icon--invite
-                        "
-                        aria-hidden="true"
-                    >
-                        person_add
-                    </span>
-
-                    <span class="profile-menu__label">
-                        ${t("profile.main.menu.referral")}
-                    </span>
-
-                </div>
-
-                <div class="profile-menu__right">
-
-                    <span class="profile-menu__reward">
-                        +5 XP
-                    </span>
-
-                    ${renderProfileMenuRightIcon(
-                        "referral"
-                    )}
-
-                </div>
-
-            </button>
 
 
             <button
