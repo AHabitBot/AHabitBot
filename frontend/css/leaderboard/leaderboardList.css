@@ -36,7 +36,7 @@
 
     grid-template-columns:
         34px
-        42px
+        var(--ahabit-user-avatar-size, 62px)
         minmax(90px, 1fr)
         auto;
 
@@ -67,7 +67,7 @@
     grid-template-columns:
         34px
         34px
-        42px
+        var(--ahabit-user-avatar-size, 62px)
         minmax(90px, 1fr)
         auto;
 
@@ -422,16 +422,16 @@
     color: #24303b; font-size: 12px; font-weight: 900; text-align: center;
 }
 .leaderboard-list__rank-change { display: none; }
-.leaderboard-list__avatar { width: 52px; height: 52px; background: var(--app-surface-soft); }
+.leaderboard-list__avatar { width: var(--ahabit-user-avatar-size, 62px); height: var(--ahabit-user-avatar-size, 62px); background: var(--app-surface-soft); }
 .leaderboard-list__name { font-size: 16px; font-weight: 750; }
 .leaderboard-list__xp { font-size: 14px; font-weight: 650; }
 .leaderboard-list__xp-icon { display: none; }
 .leaderboard-list__xp-value::after { content: " XP"; }
 @media (max-width: 360px) {
     .leaderboard-list__row, .leaderboard-list__row:has(.leaderboard-rank-change) {
-        grid-template-columns: 32px 44px minmax(0, 1fr) auto; gap: 7px; padding: 8px 3px;
+        grid-template-columns: 32px var(--ahabit-user-avatar-size, 62px) minmax(0, 1fr) auto; gap: 7px; padding: 8px 3px;
     }
-    .leaderboard-list__avatar { width: 44px; height: 44px; }
+    .leaderboard-list__avatar { width: var(--ahabit-user-avatar-size, 62px); height: var(--ahabit-user-avatar-size, 62px); }
     .leaderboard-list__name { font-size: 14px; }
     .leaderboard-list__xp { font-size: 12px; }
 }

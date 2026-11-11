@@ -11,7 +11,7 @@
 .profile-social-page__list { min-height:0; }
 .profile-social-page__user { display:flex; align-items:center; gap:14px; width:100%; min-height:94px; padding:15px 14px; background:none; border:0; border-bottom:1px solid #414747; color:inherit; text-align:left; cursor:pointer; }
 .profile-social-page__user:last-child { border-bottom:0; }
-.profile-social-page__avatar { position:relative; width:62px; height:62px; flex:none; }
+.profile-social-page__avatar { position:relative; width:var(--ahabit-user-avatar-size,62px); height:var(--ahabit-user-avatar-size,62px); flex:none; }
 .profile-social-page__avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
 .profile-social-page__avatar .profile-social-page__frame { position:absolute; inset:0; }
 .profile-social-page__identity { display:flex; flex:1; min-width:0; flex-direction:column; gap:5px; }

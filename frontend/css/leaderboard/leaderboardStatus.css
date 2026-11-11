@@ -3,8 +3,8 @@
 /* Compact avatar badge, Duolingo-inspired. No extra leaderboard grid column. */
 .lb-status-avatar-wrap {
     position: relative;
-    width: 52px;
-    height: 52px;
+    width: var(--ahabit-user-avatar-size, 62px);
+    height: var(--ahabit-user-avatar-size, 62px);
     flex: 0 0 auto;
     overflow: visible;
 }
@@ -41,7 +41,7 @@
 .lb-status-avatar-wrap .lb-status-bubble:disabled { cursor: default; opacity: 1; }
 .lb-status-avatar-wrap .lb-status-bubble--own { border-color: var(--app-bg, #121213); }
 @media (max-width: 360px) {
-    .lb-status-avatar-wrap { width: 44px; height: 44px; }
+    .lb-status-avatar-wrap { width: var(--ahabit-user-avatar-size, 62px); height: var(--ahabit-user-avatar-size, 62px); }
     .lb-status-avatar-wrap .lb-status-bubble {
         width: 25px; min-width: 25px; height: 25px;
         font-size: 15px; top: -5px; right: -6px;
