@@ -321,6 +321,7 @@ function openFindFriends(root, renderMainPage) {
     const show = () => openFindFriendsPage(root, {
         onBack: () => { renderMainPage?.(root); mountBottomNavigation("profile"); },
         onSearch: () => openFindFriendsSearchPage(root, { onBack: show }),
+        onUser: (id) => void openPublicProfilePage(root, id, { onBack: show }),
         onInvite: () => {
             openProfileSection(root, "referral");
             root.dataset.profileView = "section:referral-from-find";

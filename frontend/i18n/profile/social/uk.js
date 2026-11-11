@@ -19,6 +19,7 @@ export default Object.freeze({
     "profile.social.inviteFriend": "Запросити друга",
     "profile.social.inviteDescription": "Поділіться посиланням-запрошенням",
     "profile.social.suggestions": "Ви можете їх знати",
+    "profile.social.mutualFriend": "Спільний друг",
     "profile.social.suggestionsSoon": "Рекомендації з’являться, коли будуть спільні друзі",
     
 });

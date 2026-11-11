@@ -19,6 +19,7 @@ export default Object.freeze({
     "profile.social.inviteFriend": "Invite a friend",
     "profile.social.inviteDescription": "Share your invitation link",
     "profile.social.suggestions": "People you may know",
+    "profile.social.mutualFriend": "Mutual friend",
     "profile.social.suggestionsSoon": "Suggestions will appear when you have mutual friends",
     
 });

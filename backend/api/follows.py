@@ -12,6 +12,34 @@ def require_test_access(user):
         raise HTTPException(status_code=403, detail="Функция пока недоступна")
 
 
+@router.get("/suggestions")
+async def follow_suggestions(user: CurrentUser, limit: int = Query(3, ge=1, le=30), offset: int = Query(0, ge=0)):
+    """Friends-of-following ranked by number of shared connections."""
+    require_test_access(user)
+    async with get_connection() as db:
+        rows = await db.fetch("""
+            SELECT u.id, u.nickname, u.avatar_key,
+                   COALESCE(s.highest_level_reached, 1) AS level,
+                   COUNT(DISTINCT mutual.id) AS mutual_count,
+                   (ARRAY_AGG(mutual.nickname ORDER BY mutual.id))[1] AS mutual_name
+            FROM user_follows mine
+            JOIN users mutual ON mutual.id = mine.following_id
+            JOIN user_follows second_degree ON second_degree.follower_id = mutual.id
+            JOIN users u ON u.id = second_degree.following_id
+            LEFT JOIN user_stats s ON s.user_id = u.id
+            WHERE mine.follower_id = $1
+              AND u.id <> $1
+              AND NOT EXISTS (
+                  SELECT 1 FROM user_follows existing
+                  WHERE existing.follower_id = $1 AND existing.following_id = u.id
+              )
+            GROUP BY u.id, u.nickname, u.avatar_key, s.highest_level_reached
+            ORDER BY mutual_count DESC, u.id ASC
+            LIMIT $2 OFFSET $3
+        """, int(user["id"]), limit + 1, offset)
+    return {"items": [dict(r) for r in rows[:limit]], "has_more": len(rows) > limit}
+
+
 @router.get("/me")
 async def my_social_summary(user: CurrentUser):
     """Счётчики текущего пользователя по проверенной Telegram-сессии."""
