@@ -299,17 +299,17 @@ export function renderProfileUserCard(
 
             </div>
             ${showSocial ? `
-                <div class="profile-user-card__social" aria-label="Подписки пользователя">
+                <div class="profile-user-card__social" aria-label="${t("profile.social.aria")}">
                     <div class="profile-user-card__social-count">
-                        <strong>—</strong><span>Подписки</span>
+                        <strong>—</strong><span>${t("profile.social.following")}</span>
                     </div>
                     <div class="profile-user-card__social-divider" aria-hidden="true"></div>
                     <div class="profile-user-card__social-count">
-                        <strong>—</strong><span>Подписчики</span>
+                        <strong>—</strong><span>${t("profile.social.followers")}</span>
                     </div>
                     <button class="profile-user-card__social-action" type="button" ${isPublicProfile ? 'data-public-follow-action disabled' : 'disabled'}
-                        aria-label="${isPublicProfile ? 'Подписаться' : 'Найти пользователей'}">
-                        ${isPublicProfile ? 'Подписаться' : '<span class="material-symbols-rounded" aria-hidden="true">person_add</span>'}
+                        aria-label="${isPublicProfile ? t('profile.social.follow') : t('profile.social.find')}">
+                        ${isPublicProfile ? t('profile.social.follow') : '<span class="material-symbols-rounded" aria-hidden="true">person_add</span>'}
                     </button>
                 </div>
             ` : ''}

@@ -34,6 +34,11 @@ import profileMainUk from "../profile/main/uk.js";
 import profileMainEn from "../profile/main/en.js";
 import profileMainDe from "../profile/main/de.js";
 
+import profileSocialRu from "../profile/social/ru.js";
+import profileSocialUk from "../profile/social/uk.js";
+import profileSocialEn from "../profile/social/en.js";
+import profileSocialDe from "../profile/social/de.js";
+
 import profileNicknameRu from "../profile/nickname/ru.js";
 import profileNicknameUk from "../profile/nickname/uk.js";
 import profileNicknameEn from "../profile/nickname/en.js";
@@ -131,6 +136,7 @@ const dictionaries = Object.freeze({
         emojiRu,
         leaderboardSeasonRu,
         profileMainRu,
+        profileSocialRu,
         profileNicknameRu,
         profileStatsRu,
         profileAchievementsRu,
@@ -152,6 +158,7 @@ const dictionaries = Object.freeze({
         emojiUk,
         leaderboardSeasonUk,
         profileMainUk,
+        profileSocialUk,
         profileNicknameUk,
         profileStatsUk,
         profileAchievementsUk,
@@ -173,6 +180,7 @@ const dictionaries = Object.freeze({
         emojiEn,
         leaderboardSeasonEn,
         profileMainEn,
+        profileSocialEn,
         profileNicknameEn,
         profileStatsEn,
         profileAchievementsEn,
@@ -194,6 +202,7 @@ const dictionaries = Object.freeze({
         emojiDe,
         leaderboardSeasonDe,
         profileMainDe,
+        profileSocialDe,
         profileNicknameDe,
         profileStatsDe,
         profileAchievementsDe,

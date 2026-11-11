@@ -1,3 +1,4 @@
+import { loadSocialCounts } from "./social/profileSocialCounts.js";
 import {
     renderProfileUserCard,
     renderProfileMenu
@@ -171,4 +172,5 @@ export function renderProfileMainPage(
 
         </section>
     `
+    void loadSocialCounts(root);
 }
