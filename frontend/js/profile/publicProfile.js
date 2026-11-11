@@ -189,7 +189,7 @@ async function bindPublicFollow(cardRoot, userId) {
     let isFollowing = false;
     let busy = false;
     const setButton = () => {
-        button.textContent = isFollowing ? "Подписки" : "Подписаться";
+        button.textContent = isFollowing ? "Отписаться" : "Подписаться";
         button.setAttribute("aria-label", isFollowing ? "Отписаться" : "Подписаться");
         button.disabled = busy;
     };
