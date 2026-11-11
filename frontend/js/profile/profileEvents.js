@@ -117,7 +117,7 @@ export function initProfileEvents(
     }
 
     root.addEventListener("profile-social-find-request", () => {
-        if (isProfileDeveloper()) openFindFriends(root, renderMainPage);
+        openFindFriends(root, renderMainPage);
     });
 
     root.addEventListener(
@@ -220,7 +220,7 @@ function handleProfileClick(
 
 
     const findFriendsButton = event.target.closest("[data-social-find-open]");
-    if (findFriendsButton && isProfileDeveloper()) {
+    if (findFriendsButton) {
         openFindFriends(root, renderMainPage);
         return;
     }
@@ -228,7 +228,7 @@ function handleProfileClick(
     // Счётчики находятся внутри кликабельной карточки профиля.
     // Обрабатываем их раньше родительского data-profile-page="appearance".
     const socialButton = event.target.closest("[data-social-open]");
-    if (socialButton && isProfileDeveloper()) {
+    if (socialButton) {
         removeBottomNavigation();
         root.dataset.profileView = "section:social";
         const open = (tab = "following") => openSocialList(root, {
