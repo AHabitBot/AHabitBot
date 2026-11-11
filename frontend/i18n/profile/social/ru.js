@@ -13,5 +13,12 @@ export default Object.freeze({
     "profile.social.loadError": "Не удалось загрузить список",
     "profile.social.more": "Показать ещё",
     "profile.social.searchSoon": "Поиск подключим следующим этапом",
+    "profile.social.findFriends": "Найти друзей",
+    "profile.social.searchByName": "Поиск по имени",
+    "profile.social.searchDescription": "Найдите пользователя в AHabit",
+    "profile.social.inviteFriend": "Пригласить друга",
+    "profile.social.inviteDescription": "Поделитесь ссылкой-приглашением",
+    "profile.social.suggestions": "Вы можете их знать",
+    "profile.social.suggestionsSoon": "Рекомендации появятся, когда будут общие друзья",
     
 });

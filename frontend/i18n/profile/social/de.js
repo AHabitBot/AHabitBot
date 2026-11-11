@@ -13,5 +13,12 @@ export default Object.freeze({
     "profile.social.loadError": "Liste konnte nicht geladen werden",
     "profile.social.more": "Mehr anzeigen",
     "profile.social.searchSoon": "Suche folgt im nächsten Schritt",
+    "profile.social.findFriends": "Freunde finden",
+    "profile.social.searchByName": "Nach Namen suchen",
+    "profile.social.searchDescription": "Nutzer in AHabit finden",
+    "profile.social.inviteFriend": "Freund einladen",
+    "profile.social.inviteDescription": "Einladungslink teilen",
+    "profile.social.suggestions": "Personen, die du kennen könntest",
+    "profile.social.suggestionsSoon": "Vorschläge erscheinen, sobald es gemeinsame Freunde gibt",
     
 });

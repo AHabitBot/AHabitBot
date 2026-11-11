@@ -1,3 +1,4 @@
+import { openFindFriendsPage, openFindFriendsSearchPage } from "./social/profileFindFriends.js";
 import { openSocialList } from "./social/profileSocial.js";
 import { openPublicProfilePage } from "./publicProfile.js";
 import {
@@ -115,6 +116,10 @@ export function initProfileEvents(
         return
     }
 
+    root.addEventListener("profile-social-find-request", () => {
+        if (isProfileDeveloper()) openFindFriends(root, renderMainPage);
+    });
+
     root.addEventListener(
         "click",
         (event) => {
@@ -214,6 +219,12 @@ function handleProfileClick(
     }
 
 
+    const findFriendsButton = event.target.closest("[data-social-find-open]");
+    if (findFriendsButton && isProfileDeveloper()) {
+        openFindFriends(root, renderMainPage);
+        return;
+    }
+
     // Счётчики находятся внутри кликабельной карточки профиля.
     // Обрабатываем их раньше родительского data-profile-page="appearance".
     const socialButton = event.target.closest("[data-social-open]");
@@ -297,6 +308,17 @@ function handleProfileClick(
     }
 }
 
+
+function openFindFriends(root, renderMainPage) {
+    removeBottomNavigation();
+    root.dataset.profileView = "section:find-friends";
+    const show = () => openFindFriendsPage(root, {
+        onBack: () => { renderMainPage?.(root); mountBottomNavigation("profile"); },
+        onSearch: () => openFindFriendsSearchPage(root, { onBack: show }),
+        onInvite: () => openProfileSection(root, "referral")
+    });
+    show();
+}
 
 /* =========================================================
    ОТКРЫТЬ РАЗДЕЛ

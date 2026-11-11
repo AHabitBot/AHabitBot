@@ -37,8 +37,7 @@ export function openSocialList(root, { userId = null, initialTab = "following", 
         }));
         root.querySelector("[data-social-more]")?.addEventListener("click", () => void load());
         root.querySelector("[data-social-find]")?.addEventListener("click", () => {
-            // Search is intentionally deferred to the next implementation step.
-            root.querySelector(".profile-social-page__list").innerHTML = `<p class="profile-social-page__empty">${escape(t("profile.social.searchSoon"))}</p>`;
+            root.dispatchEvent(new CustomEvent("profile-social-find-request", { bubbles: true }));
         });
     };
     const load = async () => {

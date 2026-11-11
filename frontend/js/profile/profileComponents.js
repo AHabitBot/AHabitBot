@@ -307,7 +307,7 @@ export function renderProfileUserCard(
                     <button type="button" class="profile-user-card__social-count" data-social-open="followers">
                         <strong>—</strong><span>${t("profile.social.followers")}</span>
                     </button>
-                    <button class="profile-user-card__social-action" type="button" ${isPublicProfile ? 'data-public-follow-action disabled' : 'disabled'}
+                    <button class="profile-user-card__social-action" type="button" ${isPublicProfile ? 'data-public-follow-action disabled' : 'data-social-find-open'}
                         aria-label="${isPublicProfile ? t('profile.social.follow') : t('profile.social.find')}">
                         ${isPublicProfile ? t('profile.social.follow') : '<span class="material-symbols-rounded" aria-hidden="true">person_add</span>'}
                     </button>
