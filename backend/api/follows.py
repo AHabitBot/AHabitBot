@@ -12,6 +12,12 @@ def require_test_access(user):
         raise HTTPException(status_code=403, detail="Функция пока недоступна")
 
 
+@router.get("/me")
+async def my_social_summary(user: CurrentUser):
+    """Счётчики текущего пользователя по проверенной Telegram-сессии."""
+    return await social_summary(int(user["id"]), user)
+
+
 @router.get("/users/{profile_id}")
 async def social_summary(profile_id: int, user: CurrentUser):
     require_test_access(user)
