@@ -18,3 +18,15 @@
 .profile-find-friends__identity small { width:100%; margin-left:56px; margin-top:-12px; color:#aeb5b7; font-size:11px; }
 .profile-find-friends__follow { border:1px solid var(--app-green-active,#a6ed72); border-radius:10px; padding:9px 10px; background:transparent; color:var(--app-green-active,#a6ed72); font:600 12px inherit; cursor:pointer; flex:none; }
 .profile-find-friends__follow:disabled { opacity:.5; }
+
+.profile-find-friends__heading-row { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-top:30px; }
+.profile-find-friends__heading-row .profile-find-friends__heading { margin:0; }
+.profile-find-friends__all { border:0; background:transparent; color:var(--app-green-active,#a6ed72); font:600 13px inherit; cursor:pointer; white-space:nowrap; }
+.profile-find-friends__details { display:flex; flex:1; flex-direction:column; gap:4px; min-width:0; }
+.profile-find-friends__identity { flex-wrap:nowrap; }
+.profile-find-friends__identity small { width:auto; margin:0; }
+.profile-find-friends__dismiss { align-self:flex-start; display:grid; place-items:center; border:0; background:transparent; color:#9ca5a8; padding:0; cursor:pointer; }
+.profile-find-friends__dismiss .material-symbols-rounded { font-size:18px; }
+.profile-find-friends__dismiss:disabled { opacity:.5; }
+.profile-find-friends__more { display:block; margin:20px auto; border:1px solid #394248; border-radius:12px; padding:11px 18px; background:#1a2024; color:inherit; font:600 14px inherit; cursor:pointer; }
+.profile-find-friends__more[hidden] { display:none; }

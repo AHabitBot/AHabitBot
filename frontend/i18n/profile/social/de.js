@@ -21,5 +21,6 @@ export default Object.freeze({
     "profile.social.suggestions": "Personen, die du kennen könntest",
     "profile.social.mutualFriend": "Gemeinsamer Freund",
     "profile.social.suggestionsSoon": "Vorschläge erscheinen, sobald es gemeinsame Freunde gibt",
-    
+    "profile.social.seeAll": "Alle ansehen",
+    "profile.social.hideSuggestion": "Vorschlag ausblenden",
 });

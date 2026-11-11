@@ -21,5 +21,6 @@ export default Object.freeze({
     "profile.social.suggestions": "Вы можете их знать",
     "profile.social.mutualFriend": "Общий друг",
     "profile.social.suggestionsSoon": "Рекомендации появятся, когда будут общие друзья",
-    
+    "profile.social.seeAll": "Смотреть всех",
+    "profile.social.hideSuggestion": "Скрыть рекомендацию",
 });

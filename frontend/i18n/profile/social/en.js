@@ -21,5 +21,6 @@ export default Object.freeze({
     "profile.social.suggestions": "People you may know",
     "profile.social.mutualFriend": "Mutual friend",
     "profile.social.suggestionsSoon": "Suggestions will appear when you have mutual friends",
-    
+    "profile.social.seeAll": "See all",
+    "profile.social.hideSuggestion": "Hide suggestion",
 });

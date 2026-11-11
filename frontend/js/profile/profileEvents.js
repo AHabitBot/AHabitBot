@@ -1,4 +1,4 @@
-import { openFindFriendsPage, openFindFriendsSearchPage } from "./social/profileFindFriends.js";
+import { openFindFriendsPage, openFindFriendsAllPage, openFindFriendsSearchPage } from "./social/profileFindFriends.js";
 import { openSocialList } from "./social/profileSocial.js";
 import { openPublicProfilePage } from "./publicProfile.js";
 import {
@@ -318,9 +318,14 @@ function handleProfileClick(
 function openFindFriends(root, renderMainPage) {
     removeBottomNavigation();
     root.dataset.profileView = "section:find-friends";
+    const showAll = () => openFindFriendsAllPage(root, {
+        onBack: show,
+        onUser: (id) => void openPublicProfilePage(root, id, { onBack: showAll })
+    });
     const show = () => openFindFriendsPage(root, {
         onBack: () => { renderMainPage?.(root); mountBottomNavigation("profile"); },
         onSearch: () => openFindFriendsSearchPage(root, { onBack: show }),
+        onAll: showAll,
         onUser: (id) => void openPublicProfilePage(root, id, { onBack: show }),
         onInvite: () => {
             openProfileSection(root, "referral");

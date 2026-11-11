@@ -81,6 +81,16 @@ CREATE TABLE IF NOT EXISTS user_follows (
 CREATE INDEX IF NOT EXISTS idx_user_follows_following_id
     ON user_follows(following_id);
 
+-- Hidden friend suggestions: persist dismissals per user.
+CREATE TABLE IF NOT EXISTS user_follow_suggestions_hidden (
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    suggested_user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (user_id, suggested_user_id),
+    CONSTRAINT user_follow_suggestions_hidden_no_self
+        CHECK (user_id <> suggested_user_id)
+);
+
 CREATE TABLE IF NOT EXISTS user_settings (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL UNIQUE,
@@ -744,6 +754,7 @@ async def init_database() -> None:
         print("✅ Таблицы успешно созданы:")
         print("   • users")
         print("   • user_follows")
+        print("   • user_follow_suggestions_hidden")
         print("   • user_settings")
         print("   • habits")
         print("   • shared_habits")
