@@ -77,7 +77,7 @@ export function renderProfileUserCard(
         mode === "appearance"
     const isPublicProfile =
         mode === "public"
-    const showSocial = !isAppearancePreview
+    const showSocial = !isAppearancePreview && isProfileDeveloper()
     const nickname =
         escapeProfileText(
             profile.nickname || "Player"
