@@ -11,7 +11,7 @@
 .profile-social-page__list { min-height:0; }
 .profile-social-page__user { display:flex; align-items:center; gap:14px; width:100%; min-height:94px; padding:15px 14px; background:none; border:0; border-bottom:1px solid #414747; color:inherit; text-align:left; cursor:pointer; }
 .profile-social-page__user:last-child { border-bottom:0; }
-.profile-social-page__avatar { position:relative; width:var(--ahabit-user-avatar-size,62px); height:var(--ahabit-user-avatar-size,62px); flex:none; }
+.profile-social-page__avatar { position:relative; width:52px; height:52px; flex:none; }
 .profile-social-page__avatar img { width:100%; height:100%; border-radius:50%; object-fit:cover; }
 .profile-social-page__avatar .profile-social-page__frame { position:absolute; inset:0; }
 .profile-social-page__identity { display:flex; flex:1; min-width:0; flex-direction:column; gap:5px; }
@@ -22,3 +22,6 @@
 .profile-social-page__find { display:flex; align-items:center; justify-content:center; gap:10px; margin:24px auto 0; background:none; border:0; color:var(--app-green-active,#a6ed72); font-size:14px; font-weight:700; text-transform:uppercase; padding:12px; cursor:pointer; }
 .profile-social-page__more { display:block; margin:10px auto; background:none; border:1px solid #444; border-radius:12px; padding:10px 20px; color:#eee; }
 .profile-social-page__more[hidden] { display:none; }
+
+/* Match the league avatar on narrow screens; frame scales with the avatar. */
+@media (max-width:360px) { .profile-social-page__avatar { width:44px; height:44px; } }
