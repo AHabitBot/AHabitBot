@@ -69,6 +69,18 @@ WHERE avatar_key IN ('beginer_m', 'beginner_m');
 
 
 
+-- Social follows: one directed relationship per pair of users.
+CREATE TABLE IF NOT EXISTS user_follows (
+    follower_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    following_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT user_follows_pkey PRIMARY KEY (follower_id, following_id),
+    CONSTRAINT user_follows_no_self_follow CHECK (follower_id <> following_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_follows_following_id
+    ON user_follows(following_id);
+
 CREATE TABLE IF NOT EXISTS user_settings (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL UNIQUE,
@@ -731,6 +743,7 @@ async def init_database() -> None:
 
         print("✅ Таблицы успешно созданы:")
         print("   • users")
+        print("   • user_follows")
         print("   • user_settings")
         print("   • habits")
         print("   • shared_habits")

@@ -77,6 +77,7 @@ export function renderProfileUserCard(
         mode === "appearance"
     const isPublicProfile =
         mode === "public"
+    const showSocial = !isAppearancePreview
     const nickname =
         escapeProfileText(
             profile.nickname || "Player"
@@ -297,6 +298,22 @@ export function renderProfileUserCard(
                 </div>
 
             </div>
+            ${showSocial ? `
+                <div class="profile-user-card__social" aria-label="Подписки пользователя">
+                    <div class="profile-user-card__social-count">
+                        <strong>—</strong><span>Подписки</span>
+                    </div>
+                    <div class="profile-user-card__social-divider" aria-hidden="true"></div>
+                    <div class="profile-user-card__social-count">
+                        <strong>—</strong><span>Подписчики</span>
+                    </div>
+                    <button class="profile-user-card__social-action" type="button" disabled
+                        title="Подключим после реализации API подписок"
+                        aria-label="${isPublicProfile ? 'Подписаться' : 'Найти пользователей'} — скоро">
+                        ${isPublicProfile ? 'Подписаться' : '<span class="material-symbols-rounded" aria-hidden="true">person_add</span>'}
+                    </button>
+                </div>
+            ` : ''}
         </section>
     `
 }
