@@ -307,9 +307,8 @@ export function renderProfileUserCard(
                     <div class="profile-user-card__social-count">
                         <strong>—</strong><span>Подписчики</span>
                     </div>
-                    <button class="profile-user-card__social-action" type="button" disabled
-                        title="Подключим после реализации API подписок"
-                        aria-label="${isPublicProfile ? 'Подписаться' : 'Найти пользователей'} — скоро">
+                    <button class="profile-user-card__social-action" type="button" ${isPublicProfile ? 'data-public-follow-action disabled' : 'disabled'}
+                        aria-label="${isPublicProfile ? 'Подписаться' : 'Найти пользователей'}">
                         ${isPublicProfile ? 'Подписаться' : '<span class="material-symbols-rounded" aria-hidden="true">person_add</span>'}
                     </button>
                 </div>

@@ -2,6 +2,8 @@ import {
     fetchPublicProfile
 } from "./publicProfileApi.js";
 
+import { apiRequest } from "../api/apiClient.js";
+
 import {
     renderProfileUserCard,
     renderProfileSectionHeader
@@ -175,6 +177,62 @@ function renderShell(
 
         </section>
     `;
+}
+
+
+// The social button is available only in the closed test account.
+// The backend independently validates the Telegram initData.
+async function bindPublicFollow(cardRoot, userId) {
+    const button = cardRoot.querySelector("[data-public-follow-action]");
+    if (!button) return;
+
+    let isFollowing = false;
+    let busy = false;
+    const setButton = () => {
+        button.textContent = isFollowing ? "Подписки" : "Подписаться";
+        button.setAttribute("aria-label", isFollowing ? "Отписаться" : "Подписаться");
+        button.disabled = busy;
+    };
+
+    try {
+        const summary = await apiRequest(`/api/follows/users/${encodeURIComponent(userId)}`);
+        if (!button.isConnected) return;
+        isFollowing = Boolean(summary.is_following);
+        setButton();
+        const counts = cardRoot.querySelectorAll(".profile-user-card__social-count strong");
+        if (counts.length === 2) {
+            counts[0].textContent = summary.following_count ?? 0;
+            counts[1].textContent = summary.followers_count ?? 0;
+        }
+    } catch (error) {
+        console.error("Follow status:", error);
+        return;
+    }
+
+    button.addEventListener("click", async (event) => {
+        event.stopPropagation();
+        if (busy) return;
+        busy = true;
+        setButton();
+        try {
+            const result = await apiRequest(
+                `/api/follows/users/${encodeURIComponent(userId)}`,
+                { method: isFollowing ? "DELETE" : "POST" }
+            );
+            isFollowing = Boolean(result.is_following);
+            const counts = cardRoot.querySelectorAll(".profile-user-card__social-count strong");
+            if (counts.length === 2) {
+                const current = Number(counts[1].textContent) || 0;
+                counts[1].textContent = Math.max(0, current + (isFollowing ? 1 : -1));
+            }
+        } catch (error) {
+            console.error("Follow action:", error);
+            window.Telegram?.WebApp?.showAlert?.("Не удалось изменить подписку. Попробуйте ещё раз.");
+        } finally {
+            busy = false;
+            if (button.isConnected) setButton();
+        }
+    });
 }
 
 
@@ -363,6 +421,7 @@ export async function openPublicProfilePage(
                         mode: "public"
                     }
                 );
+            void bindPublicFollow(cardRoot, userId);
         }
 
         renderPublicStats(
