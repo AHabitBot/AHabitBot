@@ -2,7 +2,6 @@ import { apiRequest } from "../../api/apiClient.js";
 import { t } from "../../../i18n/core/i18n.js";
 import { renderProfileSectionHeader } from "../profileComponents.js";
 import { getProfileAvatar, getDefaultProfileAvatar } from "../appearance/profileAppearanceAvatar.js";
-import { getProfileFrame } from "../appearance/profileAppearanceFrame.js";
 
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 
@@ -56,11 +55,10 @@ export function openSocialList(root, { userId = null, initialTab = "following", 
             if (offset === 0) list.replaceChildren();
             for (const item of data.items || []) {
                 const avatar = getProfileAvatar(item.avatar_key) || getDefaultProfileAvatar();
-                const frame = getProfileFrame(item.frame_key);
                 const button = document.createElement("button");
                 button.type = "button";
                 button.className = "profile-social-page__user";
-                button.innerHTML = `<span class="profile-social-page__avatar"><img src="${escape(avatar.image)}" alt="">${frame?.image ? `<img class="profile-social-page__frame" src="${escape(frame.image)}" alt="">` : ""}</span><span class="profile-social-page__identity"><strong>${escape(item.nickname || "Player")}</strong><small>${escape(t("profile.social.level"))} ${Math.max(1, Number(item.level) || 1)}</small></span><span class="material-symbols-rounded" aria-hidden="true">chevron_right</span>`;
+                button.innerHTML = `<span class="profile-social-page__avatar"><img src="${escape(avatar.image)}" alt=""></span><span class="profile-social-page__identity"><strong>${escape(item.nickname || "Player")}</strong><small>${escape(t("profile.social.level"))} ${Math.max(1, Number(item.level) || 1)}</small></span><span class="material-symbols-rounded" aria-hidden="true">chevron_right</span>`;
                 button.addEventListener("click", () => onUser?.(item.id, () => openSocialList(root, { userId, initialTab: tab, onBack, onUser })));
                 list.append(button);
             }
