@@ -12,6 +12,8 @@ export default Object.freeze({
     "profile.social.loading": "Loading...",
     "profile.social.loadError": "Could not load the list",
     "profile.social.more": "Show more",
+    "profile.social.searchPlaceholder": "Nickname or Telegram ID",
+    "profile.social.noSearchResults": "No users found",
     "profile.social.searchSoon": "Search will be added next",
     "profile.social.findFriends": "Find friends",
     "profile.social.searchByName": "Search by name",

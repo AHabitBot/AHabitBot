@@ -324,7 +324,13 @@ function openFindFriends(root, renderMainPage) {
     });
     const show = () => openFindFriendsPage(root, {
         onBack: () => { renderMainPage?.(root); mountBottomNavigation("profile"); },
-        onSearch: () => openFindFriendsSearchPage(root, { onBack: show }),
+        onSearch: () => {
+            const showSearch = () => openFindFriendsSearchPage(root, {
+                onBack: show,
+                onUser: (id) => void openPublicProfilePage(root, id, { onBack: showSearch })
+            });
+            showSearch();
+        },
         onAll: showAll,
         onUser: (id) => void openPublicProfilePage(root, id, { onBack: show }),
         onInvite: () => {

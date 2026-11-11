@@ -12,6 +12,8 @@ export default Object.freeze({
     "profile.social.loading": "Завантаження...",
     "profile.social.loadError": "Не вдалося завантажити список",
     "profile.social.more": "Показати ще",
+    "profile.social.searchPlaceholder": "Нікнейм або Telegram ID",
+    "profile.social.noSearchResults": "Користувачів не знайдено",
     "profile.social.searchSoon": "Пошук додамо на наступному етапі",
     "profile.social.findFriends": "Знайти друзів",
     "profile.social.searchByName": "Пошук за ім’ям",

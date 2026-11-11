@@ -117,10 +117,80 @@ export function openFindFriendsAllPage(root, { onBack, onUser } = {}) {
     createSuggestions(root, root.querySelector(".profile-find-friends__suggestions"), { full: true, onUser });
 }
 
-export function openFindFriendsSearchPage(root, { onBack } = {}) {
+export function openFindFriendsSearchPage(root, { onBack, onUser } = {}) {
     root.innerHTML = `<section class="profile-find-friends">
       ${renderProfileSectionHeader(t("profile.social.searchByName"))}
-      <p class="profile-find-friends__empty">${t("profile.social.searchSoon")}</p>
+      <div class="profile-find-friends__search-field">
+        <span class="material-symbols-rounded" aria-hidden="true">search</span>
+        <input type="search" maxlength="64" autocomplete="off" spellcheck="false" aria-label="${escape(t("profile.social.searchPlaceholder"))}" placeholder="${escape(t("profile.social.searchPlaceholder"))}" data-user-query>
+      </div>
+      <div class="profile-find-friends__suggestions" data-user-results aria-live="polite"></div>
+      <button type="button" class="profile-find-friends__more" data-search-more hidden>${escape(t("profile.social.more"))}</button>
     </section>`;
     root.querySelector("[data-profile-back]")?.addEventListener("click", e => { e.stopPropagation(); onBack?.(); });
+    const input = root.querySelector("[data-user-query]");
+    const container = root.querySelector("[data-user-results]");
+    const more = root.querySelector("[data-search-more]");
+    let timer;
+    let generation = 0;
+    let offset = 0;
+    let busy = false;
+    let hasMore = false;
+    const message = key => { container.innerHTML = `<p class="profile-find-friends__empty">${escape(t(key))}</p>`; };
+    const load = async (append = false) => {
+        const query = input.value.trim();
+        if (!query || !container.isConnected || (append && (busy || !hasMore))) return;
+        const current = ++generation;
+        const nextOffset = append ? offset : 0;
+        busy = true;
+        more.disabled = true;
+        if (!append) message("profile.social.loading");
+        try {
+            const data = await apiRequest(`/api/follows/search?q=${encodeURIComponent(query)}&limit=30&offset=${nextOffset}`);
+            if (current !== generation || !container.isConnected) return;
+            const items = data.items || [];
+            if (!append) container.replaceChildren();
+            offset = nextOffset + items.length;
+            hasMore = !!data.has_more;
+            for (const item of items) {
+                const avatar = getProfileAvatar(item.avatar_key) || getDefaultProfileAvatar();
+                const card = document.createElement("div");
+                card.className = "profile-find-friends__person";
+                card.innerHTML = `<button type="button" class="profile-find-friends__identity"><img src="${escape(avatar.image)}" alt=""><span class="profile-find-friends__details"><strong>${escape(item.nickname || "Player")}</strong></span></button><button type="button" class="profile-find-friends__follow">${escape(t(item.is_following ? "profile.social.unfollow" : "profile.social.follow"))}</button>`;
+                card.querySelector(".profile-find-friends__identity").addEventListener("click", () => onUser?.(item.id));
+                const button = card.querySelector(".profile-find-friends__follow");
+                let following = !!item.is_following;
+                button.addEventListener("click", async () => {
+                    button.disabled = true;
+                    try {
+                        await apiRequest(`/api/follows/users/${encodeURIComponent(item.id)}`, { method: following ? "DELETE" : "POST" });
+                        following = !following;
+                        if (button.isConnected) button.textContent = t(following ? "profile.social.unfollow" : "profile.social.follow");
+                    } catch (error) {
+                        console.error("Search follow:", error);
+                    } finally { if (button.isConnected) button.disabled = false; }
+                });
+                container.append(card);
+            }
+            if (!container.children.length) message("profile.social.noSearchResults");
+            more.hidden = !hasMore;
+        } catch (error) {
+            console.error("User search:", error);
+            if (current === generation && container.isConnected) message("profile.social.loadError");
+        } finally {
+            if (current === generation) { busy = false; more.disabled = false; }
+        }
+    };
+    input.addEventListener("input", () => {
+        clearTimeout(timer);
+        generation++;
+        busy = false;
+        offset = 0;
+        hasMore = false;
+        more.hidden = true;
+        if (!input.value.trim()) { container.replaceChildren(); return; }
+        timer = setTimeout(() => void load(), 300);
+    });
+    more.addEventListener("click", () => void load(true));
+    input.focus();
 }

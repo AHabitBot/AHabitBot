@@ -33,11 +33,69 @@ async def follow_suggestions(user: CurrentUser, limit: int = Query(3, ge=1, le=3
                   SELECT 1 FROM user_follows existing
                   WHERE existing.follower_id = $1 AND existing.following_id = u.id
               )
+              AND NOT EXISTS (
+                  SELECT 1 FROM user_follow_suggestions_hidden hidden
+                  WHERE hidden.user_id = $1 AND hidden.suggested_user_id = u.id
+              )
             GROUP BY u.id, u.nickname, u.avatar_key, s.highest_level_reached
             ORDER BY mutual_count DESC, u.id ASC
             LIMIT $2 OFFSET $3
         """, int(user["id"]), limit + 1, offset)
     return {"items": [dict(r) for r in rows[:limit]], "has_more": len(rows) > limit}
+
+
+@router.post("/suggestions/{profile_id}/hide")
+async def hide_follow_suggestion(profile_id: int, user: CurrentUser):
+    """Persistently dismiss a recommendation for the current viewer."""
+    require_test_access(user)
+    viewer_id = int(user["id"])
+    if profile_id == viewer_id:
+        raise HTTPException(status_code=400, detail="Нельзя скрыть свой профиль")
+    async with get_connection() as db:
+        if not await db.fetchval("SELECT 1 FROM users WHERE id=$1", profile_id):
+            raise HTTPException(status_code=404, detail="Пользователь не найден")
+        await db.execute("""
+            INSERT INTO user_follow_suggestions_hidden (user_id, suggested_user_id)
+            VALUES ($1, $2) ON CONFLICT DO NOTHING
+        """, viewer_id, profile_id)
+    return {"hidden": True}
+
+
+@router.get("/search")
+async def search_users(
+    user: CurrentUser,
+    q: str = Query("", max_length=64),
+    limit: int = Query(30, ge=1, le=30),
+    offset: int = Query(0, ge=0),
+):
+    """Search public nicknames or exact Telegram ID; never expose Telegram IDs."""
+    require_test_access(user)
+    term = q.strip().lstrip("@")
+    if not term:
+        return {"items": [], "has_more": False}
+    telegram_id = int(term) if term.isascii() and term.isdecimal() and len(term) <= 18 else None
+    async with get_connection() as db:
+        rows = await db.fetch("""
+            SELECT u.id, u.nickname, u.avatar_key,
+                   EXISTS (
+                       SELECT 1 FROM user_follows f
+                       WHERE f.follower_id = $1 AND f.following_id = u.id
+                   ) AS is_following
+            FROM users u
+            WHERE u.id <> $1
+              AND (
+                  u.nickname ILIKE '%' || $2 || '%'
+                  OR ($3::bigint IS NOT NULL AND u.telegram_id = $3)
+              )
+            ORDER BY
+                CASE WHEN lower(u.nickname) = lower($2) THEN 0
+                     WHEN lower(u.nickname) LIKE lower($2) || '%' THEN 1
+                     WHEN u.telegram_id = $3 THEN 0
+                     ELSE 2 END,
+                lower(u.nickname) NULLS LAST, u.id
+            LIMIT $4 OFFSET $5
+        """, int(user["id"]), term, telegram_id, limit + 1, offset)
+    return {"items": [dict(row) for row in rows[:limit]], "has_more": len(rows) > limit}
 
 
 @router.get("/me")

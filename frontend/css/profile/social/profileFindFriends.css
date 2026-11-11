@@ -30,3 +30,9 @@
 .profile-find-friends__dismiss:disabled { opacity:.5; }
 .profile-find-friends__more { display:block; margin:20px auto; border:1px solid #394248; border-radius:12px; padding:11px 18px; background:#1a2024; color:inherit; font:600 14px inherit; cursor:pointer; }
 .profile-find-friends__more[hidden] { display:none; }
+
+.profile-find-friends__search-field { display:flex; align-items:center; gap:10px; margin-top:20px; padding:0 14px; min-height:50px; background:#1a2024; border:1px solid #394248; border-radius:14px; }
+.profile-find-friends__search-field .material-symbols-rounded { color:#aeb5b7; font-size:23px; }
+.profile-find-friends__search-field input { width:100%; min-width:0; border:0; outline:0; background:transparent; color:#f5f5f5; font:inherit; font-size:15px; }
+.profile-find-friends__search-field:focus-within { border-color:var(--app-green-active,#a6ed72); }
+.profile-find-friends__search-field input::placeholder { color:#9ca5a8; }
