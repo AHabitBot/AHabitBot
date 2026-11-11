@@ -6,4 +6,11 @@ export default Object.freeze({
     "profile.social.unfollow": "Entfolgen",
     "profile.social.find": "Nutzer finden",
     "profile.social.error": "Abo konnte nicht geändert werden. Bitte erneut versuchen.",
+    "profile.social.level": "Level",
+    "profile.social.empty": "Noch keine Nutzer vorhanden",
+    "profile.social.loading": "Lädt...",
+    "profile.social.loadError": "Liste konnte nicht geladen werden",
+    "profile.social.more": "Mehr anzeigen",
+    "profile.social.searchSoon": "Suche folgt im nächsten Schritt",
+    
 });

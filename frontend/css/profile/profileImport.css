@@ -61,3 +61,8 @@
 
 @import url("./settings/profileSettingsImport.css");
 
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+@import url("./social/profileSocialImport.css");
