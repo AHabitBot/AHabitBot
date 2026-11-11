@@ -1,4 +1,5 @@
 import { openSocialList } from "./social/profileSocial.js";
+import { openFindFriendsSearchPage } from "./social/profileFindFriends.js";
 import {
     fetchPublicProfile
 } from "./publicProfileApi.js";
@@ -430,7 +431,14 @@ export async function openPublicProfilePage(
                     userId,
                     initialTab: tab,
                     onBack: () => void openPublicProfilePage(root, userId, { onBack }),
-                    onUser: (id, back) => void openPublicProfilePage(root, id, { onBack: back })
+                    onUser: (id, back) => void openPublicProfilePage(root, id, { onBack: back }),
+                    onFind: () => {
+                        const showSearch = () => openFindFriendsSearchPage(root, {
+                            onBack: () => open(selected),
+                            onUser: (id) => void openPublicProfilePage(root, id, { onBack: showSearch })
+                        });
+                        showSearch();
+                    }
                 });
                 open(selected);
             }));

@@ -6,7 +6,7 @@ import { getProfileAvatar, getDefaultProfileAvatar } from "../appearance/profile
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 
 // userId=null means authenticated user. onBack restores the calling screen.
-export function openSocialList(root, { userId = null, initialTab = "following", onBack, onUser } = {}) {
+export function openSocialList(root, { userId = null, initialTab = "following", onBack, onUser, onFind } = {}) {
     let tab = initialTab === "followers" ? "followers" : "following";
     let offset = 0;
     let loading = false;
@@ -37,7 +37,8 @@ export function openSocialList(root, { userId = null, initialTab = "following", 
         }));
         root.querySelector("[data-social-more]")?.addEventListener("click", () => void load());
         root.querySelector("[data-social-find]")?.addEventListener("click", () => {
-            root.dispatchEvent(new CustomEvent("profile-social-find-request", { bubbles: true }));
+            if (onFind) onFind();
+            else root.dispatchEvent(new CustomEvent("profile-social-find-request", { bubbles: true }));
         });
     };
     const load = async () => {
