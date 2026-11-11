@@ -286,6 +286,12 @@ function handleProfileClick(
             "[data-profile-back]"
         )
 
+    // Возврат из приглашения, открытого через «Найти друзей».
+    if (backButton && root.dataset.profileView === "section:referral-from-find") {
+        openFindFriends(root, renderMainPage);
+        return;
+    }
+
 
     if (
         backButton &&
@@ -315,7 +321,10 @@ function openFindFriends(root, renderMainPage) {
     const show = () => openFindFriendsPage(root, {
         onBack: () => { renderMainPage?.(root); mountBottomNavigation("profile"); },
         onSearch: () => openFindFriendsSearchPage(root, { onBack: show }),
-        onInvite: () => openProfileSection(root, "referral")
+        onInvite: () => {
+            openProfileSection(root, "referral");
+            root.dataset.profileView = "section:referral-from-find";
+        }
     });
     show();
 }
