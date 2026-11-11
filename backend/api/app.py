@@ -26,6 +26,8 @@ from backend.api.leaderboard import (
     router as leaderboard_router,
 )
 
+from backend.api.follows import router as follows_router
+
 from backend.api.profile import (
     router as profile_router,
 )
@@ -108,6 +110,7 @@ app.include_router(leaderboard_status_router)
 app.include_router(
     profile_router
 )
+app.include_router(follows_router)
 
 app.include_router(
     settings_router
