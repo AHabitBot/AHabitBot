@@ -214,6 +214,21 @@ function handleProfileClick(
     }
 
 
+    // Счётчики находятся внутри кликабельной карточки профиля.
+    // Обрабатываем их раньше родительского data-profile-page="appearance".
+    const socialButton = event.target.closest("[data-social-open]");
+    if (socialButton && isProfileDeveloper()) {
+        removeBottomNavigation();
+        root.dataset.profileView = "section:social";
+        const open = (tab = "following") => openSocialList(root, {
+            initialTab: tab,
+            onBack: () => { renderMainPage(root); mountBottomNavigation("profile"); },
+            onUser: (id, back) => void openPublicProfilePage(root, id, { onBack: back })
+        });
+        open(socialButton.dataset.socialOpen);
+        return;
+    }
+
     /* -----------------------------------------------------
        ОТКРЫТИЕ ВНУТРЕННЕГО РАЗДЕЛА
        ----------------------------------------------------- */
@@ -250,19 +265,6 @@ function handleProfileClick(
         return
     }
 
-
-    const socialButton = event.target.closest("[data-social-open]");
-    if (socialButton && isProfileDeveloper()) {
-        removeBottomNavigation();
-        root.dataset.profileView = "section:social";
-        const open = (tab = "following") => openSocialList(root, {
-            initialTab: tab,
-            onBack: () => { renderMainPage(root); mountBottomNavigation("profile"); },
-            onUser: (id, back) => void openPublicProfilePage(root, id, { onBack: back })
-        });
-        open(socialButton.dataset.socialOpen);
-        return;
-    }
 
     /* -----------------------------------------------------
        ВОЗВРАТ НАЗАД
