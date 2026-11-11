@@ -1,9 +1,9 @@
+import { openSocialList } from "./social/profileSocial.js";
 import {
     fetchPublicProfile
 } from "./publicProfileApi.js";
 
 import { apiRequest } from "../api/apiClient.js";
-import { loadSocialCounts } from "./social/profileSocialCounts.js";
 
 import {
     renderProfileUserCard,
@@ -190,8 +190,8 @@ async function bindPublicFollow(cardRoot, userId) {
     let isFollowing = false;
     let busy = false;
     const setButton = () => {
-        button.textContent = isFollowing ? t("profile.social.unfollow") : t("profile.social.follow");
-        button.setAttribute("aria-label", isFollowing ? t("profile.social.unfollow") : t("profile.social.follow"));
+        button.textContent = isFollowing ? "Отписаться" : "Подписаться";
+        button.setAttribute("aria-label", isFollowing ? "Отписаться" : "Подписаться");
         button.disabled = busy;
     };
 
@@ -202,8 +202,8 @@ async function bindPublicFollow(cardRoot, userId) {
         setButton();
         const counts = cardRoot.querySelectorAll(".profile-user-card__social-count strong");
         if (counts.length === 2) {
-            counts[0].textContent = String(summary.following_count ?? 0);
-            counts[1].textContent = String(summary.followers_count ?? 0);
+            counts[0].textContent = summary.following_count ?? 0;
+            counts[1].textContent = summary.followers_count ?? 0;
         }
     } catch (error) {
         console.error("Follow status:", error);
@@ -221,10 +221,14 @@ async function bindPublicFollow(cardRoot, userId) {
                 { method: isFollowing ? "DELETE" : "POST" }
             );
             isFollowing = Boolean(result.is_following);
-            await loadSocialCounts(cardRoot, userId);
+            const counts = cardRoot.querySelectorAll(".profile-user-card__social-count strong");
+            if (counts.length === 2) {
+                const current = Number(counts[1].textContent) || 0;
+                counts[1].textContent = Math.max(0, current + (isFollowing ? 1 : -1));
+            }
         } catch (error) {
             console.error("Follow action:", error);
-            window.Telegram?.WebApp?.showAlert?.(t("profile.social.error"));
+            window.Telegram?.WebApp?.showAlert?.("Не удалось изменить подписку. Попробуйте ещё раз.");
         } finally {
             busy = false;
             if (button.isConnected) setButton();
@@ -419,6 +423,17 @@ export async function openPublicProfilePage(
                     }
                 );
             void bindPublicFollow(cardRoot, userId);
+            cardRoot.querySelectorAll("[data-social-open]").forEach(button => button.addEventListener("click", (event) => {
+                event.stopPropagation();
+                const selected = button.dataset.socialOpen;
+                const open = (tab) => openSocialList(root, {
+                    userId,
+                    initialTab: tab,
+                    onBack: () => void openPublicProfilePage(root, userId, { onBack }),
+                    onUser: (id, back) => void openPublicProfilePage(root, id, { onBack: back })
+                });
+                open(selected);
+            }));
         }
 
         renderPublicStats(

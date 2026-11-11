@@ -78,3 +78,9 @@ async def unfollow(profile_id: int, user: CurrentUser):
     async with get_connection() as db:
         await db.execute("DELETE FROM user_follows WHERE follower_id=$1 AND following_id=$2", user["id"], profile_id)
     return {"is_following": False}
+
+
+@router.get("/me/list")
+async def my_social_list(user: CurrentUser, kind: str = Query("following", pattern="^(following|followers)$"), limit: int = Query(30, ge=1, le=100), offset: int = Query(0, ge=0)):
+    """Списки текущего пользователя; единая реализация с публичным профилем."""
+    return await social_list(int(user["id"]), user, kind, limit, offset)

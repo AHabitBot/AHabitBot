@@ -1,3 +1,5 @@
+import { openSocialList } from "./social/profileSocial.js";
+import { openPublicProfilePage } from "./publicProfile.js";
 import {
     renderProfileStatsPage
 } from "./stats/profileStats.js"
@@ -248,6 +250,19 @@ function handleProfileClick(
         return
     }
 
+
+    const socialButton = event.target.closest("[data-social-open]");
+    if (socialButton && isProfileDeveloper()) {
+        removeBottomNavigation();
+        root.dataset.profileView = "section:social";
+        const open = (tab = "following") => openSocialList(root, {
+            initialTab: tab,
+            onBack: () => { renderMainPage(root); mountBottomNavigation("profile"); },
+            onUser: (id, back) => void openPublicProfilePage(root, id, { onBack: back })
+        });
+        open(socialButton.dataset.socialOpen);
+        return;
+    }
 
     /* -----------------------------------------------------
        ВОЗВРАТ НАЗАД

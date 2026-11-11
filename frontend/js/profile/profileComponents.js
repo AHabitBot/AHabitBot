@@ -300,13 +300,13 @@ export function renderProfileUserCard(
             </div>
             ${showSocial ? `
                 <div class="profile-user-card__social" aria-label="${t("profile.social.aria")}">
-                    <div class="profile-user-card__social-count">
+                    <button type="button" class="profile-user-card__social-count" data-social-open="following">
                         <strong>—</strong><span>${t("profile.social.following")}</span>
-                    </div>
+                    </button>
                     <div class="profile-user-card__social-divider" aria-hidden="true"></div>
-                    <div class="profile-user-card__social-count">
+                    <button type="button" class="profile-user-card__social-count" data-social-open="followers">
                         <strong>—</strong><span>${t("profile.social.followers")}</span>
-                    </div>
+                    </button>
                     <button class="profile-user-card__social-action" type="button" ${isPublicProfile ? 'data-public-follow-action disabled' : 'disabled'}
                         aria-label="${isPublicProfile ? t('profile.social.follow') : t('profile.social.find')}">
                         ${isPublicProfile ? t('profile.social.follow') : '<span class="material-symbols-rounded" aria-hidden="true">person_add</span>'}
