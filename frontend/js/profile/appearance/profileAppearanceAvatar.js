@@ -33,6 +33,32 @@ export const PROFILE_AVATARS = [
 
 
     /* =====================================================
+       ANIMALS — FREE FROM LEVEL 1
+       ===================================================== */
+
+    {
+        id: "animal_01",
+        category: "standard",
+        requiredLevel: 1,
+        image: "./img/profile/avatar/avatar_animal_01.png"
+    },
+
+    {
+        id: "animal_02",
+        category: "standard",
+        requiredLevel: 1,
+        image: "./img/profile/avatar/avatar_animal_02.png"
+    },
+
+    {
+        id: "animal_03",
+        category: "standard",
+        requiredLevel: 1,
+        image: "./img/profile/avatar/avatar_animal_03.png"
+    },
+
+
+    /* =====================================================
        STANDARD — LEVEL 5
        ===================================================== */
 

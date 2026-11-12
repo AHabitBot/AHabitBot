@@ -18,6 +18,9 @@ PROFILE_AVATARS: list[dict[str, Any]] = [
         "id": "standard_f_01",
         "required_level": 1,
     },
+    {"id": "animal_01", "required_level": 1},
+    {"id": "animal_02", "required_level": 1},
+    {"id": "animal_03", "required_level": 1},
     {
         "id": "standard_m_02",
         "required_level": 5,
