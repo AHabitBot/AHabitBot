@@ -43,3 +43,8 @@
 /* Главный экран: компактный заголовок без логотипа и кнопки информации. */
 .development-screen:not([class*="development-screen--"]) .development-heading{margin-bottom:12px}
 .development-screen:not([class*="development-screen--"]) .development-intro{margin:0 0 22px}
+
+/* Заголовок направлений: стрелка слева, название по центру экрана. */
+.development-heading--direction{position:relative;justify-content:center;min-height:40px}
+.development-heading--direction .development-back{position:absolute;left:0;top:50%;transform:translateY(-50%)}
+.development-heading--direction h1{text-align:center;min-width:0;padding:0 46px}
