@@ -7,7 +7,7 @@ const DIRECTIONS = [
 ];
 const icon = (name) => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
 const rootHtml = () => `<div class="development-screen">
-    <header class="development-heading"><div class="development-heading__logo">${icon('psychiatry')}</div><h1>Развитие</h1><span class="development-heading__info" title="Прокачивай ключевые сферы жизни через реальные привычки">${icon('info')}</span></header>
+    <header class="development-heading"><h1>Развитие</h1></header>
     <p class="development-intro">Прокачивай ключевые сферы жизни через реальные привычки</p>
     <div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>Общий прогресс</strong><strong>0 / 48</strong></div><div class="development-progress"><span style="width:0%"></span></div></div></div>
     <div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${d.name}</strong><span class="development-direction__count">0 / 12</span><span class="development-progress"><span style="width:0%"></span></span></button>`).join('')}</div>

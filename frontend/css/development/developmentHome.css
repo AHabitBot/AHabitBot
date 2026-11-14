@@ -39,3 +39,7 @@
 .development-screen--will .development-heading__logo{background:#543b29;color:#ffb47b}
 .development-screen--psyche .development-heading__logo{background:#45325b;color:#d6a5ff}
 @media(max-width:350px){.development-screen{padding-left:12px;padding-right:12px}.development-direction{padding:12px;min-height:145px}.development-direction strong{font-size:16px}.development-tree__branches{gap:10px}.development-node{width:105px}}
+
+/* Главный экран: компактный заголовок без логотипа и кнопки информации. */
+.development-screen:not([class*="development-screen--"]) .development-heading{margin-bottom:12px}
+.development-screen:not([class*="development-screen--"]) .development-intro{margin:0 0 22px}
