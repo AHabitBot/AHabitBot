@@ -1,0 +1,8 @@
+import { DIRECTIONS, icon, rootHtml } from "./development.js";
+
+export function directionHtml(key){
+    const d=DIRECTIONS.find(x=>x.key===key);
+    if(!d)return rootHtml();
+    const nodes=d.key==='body'?`<div class="development-tree"><button class="development-node" data-development-upgrade="endurance">${icon('directions_run')}<strong>Выносливость</strong><small>0 / 3</small></button><div class="development-tree__branches"><button class="development-node development-node--locked" data-development-upgrade="strength">${icon('fitness_center')}<strong>Сила</strong><small>0 / 3</small></button><button class="development-node development-node--locked" data-development-upgrade="health">${icon('favorite')}<strong>Здоровье</strong><small>0 / 3</small></button></div><div class="development-node development-node--locked development-node--final">${icon('lock')}<strong>Скоро</strong></div></div>`:`<div class="development-empty">Дерево направления будет добавлено после согласования улучшений</div>`;
+    return `<div class="development-screen development-screen--${d.color}"><header class="development-heading development-heading--direction"><button class="development-back" data-development-back="root" aria-label="Назад">${icon('arrow_back')}</button><h1>${d.name}</h1></header><div class="development-overall"><div class="development-overall__main"><div class="development-line"><span>Прогресс направления</span><strong>0 / 12</strong></div><div class="development-progress"><span style="width:0%"></span></div></div></div>${nodes}<p class="development-preview-note">Схема предварительная. У каждого направления будет собственное расширяемое дерево.</p></div>`;
+}
