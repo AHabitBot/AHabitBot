@@ -49,15 +49,11 @@
             env(safe-area-inset-bottom)
         );
 
-    width:
-        min(
-            calc(100vw - 72px),
-            274px
-        );
+    width: min(calc(100vw - 32px), calc(91px * var(--nav-items-count)));
     height: 58px;
 
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--nav-items-count), minmax(0, 1fr));
     align-items: stretch;
 
     box-sizing: border-box;

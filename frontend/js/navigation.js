@@ -3,10 +3,19 @@ import { t } from "../i18n/core/i18n.js";
 const NAVIGATION_ID = "bottom-navigation";
 const NAVIGATION_FADE_ID = "bottom-navigation-fade";
 
+const DEVELOPMENT_TESTER_ID = 900410719;
+
+// Только визуальное ограничение. Будущие API обязаны проверять
+// подписанный Telegram initData на сервере.
+export function canAccessDevelopment() {
+    return Number(window.Telegram?.WebApp?.initDataUnsafe?.user?.id) === DEVELOPMENT_TESTER_ID;
+}
+
 const NAVIGATION_PAGE_INDEX = {
     habits: 0,
-    leaderboard: 1,
-    profile: 2
+    development: 1,
+    leaderboard: 2,
+    profile: 3
 };
 
 /* =========================================================
@@ -28,6 +37,19 @@ export function canAccessProfile() {
 export function renderBottomNavigation(
     activePage = "habits"
 ) {
+
+    const developmentEnabled = canAccessDevelopment();
+    const navigationIndex = developmentEnabled
+        ? (NAVIGATION_PAGE_INDEX[activePage] ?? 0)
+        : ({ habits: 0, leaderboard: 1, profile: 2 }[activePage] ?? 0);
+
+    const developmentNavigationItem = developmentEnabled ? `
+        <button type="button" class="bottom-navigation__item ${activePage === "development" ? "is-active" : ""}"
+            data-navigation-page="development" aria-label="${t("common.navigation.development.aria")}" ${activePage === "development" ? 'aria-current="page"' : ""}>
+            <span class="material-symbols-outlined bottom-navigation__icon" aria-hidden="true">psychology_alt</span>
+            <span class="bottom-navigation__label">${t("common.navigation.development.label")}</span>
+        </button>
+    ` : "";
 
     const profileNavigationItem =
         canAccessProfile()
@@ -78,7 +100,7 @@ export function renderBottomNavigation(
             id="${NAVIGATION_ID}"
             class="bottom-navigation"
             aria-label="${t("common.navigation.aria")}"
-            style="--nav-active-index: ${NAVIGATION_PAGE_INDEX[activePage] ?? 0};"
+            style="--nav-active-index: ${navigationIndex}; --nav-items-count: ${developmentEnabled ? 4 : 3};"
         >
 
             <button
@@ -149,6 +171,7 @@ export function renderBottomNavigation(
             </button>
 
 
+            ${developmentNavigationItem}
             ${profileNavigationItem}
 
         </nav>
@@ -229,7 +252,9 @@ export function setActiveNavigationPage(
     navigation.style.setProperty(
         "--nav-active-index",
         String(
-            NAVIGATION_PAGE_INDEX[activePage]
+            (canAccessDevelopment()
+                ? NAVIGATION_PAGE_INDEX[activePage]
+                : { habits: 0, leaderboard: 1, profile: 2 }[activePage])
             ?? 0
         )
     );
@@ -332,6 +357,8 @@ function handleNavigationClick(event) {
         return;
     }
 
+
+    if (page === "development" && !canAccessDevelopment()) return;
 
     setActiveNavigationPage(page);
 

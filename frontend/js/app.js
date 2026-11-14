@@ -13,7 +13,8 @@ import {
 
 import {
     setActiveNavigationPage,
-    canAccessProfile
+    canAccessProfile,
+    canAccessDevelopment
 } from "./navigation.js"
 
 import {
@@ -170,6 +171,7 @@ function getMainPageElements() {
         habits: document.getElementById(
             "habits-v2-page"
         ),
+        development: document.getElementById("development-v2-page"),
         leaderboard: document.getElementById(
             "leaderboard-v2-page"
         ),
@@ -184,9 +186,20 @@ function renderMainNavigationPage(
     page,
     {
         leaderboardRoot,
-        profileRoot
+        profileRoot,
+        developmentRoot
     }
 ) {
+    if (page === "development") {
+        if (!canAccessDevelopment() || !developmentRoot) return false;
+        developmentRoot.innerHTML = `
+            <section style="padding:24px 20px 110px; color:var(--text-primary,#fff)">
+                <h1 style="font-size:26px;margin:0 0 8px">${window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code === "uk" ? "Розвиток" : "Развитие"}</h1>
+                <p style="opacity:.7;line-height:1.5">${window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code === "uk" ? "Розділ у розробці" : "Раздел в разработке"}</p>
+            </section>`;
+        return true;
+    }
+
     if (page === "leaderboard") {
         openLeaderboardPage(
             leaderboardRoot
@@ -226,7 +239,7 @@ async function handleNavigation(event) {
     const targetPage =
         pages[page]
 
-    if (!targetPage) {
+    if (!targetPage || (page === "development" && !canAccessDevelopment())) {
         return
     }
 
@@ -254,6 +267,8 @@ async function handleNavigation(event) {
         document.getElementById(
             "profile-v2-root"
         )
+
+    const developmentRoot = document.getElementById("development-v2-root")
 
     const transitionId =
         ++pageTransitionId
@@ -296,7 +311,8 @@ async function handleNavigation(event) {
             page,
             {
                 leaderboardRoot,
-                profileRoot
+                profileRoot,
+                developmentRoot
             }
         )
 
