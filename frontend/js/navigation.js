@@ -46,7 +46,7 @@ export function renderBottomNavigation(
     const developmentNavigationItem = developmentEnabled ? `
         <button type="button" class="bottom-navigation__item ${activePage === "development" ? "is-active" : ""}"
             data-navigation-page="development" aria-label="${t("common.navigation.development.aria")}" ${activePage === "development" ? 'aria-current="page"' : ""}>
-            <span class="material-symbols-outlined bottom-navigation__icon" aria-hidden="true">spa</span>
+            <span class="material-symbols-outlined bottom-navigation__icon" aria-hidden="true">psychiatry</span>
             <span class="bottom-navigation__label">${t("common.navigation.development.label")}</span>
         </button>
     ` : "";
