@@ -1,0 +1,8 @@
+.development-tree{display:flex;align-items:center;flex-direction:column;padding:26px 0;gap:38px}
+.development-node{width:118px;min-height:114px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;border:2px solid #7fda65;border-radius:24px;background:#193224;color:#f4f6f6;font:inherit;cursor:pointer}
+.development-node>.material-symbols-outlined{font-size:35px;color:#95ec76}
+.development-node strong{font-size:13px}.development-node small{color:#aebcb8}
+.development-node--locked{border-color:#465258;background:#1a2428}.development-node--locked>.material-symbols-outlined{color:#9ba8ab}
+.development-tree__branches{display:flex;justify-content:space-around;gap:24px;width:100%;position:relative}
+.development-tree__branches:before{content:'';position:absolute;top:-20px;left:25%;width:50%;height:19px;border:2px solid #839295;border-bottom:0;border-radius:20px 20px 0 0;opacity:.65}
+.development-node--final{cursor:default}

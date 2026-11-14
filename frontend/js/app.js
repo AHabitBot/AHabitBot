@@ -1,3 +1,4 @@
+import { renderDevelopment } from "./development/development.js";
 import {
     initHabitsEvents,
     openHabitsPageFromStore
@@ -192,11 +193,7 @@ function renderMainNavigationPage(
 ) {
     if (page === "development") {
         if (!canAccessDevelopment() || !developmentRoot) return false;
-        developmentRoot.innerHTML = `
-            <section style="padding:24px 20px 110px; color:var(--text-primary,#fff)">
-                <h1 style="font-size:26px;margin:0 0 8px">${window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code === "uk" ? "Розвиток" : "Развитие"}</h1>
-                <p style="opacity:.7;line-height:1.5">${window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code === "uk" ? "Розділ у розробці" : "Раздел в разработке"}</p>
-            </section>`;
+        renderDevelopment(developmentRoot);
         return true;
     }
 

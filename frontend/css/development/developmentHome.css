@@ -1,0 +1,41 @@
+#development-v2-root{min-height:100%;color:#f4f5f6}
+.development-screen{padding:22px 18px 120px;max-width:650px;margin:auto;box-sizing:border-box}
+.development-heading{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.development-heading h1{font-size:27px;line-height:1.2;margin:0;font-weight:750}
+.development-heading__logo{width:56px;height:56px;border-radius:19px;background:#183a22;color:#91f473;display:grid;place-items:center;flex-shrink:0}
+.development-heading__logo .material-symbols-outlined{font-size:35px}
+.development-heading__info{margin-left:auto;color:#9aa6aa}
+.development-heading__info .material-symbols-outlined{font-size:26px}
+.development-intro{font-size:14px;color:#aeb8bc;line-height:1.45;margin:-6px 0 22px}
+.development-overall,.development-detail{border:1px solid #344145;background:linear-gradient(145deg,#1b292b,#131c1e);border-radius:21px;padding:16px;margin-bottom:18px}
+.development-overall{display:flex;align-items:center;gap:13px}
+.development-overall__icon{width:50px;height:50px;display:grid;place-items:center;color:#89e765;background:#213d2b;border-radius:16px;flex-shrink:0}
+.development-overall__icon .material-symbols-outlined{font-size:30px}
+.development-overall__main{flex:1;min-width:0}
+.development-line{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;font-size:14px}
+.development-progress{height:12px;background:#3b4749;border-radius:50px;overflow:hidden;display:block}
+.development-progress>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(#9cef77,#52c936)}
+.development-directions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:16px 0 26px}
+.development-direction{border:1px solid var(--direction-border);border-radius:21px;background:linear-gradient(150deg,#18252b,var(--direction-bg));min-height:156px;padding:15px;text-align:left;color:white;display:flex;flex-direction:column;align-items:flex-start;cursor:pointer;font:inherit;position:relative}
+.development-direction--body,.development-screen--body{--direction-bg:#204c6b;--direction-border:#315e79;--direction-color:#8ecbff}
+.development-direction--mind,.development-screen--mind{--direction-bg:#60324c;--direction-border:#77445f;--direction-color:#f0a0c4}
+.development-direction--will,.development-screen--will{--direction-bg:#70432b;--direction-border:#845337;--direction-color:#ffb47b}
+.development-direction--psyche,.development-screen--psyche{--direction-bg:#473262;--direction-border:#5b4279;--direction-color:#d6a5ff}
+.development-direction__icon{display:grid;place-items:center;width:48px;height:48px;background:#ffffff15;border-radius:50%;color:var(--direction-color);margin-bottom:11px}
+.development-direction__icon .material-symbols-outlined{font-size:31px}
+.development-direction__arrow{position:absolute;right:11px;top:14px;color:#aeb9c1}
+.development-direction strong{font-size:18px}
+.development-direction__count{color:#b6bdc5;margin:4px 0 7px;font-size:14px}
+.development-direction .development-progress{width:100%;height:10px;margin-top:auto}
+.development-section-title{display:flex;align-items:center;gap:9px;margin:0 0 14px}
+.development-section-title h2{font-size:20px;margin:0}
+.development-section-title>span:last-child{margin-left:auto;font-size:14px}
+.development-section-title>.material-symbols-outlined{color:#a6b2b6}
+.development-empty{padding:22px 16px;border:1px solid #334043;background:#182225;border-radius:20px;color:#aeb9bc;font-size:14px}
+.development-preview-note{font-size:12px;color:#819095;line-height:1.5;margin-top:20px}
+.development-back{border:1px solid #354247;border-radius:50%;width:40px;height:40px;background:#202b2f;color:white;display:grid;place-items:center;cursor:pointer;flex-shrink:0}
+.development-screen--body .development-heading__logo{background:#1d3b52;color:#8ecbff}
+.development-screen--mind .development-heading__logo{background:#503048;color:#f0a0c4}
+.development-screen--will .development-heading__logo{background:#543b29;color:#ffb47b}
+.development-screen--psyche .development-heading__logo{background:#45325b;color:#d6a5ff}
+@media(max-width:350px){.development-screen{padding-left:12px;padding-right:12px}.development-direction{padding:12px;min-height:145px}.development-direction strong{font-size:16px}.development-tree__branches{gap:10px}.development-node{width:105px}}
