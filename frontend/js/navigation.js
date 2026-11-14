@@ -13,8 +13,8 @@ export function canAccessDevelopment() {
 
 const NAVIGATION_PAGE_INDEX = {
     habits: 0,
-    development: 1,
-    leaderboard: 2,
+    leaderboard: 1,
+    development: 2,
     profile: 3
 };
 
@@ -46,7 +46,7 @@ export function renderBottomNavigation(
     const developmentNavigationItem = developmentEnabled ? `
         <button type="button" class="bottom-navigation__item ${activePage === "development" ? "is-active" : ""}"
             data-navigation-page="development" aria-label="${t("common.navigation.development.aria")}" ${activePage === "development" ? 'aria-current="page"' : ""}>
-            <span class="material-symbols-outlined bottom-navigation__icon" aria-hidden="true">psychology_alt</span>
+            <span class="material-symbols-outlined bottom-navigation__icon" aria-hidden="true">spa</span>
             <span class="bottom-navigation__label">${t("common.navigation.development.label")}</span>
         </button>
     ` : "";
