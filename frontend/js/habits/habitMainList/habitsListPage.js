@@ -1,4 +1,4 @@
-import { renderDevelopmentCard } from "../../development/developmentCard.js?v=20261115-devcard-cachefix2"
+import { renderDevelopmentCard } from "../../development/developmentCard.js?v=20261115-size-label-fix1"
 import { formatCurrentDate } from "../habitsUtils.js"
 import { t } from "../../../i18n/core/i18n.js"
 import { getPluralForm } from "../../../i18n/core/plural.js"

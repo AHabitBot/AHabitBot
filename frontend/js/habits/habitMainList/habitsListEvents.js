@@ -76,7 +76,7 @@ import {
 
 import {
     renderHabitsStats
-} from "./habitsListPage.js?v=20261115-devcard-cachefix2"
+} from "./habitsListPage.js?v=20261115-size-label-fix1"
 
 
 import {
