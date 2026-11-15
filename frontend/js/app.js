@@ -1,4 +1,4 @@
-import { renderDevelopment } from "./development/development.js?v=20261115-state-fix2";
+import { renderDevelopment } from "./development/development.js";
 import {
     initHabitsEvents,
     openHabitsPageFromStore
