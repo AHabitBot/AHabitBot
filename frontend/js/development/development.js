@@ -12,11 +12,20 @@ export const rootHtml = () => `<div class="development-screen">
 <p class="development-preview-note">Каталог исследований доступен для просмотра. Запуск и прогресс будут подключены после реализации серверной логики.</p></div>`;
 // Keep the actual direction DOM when opening a research detail. This avoids
 // rebuilding the tree and preserves the exact scroll position on return.
-export function renderDevelopment(root){
+export function renderDevelopment(root,{reset=false}={}){
  if(!root)return;
- if(root.dataset.developmentBound)return;
+ if(root.dataset.developmentBound){
+  if(reset && typeof root.resetDevelopmentPage==='function')root.resetDevelopmentPage();
+  return;
+ }
  root.dataset.developmentBound='1';
  const history=[];
+ root.resetDevelopmentPage=()=>{
+  history.length=0;
+  root.innerHTML=rootHtml();
+  root.dataset.developmentPage='root';
+  root.scrollTop=0;
+ };
  const showPage=(html, pageType)=>{
   const current=root.firstElementChild;
   if(current)history.push({node:current,scrollTop:root.scrollTop});

@@ -193,7 +193,7 @@ function renderMainNavigationPage(
 ) {
     if (page === "development") {
         if (!canAccessDevelopment() || !developmentRoot) return false;
-        renderDevelopment(developmentRoot);
+        renderDevelopment(developmentRoot, {reset:true});
         return true;
     }
 
