@@ -10,16 +10,43 @@ export const rootHtml = () => `<div class="development-screen">
 <div class="development-section-title">${icon('science')}<h2>Исследования</h2><span>0 / 1 (Free)</span></div>
 <div class="development-empty">Нет активных исследований</div>
 <p class="development-preview-note">Каталог исследований доступен для просмотра. Запуск и прогресс будут подключены после реализации серверной логики.</p></div>`;
+// Keep the actual direction DOM when opening a research detail. This avoids
+// rebuilding the tree and preserves the exact scroll position on return.
 export function renderDevelopment(root){
  if(!root)return;
- root.innerHTML=rootHtml();
  if(root.dataset.developmentBound)return;
  root.dataset.developmentBound='1';
+ const history=[];
+ const showPage=(html, pageType)=>{
+  const current=root.firstElementChild;
+  if(current)history.push({node:current,scrollTop:root.scrollTop});
+  root.innerHTML=html;
+  root.dataset.developmentPage=pageType;
+  root.scrollTop=0;
+ };
+ const goBack=()=>{
+  const previous=history.pop();
+  if(!previous)return;
+  root.replaceChildren(previous.node);
+  root.dataset.developmentPage=previous.node.dataset.pageType||'root';
+  // The scroll container stays mounted; restoring the original node preserves
+  // the tree, its layout and the user's location without a second render.
+  root.scrollTop=previous.scrollTop;
+  requestAnimationFrame(()=>{root.scrollTop=previous.scrollTop;});
+ };
+ root.innerHTML=rootHtml();
+ root.dataset.developmentPage='root';
  root.addEventListener('click',event=>{
   const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade]');
   if(!button||!root.contains(button))return;
-  if(button.dataset.developmentDirection)root.innerHTML=directionHtml(button.dataset.developmentDirection);
-  else if(button.dataset.developmentBack)root.innerHTML=button.dataset.developmentBack==='root'?rootHtml():directionHtml(button.dataset.developmentBack);
-  else if(button.dataset.developmentUpgrade)root.innerHTML=upgradeHtml(button.dataset.developmentUpgrade);
+  if(button.hasAttribute('data-development-back')){goBack();return;}
+  if(button.dataset.developmentDirection){
+   if(root.firstElementChild)root.firstElementChild.dataset.pageType='root';
+   showPage(directionHtml(button.dataset.developmentDirection),'direction');
+  }else if(button.dataset.developmentUpgrade){
+   const cycle=Number(button.dataset.developmentCycle)||1;
+   if(root.firstElementChild)root.firstElementChild.dataset.pageType='direction';
+   showPage(upgradeHtml(button.dataset.developmentUpgrade,cycle),'detail');
+  }
  });
 }

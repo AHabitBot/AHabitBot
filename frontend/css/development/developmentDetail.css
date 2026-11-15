@@ -2,14 +2,6 @@
 .development-detail__row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #354245;font-size:14px}
 .development-detail__row strong{margin-left:auto;text-align:right}.development-detail__row .material-symbols-outlined{color:#9fb0b5}
 .development-detail p{font-size:13px;color:#aeb8bc;margin:12px 0 0}
-/* Единый заголовок для всех исследований: стрелка слева, название строго по центру. */
-.development-heading--upgrade{position:relative;justify-content:center;min-height:54px}
-.development-heading--upgrade .development-back{position:absolute;left:0;top:50%;transform:translateY(-50%)}
-.development-heading--upgrade .development-heading__title{text-align:center;min-width:0;padding:0 46px}
-.development-heading--upgrade .development-subtitle{display:block;margin-top:3px}
 
-/* Награда: заголовок на месте, результат и XP под разделителем. */
-.development-detail--reward .development-detail__row{margin-bottom:0}
-.development-reward__content{padding-top:12px;font-size:14px}
-.development-reward__content>strong{display:block}
-.development-detail--reward .development-reward__content p{margin:6px 0 0}
+/* Both detail and direction headings belong to the scrolling page. */
+.development-heading--direction,.development-heading--upgrade{position:static;top:auto;transform:none;z-index:auto}
