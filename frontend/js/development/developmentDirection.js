@@ -3,17 +3,13 @@ import { icon, rootHtml } from './development.js';
 
 // Display links are a deliberately sparse, non-crossing tree. Actual access
 // requirements remain in the catalog and will be enforced by the backend.
+// Each direction has its own 12-node silhouette, repeated for cycles I–III.
+// These are display-only connections; access rules stay in developmentCatalog.js.
 const LAYOUTS = {
  body: [['endurance'],['strength','health'],['flexibility','nutrition','recovery'],['posture','balance'],['coordination','speed','agility'],['fitness']],
- mind: [['attention'],['memory','focus'],['logic','learning','planning'],['analysis','creativity'],['thinking','speech','erudition'],['strategy']],
- will: [['discipline'],['self_control','persistence'],['responsibility','patience','decisiveness'],['consistency','courage'],['initiative','purpose','resilience'],['character']],
- psyche: [['awareness'],['calm','self_esteem'],['empathy','confidence','stress'],['emotional_control','adaptability'],['acceptance','optimism','inner_balance'],['psychological_resilience']]
-};
-const PARENTS = {
- body: {strength:'endurance',health:'endurance',flexibility:'strength',nutrition:'health',recovery:'health',posture:'flexibility',balance:'nutrition',coordination:'balance',speed:'posture',agility:'coordination',fitness:'agility'},
- mind: {memory:'attention',focus:'attention',logic:'memory',learning:'memory',planning:'focus',analysis:'logic',creativity:'learning',thinking:'analysis',speech:'creativity',erudition:'learning',strategy:'thinking'},
- will: {self_control:'discipline',persistence:'discipline',responsibility:'self_control',patience:'self_control',decisiveness:'persistence',consistency:'responsibility',courage:'decisiveness',initiative:'consistency',purpose:'persistence',resilience:'patience',character:'purpose'},
- psyche: {calm:'awareness',self_esteem:'awareness',empathy:'calm',confidence:'self_esteem',stress:'calm',emotional_control:'stress',adaptability:'confidence',acceptance:'emotional_control',optimism:'self_esteem',inner_balance:'acceptance',psychological_resilience:'inner_balance'}
+ mind: [['attention'],['memory','focus'],['logic','learning'],['analysis','creativity','planning'],['thinking','speech'],['erudition','strategy']],
+ will: [['discipline'],['self_control','persistence'],['responsibility'],['patience','decisiveness'],['consistency','courage','initiative'],['purpose','resilience','character']],
+ psyche: [['awareness'],['calm','self_esteem','empathy'],['confidence','stress'],['emotional_control','adaptability'],['acceptance','optimism','inner_balance'],['psychological_resilience']]
 };
 const X = {1:[50],2:[26,74],3:[17,50,83]};
 const ROW_STEP = 142;
@@ -29,14 +25,21 @@ function renderCycle(direction, cycle) {
  const height=Y0+(rows.length-1)*ROW_STEP+92;
  // Visual routes use an ordered, non-crossing hierarchy. The complete
  // unlock prerequisites remain in RESEARCH_CATALOG and are not altered here.
- // Rows are 1-2-3-2-3-1; each child has one visual connection, and
- // siblings share a horizontal bus with right-angle corners.
- const DISPLAY_PARENT_ROWS = [null, [0,0], [0,0,1], [0,2], [0,0,1], [1]];
+ // A child is visually attached to the nearest node in the preceding row.
+ // Nearest-neighbour mapping keeps each parent's children adjacent and
+ // prevents crossing lines even when row widths differ by direction.
  const paths=[];
  for(let i=1;i<rows.length;i++){
   const parents=rows[i-1];
   const children=rows[i];
-  const parentIndices=DISPLAY_PARENT_ROWS[i];
+  const parentIndices=children.map((key,j)=>{
+   const childX=points.get(key).x;
+   let closest=0;
+   for(let k=1;k<parents.length;k++){
+    if(Math.abs(points.get(parents[k]).x-childX)<Math.abs(points.get(parents[closest]).x-childX)) closest=k;
+   }
+   return closest;
+  });
   const grouped=new Map();
   children.forEach((key,j)=>{
    const parentKey=parents[parentIndices[j]];
@@ -50,13 +53,18 @@ function renderCycle(direction, cycle) {
    const busY=Math.round((sy+ey)/2);
    const xs=childKeys.map(key=>points.get(key).x);
    const minX=Math.min(a.x,...xs), maxX=Math.max(a.x,...xs);
-   // One vertical stem, one horizontal bus, and vertical drops.
-   paths.push(`<path d="M ${a.x} ${sy} V ${busY}"/>`);
-   if(maxX>minX)paths.push(`<path d="M ${minX} ${busY} H ${maxX}"/>`);
-   childKeys.forEach(key=>{
-    const x=points.get(key).x;
-    paths.push(`<path d="M ${x} ${busY} V ${ey}"/>`);
-   });
+   // Orthogonal stems and a shared horizontal bus, all at 1.5px in CSS.
+   // A straight aligned pair needs just one continuous vertical segment.
+   if(childKeys.length===1 && xs[0]===a.x){
+    paths.push(`<path d="M ${a.x} ${sy} V ${ey}"/>`);
+   }else{
+    paths.push(`<path d="M ${a.x} ${sy} V ${busY}"/>`);
+    if(maxX>minX)paths.push(`<path d="M ${minX} ${busY} H ${maxX}"/>`);
+    childKeys.forEach(key=>{
+     const x=points.get(key).x;
+     paths.push(`<path d="M ${x} ${busY} V ${ey}"/>`);
+    });
+   }
   }
  }
  const nodes=rows.flat().map(key=>{
