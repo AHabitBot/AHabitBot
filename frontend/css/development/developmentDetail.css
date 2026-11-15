@@ -43,3 +43,32 @@
 }
 /* Экран отдельного исследования пока сохраняет прежнюю навигацию. */
 .development-heading--upgrade {position: static; top: auto; transform: none; z-index: auto;}
+
+/* Центрированный обычный заголовок подробностей исследования (без sticky). */
+#development-v2-root .development-heading--upgrade {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+#development-v2-root .development-heading--upgrade > .development-back {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translateY(-50%);
+    margin: 0;
+}
+#development-v2-root .development-heading--upgrade > .development-heading__title {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 52px;
+    text-align: center;
+}
+#development-v2-root .development-heading--upgrade .development-heading__title > h1,
+#development-v2-root .development-heading--upgrade .development-subtitle {
+    display: block;
+    text-align: center;
+}
