@@ -1,7 +1,7 @@
 import { apiRequest } from '../api/apiClient.js';
 import { DIRECTIONS, getResearch, RESEARCH_DAYS } from './developmentCatalog.js';
-import { directionHtml } from './developmentDirection.js?v=20261115-dev-state-sync5';
-import { upgradeHtml } from './developmentDetail.js?v=20261115-dev-state-sync5';
+import { directionHtml } from './developmentDirection.js?v=20261115-dev-stabilize6';
+import { upgradeHtml } from './developmentDetail.js?v=20261115-dev-stabilize6';
 export const icon = name => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
 let developmentState = {research:[]};
 export const researchState = () => developmentState;
@@ -83,9 +83,13 @@ export function renderDevelopment(root,{reset=false}={}){
  };
  root.innerHTML=rootHtml();
  root.dataset.developmentPage='root';
- const refresh = async () => { try {if(await refreshState())refreshVisible();}catch(error){console.error('Развитие:',error);} };
+ const refresh = async () => { try {if(await refreshState())refreshVisible();}catch(error){console.error('Развитие:',error); throw error;} };
  refresh();
- window.addEventListener('ahabit:habits-refresh', refresh);
+ window.addEventListener('ahabit:habits-refresh', event => {
+  const task = refresh();
+  if (Array.isArray(event.detail?.waitFor)) event.detail.waitFor.push(task);
+  else task.catch(error => console.error('Развитие:', error));
+ });
  root.addEventListener('click',async event=>{
   const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve], [data-development-go-habits], [data-development-active], [data-development-next-cycle]');
   if(!button||!root.contains(button))return;

@@ -1,5 +1,5 @@
 import { RESEARCH_CATALOG } from './developmentCatalog.js';
-import { icon, rootHtml, researchState, researchRecord } from './development.js?v=20261115-dev-state-sync5';
+import { icon, rootHtml, researchState, researchRecord } from './development.js?v=20261115-dev-stabilize6';
 
 // Display links are a deliberately sparse, non-crossing tree. Actual access
 // requirements remain in the catalog and will be enforced by the backend.
@@ -23,48 +23,19 @@ function renderCycle(direction, cycle) {
  const points=new Map();
  rows.forEach((row,i)=>row.forEach((key,j)=>points.set(key,{x:X[row.length][j],y:Y0+i*ROW_STEP})));
  const height=Y0+(rows.length-1)*ROW_STEP+92;
- // Visual routes use an ordered, non-crossing hierarchy. The complete
- // unlock prerequisites remain in RESEARCH_CATALOG and are not altered here.
- // A child is visually attached to the nearest node in the preceding row.
- // Nearest-neighbour mapping keeps each parent's children adjacent and
- // prevents crossing lines even when row widths differ by direction.
+ // Draw only actual prerequisites. A line is shown for each required parent,
+ // even when the parent is in an earlier non-adjacent row.
  const paths=[];
- for(let i=1;i<rows.length;i++){
-  const parents=rows[i-1];
-  const children=rows[i];
-  const parentIndices=children.map((key,j)=>{
-   const childX=points.get(key).x;
-   let closest=0;
-   for(let k=1;k<parents.length;k++){
-    if(Math.abs(points.get(parents[k]).x-childX)<Math.abs(points.get(parents[closest]).x-childX)) closest=k;
-   }
-   return closest;
-  });
-  const grouped=new Map();
-  children.forEach((key,j)=>{
-   const parentKey=parents[parentIndices[j]];
-   if(!grouped.has(parentKey))grouped.set(parentKey,[]);
-   grouped.get(parentKey).push(key);
-  });
-  for(const [parentKey,childKeys] of grouped){
-   const a=points.get(parentKey);
-   const sy=a.y+R;
-   const ey=points.get(childKeys[0]).y-R;
-   const busY=Math.round((sy+ey)/2);
-   const xs=childKeys.map(key=>points.get(key).x);
-   const minX=Math.min(a.x,...xs), maxX=Math.max(a.x,...xs);
-   // Orthogonal stems and a shared horizontal bus, all at 1.5px in CSS.
-   // A straight aligned pair needs just one continuous vertical segment.
-   if(childKeys.length===1 && xs[0]===a.x){
-    paths.push(`<path d="M ${a.x} ${sy} V ${ey}"/>`);
-   }else{
-    paths.push(`<path d="M ${a.x} ${sy} V ${busY}"/>`);
-    if(maxX>minX)paths.push(`<path d="M ${minX} ${busY} H ${maxX}"/>`);
-    childKeys.forEach(key=>{
-     const x=points.get(key).x;
-     paths.push(`<path d="M ${x} ${busY} V ${ey}"/>`);
-    });
-   }
+ for (const item of direction.items) {
+  const child=points.get(item.key);
+  if (!child) continue;
+  for (const requirement of item.requires) {
+   const parent=points.get(requirement.key);
+   if (!parent) continue;
+   const startY=parent.y+R;
+   const endY=child.y-R;
+   const midY=Math.round((startY+endY)/2);
+   paths.push(`<path d="M ${parent.x} ${startY} V ${midY} H ${child.x} V ${endY}"/>`);
   }
  }
  const nodes=rows.flat().map(key=>{
