@@ -1,7 +1,7 @@
 import { apiRequest } from '../api/apiClient.js';
 import { DIRECTIONS, getResearch, RESEARCH_DAYS } from './developmentCatalog.js';
-import { directionHtml } from './developmentDirection.js';
-import { upgradeHtml } from './developmentDetail.js';
+import { directionHtml } from './developmentDirection.js?v=20261115-dev-status3';
+import { upgradeHtml } from './developmentDetail.js?v=20261115-dev-status3';
 export const icon = name => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
 let developmentState = {research:[]};
 export const researchState = () => developmentState;
@@ -21,8 +21,8 @@ const activeResearchHtml = () => {
 export const rootHtml = () => `<div class="development-screen">
 <header class="development-heading"><h1>Развитие</h1></header>
 <p class="development-intro">Прокачивай ключевые сферы жизни через реальные привычки</p>
-<div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>Общий прогресс</strong><strong>${developmentState.research.filter(r=>r.completed).length} / 144</strong></div><div class="development-progress"><span style="width:0%"></span></div></div></div>
-<div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${d.name}</strong><span class="development-direction__count">${developmentState.research.filter(r=>r.direction===d.key&&r.completed).length} / 36</span><span class="development-progress"><span style="width:0%"></span></span></button>`).join('')}</div>
+<div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>Общий прогресс</strong><strong>${developmentState.research.filter(r=>r.completed).length} / 144</strong></div><div class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.completed).length/144*100))}%"></span></div></div></div>
+<div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${d.name}</strong><span class="development-direction__count">${developmentState.research.filter(r=>r.direction===d.key&&r.completed).length} / 36</span><span class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.direction===d.key&&r.completed).length/36*100))}%"></span></span></button>`).join('')}</div>
 <div class="development-section-title">${icon('science')}<h2>Исследования</h2><span>${developmentState.research.filter(r=>!r.completed).length} активных</span></div>
 ${activeResearchHtml()}
 <p class="development-preview-note">Выбери направление и начни исследование.</p></div>`;
@@ -87,8 +87,26 @@ export function renderDevelopment(root,{reset=false}={}){
  refresh();
  window.addEventListener('ahabit:habits-refresh', refresh);
  root.addEventListener('click',async event=>{
-  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve], [data-development-go-habits], [data-development-active]');
+  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve], [data-development-go-habits], [data-development-active], [data-development-next-cycle]');
   if(!button||!root.contains(button))return;
+  if(button.hasAttribute('data-development-next-cycle')){
+   const key=button.dataset.developmentNextKey;
+   const cycle=Number(button.dataset.developmentNextCycle);
+   const item=getResearch(key);
+   if(!item||!Number.isInteger(cycle)||cycle<2||cycle>3)return;
+   // Navigate back to the direction tree and scroll to the next cycle.
+   history.length=0;
+   root.dataset.developmentPage='direction';
+   root.dataset.developmentDirectionKey=item.direction;
+   root.dataset.developmentResearchKey='';
+   root.innerHTML=directionHtml(item.direction);
+   const section=root.querySelector(`[data-development-cycle-section="${cycle}"]`);
+   if(section){
+    const top=section.getBoundingClientRect().top-root.getBoundingClientRect().top+root.scrollTop-75;
+    root.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+   }
+   return;
+  }
   if(button.hasAttribute('data-development-back')){goBack();return;}
   if(button.hasAttribute('data-development-go-habits')){
    document.dispatchEvent(new CustomEvent('app:navigate',{detail:{page:'habits'}}));

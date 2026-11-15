@@ -1,6 +1,6 @@
 @import url("./developmentHome.css");
-@import url("./developmentTree.css");
-@import url("./developmentDetail.css");
+@import url("./developmentTree.css?v=20261115-dev-status3");
+@import url("./developmentDetail.css?v=20261115-dev-status3");
 
 /* Прокрутка только раздела «Развитие»; другие страницы не затрагиваем. */
 #development-v2-page {

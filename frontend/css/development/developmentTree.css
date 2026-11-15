@@ -20,3 +20,12 @@
 
 /* Keep a uniform physical stroke width when the SVG is stretched differently on each axis. */
 .development-tree-map__links path{vector-effect:non-scaling-stroke}
+
+/* Research states: finished nodes retain their skill icon and gain a check badge. */
+.development-skill__circle{position:relative}
+.development-skill--completed .development-skill__circle{border-color:#7de0a0;background:#285544;color:#e5ffed;box-shadow:none}
+.development-skill__done{position:absolute;right:-7px;bottom:-6px;display:grid;place-items:center;width:23px;height:23px;border:2px solid #111314;border-radius:50%;background:#7de0a0;color:#103b26}
+.development-skill__done .material-symbols-outlined{font-size:16px}
+.development-skill--active .development-skill__circle{border-color:#e5d28c;background:#393a28;color:#f7e4a0;box-shadow:0 0 12px rgba(230,200,120,.12)}
+.development-skill--ready .development-skill__circle{border-color:#76d9a1;background:#274c3b;color:#a3f6bf;box-shadow:0 0 12px rgba(110,230,155,.17)}
+.development-skill--locked .development-skill__name{color:#829096}

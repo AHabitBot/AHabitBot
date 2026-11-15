@@ -72,3 +72,9 @@
     display: block;
     text-align: center;
 }
+
+/* Real action button, not an unstyled text node. */
+#development-v2-root .development-action-wrap{margin-top:16px;padding:0;border:0;background:transparent}
+#development-v2-root .development-action{display:flex;align-items:center;justify-content:center;width:100%;min-height:52px;padding:13px 18px;border:1px solid #66c98c;border-radius:15px;background:#78dfa0;color:#113523;font:inherit;font-size:15px;font-weight:750;line-height:1.3;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#development-v2-root .development-action:active{transform:scale(.99)}
+#development-v2-root .development-action:disabled{opacity:.55;cursor:wait}
