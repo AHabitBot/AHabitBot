@@ -27,20 +27,38 @@ function renderCycle(direction, cycle) {
  const points=new Map();
  rows.forEach((row,i)=>row.forEach((key,j)=>points.set(key,{x:X[row.length][j],y:Y0+i*ROW_STEP})));
  const height=Y0+(rows.length-1)*ROW_STEP+92;
- // One visible parent per node, only adjacent rows. This prevents crossing
- // and sprawling connector paths; unlock logic can have extra prerequisites.
+ // Visual routes use an ordered, non-crossing hierarchy. The complete
+ // unlock prerequisites remain in RESEARCH_CATALOG and are not altered here.
+ // Rows are 1-2-3-2-3-1; each child has one visual connection, and
+ // siblings share a horizontal bus with right-angle corners.
+ const DISPLAY_PARENT_ROWS = [null, [0,0], [0,0,1], [0,2], [0,0,1], [1]];
  const paths=[];
- rows.forEach((row,i)=>{
-  if(!i)return;
-  const previous=new Set(rows[i-1]);
-  row.forEach(key=>{
-   const parent=PARENTS[direction.key][key];
-   if(!previous.has(parent))return;
-   const a=points.get(parent),b=points.get(key);
-   const sy=a.y+R, ey=b.y-R, mid=(sy+ey)/2;
-   paths.push(`<path d="M ${a.x} ${sy} C ${a.x} ${mid}, ${b.x} ${mid}, ${b.x} ${ey}"/>`);
+ for(let i=1;i<rows.length;i++){
+  const parents=rows[i-1];
+  const children=rows[i];
+  const parentIndices=DISPLAY_PARENT_ROWS[i];
+  const grouped=new Map();
+  children.forEach((key,j)=>{
+   const parentKey=parents[parentIndices[j]];
+   if(!grouped.has(parentKey))grouped.set(parentKey,[]);
+   grouped.get(parentKey).push(key);
   });
- });
+  for(const [parentKey,childKeys] of grouped){
+   const a=points.get(parentKey);
+   const sy=a.y+R;
+   const ey=points.get(childKeys[0]).y-R;
+   const busY=Math.round((sy+ey)/2);
+   const xs=childKeys.map(key=>points.get(key).x);
+   const minX=Math.min(a.x,...xs), maxX=Math.max(a.x,...xs);
+   // One vertical stem, one horizontal bus, and vertical drops.
+   paths.push(`<path d="M ${a.x} ${sy} V ${busY}"/>`);
+   if(maxX>minX)paths.push(`<path d="M ${minX} ${busY} H ${maxX}"/>`);
+   childKeys.forEach(key=>{
+    const x=points.get(key).x;
+    paths.push(`<path d="M ${x} ${busY} V ${ey}"/>`);
+   });
+  }
+ }
  const nodes=rows.flat().map(key=>{
   const item=items.get(key),p=points.get(key);
   const available=cycle===1 && item.requires.length===0;
