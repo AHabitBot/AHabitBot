@@ -21,11 +21,29 @@
 /* Keep a uniform physical stroke width when the SVG is stretched differently on each axis. */
 .development-tree-map__links path{vector-effect:non-scaling-stroke}
 
-/* Research states: finished nodes retain their skill icon and gain a check badge. */
+/* State progression: locked -> available -> active/ready -> completed. */
 .development-skill__circle{position:relative}
-.development-skill--completed .development-skill__circle{border-color:#7de0a0;background:#285544;color:#e5ffed;box-shadow:none}
-.development-skill__done{position:absolute;right:-7px;bottom:-6px;display:grid;place-items:center;width:23px;height:23px;border:2px solid #111314;border-radius:50%;background:#7de0a0;color:#103b26}
-.development-skill__done .material-symbols-outlined{font-size:16px}
-.development-skill--active .development-skill__circle{border-color:#e5d28c;background:#393a28;color:#f7e4a0;box-shadow:0 0 12px rgba(230,200,120,.12)}
-.development-skill--ready .development-skill__circle{border-color:#76d9a1;background:#274c3b;color:#a3f6bf;box-shadow:0 0 12px rgba(110,230,155,.17)}
+.development-skill--available .development-skill__circle{
+ border-color:#818b8e;background:#252b2d;color:#aeb8ba;box-shadow:none
+}
+.development-skill--completed .development-skill__circle{
+ border-color:#83e66a;background:#1c3928;color:#91f176;box-shadow:none
+}
+.development-skill--active .development-skill__circle{
+ border-color:#e8ce79;background:#403b25;color:#f4dd8b;
+ animation:development-research-glow 2.8s ease-in-out infinite
+}
+.development-skill--ready .development-skill__circle{
+ border-color:#e8ce79;background:#403b25;color:#f4dd8b;box-shadow:0 0 10px rgba(232,206,121,.16)
+}
+.development-skill--locked .development-skill__circle{
+ border-color:#42494b;background:#1d2223;color:#666f72;box-shadow:none
+}
 .development-skill--locked .development-skill__name{color:#829096}
+@keyframes development-research-glow{
+ 0%,100%{box-shadow:0 0 4px rgba(232,206,121,.08)}
+ 50%{box-shadow:0 0 19px rgba(232,206,121,.38)}
+}
+@media(prefers-reduced-motion:reduce){
+ .development-skill--active .development-skill__circle{animation:none;box-shadow:0 0 9px rgba(232,206,121,.16)}
+}
