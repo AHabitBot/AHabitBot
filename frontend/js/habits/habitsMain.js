@@ -249,13 +249,14 @@ async function openHabitsPage({
         console.error("Не удалось загрузить привычки и исследования:", error)
         const root = getHabitsRoot()
         if (root) root.innerHTML = `<div class="habits-load-error" role="alert">Не удалось загрузить исследования. Закройте и снова откройте приложение.</div>`
-        return
+        return false
     }
 
     openHabitsPageFromStore({
         preserveScroll,
         scrollTop
     })
+    return true
 }
 
 
@@ -490,7 +491,11 @@ export function initHabitsEvents({
 
 
 // Синхронизация после запуска/подтверждения исследования без перезапуска Mini App.
-window.addEventListener("ahabit:habits-refresh", () => {
+window.addEventListener("ahabit:habits-refresh", event => {
     const page = document.getElementById("habits-v2-page")
-    if (page && !page.hidden) void openHabitsPage({preserveScroll:true, scrollTop:document.querySelector(".habits-v2-list")?.scrollTop || 0})
+    if (!page || page.hidden) return
+    const refresh = openHabitsPage({preserveScroll:true, scrollTop:document.querySelector(".habits-v2-list")?.scrollTop || 0})
+        .then(ok => { if (ok === false) throw new Error("Не удалось обновить список исследований") })
+    if (Array.isArray(event.detail?.waitFor)) event.detail.waitFor.push(refresh)
+    else void refresh.catch(error => console.error(error))
 })

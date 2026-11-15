@@ -4,8 +4,6 @@ import { apiRequest } from '../api/apiClient.js'
 
 const pending = new Set()
 const wait = ms => new Promise(resolve => window.setTimeout(resolve, ms))
-const SPIN_CONFIRM_MS = 450
-const SPIN_UNCONFIRM_MS = 650
 const REWARD_MS = 650
 
 function animateResearchResult(card, action, response, desired) {
@@ -70,7 +68,6 @@ export function initDevelopmentCardEvents(card, { getCompletedToday = () => fals
         const isImprove = Boolean(action.dataset.developmentImproveHabit)
         const currentlyDone = action.classList.contains('is-completed') || Boolean(getCompletedToday(id))
         const desired = !currentlyDone
-        const started = performance.now()
         if (!isImprove) {
             action.classList.add('is-confirming')
             action.classList.toggle('is-unconfirming', !desired)
@@ -85,18 +82,24 @@ export function initDevelopmentCardEvents(card, { getCompletedToday = () => fals
                 const response = await apiRequest(`/api/development/${encodeURIComponent(id)}/confirmation`, {
                     method: 'PUT', body: { is_confirmed: desired }
                 })
-                await wait(Math.max(0, (desired ? SPIN_CONFIRM_MS : SPIN_UNCONFIRM_MS) - (performance.now() - started)))
+                // Сохраняем загрузку до завершения серверной операции и обновления списка.
+                const refresh = new CustomEvent('ahabit:habits-refresh', { detail: { waitFor: [] } })
+                window.dispatchEvent(refresh)
+                await Promise.all(refresh.detail.waitFor)
                 action.classList.remove('is-confirming', 'is-unconfirming')
                 action.removeAttribute('aria-busy')
-                animateResearchResult(card, action, response, desired)
+                // Обновлённая карточка уже отрисована; старую не анимируем.
+                const updatedCard = document.querySelector(`[data-development-card="1"][data-habit-id="${String(id).replace(/[^0-9]/g, '')}"]`)
+                if (updatedCard) {
+                    const updatedAction = updatedCard.querySelector('[data-development-confirm]')
+                    if (updatedAction) animateResearchResult(updatedCard, updatedAction, response, desired)
+                }
                 if (!desired && response?.confirmation?.confirmation_state_changed) {
                     action.classList.add('is-unconfirm-success')
                     window.setTimeout(() => action.classList.remove('is-unconfirm-success'), 320)
                 }
-                // Даём анимации закончиться до перерисовки списка.
-                await wait(REWARD_MS)
             }
-            window.dispatchEvent(new Event('ahabit:habits-refresh'))
+            if (isImprove) window.dispatchEvent(new Event('ahabit:habits-refresh'))
         } catch (error) {
             action.classList.remove('is-confirming', 'is-unconfirming')
             action.removeAttribute('aria-busy')
