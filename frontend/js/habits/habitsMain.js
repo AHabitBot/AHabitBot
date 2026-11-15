@@ -16,7 +16,7 @@
 /* 1. Импорты */
 import { apiRequest } from "../api/apiClient.js"
 import { renderHabitsEmpty } from "./habitMainEmpty/habitsEmpty.js"
-import { renderHabitsList } from "./habitMainList/habitsListPage.js?v=20261115-card-fix1"
+import { renderHabitsList } from "./habitMainList/habitsListPage.js?v=20261115-devcard-cachefix2"
 
 import {
     openAddHabitPage,
@@ -28,7 +28,7 @@ import {
 import {
     initHabitsListEvents,
     initOpenedHabitDetailsEvents
-} from "./habitMainList/habitsListEvents.js?v=20261115-independent-events-v1"
+} from "./habitMainList/habitsListEvents.js?v=20261115-devcard-cachefix2"
 
 import {
     addHabit,
