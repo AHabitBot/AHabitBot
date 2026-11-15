@@ -7,11 +7,13 @@
 .development-tree__branches:before{content:'';position:absolute;top:-20px;left:25%;width:50%;height:19px;border:2px solid #839295;border-bottom:0;border-radius:20px 20px 0 0;opacity:.65}
 .development-node--final{cursor:default}
 
-/* Каталог: компактная сетка всех исследований вместо временной схемы из 3 узлов. */
-.development-tree--catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px;align-items:stretch;padding:22px 0}
-.development-tree--catalog .development-node{width:100%;min-height:108px;padding:10px 6px;box-sizing:border-box}
-.development-tree--catalog .development-node strong{text-align:center;overflow-wrap:anywhere}
-.development-tree--catalog .development-node--locked{cursor:pointer}
+/* Branching research map. Connections are drawn from actual catalog prerequisites. */
+.development-tree-map{position:relative;width:100%;margin:22px 0 10px;box-sizing:border-box}
+.development-tree-map__links{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;fill:none;stroke:#708b94;stroke-width:3;opacity:.7}
+.development-tree-map .development-tree-node{position:absolute;transform:translateX(-50%);width:clamp(92px,29%,132px);height:112px;min-height:112px;padding:8px 4px;box-sizing:border-box;z-index:1}
+.development-tree-map .development-tree-node strong{font-size:12px;text-align:center;overflow-wrap:anywhere;line-height:1.15}
+.development-tree-map .development-tree-node>.material-symbols-outlined{font-size:29px}
+.development-tree-map .development-tree-node--locked{cursor:pointer}
 .development-detail--tasks .development-task{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #354245;font-size:13px;line-height:1.45;color:#eef2f3}
 .development-detail--tasks .development-task:last-child{border-bottom:0}
 .development-task__level{flex:0 0 64px;color:#aeb8bc;font-size:12px}
