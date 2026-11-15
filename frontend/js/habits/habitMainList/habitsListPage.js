@@ -288,6 +288,7 @@ function renderSharedHabitPeople(shared) {
    ========================================================= */
 
 export function renderHabitCard(habit = {}) {
+    if (habit.development) return renderDevelopmentHabitCard(habit)
     const {
         id = "",
         name = "",
@@ -421,3 +422,22 @@ export function renderHabitCard(habit = {}) {
 
 
 import { formatRepeatRule } from "../habitRepeatRule.js"
+
+// Отдельный тип карточки исследования. Не использует стрик и недельные кружки обычной карточки.
+function renderDevelopmentHabitCard(habit) {
+    const d = habit.development
+    const id = escapeHtml(habit.id)
+    const target = Math.max(1, Number(d.target) || 7)
+    const progress = Math.min(target, Math.max(0, Number(d.progress) || 0))
+    const ready = Boolean(d.ready || progress >= target)
+    const dots = Array.from({length:7}, (_, i) => `<span class="development-habit__dot ${i < progress % 7 || (progress > 0 && progress % 7 === 0 && i < 7) ? 'is-done' : ''}"></span>`).join('')
+    const icons = {endurance:'directions_run',strength:'fitness_center',health:'favorite',attention:'psychology'}
+    const icon = icons[d.key] || 'auto_awesome'
+    return `<article class="development-habit" data-habit-id="${id}" data-development-card="1">
+      <span class="development-habit__icon material-symbols-rounded" aria-hidden="true">${icon}</span>
+      ${ready ? `<button class="development-habit__improve" type="button" data-development-improve-habit="${id}">Улучшить</button>` :
+      `<button class="development-habit__check ${habit.completedToday ? 'is-done' : ''}" type="button" data-development-confirm="${id}" aria-label="Подтвердить исследование" aria-pressed="${Boolean(habit.completedToday)}"><span class="material-symbols-rounded">check</span></button>`}
+      <div class="development-habit__body"><h2>${escapeHtml(habit.name)}</h2><p>Развитие · ${Number(d.cycle)} уровень</p></div>
+      <div class="development-habit__footer"><div class="development-habit__dots">${dots}</div><strong>${progress}/${target}</strong></div>
+    </article>`
+}

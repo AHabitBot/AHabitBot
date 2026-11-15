@@ -62,6 +62,7 @@ export function renderDevelopment(root,{reset=false}={}){
     else {await apiRequest(`/api/development/${button.dataset.developmentImprove}/improve`,{method:'POST'});}
     developmentState=await apiRequest('/api/development');
     root.innerHTML=upgradeHtml(button.dataset.developmentKey,Number(button.dataset.developmentCycle));
+    window.dispatchEvent(new Event('ahabit:habits-refresh'));
     window.dispatchEvent(new Event('focus'));
    }catch(error){alert(error.message||'Не удалось выполнить действие');button.disabled=false;}
    return;

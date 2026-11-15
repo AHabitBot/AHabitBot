@@ -1,3 +1,4 @@
+import { apiRequest } from "../../api/apiClient.js"
 /* =========================================================
    HABITS LIST EVENTS
 
@@ -1046,6 +1047,34 @@ function initSingleHabitCardEvents(
         card.dataset.habitId
 
     if (!habitId) {
+        return
+    }
+
+    if (card.dataset.developmentCard === "1") {
+        const action = card.querySelector('[data-development-confirm], [data-development-improve-habit]')
+        card.addEventListener('click', event => {
+            if (!event.target.closest('button')) event.stopPropagation()
+        })
+        action?.addEventListener('click', async event => {
+            event.preventDefault()
+            event.stopPropagation()
+            if (action.disabled) return
+            action.disabled = true
+            try {
+                if (action.dataset.developmentImproveHabit) {
+                    await apiRequest(`/api/development/${habitId}/improve`, {method:'POST'})
+                } else {
+                    const habit = getHabitById(habitId)
+                    await apiRequest(`/api/development/${habitId}/confirmation`, {
+                        method:'PUT', body:{is_confirmed:!Boolean(habit?.completedToday)}
+                    })
+                }
+                window.dispatchEvent(new Event('ahabit:habits-refresh'))
+            } catch (error) {
+                alert(error?.message || 'Не удалось обновить исследование')
+                action.disabled = false
+            }
+        })
         return
     }
 

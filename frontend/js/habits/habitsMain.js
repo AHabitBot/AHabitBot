@@ -14,6 +14,7 @@
 
 
 /* 1. Импорты */
+import { apiRequest } from "../api/apiClient.js"
 import { renderHabitsEmpty } from "./habitMainEmpty/habitsEmpty.js"
 import { renderHabitsList } from "./habitMainList/habitsListPage.js"
 
@@ -197,8 +198,21 @@ async function openHabitsPage({
             statistics
         } = await fetchHabits()
 
-        const normalizedHabits =
-            habits.map(normalizeHabit)
+        // Исследования хранят прогресс отдельно, но используют общий список привычек.
+        // Если API развития недоступен, обычные привычки продолжают работать.
+        let development = []
+        try {
+            const response = await apiRequest("/api/development")
+            development = Array.isArray(response?.research) ? response.research : []
+        } catch (error) {
+            console.warn("Не удалось получить прогресс развития", error)
+        }
+        const byHabitId = new Map(development.filter(r => !r.completed).map(r => [String(r.habit_id), r]))
+        const normalizedHabits = habits.map(raw => {
+            const normalized = normalizeHabit(raw)
+            normalized.development = byHabitId.get(String(normalized.id)) || null
+            return normalized
+        })
 
         setHabits(normalizedHabits)
 
@@ -458,12 +472,7 @@ export function initHabitsEvents({
        --------------------------------------------------------- */
 
     if (useStore) {
-        // Сначала показываем сохранённый список без задержки.
         openHabitsPageFromStore()
-        // Затем синхронизируем с сервером: исследования могли быть
-        // созданы на другой странице после последней загрузки Store.
-        void openHabitsPage({ preserveScroll: true,
-            scrollTop: document.querySelector(".habits-v2-list")?.scrollTop ?? 0 })
         return
     }
 
@@ -480,3 +489,9 @@ export function initHabitsEvents({
 
 
 
+
+// Синхронизация после запуска/подтверждения исследования без перезапуска Mini App.
+window.addEventListener("ahabit:habits-refresh", () => {
+    const page = document.getElementById("habits-v2-page")
+    if (page && !page.hidden) void openHabitsPage({preserveScroll:true, scrollTop:document.querySelector(".habits-v2-list")?.scrollTop || 0})
+})
