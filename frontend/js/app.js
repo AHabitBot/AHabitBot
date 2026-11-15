@@ -1,4 +1,4 @@
-import { renderDevelopment } from "./development/development.js?v=20261115-dev-states4";
+import { renderDevelopment } from "./development/development.js?v=20261115-dev-state-sync5";
 import {
     initHabitsEvents,
     openHabitsPageFromStore

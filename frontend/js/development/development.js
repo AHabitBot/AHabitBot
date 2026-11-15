@@ -1,7 +1,7 @@
 import { apiRequest } from '../api/apiClient.js';
 import { DIRECTIONS, getResearch, RESEARCH_DAYS } from './developmentCatalog.js';
-import { directionHtml } from './developmentDirection.js?v=20261115-dev-states4';
-import { upgradeHtml } from './developmentDetail.js?v=20261115-dev-status3';
+import { directionHtml } from './developmentDirection.js?v=20261115-dev-state-sync5';
+import { upgradeHtml } from './developmentDetail.js?v=20261115-dev-state-sync5';
 export const icon = name => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
 let developmentState = {research:[]};
 export const researchState = () => developmentState;

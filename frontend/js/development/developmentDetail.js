@@ -1,6 +1,6 @@
 import { getResearch, RESEARCH_DAYS, RESEARCH_CATALOG } from './developmentCatalog.js';
-import { icon, researchRecord, researchState } from './development.js?v=20261115-dev-status3';
-import { directionHtml } from './developmentDirection.js?v=20261115-dev-status3';
+import { icon, researchRecord, researchState } from './development.js?v=20261115-dev-state-sync5';
+import { directionHtml } from './developmentDirection.js?v=20261115-dev-state-sync5';
 const escapeHtml=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 export function upgradeHtml(key, cycle=1){
  cycle=Math.max(1,Math.min(3,Number(cycle)||1));

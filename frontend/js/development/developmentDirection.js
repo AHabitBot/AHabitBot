@@ -1,5 +1,5 @@
 import { RESEARCH_CATALOG } from './developmentCatalog.js';
-import { icon, rootHtml, researchState, researchRecord } from './development.js?v=20261115-dev-status3';
+import { icon, rootHtml, researchState, researchRecord } from './development.js?v=20261115-dev-state-sync5';
 
 // Display links are a deliberately sparse, non-crossing tree. Actual access
 // requirements remain in the catalog and will be enforced by the backend.
