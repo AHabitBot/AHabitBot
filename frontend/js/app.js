@@ -20,7 +20,7 @@ import {
 
 import {
     bootstrapApp
-} from "./core/appBootstrap.js"
+} from "./core/appBootstrap.js?v=20261115-bootstrap-development-fix"
 
 import {
     openSharedHabitInviteFromTelegram

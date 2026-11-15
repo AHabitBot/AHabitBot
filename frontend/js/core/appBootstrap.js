@@ -8,6 +8,7 @@ import {
 } from "./resourceCache.js"
 
 import {
+    getHabits,
     setHabits,
     setHabitsStatistics
 } from "../habits/habitsStore.js"
@@ -30,6 +31,7 @@ function normalizeHabit(habit = {}) {
         id: String(habit.id),
         name: habit.title || "",
         description: habit.description ?? "",
+        habitType: habit.habit_type ?? habit.habitType ?? "regular",
         icon: habit.emoji || "✱",
         color: habit.color || "green",
         size: habit.size || "large",
@@ -291,6 +293,29 @@ export async function bootstrapApp({ onProgress } = {}) {
     reportProgress(86)
 
     hydrateResources(data)
+
+    // Bootstrap renders the habits screen directly from Store (useStore: true).
+    // Enrich that Store before the first render, not only on later navigation.
+    const researchState = await apiRequest("/api/development")
+    if (!Array.isArray(researchState?.research)) {
+        throw new Error("Bootstrap: некорректный ответ /api/development")
+    }
+    const activeResearch = new Map(
+        researchState.research
+            .filter(item => !item.completed)
+            .map(item => [String(item.habit_id), item])
+    )
+    const enrichedHabits = getHabits().map(habit => {
+        const research = activeResearch.get(String(habit.id)) || null
+        return {
+            ...habit,
+            habitType: research ? "development" : habit.habitType,
+            development: research
+        }
+    })
+    // If a development habit lacks its research record, do not render it
+    // using the regular card as a misleading fallback.
+    setHabits(enrichedHabits)
 
     reportProgress(94)
 
