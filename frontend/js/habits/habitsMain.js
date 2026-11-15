@@ -16,7 +16,7 @@
 /* 1. Импорты */
 import { apiRequest } from "../api/apiClient.js"
 import { renderHabitsEmpty } from "./habitMainEmpty/habitsEmpty.js"
-import { renderHabitsList } from "./habitMainList/habitsListPage.js?v=20261115-development-card-v3"
+import { renderHabitsList } from "./habitMainList/habitsListPage.js?v=20261115-card-fix1"
 
 import {
     openAddHabitPage,
@@ -200,13 +200,11 @@ async function openHabitsPage({
 
         // Исследования хранят прогресс отдельно, но используют общий список привычек.
         // Если API развития недоступен, обычные привычки продолжают работать.
-        let development = []
-        try {
-            const response = await apiRequest("/api/development")
-            development = Array.isArray(response?.research) ? response.research : []
-        } catch (error) {
-            console.warn("Не удалось получить прогресс развития", error)
+        const response = await apiRequest("/api/development")
+        if (!Array.isArray(response?.research)) {
+            throw new Error("Сервер вернул некорректный список исследований")
         }
+        const development = response.research
         const byHabitId = new Map(development.filter(r => !r.completed).map(r => [String(r.habit_id), r]))
         const normalizedHabits = habits.map(raw => {
             const normalized = normalizeHabit(raw)
@@ -248,10 +246,10 @@ async function openHabitsPage({
                 ) || 0
         })
     } catch (error) {
-        console.error(
-            "Не удалось загрузить привычки:",
-            error
-        )
+        console.error("Не удалось загрузить привычки и исследования:", error)
+        const root = getHabitsRoot()
+        if (root) root.innerHTML = `<div class="habits-load-error" role="alert">Не удалось загрузить исследования. Закройте и снова откройте приложение.</div>`
+        return
     }
 
     openHabitsPageFromStore({
