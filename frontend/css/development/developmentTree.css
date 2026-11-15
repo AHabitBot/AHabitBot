@@ -1,79 +1,19 @@
-/* Compact, circular skill tree. The tree fits the screen width without horizontal scrolling. */
-.development-tree-map {
-  position:relative;
-  width:100%;
-  max-width:520px;
-  margin:16px auto 10px;
-  box-sizing:border-box;
-}
-.development-tree-map__links {
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  pointer-events:none;
-  fill:none;
-  stroke:#70858b;
-  stroke-width:3;
-  opacity:.68;
-}
-.development-skill {
-  position:absolute;
-  z-index:1;
-  transform:translate(-50%,-37px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  width:30%;
-  max-width:130px;
-  min-width:0;
-  padding:0;
-  border:0;
-  background:transparent;
-  color:#edf1f1;
-  font:inherit;
-  text-align:center;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-}
-.development-skill__circle {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:74px;
-  height:74px;
-  border:3px solid #58666a;
-  border-radius:50%;
-  background:#1b262a;
-  color:#a5b0b3;
-  box-sizing:border-box;
-  transition:border-color .15s ease,background .15s ease;
-}
-.development-skill__circle .material-symbols-outlined {font-size:34px;line-height:1}
-.development-skill--available .development-skill__circle {
-  border-color:#85e565;
-  background:#1b3528;
-  color:#90f06d;
-  box-shadow:0 0 0 2px rgba(133,229,101,.06),0 0 17px rgba(133,229,101,.14);
-}
-.development-skill__name {
-  display:block;
-  width:100%;
-  margin-top:8px;
-  font-size:12px;
-  line-height:1.2;
-  font-weight:600;
-  overflow-wrap:break-word;
-  hyphens:auto;
-}
-.development-skill__level {margin-top:3px;font-size:12px;color:#a8b5b7;line-height:1.2}
-.development-skill:focus-visible .development-skill__circle {outline:2px solid #fff;outline-offset:4px}
-@media(max-width:360px) {
-  .development-skill__circle {width:66px;height:66px}
-  .development-skill__circle .material-symbols-outlined {font-size:30px}
-  .development-skill__name {font-size:11px}
-}
+/* Three self-contained cycles; max three circular nodes per row. */
+.development-cycles{display:flex;flex-direction:column;gap:30px;margin:20px 0 12px}
+.development-cycle{position:relative;min-width:0}
+.development-cycle+.development-cycle{padding-top:24px;border-top:1px solid rgba(133,159,164,.20)}
+.development-cycle__heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 3px;font-size:14px}
+.development-cycle__heading strong{font-size:17px;color:#edf4ef}
+.development-cycle__heading span{font-size:12px;color:#aab7b9}
+.development-tree-map{position:relative;width:100%;max-width:520px;margin:14px auto 0;box-sizing:border-box}
+.development-tree-map__links{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;fill:none;stroke:#71888b;stroke-width:.42;stroke-linecap:round;opacity:.8}
+.development-skill{position:absolute;z-index:1;transform:translate(-50%,-33px);display:flex;flex-direction:column;align-items:center;width:32%;max-width:150px;min-width:0;padding:0;border:0;background:transparent;color:#e9efef;font:inherit;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.development-skill__circle{display:flex;align-items:center;justify-content:center;width:66px;height:66px;border:3px solid #617177;border-radius:50%;background:#1c292e;color:#a9b6b9;box-sizing:border-box}
+.development-skill__circle .material-symbols-outlined{font-size:29px;line-height:1}
+.development-skill--available .development-skill__circle{border-color:#83e66a;background:#1c3928;color:#91f176;box-shadow:0 0 15px rgba(131,230,106,.20)}
+.development-skill__name{display:block;width:100%;margin-top:9px;font-size:12px;line-height:1.24;font-weight:600;overflow-wrap:anywhere;hyphens:auto}
+.development-skill:focus-visible .development-skill__circle{outline:2px solid #fff;outline-offset:4px}
+@media(max-width:360px){.development-skill__circle{width:60px;height:60px}.development-skill__circle .material-symbols-outlined{font-size:27px}.development-skill__name{font-size:11px}}
 .development-detail--tasks .development-task{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #354245;font-size:13px;line-height:1.45;color:#eef2f3}
 .development-detail--tasks .development-task:last-child{border-bottom:0}
 .development-task__level{flex:0 0 64px;color:#aeb8bc;font-size:12px}
