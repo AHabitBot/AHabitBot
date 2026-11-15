@@ -75,7 +75,7 @@ import {
 
 import {
     renderHabitsStats
-} from "./habitsListPage.js"
+} from "./habitsListPage.js?v=20261115-development-card-v3"
 
 
 import {

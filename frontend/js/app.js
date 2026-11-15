@@ -2,7 +2,7 @@ import { renderDevelopment } from "./development/development.js";
 import {
     initHabitsEvents,
     openHabitsPageFromStore
-} from "./habits/habitsMain.js"
+} from "./habits/habitsMain.js?v=20261115-development-card-v3"
 
 import {
     openLeaderboardPage
