@@ -2,7 +2,7 @@ import { renderDevelopment } from "./development/development.js?v=20261115-dev-s
 import {
     initHabitsEvents,
     openHabitsPageFromStore
-} from "./habits/habitsMain.js?v=20261115-devcard-cachefix2"
+} from "./habits/habitsMain.js?v=20261115-confirm-anim1"
 
 import {
     openLeaderboardPage

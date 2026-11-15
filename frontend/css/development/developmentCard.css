@@ -15,17 +15,16 @@
   font-size: 34px; line-height: 1.15;
   font-variation-settings: 'FILL' 1, 'wght' 500;
 }
-.development-habit__check {
+/* Кнопка использует обе визуальные фазы и спиннер обычной привычки. */
+.development-habit .development-habit__check {
   grid-column: 2; grid-row: 1;
+  align-self: start; justify-self: end;
   width: 44px; height: 44px;
-  border: 0; border-radius: 50%;
-  background: #346d46; color: #fff;
-  display: grid; place-items: center;
-  cursor: pointer;
+  --habit-accent: #77d992;
+  --habit-accent-rgb: 117, 201, 145;
 }
-.development-habit__check .material-symbols-rounded {font-size: 27px;}
-.development-habit__check.is-done {background: #4b955d;}
-.development-habit__check:disabled, .development-habit__improve:disabled {opacity: .55;}
+.development-habit .development-habit__check:disabled { cursor: default; }
+.development-habit__improve:disabled {opacity: .55;}
 .development-habit__improve {
   grid-column: 2; grid-row: 1;
   align-self: start; justify-self: end;
@@ -58,10 +57,21 @@
   font-weight: 750; color: #b0f0bd; font-variant-numeric: tabular-nums;
 }
 @media (max-width: 480px) {
-  .development-habit__check {width: 42px; height: 42px;}
+  .development-habit .development-habit__check {width: 42px; height: 42px;}
   .development-habit__icon {font-size: 32px;}
 }
 @media (max-width: 360px) {
   .development-habit__dots {gap: 4px;}
   .development-habit__footer strong {font-size: 16px;}
+}
+
+/* Анимация дневных кружочков исследования (без изменения серверной логики). */
+.development-habit__dot.is-rewarded { animation: development-dot-fill 650ms ease-out both; }
+.development-habit__dot.is-unrewarded { animation: development-dot-empty 650ms ease-out both; }
+.development-habit__footer strong.is-updated { animation: development-count-pop 420ms ease-out; }
+@keyframes development-dot-fill { 0% {transform:scale(.7);filter:brightness(.75)} 50% {transform:scale(1.17);filter:brightness(1.35)} 100% {transform:scale(1);filter:brightness(1)} }
+@keyframes development-dot-empty { 0% {transform:scale(1);opacity:1} 65% {transform:scale(.78);opacity:.45} 100% {transform:scale(1);opacity:1} }
+@keyframes development-count-pop { 45% {transform:scale(1.13)} 100% {transform:scale(1)} }
+@media (prefers-reduced-motion: reduce) {
+  .development-habit__dot.is-rewarded,.development-habit__dot.is-unrewarded,.development-habit__footer strong.is-updated {animation:none}
 }

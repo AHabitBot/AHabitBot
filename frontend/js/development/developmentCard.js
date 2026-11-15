@@ -23,7 +23,7 @@ export function renderDevelopmentCard(habit) {
     <span class="development-habit__icon material-symbols-rounded" aria-hidden="true">${icon}</span>
     ${ready
       ? `<button class="development-habit__improve" type="button" data-development-improve-habit="${id}">Улучшить</button>`
-      : `<button class="development-habit__check ${habit.completedToday ? 'is-done' : ''}" type="button" data-development-confirm="${id}" aria-label="Подтвердить исследование" aria-pressed="${Boolean(habit.completedToday)}"><span class="material-symbols-rounded">check</span></button>`}
+      : `<button class="habit-card__check development-habit__check ${habit.completedToday ? 'is-completed' : ''}" type="button" data-development-confirm="${id}" aria-label="Подтвердить исследование" aria-pressed="${Boolean(habit.completedToday)}"><span class="habit-card__check-mark material-symbols-rounded">check</span></button>`}
     <div class="development-habit__body"><h2>${title}</h2><p>Развитие · ${directionName}</p></div>
     <div class="development-habit__footer"><div class="development-habit__dots">${dots}</div><strong>${progress}/${target}</strong></div>
   </article>`

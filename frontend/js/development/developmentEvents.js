@@ -1,17 +1,64 @@
-// Исследования: независимая обработка событий, без логики обычных привычек.
+// Исследования используют кнопку и анимации обычных привычек,
+// но сохраняют собственный endpoint и собственный прогресс.
 import { apiRequest } from '../api/apiClient.js'
 
 const pending = new Set()
+const wait = ms => new Promise(resolve => window.setTimeout(resolve, ms))
+const SPIN_CONFIRM_MS = 450
+const SPIN_UNCONFIRM_MS = 650
+const REWARD_MS = 650
+
+function animateResearchResult(card, action, response, desired) {
+    const oldCount = Number(card.querySelector('.development-habit__footer strong')?.textContent?.split('/')[0] || 0)
+    const target = Math.max(1, Number(response?.target) || Number(card.querySelectorAll('.development-habit__dot').length) || 7)
+    const progress = Math.min(target, Math.max(0, Number(response?.progress ?? oldCount)))
+    const dots = card.querySelectorAll('.development-habit__dot')
+    dots.forEach((dot, index) => {
+        const wasDone = dot.classList.contains('is-done')
+        const nowDone = index < progress
+        dot.classList.toggle('is-done', nowDone)
+        dot.classList.remove('is-rewarded', 'is-unrewarded')
+        if (wasDone !== nowDone) {
+            void dot.offsetWidth
+            dot.classList.add(nowDone ? 'is-rewarded' : 'is-unrewarded')
+            window.setTimeout(() => dot.classList.remove('is-rewarded', 'is-unrewarded'), REWARD_MS)
+        }
+    })
+    const count = card.querySelector('.development-habit__footer strong')
+    if (count) {
+        count.textContent = `${progress}/${target}`
+        if (progress !== oldCount) {
+            count.classList.remove('is-updated')
+            void count.offsetWidth
+            count.classList.add('is-updated')
+            window.setTimeout(() => count.classList.remove('is-updated'), REWARD_MS)
+        }
+    }
+    action.classList.toggle('is-completed', desired)
+    action.setAttribute('aria-pressed', String(desired))
+    action.setAttribute('aria-label', desired ? 'Отменить подтверждение исследования' : 'Подтвердить исследование')
+    const confirmation = response?.confirmation || {}
+    const changed = Boolean(confirmation.confirmation_state_changed)
+    const habit = confirmation.habit || {}
+    const amount = desired ? (habit.xp_awarded_today ? Number(habit.xp_amount_today) : 0)
+        : Number(habit.xp_removed_today || 0)
+    if (changed && amount > 0) {
+        const reward = document.createElement('span')
+        reward.className = `habit-card__xp-reward${desired ? '' : ' is-removed'}`
+        reward.textContent = `${desired ? '+' : '-'}${amount} XP`
+        reward.setAttribute('aria-hidden', 'true')
+        card.querySelector('.habit-card__xp-reward')?.remove()
+        card.appendChild(reward)
+        window.setTimeout(() => reward.remove(), REWARD_MS)
+    }
+}
 
 export function initDevelopmentCardEvents(card, { getCompletedToday = () => false } = {}) {
     const id = card?.dataset?.habitId
     if (!id || card.dataset.developmentCard !== '1') return
-
-    // Клики по свободной области исследования не открывают обычные детали привычки.
     card.addEventListener('click', event => {
         if (!event.target.closest('button')) event.stopPropagation()
     })
-
     const action = card.querySelector('[data-development-confirm], [data-development-improve-habit]')
     if (!action) return
     action.addEventListener('click', async event => {
@@ -20,22 +67,42 @@ export function initDevelopmentCardEvents(card, { getCompletedToday = () => fals
         if (action.disabled || pending.has(id)) return
         pending.add(id)
         action.disabled = true
+        const isImprove = Boolean(action.dataset.developmentImproveHabit)
+        const currentlyDone = action.classList.contains('is-completed') || Boolean(getCompletedToday(id))
+        const desired = !currentlyDone
+        const started = performance.now()
+        if (!isImprove) {
+            action.classList.add('is-confirming')
+            action.classList.toggle('is-unconfirming', !desired)
+            action.setAttribute('aria-busy', 'true')
+        }
         try {
-            if (action.dataset.developmentImproveHabit) {
+            if (isImprove) {
                 await apiRequest(`/api/development/${encodeURIComponent(id)}/improve`, { method: 'POST' })
-                // The server archived the research; prevent another claim while the list refreshes.
                 action.textContent = 'Улучшено'
                 card.dataset.developmentCompleted = '1'
             } else {
-                await apiRequest(`/api/development/${encodeURIComponent(id)}/confirmation`, {
-                    method: 'PUT', body: { is_confirmed: !getCompletedToday(id) }
+                const response = await apiRequest(`/api/development/${encodeURIComponent(id)}/confirmation`, {
+                    method: 'PUT', body: { is_confirmed: desired }
                 })
+                await wait(Math.max(0, (desired ? SPIN_CONFIRM_MS : SPIN_UNCONFIRM_MS) - (performance.now() - started)))
+                action.classList.remove('is-confirming', 'is-unconfirming')
+                action.removeAttribute('aria-busy')
+                animateResearchResult(card, action, response, desired)
+                if (!desired && response?.confirmation?.confirmation_state_changed) {
+                    action.classList.add('is-unconfirm-success')
+                    window.setTimeout(() => action.classList.remove('is-unconfirm-success'), 320)
+                }
+                // Даём анимации закончиться до перерисовки списка.
+                await wait(REWARD_MS)
             }
             window.dispatchEvent(new Event('ahabit:habits-refresh'))
         } catch (error) {
+            action.classList.remove('is-confirming', 'is-unconfirming')
+            action.removeAttribute('aria-busy')
             alert(error?.message || 'Не удалось обновить исследование')
-            action.disabled = false
         } finally {
+            action.disabled = false
             pending.delete(id)
         }
     })
