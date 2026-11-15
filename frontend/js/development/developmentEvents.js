@@ -54,9 +54,12 @@ function animateResearchResult(card, action, response, desired) {
 export function initDevelopmentCardEvents(card, { getCompletedToday = () => false } = {}) {
     const id = card?.dataset?.habitId
     if (!id || card.dataset.developmentCard !== '1') return
-    card.addEventListener('click', event => {
-        if (!event.target.closest('button')) event.stopPropagation()
-    })
+    if (card.dataset.developmentEventsBound !== '1') {
+        card.addEventListener('click', event => {
+            if (!event.target.closest('button')) event.stopPropagation()
+        })
+        card.dataset.developmentEventsBound = '1'
+    }
     const action = card.querySelector('[data-development-confirm], [data-development-improve-habit]')
     if (!action) return
     action.addEventListener('click', async event => {
@@ -83,16 +86,22 @@ export function initDevelopmentCardEvents(card, { getCompletedToday = () => fals
                     method: 'PUT', body: { is_confirmed: desired }
                 })
                 // Сохраняем загрузку до завершения серверной операции и обновления списка.
-                const refresh = new CustomEvent('ahabit:habits-refresh', { detail: { waitFor: [] } })
+                const refresh = new CustomEvent('ahabit:habits-refresh', { detail: { waitFor: [], silent: true } })
                 window.dispatchEvent(refresh)
                 await Promise.all(refresh.detail.waitFor)
                 action.classList.remove('is-confirming', 'is-unconfirming')
                 action.removeAttribute('aria-busy')
-                // Обновлённая карточка уже отрисована; старую не анимируем.
-                const updatedCard = document.querySelector(`[data-development-card="1"][data-habit-id="${String(id).replace(/[^0-9]/g, '')}"]`)
-                if (updatedCard) {
-                    const updatedAction = updatedCard.querySelector('[data-development-confirm]')
-                    if (updatedAction) animateResearchResult(updatedCard, updatedAction, response, desired)
+                // Карточка остаётся в DOM: анимируем её без пересоздания списка.
+                animateResearchResult(card, action, response, desired)
+                if (Boolean(response?.ready || (Number(response?.progress) >= Number(response?.target) && Number(response?.target) > 0))) {
+                    const improve = document.createElement('button')
+                    improve.type = 'button'
+                    improve.className = 'development-habit__improve'
+                    improve.dataset.developmentImproveHabit = id
+                    improve.textContent = 'Улучшить'
+                    action.replaceWith(improve)
+                    // Новый обработчик для кнопки «Улучшить» привязывается к этой карточке.
+                    initDevelopmentCardEvents(card)
                 }
                 if (!desired && response?.confirmation?.confirmation_state_changed) {
                     action.classList.add('is-unconfirm-success')

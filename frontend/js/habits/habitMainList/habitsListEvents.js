@@ -1,4 +1,4 @@
-import { initDevelopmentCardEvents } from "../../development/developmentEvents.js?v=20261115-confirm-anim1"
+import { initDevelopmentCardEvents } from "../../development/developmentEvents.js?v=20261115-no-redraw2"
 import { apiRequest } from "../../api/apiClient.js"
 /* =========================================================
    HABITS LIST EVENTS
