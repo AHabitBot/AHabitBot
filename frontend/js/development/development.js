@@ -24,15 +24,32 @@ export function renderDevelopment(root,{reset=false}={}){
  }
  root.dataset.developmentBound='1';
  const history=[];
+ let refreshSequence=0;
+ const refreshState=async()=>{
+  const sequence=++refreshSequence;
+  const next=await apiRequest('/api/development');
+  if(sequence!==refreshSequence)return false;
+  developmentState=next;
+  return true;
+ };
+ const refreshVisible=()=>{
+  const page=root.dataset.developmentPage;
+  if(page==='root')root.innerHTML=rootHtml();
+  else if(page==='direction' && root.dataset.developmentDirectionKey)
+   root.innerHTML=directionHtml(root.dataset.developmentDirectionKey);
+  else if(page==='detail' && root.dataset.developmentResearchKey)
+   root.innerHTML=upgradeHtml(root.dataset.developmentResearchKey,Number(root.dataset.developmentCycle)||1);
+ };
  root.resetDevelopmentPage=()=>{
   history.length=0;
   root.innerHTML=rootHtml();
   root.dataset.developmentPage='root';
   root.scrollTop=0;
+  refresh().catch(error=>console.error('Развитие:',error));
  };
  const showPage=(html, pageType)=>{
   const current=root.firstElementChild;
-  if(current)history.push({node:current,scrollTop:root.scrollTop});
+  if(current)history.push({page:root.dataset.developmentPage||'root',direction:root.dataset.developmentDirectionKey||'',key:root.dataset.developmentResearchKey||'',cycle:root.dataset.developmentCycle||'',scrollTop:root.scrollTop});
   root.innerHTML=html;
   root.dataset.developmentPage=pageType;
   root.scrollTop=0;
@@ -40,8 +57,12 @@ export function renderDevelopment(root,{reset=false}={}){
  const goBack=()=>{
   const previous=history.pop();
   if(!previous)return;
-  root.replaceChildren(previous.node);
-  root.dataset.developmentPage=previous.node.dataset.pageType||'root';
+  // Rebuild from fresh server state instead of restoring stale saved markup.
+  root.dataset.developmentPage=previous.page;
+  root.dataset.developmentDirectionKey=previous.direction||'';
+  root.dataset.developmentResearchKey=previous.key||'';
+  root.dataset.developmentCycle=previous.cycle||'';
+  refreshVisible();
   // The scroll container stays mounted; restoring the original node preserves
   // the tree, its layout and the user's location without a second render.
   root.scrollTop=previous.scrollTop;
@@ -49,8 +70,9 @@ export function renderDevelopment(root,{reset=false}={}){
  };
  root.innerHTML=rootHtml();
  root.dataset.developmentPage='root';
- const refresh = async () => { try {developmentState=await apiRequest('/api/development'); if(root.dataset.developmentPage==='root')root.innerHTML=rootHtml();}catch(error){console.error('Развитие:',error);} };
+ const refresh = async () => { try {if(await refreshState())refreshVisible();}catch(error){console.error('Развитие:',error);} };
  refresh();
+ window.addEventListener('ahabit:habits-refresh', refresh);
  root.addEventListener('click',async event=>{
   const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve]');
   if(!button||!root.contains(button))return;
@@ -60,20 +82,22 @@ export function renderDevelopment(root,{reset=false}={}){
    try{
     if(button.dataset.developmentStart){await apiRequest('/api/development/start',{method:'POST',body:{direction:button.dataset.direction,key:button.dataset.developmentStart,cycle:Number(button.dataset.developmentCycle)}});}
     else {await apiRequest(`/api/development/${button.dataset.developmentImprove}/improve`,{method:'POST'});}
-    developmentState=await apiRequest('/api/development');
-    root.innerHTML=upgradeHtml(button.dataset.developmentKey,Number(button.dataset.developmentCycle));
+    await refreshState();
+    // Keep the current detail view, but rebuild it using the latest statuses.
+    refreshVisible();
     window.dispatchEvent(new Event('ahabit:habits-refresh'));
     window.dispatchEvent(new Event('focus'));
    }catch(error){alert(error.message||'Не удалось выполнить действие');button.disabled=false;}
    return;
   }
   if(button.dataset.developmentDirection){
-   if(root.firstElementChild)root.firstElementChild.dataset.pageType='root';
    showPage(directionHtml(button.dataset.developmentDirection),'direction');
+   root.dataset.developmentDirectionKey=button.dataset.developmentDirection;
   }else if(button.dataset.developmentUpgrade){
    const cycle=Number(button.dataset.developmentCycle)||1;
-   if(root.firstElementChild)root.firstElementChild.dataset.pageType='direction';
    showPage(upgradeHtml(button.dataset.developmentUpgrade,cycle),'detail');
+   root.dataset.developmentResearchKey=button.dataset.developmentUpgrade;
+   root.dataset.developmentCycle=String(cycle);
   }
  });
 }

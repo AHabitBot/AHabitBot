@@ -392,6 +392,13 @@ CREATE TABLE IF NOT EXISTS development_progress (
  completed_at TIMESTAMPTZ,
  PRIMARY KEY(user_id,direction,research_key,cycle)
 );
+-- Lock research progress permanently after its threshold is reached.
+-- This is independent of completed_at, which records manual improvement.
+ALTER TABLE development_progress ADD COLUMN IF NOT EXISTS reached_at TIMESTAMPTZ;
+UPDATE development_progress
+SET reached_at = NOW()
+WHERE reached_at IS NULL AND progress >= CASE cycle WHEN 1 THEN 7 WHEN 2 THEN 10 ELSE 13 END;
+
 -- Existing research habits receive their explicit type without changing normal habits.
 UPDATE habits h SET habit_type='development'
 WHERE habit_type <> 'development' AND EXISTS (SELECT 1 FROM development_progress d WHERE d.habit_id=h.id);

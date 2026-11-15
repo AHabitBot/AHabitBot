@@ -33,6 +33,7 @@ async def get_shared_invite_preview(invite_token: str, user_id: int) -> dict[str
                 WHERE x.shared_habit_id = shm.shared_habit_id
             ) member_count ON TRUE
             WHERE h.invite_token = $1
+              AND h.habit_type = 'regular'
               AND h.is_archived = FALSE
             LIMIT 1
             """,
@@ -68,6 +69,7 @@ async def join_shared_habit(invite_token: str, user_id: int) -> dict[str, Any] |
                 """
                 SELECT * FROM habits
                 WHERE invite_token = $1
+                  AND habit_type = 'regular'
                   AND is_archived = FALSE
                 FOR UPDATE
                 """,

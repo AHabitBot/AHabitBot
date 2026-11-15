@@ -525,6 +525,7 @@ async def update_habit(
                 WHERE h.id = $1
                   AND h.user_id = $2
                   AND h.is_archived = FALSE
+                  AND h.habit_type = 'regular'
                 FOR UPDATE OF h
                 """,
                 habit_id,
@@ -760,6 +761,7 @@ async def archive_habit(
             WHERE id = $1
               AND user_id = $2
               AND is_archived = FALSE
+              AND habit_type = 'regular'
             """,
             habit_id,
             user_id,
@@ -990,6 +992,7 @@ async def restore_habit(
                 WHERE id = $1
                   AND user_id = $2
                   AND is_archived = TRUE
+                  AND habit_type = 'regular'
 
                 RETURNING
                     id,
@@ -1339,6 +1342,8 @@ async def set_habit_confirmation(
     user_id: int,
     habit_id: int,
     is_confirmed: bool,
+    *,
+    development_mode: bool = False,
 ) -> dict[str, Any] | None:
     async with get_connection() as connection:
         async with connection.transaction():
@@ -1355,6 +1360,7 @@ async def set_habit_confirmation(
                     id,
                     user_id,
                     xp_reward
+                    , habit_type
                     , repeat_type, repeat_days, weekly_target, challenge_target, repeat_started_on
                 FROM habits
                 WHERE id = $1
@@ -1368,6 +1374,35 @@ async def set_habit_confirmation(
 
             if habit is None:
                 return None
+
+            # An ordinary habit endpoint cannot confirm research (and vice versa).
+            if (habit["habit_type"] == "development") != development_mode:
+                return None
+
+            development_row = None
+            if development_mode:
+                # Habit row is already locked. Lock research in the same transaction,
+                # before writing the confirmation or awarding any XP.
+                development_row = await connection.fetchrow(
+                    """SELECT * FROM development_progress
+                       WHERE user_id=$1 AND habit_id=$2 FOR UPDATE""",
+                    user_id, habit_id,
+                )
+                if development_row is None or development_row["completed_at"] is not None:
+                    return None
+                from backend.services.development.development_service import DAYS, sync_row
+                from fastapi import HTTPException
+                timezone_name_guard = await connection.fetchval(
+                    "SELECT timezone FROM user_settings WHERE user_id=$1", user_id
+                )
+                research_today = get_user_local_date(timezone_name_guard)
+                research_progress = await sync_row(connection, development_row, research_today)
+                # reached_at is the irreversible completion marker. Once set,
+                # neither confirmation nor cancellation is permitted, even if
+                # legacy progress data is inconsistent with the target.
+                if (development_row["reached_at"] is not None
+                        or research_progress >= DAYS[development_row["cycle"] - 1]):
+                    raise HTTPException(409, "Исследование завершено: подтверждения и отмена запрещены")
 
             # -------------------------------------------------
             # Часовой пояс пользователя.
@@ -2000,6 +2035,14 @@ async def set_habit_confirmation(
             # =================================================
             # RESPONSE
             # =================================================
+
+            if development_mode:
+                # Confirmation, research progress and XP are committed together.
+                development_row = await connection.fetchrow(
+                    "SELECT * FROM development_progress WHERE user_id=$1 AND habit_id=$2",
+                    user_id, habit_id,
+                )
+                await sync_row(connection, development_row, confirmation_date)
 
             return {
                 "habit": {

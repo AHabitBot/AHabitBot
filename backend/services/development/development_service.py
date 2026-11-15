@@ -6,7 +6,8 @@ from pathlib import Path
 from fastapi import HTTPException
 from backend.database.database import get_connection
 from backend.repositories.habits.habits_repository import get_user_local_date
-from backend.services.habits.habit_service import update_habit_confirmation
+from backend.repositories.habits import set_habit_confirmation
+from backend.services.habits.confirmation_effects import finalize_confirmation
 
 CATALOG = json.loads(Path(__file__).with_name('development_catalog.json').read_text(encoding='utf-8'))
 DAYS = (7, 10, 13)
@@ -34,8 +35,8 @@ def unlocked(item, cycle, done):
 
 async def sync_row(conn, row, today):
     target = DAYS[row['cycle'] - 1]
-    if row['completed_at'] is not None or row['progress'] >= target:
-        return int(row['progress'])
+    if row['completed_at'] is not None or row['reached_at'] is not None or row['progress'] >= target:
+        return max(int(row['progress']), target) if row['reached_at'] is not None else int(row['progress'])
     # Rebuild from the original start date. No cron, no duplicated XP ledger.
     first = row['started_on']
     confirmed = await conn.fetch('''SELECT confirmation_date FROM habit_confirmations
@@ -52,8 +53,11 @@ async def sync_row(conn, row, today):
         if progress == target:
             break
         day += timedelta(days=1)
-    await conn.execute('''UPDATE development_progress SET progress=$3,last_processed_date=$4
-        WHERE user_id=$1 AND habit_id=$2''', row['user_id'], row['habit_id'], progress, today)
+    await conn.execute('''UPDATE development_progress
+        SET progress=$3, last_processed_date=$4,
+            reached_at=CASE WHEN $3 >= $5 THEN COALESCE(reached_at, NOW()) ELSE reached_at END
+        WHERE user_id=$1 AND habit_id=$2 AND reached_at IS NULL''',
+        row['user_id'], row['habit_id'], progress, today, target)
     return progress
 
 
@@ -96,33 +100,79 @@ async def start(user_id,direction,key,cycle):
 
 
 async def confirm(user_id, habit_id, is_confirmed):
-    async with get_connection() as conn:
-        row = await conn.fetchrow('SELECT * FROM development_progress WHERE user_id=$1 AND habit_id=$2', user_id, habit_id)
-        if not row or row['completed_at'] is not None:
-            raise HTTPException(404, 'Активное исследование не найдено')
-        today = await today_for(conn, user_id)
-        progress = await sync_row(conn, row, today)
-        if progress >= DAYS[row['cycle']-1]:
-            raise HTTPException(409, 'Исследование готово к улучшению')
-    # Existing service remains the sole owner of XP, streaks, and league accounting.
-    result = await update_habit_confirmation(user_id, habit_id, is_confirmed)
+    # The repository holds both the habit and research locks and performs
+    # the confirmation, XP update and research sync in one DB transaction.
+    result = await set_habit_confirmation(
+        user_id, habit_id, is_confirmed, development_mode=True,
+    )
     if result is None:
-        raise HTTPException(404, 'Привычка не найдена')
+        raise HTTPException(404, 'Активное исследование не найдено')
+    result = await finalize_confirmation(
+        user_id, habit_id, is_confirmed, result, notify_shared=False,
+    )
     async with get_connection() as conn:
-        row = await conn.fetchrow('SELECT * FROM development_progress WHERE user_id=$1 AND habit_id=$2', user_id, habit_id)
-        progress = await sync_row(conn, row, await today_for(conn, user_id))
-    return {'confirmation': result, 'progress': progress, 'target': DAYS[row['cycle']-1]}
+        row = await conn.fetchrow(
+            'SELECT * FROM development_progress WHERE user_id=$1 AND habit_id=$2',
+            user_id, habit_id,
+        )
+    return {
+        'confirmation': result,
+        'progress': row['progress'],
+        'target': DAYS[row['cycle'] - 1],
+    }
 
 
-async def finish(user_id,habit_id):
+async def finish(user_id, habit_id):
+    """Claim a completed research exactly once; archive in the same transaction.
+
+    The habit row is locked before the research row, matching confirmation locks.
+    XP is earned on daily confirmations, not a second time on improvement.
+    """
     async with get_connection() as conn:
         async with conn.transaction():
-            row=await conn.fetchrow('SELECT * FROM development_progress WHERE user_id=$1 AND habit_id=$2 FOR UPDATE',user_id,habit_id)
-            if row is None: raise HTTPException(404,'Исследование не найдено')
-            if row['completed_at'] is not None: raise HTTPException(409,'Награда уже получена')
-            today=await today_for(conn,user_id)
-            progress=await sync_row(conn,row,today)
-            if progress<DAYS[row['cycle']-1]: raise HTTPException(409,'Исследование ещё не завершено')
-            await conn.execute('UPDATE development_progress SET completed_at=NOW() WHERE user_id=$1 AND habit_id=$2',user_id,habit_id)
-            await conn.execute('UPDATE habits SET is_archived=TRUE,archived_at=NOW() WHERE id=$1 AND user_id=$2',habit_id,user_id)
-            return {'completed':True,'direction':row['direction'],'key':row['research_key'],'cycle':row['cycle']}
+            habit = await conn.fetchrow(
+                """SELECT id, is_archived, habit_type FROM habits
+                   WHERE id=$1 AND user_id=$2 FOR UPDATE""",
+                habit_id, user_id,
+            )
+            if habit is None or habit['habit_type'] != 'development':
+                raise HTTPException(404, 'Исследование не найдено')
+            row = await conn.fetchrow(
+                """SELECT * FROM development_progress
+                   WHERE user_id=$1 AND habit_id=$2 FOR UPDATE""",
+                user_id, habit_id,
+            )
+            if row is None:
+                raise HTTPException(404, 'Исследование не найдено')
+            if row['completed_at'] is not None:
+                raise HTTPException(409, 'Исследование уже улучшено')
+            if habit['is_archived']:
+                raise HTTPException(409, 'Исследование уже архивировано')
+
+            today = await today_for(conn, user_id)
+            progress = await sync_row(conn, row, today)
+            target = DAYS[row['cycle'] - 1]
+            # sync_row sets reached_at when the threshold is first achieved.
+            # Do not allow a claim on a partially completed research.
+            if progress < target:
+                raise HTTPException(409, 'Исследование ещё не завершено')
+            updated = await conn.fetchrow(
+                """UPDATE development_progress
+                   SET completed_at=NOW(), reached_at=COALESCE(reached_at, NOW()),
+                       progress=$3
+                   WHERE user_id=$1 AND habit_id=$2 AND completed_at IS NULL
+                   RETURNING direction, research_key, cycle, completed_at""",
+                user_id, habit_id, target,
+            )
+            if updated is None:
+                raise HTTPException(409, 'Исследование уже улучшено')
+            await conn.execute(
+                """UPDATE habits SET is_archived=TRUE, archived_at=NOW(), updated_at=NOW()
+                   WHERE id=$1 AND user_id=$2 AND habit_type='development'""",
+                habit_id, user_id,
+            )
+            return {
+                'completed': True, 'direction': updated['direction'],
+                'key': updated['research_key'], 'cycle': updated['cycle'],
+                'habit_id': habit_id,
+            }

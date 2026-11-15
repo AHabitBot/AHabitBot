@@ -28,7 +28,7 @@ import {
 import {
     initHabitsListEvents,
     initOpenedHabitDetailsEvents
-} from "./habitMainList/habitsListEvents.js?v=20261115-development-card-v3"
+} from "./habitMainList/habitsListEvents.js?v=20261115-independent-events-v1"
 
 import {
     addHabit,
