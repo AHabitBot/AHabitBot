@@ -458,7 +458,12 @@ export function initHabitsEvents({
        --------------------------------------------------------- */
 
     if (useStore) {
+        // Сначала показываем сохранённый список без задержки.
         openHabitsPageFromStore()
+        // Затем синхронизируем с сервером: исследования могли быть
+        // созданы на другой странице после последней загрузки Store.
+        void openHabitsPage({ preserveScroll: true,
+            scrollTop: document.querySelector(".habits-v2-list")?.scrollTop ?? 0 })
         return
     }
 
