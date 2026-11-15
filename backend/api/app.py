@@ -7,6 +7,8 @@ from fastapi.middleware.cors import (
     CORSMiddleware,
 )
 
+from backend.api.development import router as development_router
+
 from backend.api.habits import (
     router as habits_router,
 )
@@ -101,6 +103,7 @@ app.include_router(
 app.include_router(
     habits_router
 )
+app.include_router(development_router)
 
 app.include_router(
     leaderboard_router

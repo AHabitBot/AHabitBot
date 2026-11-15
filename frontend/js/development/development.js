@@ -1,15 +1,19 @@
+import { apiRequest } from '../api/apiClient.js';
 import { DIRECTIONS } from './developmentCatalog.js';
 import { directionHtml } from './developmentDirection.js';
 import { upgradeHtml } from './developmentDetail.js';
 export const icon = name => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
+let developmentState = {research:[]};
+export const researchState = () => developmentState;
+export const researchRecord = (key,cycle) => developmentState.research.find(r=>r.key===key&&r.cycle===cycle);
 export const rootHtml = () => `<div class="development-screen">
 <header class="development-heading"><h1>Развитие</h1></header>
 <p class="development-intro">Прокачивай ключевые сферы жизни через реальные привычки</p>
-<div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>Общий прогресс</strong><strong>0 / 48</strong></div><div class="development-progress"><span style="width:0%"></span></div></div></div>
-<div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${d.name}</strong><span class="development-direction__count">0 / 12</span><span class="development-progress"><span style="width:0%"></span></span></button>`).join('')}</div>
-<div class="development-section-title">${icon('science')}<h2>Исследования</h2><span>0 / 1 (Free)</span></div>
+<div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>Общий прогресс</strong><strong>${developmentState.research.filter(r=>r.completed).length} / 144</strong></div><div class="development-progress"><span style="width:0%"></span></div></div></div>
+<div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${d.name}</strong><span class="development-direction__count">${developmentState.research.filter(r=>r.direction===d.key&&r.completed).length} / 36</span><span class="development-progress"><span style="width:0%"></span></span></button>`).join('')}</div>
+<div class="development-section-title">${icon('science')}<h2>Исследования</h2><span>${developmentState.research.filter(r=>!r.completed).length} активных</span></div>
 <div class="development-empty">Нет активных исследований</div>
-<p class="development-preview-note">Каталог исследований доступен для просмотра. Запуск и прогресс будут подключены после реализации серверной логики.</p></div>`;
+<p class="development-preview-note">Выбери направление и начни исследование.</p></div>`;
 // Keep the actual direction DOM when opening a research detail. This avoids
 // rebuilding the tree and preserves the exact scroll position on return.
 export function renderDevelopment(root,{reset=false}={}){
@@ -45,10 +49,23 @@ export function renderDevelopment(root,{reset=false}={}){
  };
  root.innerHTML=rootHtml();
  root.dataset.developmentPage='root';
- root.addEventListener('click',event=>{
-  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade]');
+ const refresh = async () => { try {developmentState=await apiRequest('/api/development'); if(root.dataset.developmentPage==='root')root.innerHTML=rootHtml();}catch(error){console.error('Развитие:',error);} };
+ refresh();
+ root.addEventListener('click',async event=>{
+  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve]');
   if(!button||!root.contains(button))return;
   if(button.hasAttribute('data-development-back')){goBack();return;}
+  if(button.dataset.developmentStart || button.dataset.developmentImprove){
+   button.disabled=true;
+   try{
+    if(button.dataset.developmentStart){await apiRequest('/api/development/start',{method:'POST',body:{direction:button.dataset.direction,key:button.dataset.developmentStart,cycle:Number(button.dataset.developmentCycle)}});}
+    else {await apiRequest(`/api/development/${button.dataset.developmentImprove}/improve`,{method:'POST'});}
+    developmentState=await apiRequest('/api/development');
+    root.innerHTML=upgradeHtml(button.dataset.developmentKey,Number(button.dataset.developmentCycle));
+    window.dispatchEvent(new Event('focus'));
+   }catch(error){alert(error.message||'Не удалось выполнить действие');button.disabled=false;}
+   return;
+  }
   if(button.dataset.developmentDirection){
    if(root.firstElementChild)root.firstElementChild.dataset.pageType='root';
    showPage(directionHtml(button.dataset.developmentDirection),'direction');

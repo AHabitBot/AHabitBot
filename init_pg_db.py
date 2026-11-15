@@ -6,6 +6,8 @@ from backend.database.database import DATABASE_URL
 
 
 CREATE_TABLES_SQL = """
+
+
 -- Isolated administrator session and failed-login records.
 CREATE TABLE IF NOT EXISTS admin_sessions (
     id BIGSERIAL PRIMARY KEY,
@@ -372,6 +374,22 @@ CREATE TABLE IF NOT EXISTS habit_confirmations (
 ALTER TABLE habit_confirmations ADD COLUMN IF NOT EXISTS xp_awarded_at TIMESTAMPTZ;
 UPDATE habit_confirmations SET xp_awarded_at = created_at
 WHERE xp_awarded_at IS NULL AND is_confirmed AND xp_awarded;
+
+-- One row per research attempt. XP and daily confirmations remain in existing tables.
+CREATE TABLE IF NOT EXISTS development_progress (
+ user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+ direction VARCHAR(16) NOT NULL,
+ research_key VARCHAR(64) NOT NULL,
+ cycle SMALLINT NOT NULL CHECK (cycle BETWEEN 1 AND 3),
+ habit_id BIGINT NOT NULL UNIQUE REFERENCES habits(id) ON DELETE RESTRICT,
+ progress SMALLINT NOT NULL DEFAULT 0 CHECK (progress BETWEEN 0 AND 13),
+ last_processed_date DATE NOT NULL,
+ started_on DATE NOT NULL,
+ completed_at TIMESTAMPTZ,
+ PRIMARY KEY(user_id,direction,research_key,cycle)
+);
+CREATE INDEX IF NOT EXISTS idx_development_progress_user_active
+ ON development_progress(user_id) WHERE completed_at IS NULL;
 
 CREATE TABLE IF NOT EXISTS referrals (
     id BIGSERIAL PRIMARY KEY,

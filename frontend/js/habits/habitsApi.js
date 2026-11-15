@@ -197,8 +197,9 @@ export async function setHabitConfirmation(
         );
     }
 
-    const data =
-        await apiRequest(
+    let data;
+    try {
+        data = await apiRequest(
             `/api/habits/${habitId}/confirmation`,
             {
                 method: "PUT",
@@ -211,11 +212,16 @@ export async function setHabitConfirmation(
                 }
             }
         );
+    } catch (error) {
+        if (!String(error?.message || '').includes('Используйте раздел Развитие')) throw error;
+        const development = await apiRequest(`/api/development/${habitId}/confirmation`, {
+            method: 'PUT', body: {is_confirmed: Boolean(isConfirmed)}
+        });
+        data = development.confirmation;
+    }
 
     if (!data?.habit) {
-        throw new Error(
-            "Сервер не вернул состояние привычки"
-        );
+        throw new Error("Сервер не вернул состояние привычки");
     }
 
     /*

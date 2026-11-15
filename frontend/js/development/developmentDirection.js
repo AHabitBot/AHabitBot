@@ -1,5 +1,5 @@
 import { RESEARCH_CATALOG } from './developmentCatalog.js';
-import { icon, rootHtml } from './development.js';
+import { icon, rootHtml, researchState, researchRecord } from './development.js';
 
 // Display links are a deliberately sparse, non-crossing tree. Actual access
 // requirements remain in the catalog and will be enforced by the backend.
@@ -69,13 +69,15 @@ function renderCycle(direction, cycle) {
  }
  const nodes=rows.flat().map(key=>{
   const item=items.get(key),p=points.get(key);
-  const available=cycle===1 && item.requires.length===0;
-  const state=available?'available':'locked';
+  const record=researchRecord(key,cycle);
+  const done=new Set(researchState().research.filter(r=>r.completed).map(r=>`${r.key}:${r.cycle}`));
+  const available=(cycle===1||done.has(`${key}:${cycle-1}`))&&item.requires.every(r=>done.has(`${r.key}:${cycle}`));
+  const state=record?.completed?'available':record?'available':available?'available':'locked';
   return `<button type="button" class="development-skill development-skill--${state}" style="left:${p.x}%;top:${p.y}px" data-development-upgrade="${escapeHtml(key)}" data-development-cycle="${cycle}" aria-label="${escapeHtml(item.name)} ${cycle}. ${available?'Доступно':'Закрыто'}"><span class="development-skill__circle">${icon(available?item.icon:'lock')}</span><span class="development-skill__name">${escapeHtml(item.name)} ${['','I','II','III'][cycle]}</span></button>`;
  }).join('');
- return `<section class="development-cycle"><div class="development-cycle__heading"><strong>Цикл ${['','I','II','III'][cycle]}</strong><span>${['','Основа','Развитие','Мастерство'][cycle]} · 0 / 12</span></div><div class="development-tree-map" style="height:${height}px"><svg class="development-tree-map__links" viewBox="0 0 100 ${height}" preserveAspectRatio="none" aria-hidden="true">${paths.join('')}</svg>${nodes}</div></section>`;
+ return `<section class="development-cycle"><div class="development-cycle__heading"><strong>Цикл ${['','I','II','III'][cycle]}</strong><span>${['','Основа','Развитие','Мастерство'][cycle]} · ${researchState().research.filter(r=>r.direction===direction.key&&r.cycle===cycle&&r.completed).length} / 12</span></div><div class="development-tree-map" style="height:${height}px"><svg class="development-tree-map__links" viewBox="0 0 100 ${height}" preserveAspectRatio="none" aria-hidden="true">${paths.join('')}</svg>${nodes}</div></section>`;
 }
 export function directionHtml(key){
  const direction=RESEARCH_CATALOG[key];if(!direction)return rootHtml();
- return `<div class="development-screen development-screen--${direction.color}"><header class="development-heading development-heading--direction"><button class="development-back" data-development-back="root" aria-label="Назад">${icon('arrow_back')}</button><h1>${escapeHtml(direction.name)}</h1></header><div class="development-overall"><div class="development-overall__main"><div class="development-line"><span>Прогресс направления</span><strong>0 / 36</strong></div><div class="development-progress"><span style="width:0%"></span></div></div></div><div class="development-cycles">${[1,2,3].map(c=>renderCycle(direction,c)).join('')}</div><p class="development-preview-note">Предпросмотр дерева. Запуск исследований и реальные статусы появятся после подключения backend.</p></div>`;
+ return `<div class="development-screen development-screen--${direction.color}"><header class="development-heading development-heading--direction"><button class="development-back" data-development-back="root" aria-label="Назад">${icon('arrow_back')}</button><h1>${escapeHtml(direction.name)}</h1></header><div class="development-overall"><div class="development-overall__main"><div class="development-line"><span>Прогресс направления</span><strong>${researchState().research.filter(r=>r.direction===key&&r.completed).length} / 36</strong></div><div class="development-progress"><span style="width:0%"></span></div></div></div><div class="development-cycles">${[1,2,3].map(c=>renderCycle(direction,c)).join('')}</div><p class="development-preview-note">Выбирай доступные исследования и выполняй задания.</p></div>`;
 }

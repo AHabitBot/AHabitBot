@@ -9,6 +9,14 @@ from fastapi import (
     status,
 )
 
+from backend.database.database import get_connection
+
+async def reject_development_habit(user_id, habit_id):
+    async with get_connection() as conn:
+        found=await conn.fetchval("SELECT 1 FROM development_progress WHERE user_id=$1 AND habit_id=$2",user_id,habit_id)
+    if found:
+        raise HTTPException(status_code=409,detail="Используйте раздел Развитие для управления исследованием")
+
 from backend.api.dependencies import (
     CurrentUser,
 )
@@ -274,6 +282,8 @@ async def update_existing_habit(
 
     user: CurrentUser,
 ):
+    await reject_development_habit(user["id"],habit_id)
+
     try:
         repeat_type, repeat_days, weekly_target, challenge_target = normalize_repeat_rule(
             payload.repeat_type, payload.repeat_days, payload.weekly_target, payload.challenge_target
@@ -358,6 +368,8 @@ async def archive_habit_endpoint(
 
     user: CurrentUser,
 ):
+    await reject_development_habit(user["id"],habit_id)
+
     try:
         archived = await archive_user_habit(
             user_id=user["id"],
@@ -439,6 +451,8 @@ async def restore_habit_endpoint(
     XP и лучший стрик сохраняются.
     """
 
+    await reject_development_habit(user["id"],habit_id)
+
     try:
         habit = await restore_user_habit(
             user_id=user["id"],
@@ -511,6 +525,8 @@ async def set_confirmation(
 
     user: CurrentUser,
 ):
+    await reject_development_habit(user["id"],habit_id)
+
     try:
         result = (
             await update_habit_confirmation(
