@@ -1,7 +1,7 @@
 import { apiRequest } from '../api/apiClient.js';
 import { DIRECTIONS, getResearch, RESEARCH_DAYS } from './developmentCatalog.js';
-import { directionHtml } from './developmentDirection.js?v=20261115-dev-stabilize6';
-import { upgradeHtml } from './developmentDetail.js?v=20261115-dev-stabilize6';
+import { directionHtml } from './developmentDirection.js?v=20261115-dev-cancel7';
+import { upgradeHtml } from './developmentDetail.js?v=20261115-dev-cancel7';
 export const icon = name => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
 let developmentState = {research:[]};
 export const researchState = () => developmentState;
@@ -91,8 +91,19 @@ export function renderDevelopment(root,{reset=false}={}){
   else task.catch(error => console.error('Развитие:', error));
  });
  root.addEventListener('click',async event=>{
-  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve], [data-development-go-habits], [data-development-active], [data-development-next-cycle]');
+  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve], [data-development-go-habits], [data-development-active], [data-development-next-cycle], [data-development-cancel]');
   if(!button||!root.contains(button))return;
+  if(button.hasAttribute('data-development-cancel')){
+   if(!window.confirm('Отменить исследование? Прогресс сбросится, но заработанный XP сохранится.'))return;
+   button.disabled=true;
+   try{
+    await apiRequest(`/api/development/${encodeURIComponent(button.dataset.developmentCancel)}/cancel`,{method:'POST'});
+    await refreshState();
+    refreshVisible();
+    window.dispatchEvent(new Event('ahabit:habits-refresh'));
+   }catch(error){alert(error?.message||'Не удалось отменить исследование');button.disabled=false;}
+   return;
+  }
   if(button.hasAttribute('data-development-next-cycle')){
    const key=button.dataset.developmentNextKey;
    const cycle=Number(button.dataset.developmentNextCycle);

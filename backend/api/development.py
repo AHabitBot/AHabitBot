@@ -22,3 +22,7 @@ async def confirm_research(habit_id:int,payload:Confirmation,user:CurrentUser):
 @router.post('/{habit_id}/improve')
 async def improve_research(habit_id:int,user:CurrentUser):
     return await service.finish(user['id'],habit_id)
+
+@router.post('/{habit_id}/cancel')
+async def cancel_research(habit_id:int,user:CurrentUser):
+    return await service.cancel(user['id'],habit_id)

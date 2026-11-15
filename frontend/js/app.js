@@ -1,4 +1,4 @@
-import { renderDevelopment } from "./development/development.js?v=20261115-dev-stabilize6";
+import { renderDevelopment } from "./development/development.js?v=20261115-dev-cancel7";
 import {
     initHabitsEvents,
     openHabitsPageFromStore

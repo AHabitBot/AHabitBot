@@ -1,6 +1,6 @@
 import { getResearch, RESEARCH_DAYS, RESEARCH_CATALOG } from './developmentCatalog.js';
-import { icon, researchRecord, researchState } from './development.js?v=20261115-dev-stabilize6';
-import { directionHtml } from './developmentDirection.js?v=20261115-dev-stabilize6';
+import { icon, researchRecord, researchState } from './development.js?v=20261115-dev-cancel7';
+import { directionHtml } from './developmentDirection.js?v=20261115-dev-cancel7';
 const escapeHtml=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 export function upgradeHtml(key, cycle=1){
  cycle=Math.max(1,Math.min(3,Number(cycle)||1));
@@ -15,11 +15,12 @@ export function upgradeHtml(key, cycle=1){
  const status=record?.completed?'Завершено':record?.ready?'Готово к улучшению':record?'Исследуется':allowed?'Доступно':'Заблокировано';
  const nextCycle=cycle<3&&record?.completed;
  const action=record?.completed?(nextCycle?`<button type="button" class="development-action" data-development-next-cycle="${cycle+1}" data-development-next-key="${escapeHtml(key)}">${escapeHtml(item.name)} ${['','I','II','III'][cycle+1]} доступно</button>`:''):record?.ready?`<button type="button" class="development-action" data-development-improve="${record.habit_id}" data-development-key="${key}" data-development-cycle="${cycle}">Улучшить</button>`:(record&&!record.completed?`<button type="button" class="development-action" data-development-go-habits="${record.habit_id}">К привычке</button>`:(!record&&allowed?`<button type="button" class="development-action" data-development-start="${key}" data-direction="${item.direction}" data-development-cycle="${cycle}" data-development-key="${key}">Начать исследование</button>`:''));
+ const cancelAction=record&&!record.completed&&!record.ready?`<button type="button" class="development-action development-action--cancel" data-development-cancel="${record.habit_id}">Отменить исследование</button>`:'';
  const requirements=cycle>1
   ? `${item.name} ${['','I','II'][cycle-1]}`
   : (item.requires.length?item.requires.map(r=>`${direction.items.find(i=>i.key===r.key)?.name||r.key} ${roman}`).join(' + '):'Доступно сразу');
  return `<div class="development-screen development-screen--${direction.color}"><header class="development-heading development-heading--upgrade"><button class="development-back" data-development-back="${direction.key}" aria-label="Назад">${icon('arrow_back')}</button><div class="development-heading__title"><h1>${escapeHtml(item.name)} ${roman}</h1><span class="development-subtitle">${escapeHtml(direction.name)} · Цикл ${roman}</span></div></header>
  <section class="development-detail"><div class="development-line"><strong>Исследование</strong><span>${status}</span></div><div class="development-detail__row">${icon('calendar_month')}<span>Прогресс</span><strong>${progress} / ${days} дней</strong></div><div class="development-progress"><span style="width:${progress/days*100}%"></span></div><div class="development-detail__row">${icon('lock')}<span>Открытие</span><strong>${escapeHtml(requirements)}</strong></div></section>
  <section class="development-detail development-detail--tasks"><div class="development-detail__row">${icon('assignment')}<strong>Задание</strong></div><div class="development-task"><span>${escapeHtml(item.tasks[cycle-1])}</span></div></section>
- <section class="development-detail development-detail--reward"><div class="development-detail__row">${icon('star')}<span>Награда</span></div><div class="development-reward__content"><strong>${escapeHtml(item.name)} +1</strong><p>Бонус XP +0.10 — скоро</p></div></section>${action?`<div class="development-action-wrap">${action}</div>`:""}</div>`;
+ <section class="development-detail development-detail--reward"><div class="development-detail__row">${icon('star')}<span>Награда</span></div><div class="development-reward__content"><strong>${escapeHtml(item.name)} +1</strong><p>Бонус XP +0.10 — скоро</p></div></section>${action?`<div class="development-action-wrap">${action}${cancelAction}</div>`:""}</div>`;
 }

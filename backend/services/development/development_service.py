@@ -176,3 +176,39 @@ async def finish(user_id, habit_id):
                 'key': updated['research_key'], 'cycle': updated['cycle'],
                 'habit_id': habit_id,
             }
+
+
+async def cancel(user_id, habit_id):
+    """Cancel only an unfinished research attempt, retaining XP and confirmations."""
+    async with get_connection() as conn:
+        async with conn.transaction():
+            habit = await conn.fetchrow(
+                "SELECT id, habit_type, is_archived FROM habits WHERE id=$1 AND user_id=$2 FOR UPDATE",
+                habit_id, user_id,
+            )
+            if habit is None or habit['habit_type'] != 'development':
+                raise HTTPException(404, 'Исследование не найдено')
+            row = await conn.fetchrow(
+                "SELECT * FROM development_progress WHERE user_id=$1 AND habit_id=$2 FOR UPDATE",
+                user_id, habit_id,
+            )
+            if row is None:
+                raise HTTPException(404, 'Активное исследование не найдено')
+            if habit['is_archived'] or row['completed_at'] is not None:
+                raise HTTPException(409, 'Завершённое исследование нельзя отменить')
+            today = await today_for(conn, user_id)
+            progress = await sync_row(conn, row, today)
+            if row['reached_at'] is not None or progress >= DAYS[row['cycle'] - 1]:
+                raise HTTPException(409, 'Исследование достигло цели и не может быть отменено')
+            await conn.execute(
+                "UPDATE habits SET is_archived=TRUE, archived_at=NOW(), updated_at=NOW() "
+                "WHERE id=$1 AND user_id=$2 AND habit_type='development'",
+                habit_id, user_id,
+            )
+            # Deleting only the state frees its unique key. The archived habit,
+            # confirmations and league XP events are deliberately retained.
+            await conn.execute(
+                "DELETE FROM development_progress WHERE user_id=$1 AND habit_id=$2",
+                user_id, habit_id,
+            )
+            return {'cancelled': True, 'habit_id': habit_id}
