@@ -3,5 +3,43 @@
 .development-detail__row strong{margin-left:auto;text-align:right}.development-detail__row .material-symbols-outlined{color:#9fb0b5}
 .development-detail p{font-size:13px;color:#aeb8bc;margin:12px 0 0}
 
-/* Both detail and direction headings belong to the scrolling page. */
-.development-heading--direction,.development-heading--upgrade{position:static;top:auto;transform:none;z-index:auto}
+/* Единый закреплённый заголовок четырёх направлений. */
+#development-v2-root .development-screen > .development-heading--direction {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    box-sizing: border-box;
+    min-height: 64px;
+    margin: -22px -18px 18px;
+    padding: 12px 18px;
+    background: #111314;
+    isolation: isolate;
+}
+#development-v2-root .development-heading--direction > .development-back {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translateY(-50%);
+    margin: 0;
+    z-index: 1;
+}
+#development-v2-root .development-heading--direction > h1 {
+    flex: 1 1 auto;
+    width: 100%;
+    padding: 0 46px;
+    margin: 0;
+    text-align: center;
+}
+@media (max-width: 350px) {
+    #development-v2-root .development-screen > .development-heading--direction {
+        margin-left: -12px;
+        margin-right: -12px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    #development-v2-root .development-heading--direction > .development-back {left: 12px;}
+}
+/* Экран отдельного исследования пока сохраняет прежнюю навигацию. */
+.development-heading--upgrade {position: static; top: auto; transform: none; z-index: auto;}
