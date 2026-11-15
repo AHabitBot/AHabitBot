@@ -54,8 +54,8 @@ async def sync_row(conn, row, today):
             break
         day += timedelta(days=1)
     await conn.execute('''UPDATE development_progress
-        SET progress=$3, last_processed_date=$4,
-            reached_at=CASE WHEN $3 >= $5 THEN COALESCE(reached_at, NOW()) ELSE reached_at END
+        SET progress=$3::smallint, last_processed_date=$4,
+            reached_at=CASE WHEN $3::smallint >= $5::smallint THEN COALESCE(reached_at, NOW()) ELSE reached_at END
         WHERE user_id=$1 AND habit_id=$2 AND reached_at IS NULL''',
         row['user_id'], row['habit_id'], progress, today, target)
     return progress
