@@ -13,7 +13,7 @@ from backend.database.database import get_connection
 
 async def reject_development_habit(user_id, habit_id):
     async with get_connection() as conn:
-        found=await conn.fetchval("SELECT 1 FROM development_progress WHERE user_id=$1 AND habit_id=$2",user_id,habit_id)
+        found=await conn.fetchval("SELECT 1 FROM habits WHERE user_id=$1 AND id=$2 AND habit_type='development'",user_id,habit_id)
     if found:
         raise HTTPException(status_code=409,detail="Используйте раздел Развитие для управления исследованием")
 

@@ -160,6 +160,10 @@ CREATE TABLE IF NOT EXISTS habits (
         ON DELETE CASCADE
 );
 
+ALTER TABLE habits ADD COLUMN IF NOT EXISTS habit_type VARCHAR(16) NOT NULL DEFAULT 'regular';
+ALTER TABLE habits DROP CONSTRAINT IF EXISTS habits_habit_type_check;
+ALTER TABLE habits ADD CONSTRAINT habits_habit_type_check CHECK (habit_type IN ('regular', 'development'));
+
 ALTER TABLE habits ADD COLUMN IF NOT EXISTS description VARCHAR(200);
 
 ALTER TABLE habits
@@ -388,6 +392,10 @@ CREATE TABLE IF NOT EXISTS development_progress (
  completed_at TIMESTAMPTZ,
  PRIMARY KEY(user_id,direction,research_key,cycle)
 );
+-- Existing research habits receive their explicit type without changing normal habits.
+UPDATE habits h SET habit_type='development'
+WHERE habit_type <> 'development' AND EXISTS (SELECT 1 FROM development_progress d WHERE d.habit_id=h.id);
+
 CREATE INDEX IF NOT EXISTS idx_development_progress_user_active
  ON development_progress(user_id) WHERE completed_at IS NULL;
 

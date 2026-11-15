@@ -74,6 +74,7 @@ async def get_user_habits(
                 h.size,
                 h.xp_reward,
                 h.is_archived,
+                h.habit_type,
                 h.created_at,
                 h.updated_at,
                 h.repeat_type,

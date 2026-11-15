@@ -288,7 +288,11 @@ function renderSharedHabitPeople(shared) {
    ========================================================= */
 
 export function renderHabitCard(habit = {}) {
-    if (habit.development) return renderDevelopmentHabitCard(habit)
+    if (habit.habitType === "development" || habit.development) {
+        // Never show a development research as a regular habit if its state request failed.
+        if (!habit.development) return ""
+        return renderDevelopmentHabitCard(habit)
+    }
     const {
         id = "",
         name = "",

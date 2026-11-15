@@ -211,6 +211,7 @@ async function openHabitsPage({
         const normalizedHabits = habits.map(raw => {
             const normalized = normalizeHabit(raw)
             normalized.development = byHabitId.get(String(normalized.id)) || null
+            if (normalized.development) normalized.habitType = "development"
             return normalized
         })
 

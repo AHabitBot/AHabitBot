@@ -86,8 +86,8 @@ async def start(user_id,direction,key,cycle):
                 raise HTTPException(409,'Исследование уже начато')
             today=await today_for(conn,user_id)
             habit_id=await conn.fetchval('''INSERT INTO habits
-                (user_id,title,description,emoji,color,size,repeat_type,repeat_days,repeat_started_on,invite_token)
-                VALUES ($1,$2,$3,$4,$5,'large','days',ARRAY[1,2,3,4,5,6,7]::SMALLINT[],$6,$7)
+                (user_id,title,description,emoji,color,size,repeat_type,repeat_days,repeat_started_on,invite_token,habit_type)
+                VALUES ($1,$2,$3,$4,$5,'large','days',ARRAY[1,2,3,4,5,6,7]::SMALLINT[],$6,$7,'development')
                 RETURNING id''',user_id,item['name'],item['tasks'][cycle-1], '✱','#4D9568',today,secrets.token_urlsafe(24))
             await conn.execute('''INSERT INTO development_progress
                 (user_id,direction,research_key,cycle,habit_id,progress,last_processed_date,started_on)
