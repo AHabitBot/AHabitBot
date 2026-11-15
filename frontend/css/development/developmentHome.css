@@ -48,3 +48,8 @@
 .development-heading--direction{position:relative;justify-content:center;min-height:40px}
 .development-heading--direction .development-back{position:absolute;left:0;top:50%;transform:translateY(-50%)}
 .development-heading--direction h1{text-align:center;min-width:0;padding:0 46px}
+
+/* Active research rows: compact, tappable, consistent with the development UI. */
+.development-active-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.development-active-item{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid var(--border-color,rgba(150,180,160,.2));border-radius:14px;background:rgba(120,160,135,.08);color:inherit;text-align:left;font:inherit;font-weight:600;cursor:pointer}
+.development-active-item .material-symbols-outlined{font-size:20px;opacity:.65}

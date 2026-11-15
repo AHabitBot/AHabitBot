@@ -1,18 +1,30 @@
 import { apiRequest } from '../api/apiClient.js';
-import { DIRECTIONS } from './developmentCatalog.js';
+import { DIRECTIONS, getResearch, RESEARCH_DAYS } from './developmentCatalog.js';
 import { directionHtml } from './developmentDirection.js';
 import { upgradeHtml } from './developmentDetail.js';
 export const icon = name => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
 let developmentState = {research:[]};
 export const researchState = () => developmentState;
-export const researchRecord = (key,cycle) => developmentState.research.find(r=>r.key===key&&r.cycle===cycle);
+export const researchRecord = (key,cycle) => developmentState.research.find(r=>r.key===key&&Number(r.cycle)===Number(cycle));
+const escapeHtml = value => String(value).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const activeResearchHtml = () => {
+ const active=developmentState.research.filter(r=>!r.completed);
+ if(!active.length)return '<div class="development-empty">Нет активных исследований</div>';
+ return `<div class="development-active-list">${active.map(r=>{
+  const direction=DIRECTIONS.find(d=>d.key===r.direction);
+  const item=getResearch(r.key);
+  const target=Number(r.target)||RESEARCH_DAYS[Number(r.cycle)-1]||7;
+  const progress=Math.max(0,Math.min(target,Number(r.progress)||0));
+  return `<button type="button" class="development-active-item" data-development-active="${escapeHtml(r.key)}" data-development-cycle="${Number(r.cycle)||1}"><span>${escapeHtml(direction?.name||r.direction)} · ${escapeHtml(item?.name||r.key)} ${progress}/${target}</span>${icon('chevron_right')}</button>`;
+ }).join('')}</div>`;
+};
 export const rootHtml = () => `<div class="development-screen">
 <header class="development-heading"><h1>Развитие</h1></header>
 <p class="development-intro">Прокачивай ключевые сферы жизни через реальные привычки</p>
 <div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>Общий прогресс</strong><strong>${developmentState.research.filter(r=>r.completed).length} / 144</strong></div><div class="development-progress"><span style="width:0%"></span></div></div></div>
 <div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${d.name}</strong><span class="development-direction__count">${developmentState.research.filter(r=>r.direction===d.key&&r.completed).length} / 36</span><span class="development-progress"><span style="width:0%"></span></span></button>`).join('')}</div>
 <div class="development-section-title">${icon('science')}<h2>Исследования</h2><span>${developmentState.research.filter(r=>!r.completed).length} активных</span></div>
-<div class="development-empty">Нет активных исследований</div>
+${activeResearchHtml()}
 <p class="development-preview-note">Выбери направление и начни исследование.</p></div>`;
 // Keep the actual direction DOM when opening a research detail. This avoids
 // rebuilding the tree and preserves the exact scroll position on return.
@@ -29,6 +41,7 @@ export function renderDevelopment(root,{reset=false}={}){
   const sequence=++refreshSequence;
   const next=await apiRequest('/api/development');
   if(sequence!==refreshSequence)return false;
+  if(!next || !Array.isArray(next.research))throw new Error('Некорректный ответ /api/development');
   developmentState=next;
   return true;
  };
@@ -74,19 +87,29 @@ export function renderDevelopment(root,{reset=false}={}){
  refresh();
  window.addEventListener('ahabit:habits-refresh', refresh);
  root.addEventListener('click',async event=>{
-  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve], [data-development-go-habits]');
+  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve], [data-development-go-habits], [data-development-active]');
   if(!button||!root.contains(button))return;
   if(button.hasAttribute('data-development-back')){goBack();return;}
   if(button.hasAttribute('data-development-go-habits')){
    document.dispatchEvent(new CustomEvent('app:navigate',{detail:{page:'habits'}}));
    return;
   }
+  if(button.hasAttribute('data-development-active')){
+   const key=button.dataset.developmentActive;const cycle=Number(button.dataset.developmentCycle)||1;
+   showPage(upgradeHtml(key,cycle),'detail');
+   root.dataset.developmentResearchKey=key;root.dataset.developmentCycle=String(cycle);return;
+  }
   if(button.dataset.developmentStart || button.dataset.developmentImprove){
    button.disabled=true;
    try{
-    if(button.dataset.developmentStart){await apiRequest('/api/development/start',{method:'POST',body:{direction:button.dataset.direction,key:button.dataset.developmentStart,cycle:Number(button.dataset.developmentCycle)}});}
+    if(button.dataset.developmentStart){
+     const direction=button.dataset.direction,key=button.dataset.developmentStart,cycle=Number(button.dataset.developmentCycle);
+     const created=await apiRequest('/api/development/start',{method:'POST',body:{direction,key,cycle}});
+     // The POST succeeded: reflect the record immediately even if a later GET races.
+     if(created?.habit_id && !researchRecord(key,cycle))developmentState={...developmentState,research:[...developmentState.research,{direction,key,cycle,habit_id:created.habit_id,progress:created.progress||0,target:created.target||RESEARCH_DAYS[cycle-1],completed:false,ready:false}]};
+    }
     else {await apiRequest(`/api/development/${button.dataset.developmentImprove}/improve`,{method:'POST'});}
-    await refreshState();
+    try { await refreshState(); } catch(refreshError) { console.error('Не удалось обновить исследования после успешного действия:',refreshError); }
     // Keep the current detail view, but rebuild it using the latest statuses.
     refreshVisible();
     window.dispatchEvent(new Event('ahabit:habits-refresh'));
