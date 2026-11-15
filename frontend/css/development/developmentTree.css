@@ -6,7 +6,7 @@
 .development-cycle__heading strong{font-size:17px;color:#edf4ef}
 .development-cycle__heading span{font-size:12px;color:#aab7b9}
 .development-tree-map{position:relative;width:100%;max-width:520px;margin:14px auto 0;box-sizing:border-box}
-.development-tree-map__links{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;fill:none;stroke:#71888b;stroke-width:.46;stroke-linecap:butt;stroke-linejoin:miter;opacity:.82}
+.development-tree-map__links{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;fill:none;stroke:#71888b;stroke-width:1.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:.82}
 .development-skill{position:absolute;z-index:1;transform:translate(-50%,-33px);display:flex;flex-direction:column;align-items:center;width:32%;max-width:150px;min-width:0;padding:0;border:0;background:transparent;color:#e9efef;font:inherit;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .development-skill__circle{display:flex;align-items:center;justify-content:center;width:66px;height:66px;border:3px solid #617177;border-radius:50%;background:#1c292e;color:#a9b6b9;box-sizing:border-box}
 .development-skill__circle .material-symbols-outlined{font-size:29px;line-height:1}
@@ -17,3 +17,6 @@
 .development-detail--tasks .development-task{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #354245;font-size:13px;line-height:1.45;color:#eef2f3}
 .development-detail--tasks .development-task:last-child{border-bottom:0}
 .development-task__level{flex:0 0 64px;color:#aeb8bc;font-size:12px}
+
+/* Keep a uniform physical stroke width when the SVG is stretched differently on each axis. */
+.development-tree-map__links path{vector-effect:non-scaling-stroke}
