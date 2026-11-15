@@ -74,9 +74,13 @@ export function renderDevelopment(root,{reset=false}={}){
  refresh();
  window.addEventListener('ahabit:habits-refresh', refresh);
  root.addEventListener('click',async event=>{
-  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve]');
+  const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve], [data-development-go-habits]');
   if(!button||!root.contains(button))return;
   if(button.hasAttribute('data-development-back')){goBack();return;}
+  if(button.hasAttribute('data-development-go-habits')){
+   document.dispatchEvent(new CustomEvent('app:navigate',{detail:{page:'habits'}}));
+   return;
+  }
   if(button.dataset.developmentStart || button.dataset.developmentImprove){
    button.disabled=true;
    try{

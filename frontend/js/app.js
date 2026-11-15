@@ -1,8 +1,8 @@
-import { renderDevelopment } from "./development/development.js";
+import { renderDevelopment } from "./development/development.js?v=20261115-start-action1";
 import {
     initHabitsEvents,
     openHabitsPageFromStore
-} from "./habits/habitsMain.js?v=20261115-size-label-fix1"
+} from "./habits/habitsMain.js?v=20261115-devcard-cachefix2"
 
 import {
     openLeaderboardPage
@@ -20,7 +20,7 @@ import {
 
 import {
     bootstrapApp
-} from "./core/appBootstrap.js?v=20261115-bootstrap-development-fix"
+} from "./core/appBootstrap.js"
 
 import {
     openSharedHabitInviteFromTelegram
