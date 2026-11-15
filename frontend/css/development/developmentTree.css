@@ -1,19 +1,79 @@
-.development-tree{display:flex;align-items:center;flex-direction:column;padding:26px 0;gap:38px}
-.development-node{width:118px;min-height:114px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;border:2px solid #7fda65;border-radius:24px;background:#193224;color:#f4f6f6;font:inherit;cursor:pointer}
-.development-node>.material-symbols-outlined{font-size:35px;color:#95ec76}
-.development-node strong{font-size:13px}.development-node small{color:#aebcb8}
-.development-node--locked{border-color:#465258;background:#1a2428}.development-node--locked>.material-symbols-outlined{color:#9ba8ab}
-.development-tree__branches{display:flex;justify-content:space-around;gap:24px;width:100%;position:relative}
-.development-tree__branches:before{content:'';position:absolute;top:-20px;left:25%;width:50%;height:19px;border:2px solid #839295;border-bottom:0;border-radius:20px 20px 0 0;opacity:.65}
-.development-node--final{cursor:default}
-
-/* Branching research map. Connections are drawn from actual catalog prerequisites. */
-.development-tree-map{position:relative;width:100%;margin:22px 0 10px;box-sizing:border-box}
-.development-tree-map__links{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;fill:none;stroke:#708b94;stroke-width:3;opacity:.7}
-.development-tree-map .development-tree-node{position:absolute;transform:translateX(-50%);width:clamp(92px,29%,132px);height:112px;min-height:112px;padding:8px 4px;box-sizing:border-box;z-index:1}
-.development-tree-map .development-tree-node strong{font-size:12px;text-align:center;overflow-wrap:anywhere;line-height:1.15}
-.development-tree-map .development-tree-node>.material-symbols-outlined{font-size:29px}
-.development-tree-map .development-tree-node--locked{cursor:pointer}
+/* Compact, circular skill tree. The tree fits the screen width without horizontal scrolling. */
+.development-tree-map {
+  position:relative;
+  width:100%;
+  max-width:520px;
+  margin:16px auto 10px;
+  box-sizing:border-box;
+}
+.development-tree-map__links {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  pointer-events:none;
+  fill:none;
+  stroke:#70858b;
+  stroke-width:3;
+  opacity:.68;
+}
+.development-skill {
+  position:absolute;
+  z-index:1;
+  transform:translate(-50%,-37px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:30%;
+  max-width:130px;
+  min-width:0;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:#edf1f1;
+  font:inherit;
+  text-align:center;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.development-skill__circle {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:74px;
+  height:74px;
+  border:3px solid #58666a;
+  border-radius:50%;
+  background:#1b262a;
+  color:#a5b0b3;
+  box-sizing:border-box;
+  transition:border-color .15s ease,background .15s ease;
+}
+.development-skill__circle .material-symbols-outlined {font-size:34px;line-height:1}
+.development-skill--available .development-skill__circle {
+  border-color:#85e565;
+  background:#1b3528;
+  color:#90f06d;
+  box-shadow:0 0 0 2px rgba(133,229,101,.06),0 0 17px rgba(133,229,101,.14);
+}
+.development-skill__name {
+  display:block;
+  width:100%;
+  margin-top:8px;
+  font-size:12px;
+  line-height:1.2;
+  font-weight:600;
+  overflow-wrap:break-word;
+  hyphens:auto;
+}
+.development-skill__level {margin-top:3px;font-size:12px;color:#a8b5b7;line-height:1.2}
+.development-skill:focus-visible .development-skill__circle {outline:2px solid #fff;outline-offset:4px}
+@media(max-width:360px) {
+  .development-skill__circle {width:66px;height:66px}
+  .development-skill__circle .material-symbols-outlined {font-size:30px}
+  .development-skill__name {font-size:11px}
+}
 .development-detail--tasks .development-task{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #354245;font-size:13px;line-height:1.45;color:#eef2f3}
 .development-detail--tasks .development-task:last-child{border-bottom:0}
 .development-task__level{flex:0 0 64px;color:#aeb8bc;font-size:12px}
