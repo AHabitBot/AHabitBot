@@ -162,7 +162,7 @@ async def get_referral_stats(
                         END
                     ),
                     0
-                )::INTEGER AS earned_xp
+                )::NUMERIC(12,2) AS earned_xp
 
             FROM referrals
             WHERE inviter_user_id = $1

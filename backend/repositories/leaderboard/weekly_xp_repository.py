@@ -1,3 +1,4 @@
+from decimal import Decimal
 """Пересчёт недельного XP по событиям начисления, без изменения общего XP."""
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -5,7 +6,7 @@ from zoneinfo import ZoneInfo
 from backend.services.leaderboard.week_service import get_competition_bounds
 
 
-async def refresh_user_weekly_xp(connection, user_id: int, *, at: datetime | None = None) -> int:
+async def refresh_user_weekly_xp(connection, user_id: int, *, at: datetime | None = None) -> Decimal:
     """Пересчитать XP за неделю события `at` (по умолчанию текущую).
 
     Вызывать внутри существующей транзакции. Недельные начисления принимаются
@@ -29,7 +30,7 @@ async def refresh_user_weekly_xp(connection, user_id: int, *, at: datetime | Non
         start.date(),
     )
     if closed or now >= end:
-        return int(await connection.fetchval(
+        return Decimal(await connection.fetchval(
             "SELECT COALESCE((SELECT weekly_xp FROM user_weekly_xp "
             "WHERE user_id = $1 AND week_start = $2), 0)",
             user_id, start.date(),
@@ -64,10 +65,10 @@ async def refresh_user_weekly_xp(connection, user_id: int, *, at: datetime | Non
                 WHERE ua.user_id = $1 AND ua.xp_awarded
                   AND ua.earned_at >= $2 AND ua.earned_at < $3
             ), 0)
-        )::INTEGER
+        )::NUMERIC(12,2)
         """, user_id, effective_start, end,
     )
-    score = max(0, int(score or 0))
+    score = max(Decimal(0), Decimal(score or 0))
     await connection.execute(
         """
         INSERT INTO user_weekly_xp (user_id, week_start, weekly_xp)

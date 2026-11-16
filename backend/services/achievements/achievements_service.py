@@ -1,3 +1,4 @@
+from decimal import Decimal
 from backend.services.leaderboard.league_lock import lock_league_week
 from backend.repositories.leaderboard.weekly_xp_repository import refresh_user_weekly_xp
 from typing import Any
@@ -809,12 +810,12 @@ async def recalculate_user_xp(
                             ),
                             0
                         )
-                    )::INTEGER
+                    )::NUMERIC(12,2)
                 """,
                 user_id,
             )
 
-            total_xp = int(
+            total_xp = Decimal(
                 total_xp
                 or 0
             )

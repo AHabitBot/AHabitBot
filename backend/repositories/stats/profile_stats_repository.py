@@ -1,3 +1,4 @@
+from decimal import Decimal
 from datetime import date, datetime
 from typing import Any
 
@@ -279,7 +280,7 @@ async def get_confirmation_xp_for_period(
             date_to,
         )
 
-    return int(xp or 0)
+    return Decimal(xp or 0)
 
 
 # =========================================================
@@ -319,7 +320,7 @@ async def get_referral_xp_for_period(
             datetime_to,
         )
 
-    return int(xp or 0)
+    return Decimal(xp or 0)
 
 
 # =========================================================
@@ -359,7 +360,7 @@ async def get_achievement_xp_for_period(
             datetime_to,
         )
 
-    return int(xp or 0)
+    return Decimal(xp or 0)
 
 
 # =========================================================

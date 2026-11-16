@@ -37,7 +37,7 @@ async def get_weekly_leaderboard(week_start, user_id: int, limit: int = 100) -> 
             f"""WITH {active_cte}
             SELECT ROW_NUMBER() OVER (ORDER BY COALESCE(w.weekly_xp, 0) DESC, a.user_id ASC)::INTEGER AS rank,
                    u.id AS user_id, u.nickname, u.avatar_key, u.status_emoji,
-                   u.league_level, COALESCE(w.weekly_xp, 0)::INTEGER AS weekly_xp, s.current_streak
+                   u.league_level, COALESCE(w.weekly_xp, 0)::NUMERIC(12,2) AS weekly_xp, s.current_streak
             FROM active_users a
             JOIN users u ON u.id = a.user_id
             LEFT JOIN user_weekly_xp w ON w.user_id = a.user_id AND w.week_start=$4
@@ -51,7 +51,7 @@ async def get_weekly_leaderboard(week_start, user_id: int, limit: int = 100) -> 
             f"""WITH {active_cte},
             me AS (
                 SELECT u.id AS user_id, u.nickname, u.avatar_key, u.status_emoji,
-                       u.league_level, COALESCE(w.weekly_xp, 0)::INTEGER AS weekly_xp,
+                       u.league_level, COALESCE(w.weekly_xp, 0)::NUMERIC(12,2) AS weekly_xp,
                        s.current_streak, (a.user_id IS NOT NULL) AS active
                 FROM users u
                 JOIN user_stats s ON s.user_id=u.id

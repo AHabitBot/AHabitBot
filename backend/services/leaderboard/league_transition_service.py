@@ -1,3 +1,4 @@
+from decimal import Decimal
 """Безопасная фиксация и применение результатов лиг.
 
 ВНИМАНИЕ: этот сервис НЕ запускает фоновые задачи и НЕ активирует лиги.
@@ -27,7 +28,7 @@ def calculate_transitions(rows, *, transitions_enabled=True):
     groups = {level: [] for level in range(1, 11)}
     inactive = []
     for uid, league, xp, active in rows:
-        uid, league, xp = int(uid), int(league), int(xp)
+        uid, league, xp = int(uid), int(league), Decimal(xp)
         if active:
             groups[league].append((uid, xp))
         else:
@@ -72,27 +73,27 @@ async def freeze_week(connection, week: date, *, now: datetime | None = None) ->
     effective_start = max(start, launched_at)
     rows = await connection.fetch(f'''
         WITH xp AS (
-            SELECT user_id, SUM(xp_amount)::BIGINT AS points
+            SELECT user_id, SUM(xp_amount)::NUMERIC(12,2) AS points
             FROM league_habit_xp_events
             WHERE awarded_at >= $1 AND awarded_at < $2
               AND (revoked_at IS NULL OR revoked_at >= $2)
             GROUP BY user_id
             UNION ALL
-            SELECT inviter_user_id, SUM(xp_amount)::BIGINT
+            SELECT inviter_user_id, SUM(xp_amount)::NUMERIC(12,2)
             FROM referrals
             WHERE xp_awarded AND created_at >= $1 AND created_at < $2
             GROUP BY inviter_user_id
             UNION ALL
-            SELECT user_id, SUM(xp_amount)::BIGINT
+            SELECT user_id, SUM(xp_amount)::NUMERIC(12,2)
             FROM user_achievements
             WHERE xp_awarded AND earned_at >= $1 AND earned_at < $2
             GROUP BY user_id
         ), totals AS (
-            SELECT user_id, SUM(points)::INTEGER AS weekly_xp
+            SELECT user_id, SUM(points)::NUMERIC(12,2) AS weekly_xp
             FROM xp GROUP BY user_id
         ), {ACTIVE_HABIT_USERS_CTE}
         SELECT u.id, u.league_level,
-               COALESCE(t.weekly_xp, 0)::INTEGER AS weekly_xp,
+               COALESCE(t.weekly_xp, 0)::NUMERIC(12,2) AS weekly_xp,
                (a.user_id IS NOT NULL) AS active
         FROM users u
         LEFT JOIN totals t ON t.user_id=u.id

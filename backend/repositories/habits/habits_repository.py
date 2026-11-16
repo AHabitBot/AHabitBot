@@ -1,3 +1,4 @@
+from decimal import Decimal
 from backend.services.leaderboard.league_lock import lock_league_week
 from backend.repositories.leaderboard.weekly_xp_repository import refresh_user_weekly_xp
 from datetime import date, datetime, timedelta
@@ -1462,7 +1463,7 @@ async def set_habit_confirmation(
             # Ничего не угадываем на frontend: сервер знает,
             # было ли XP начислено этому подтверждению.
             xp_removed_today = (
-                int(confirmation["xp_amount"] or 0)
+                Decimal(confirmation["xp_amount"] or 0)
                 if (
                     not is_confirmed
                     and confirmation_was_confirmed
@@ -1631,13 +1632,13 @@ async def set_habit_confirmation(
                             confirmation_date,
                         )
 
-                        xp_delta = int(
+                        xp_delta = Decimal(
                             current_confirmation_xp
                             or 0
                         )
                     else:
                         confirmation_delta = -1
-                        xp_delta = -int(
+                        xp_delta = -Decimal(
                             xp_removed_today
                             or 0
                         )
@@ -1655,7 +1656,7 @@ async def set_habit_confirmation(
 
                 total_xp = max(
                     0,
-                    int(
+                    Decimal(
                         current_stats[
                             "total_xp"
                         ]
@@ -1721,7 +1722,7 @@ async def set_habit_confirmation(
                                 ),
                                 0
                             )
-                        )::INTEGER AS total_xp
+                        )::NUMERIC(12,2) AS total_xp
                     """,
                     user_id,
                 )
@@ -1734,7 +1735,7 @@ async def set_habit_confirmation(
                     else 0
                 )
 
-                total_xp = int(
+                total_xp = Decimal(
                     statistics[
                         "total_xp"
                     ]

@@ -1,3 +1,4 @@
+from decimal import Decimal
 import calendar
 
 from datetime import (
@@ -962,11 +963,11 @@ async def _get_total_xp_for_period(
     )
 
     return (
-        int(confirmation_xp)
+        Decimal(confirmation_xp)
         +
-        int(referral_xp)
+        Decimal(referral_xp)
         +
-        int(achievement_xp)
+        Decimal(achievement_xp)
     )
 
 # =========================================================
@@ -1241,12 +1242,12 @@ async def get_profile_stats(
 
         "xp": {
             "value":
-                int(
+                float(
                     current_xp
                 ),
 
             "previous_value":
-                int(
+                float(
                     previous_xp
                 ),
 

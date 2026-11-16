@@ -1,11 +1,12 @@
 from typing import TypedDict
+from decimal import Decimal
 
 
 class LevelProgress(TypedDict):
     level: int
-    level_xp: int
+    level_xp: Decimal | int
     level_xp_required: int
-    xp_to_next_level: int
+    xp_to_next_level: Decimal | int
     level_progress: int
 
 
@@ -28,7 +29,7 @@ def get_level_xp_required(level: int) -> int:
 
 
 def calculate_level_progress(
-    total_xp: int,
+    total_xp: Decimal | int,
 ) -> LevelProgress:
     """
     Рассчитывает уровень пользователя и прогресс

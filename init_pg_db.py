@@ -3,6 +3,7 @@ import asyncio
 import asyncpg
 
 from backend.database.database import DATABASE_URL
+from decimal import Decimal
 
 
 CREATE_TABLES_SQL = """
@@ -356,7 +357,7 @@ CREATE TABLE IF NOT EXISTS habit_confirmations (
     confirmation_date DATE NOT NULL,
     is_confirmed BOOLEAN NOT NULL DEFAULT TRUE,
     xp_awarded BOOLEAN NOT NULL DEFAULT TRUE,
-    xp_amount INTEGER NOT NULL DEFAULT 5 CHECK (xp_amount >= 0),
+    xp_amount NUMERIC(12,2) NOT NULL DEFAULT 5 CHECK (xp_amount >= 0),
     xp_awarded_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -413,7 +414,7 @@ CREATE TABLE IF NOT EXISTS referrals (
     invited_user_id BIGINT NOT NULL UNIQUE,
 
     xp_awarded BOOLEAN NOT NULL DEFAULT TRUE,
-    xp_amount INTEGER NOT NULL DEFAULT 5 CHECK (xp_amount >= 0),
+    xp_amount NUMERIC(12,2) NOT NULL DEFAULT 5 CHECK (xp_amount >= 0),
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
@@ -446,7 +447,7 @@ CREATE TABLE IF NOT EXISTS user_stats (
     friends_streak INTEGER NOT NULL DEFAULT 0 CHECK (friends_streak >= 0),
     friends_max_streak INTEGER NOT NULL DEFAULT 0 CHECK (friends_max_streak >= 0),
     total_confirmations INTEGER NOT NULL DEFAULT 0 CHECK (total_confirmations >= 0),
-    total_xp INTEGER NOT NULL DEFAULT 0 CHECK (total_xp >= 0),
+    total_xp NUMERIC(12,2) NOT NULL DEFAULT 0 CHECK (total_xp >= 0),
     highest_level_reached INTEGER NOT NULL DEFAULT 1 CHECK (highest_level_reached >= 1),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
@@ -508,7 +509,7 @@ CREATE TABLE IF NOT EXISTS user_achievements (
 
     xp_awarded BOOLEAN NOT NULL DEFAULT TRUE,
 
-    xp_amount INTEGER NOT NULL DEFAULT 0
+    xp_amount NUMERIC(12,2) NOT NULL DEFAULT 0
         CHECK (xp_amount >= 0),
 
     CONSTRAINT fk_user_achievements_user
@@ -527,7 +528,7 @@ CREATE TABLE IF NOT EXISTS user_achievements (
 CREATE TABLE IF NOT EXISTS user_weekly_xp (
     user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     week_start DATE NOT NULL,
-    weekly_xp INTEGER NOT NULL DEFAULT 0 CHECK (weekly_xp >= 0),
+    weekly_xp NUMERIC(12,2) NOT NULL DEFAULT 0 CHECK (weekly_xp >= 0),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (user_id, week_start)
 );
@@ -565,7 +566,7 @@ CREATE TABLE IF NOT EXISTS league_week_results (
     league_before SMALLINT NOT NULL CHECK (league_before BETWEEN 1 AND 10),
     league_after SMALLINT NOT NULL CHECK (league_after BETWEEN 1 AND 10),
     place INTEGER CHECK (place >= 1),
-    weekly_xp INTEGER NOT NULL CHECK (weekly_xp >= 0),
+    weekly_xp NUMERIC(12,2) NOT NULL CHECK (weekly_xp >= 0),
     PRIMARY KEY (week_start, user_id),
     UNIQUE (week_start, league_before, place),
     CHECK (abs(league_after - league_before) <= 1)
@@ -584,7 +585,7 @@ CREATE TABLE IF NOT EXISTS league_habit_xp_events (
     id BIGSERIAL PRIMARY KEY,
     confirmation_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    xp_amount INTEGER NOT NULL CHECK (xp_amount >= 0),
+    xp_amount NUMERIC(12,2) NOT NULL CHECK (xp_amount >= 0),
     awarded_at TIMESTAMPTZ NOT NULL,
     revoked_at TIMESTAMPTZ
 );
@@ -641,6 +642,14 @@ DROP TRIGGER IF EXISTS trg_league_habit_xp_event ON habit_confirmations;
 CREATE TRIGGER trg_league_habit_xp_event
 AFTER INSERT OR UPDATE OR DELETE ON habit_confirmations
 FOR EACH ROW EXECUTE FUNCTION record_league_habit_xp_event();
+
+-- Existing databases: migrate all XP ledgers to exact hundredths.
+-- This does not award XP or change existing amounts.
+ALTER TABLE habit_confirmations ALTER COLUMN xp_amount TYPE NUMERIC(12,2) USING xp_amount::NUMERIC(12,2);
+ALTER TABLE user_stats ALTER COLUMN total_xp TYPE NUMERIC(12,2) USING total_xp::NUMERIC(12,2);
+ALTER TABLE league_habit_xp_events ALTER COLUMN xp_amount TYPE NUMERIC(12,2) USING xp_amount::NUMERIC(12,2);
+ALTER TABLE user_weekly_xp ALTER COLUMN weekly_xp TYPE NUMERIC(12,2) USING weekly_xp::NUMERIC(12,2);
+ALTER TABLE league_week_results ALTER COLUMN weekly_xp TYPE NUMERIC(12,2) USING weekly_xp::NUMERIC(12,2);
 
 -- First rollout only: clear trial scores from earlier weekly stages.
 -- Subsequent init runs do not reset competition data.
@@ -707,14 +716,14 @@ CREATE INDEX IF NOT EXISTS idx_referrals_inviter_awarded_created
 
 
 
-def _calculate_level_for_migration(total_xp: int) -> int:
+def _calculate_level_for_migration(total_xp: Decimal) -> int:
     """
     Нужен только для безопасного backfill существующей БД.
     Повторяет текущую формулу level_service:
     level 1 -> 2 = 20 XP, далее +10 XP на каждый уровень.
     """
 
-    remaining_xp = max(0, int(total_xp or 0))
+    remaining_xp = max(Decimal(0), Decimal(total_xp or 0))
     level = 1
 
     while True:
@@ -750,7 +759,7 @@ async def _backfill_highest_levels(
 
     for row in rows:
         current_level = _calculate_level_for_migration(
-            int(row["total_xp"] or 0)
+            row["total_xp"] or Decimal(0)
         )
         stored_level = max(
             1,

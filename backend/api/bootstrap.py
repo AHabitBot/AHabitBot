@@ -58,6 +58,6 @@ async def read_bootstrap(user: CurrentUser):
         "referral": {
             "referral_link": user["referral_link"],
             "invited_count": int(referral_stats["invited_count"]) if referral_stats else 0,
-            "earned_xp": int(referral_stats["earned_xp"]) if referral_stats else 0,
+            "earned_xp": float(referral_stats["earned_xp"]) if referral_stats else 0,
         },
     }

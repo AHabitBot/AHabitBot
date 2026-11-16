@@ -1,3 +1,4 @@
+from decimal import Decimal
 import re
 from typing import Any
 
@@ -113,7 +114,7 @@ async def get_profile(
     # =====================================================
 
     total_xp = max(
-        int(
+        Decimal(
             profile_data.get(
                 "total_xp"
             )
@@ -491,7 +492,7 @@ async def change_profile_appearance(
             calculate_level_progress(
                 total_xp=max(
                     0,
-                    int(
+                    Decimal(
                         profile_data.get(
                             "total_xp"
                         )

@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import Any
 
 from backend.repositories.profile import (
@@ -43,7 +44,7 @@ async def sync_user_level_progression(
 
     total_xp = max(
         0,
-        int(state.get("total_xp") or 0),
+        Decimal(state.get("total_xp") or 0),
     )
 
     highest_level_reached = max(
