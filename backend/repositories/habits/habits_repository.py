@@ -1056,7 +1056,7 @@ async def restore_habit(
             )
 
             xp_amount_today = (
-                int(
+                float(
                     today_confirmation[
                         "xp_amount"
                     ]
@@ -1953,7 +1953,7 @@ async def set_habit_confirmation(
             )
 
             xp_amount_today = (
-                int(
+                float(
                     final_confirmation[
                         "xp_amount"
                     ]
