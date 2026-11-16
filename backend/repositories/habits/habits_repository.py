@@ -1497,15 +1497,18 @@ async def set_habit_confirmation(
                               AND hc.confirmation_date = $2
                               AND hc.is_confirmed = TRUE
                               AND hc.xp_awarded = TRUE
+                              AND h.habit_type = 'regular'
                             """,
                             user_id,
                             confirmation_date,
                         )
                     )
 
+                    # Исследования получают XP независимо от дневного лимита.
+                    # Только обычные привычки занимают три платных слота.
                     should_award_xp = (
-                        awarded_confirmations_today
-                        < DAILY_XP_CONFIRMATIONS_LIMIT
+                        development_mode
+                        or awarded_confirmations_today < DAILY_XP_CONFIRMATIONS_LIMIT
                     )
 
                     xp_amount = (
