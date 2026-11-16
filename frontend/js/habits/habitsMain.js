@@ -188,11 +188,14 @@ export function openHabitsPageFromStore({
    - будущем ручном обновлении данных.
    ========================================================= */
 
+let latestHabitsLoad = 0
+
 async function openHabitsPage({
     preserveScroll = false,
     scrollTop = null,
     silent = false
 } = {}) {
+    const loadId = ++latestHabitsLoad
     try {
         const {
             habits,
@@ -213,6 +216,9 @@ async function openHabitsPage({
             if (normalized.development) normalized.habitType = "development"
             return normalized
         })
+
+        // A newer refresh must not be overwritten by an older API response.
+        if (loadId !== latestHabitsLoad) return true
 
         setHabits(normalizedHabits)
 
@@ -247,13 +253,16 @@ async function openHabitsPage({
                 ) || 0
         })
     } catch (error) {
+        if (loadId !== latestHabitsLoad) return true
         console.error("Не удалось загрузить привычки и исследования:", error)
         const root = getHabitsRoot()
         if (root && !silent) root.innerHTML = `<div class="habits-load-error" role="alert">Не удалось загрузить исследования. Закройте и снова откройте приложение.</div>`
         return false
     }
 
-    if (!silent) openHabitsPageFromStore({
+    // Do not replace a hidden page or interrupt an animated confirmation.
+    const page = document.getElementById("habits-v2-page")
+    if (!silent && page && !page.hidden) openHabitsPageFromStore({
         preserveScroll,
         scrollTop
     })
@@ -494,7 +503,8 @@ export function initHabitsEvents({
 // Синхронизация после запуска/подтверждения исследования без перезапуска Mini App.
 window.addEventListener("ahabit:habits-refresh", event => {
     const page = document.getElementById("habits-v2-page")
-    if (!page || page.hidden) return
+    // Always refresh the Store, even while the user is in Development.
+    // Render only when the habits page is visible (handled by openHabitsPage).
     const refresh = openHabitsPage({preserveScroll:true, silent:Boolean(event.detail?.silent), scrollTop:document.querySelector(".habits-v2-list")?.scrollTop || 0})
         .then(ok => { if (ok === false) throw new Error("Не удалось обновить список исследований") })
     if (Array.isArray(event.detail?.waitFor)) event.detail.waitFor.push(refresh)

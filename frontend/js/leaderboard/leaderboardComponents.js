@@ -478,28 +478,15 @@ function getDisplayName(user) {
    ========================================================= */
 
 function formatNumber(value) {
-    const localeByLanguage = {
-        ru: "ru-RU",
-        uk: "uk-UA",
-        en: "en-US"
-    };
+    const number = Number.isFinite(Number(value))
+        ? Math.max(0, Number(value))
+        : 0;
 
-    const locale =
-        localeByLanguage[getLanguage()]
-        || localeByLanguage.ru;
-
-    const number =
-        Number.isFinite(Number(value))
-            ? Math.max(0, Number(value))
-            : 0;
-
-    return new Intl.NumberFormat(locale, {
-        minimumFractionDigits: Number.isInteger(number) ? 0 : 2,
+    // Leaderboard: 30.1, 30.12, 30 (no trailing zeroes).
+    return new Intl.NumberFormat("en-US", {
+        minimumFractionDigits: 0,
         maximumFractionDigits: 2
-    })
-        .format(number)
-        .replaceAll("\u00A0", " ")
-        .replaceAll("\u202F", " ");
+    }).format(number);
 }
 
 
