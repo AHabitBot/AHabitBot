@@ -43,7 +43,7 @@ function animateResearchResult(card, action, response, desired) {
     if (changed && amount > 0) {
         const reward = document.createElement('span')
         reward.className = `habit-card__xp-reward${desired ? '' : ' is-removed'}`
-        reward.textContent = `${desired ? '+' : '-'}${amount} XP`
+        reward.textContent = `${desired ? '+' : '-'}${Number.isInteger(amount) ? amount : amount.toFixed(2)} XP`
         reward.setAttribute('aria-hidden', 'true')
         card.querySelector('.habit-card__xp-reward')?.remove()
         card.appendChild(reward)

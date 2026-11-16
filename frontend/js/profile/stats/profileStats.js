@@ -109,6 +109,13 @@ function getCachedStats(
 }
 
 
+function formatStatsXp(value) {
+    const number = Number(value)
+    if (!Number.isFinite(number)) return "0"
+    return Number.isInteger(number) ? String(number) : number.toFixed(2)
+}
+
+
 /* =========================================================
    PERIOD HELPERS
    ========================================================= */
@@ -584,7 +591,7 @@ function renderMainStats(
                     </div>
 
                     <div class="profile-stats-metric__value">
-                        ${data.xp.value}
+                        ${formatStatsXp(data.xp.value)}
                         <span>XP</span>
                     </div>
 
@@ -1415,7 +1422,7 @@ function renderSeasonHistory(history) {
                                 </strong>
 
                                 <span class="profile-stats-season__xp">
-                                    ${Number(season.final_xp) || 0} XP
+                                    ${formatStatsXp(season.final_xp)} XP
                                 </span>
                             </div>
                         </article>

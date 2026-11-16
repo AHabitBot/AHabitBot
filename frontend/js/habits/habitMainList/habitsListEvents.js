@@ -946,15 +946,15 @@ function stopConfirmationLoading(button) {
 }
 
 function showXpChange(card, amount, { removed = false } = {}) {
-    const xpAmount = normalizePositiveInteger(amount)
+    const xpAmount = Number(amount)
 
-    if (!card || xpAmount <= 0) return
+    if (!card || !Number.isFinite(xpAmount) || xpAmount <= 0) return
 
     card.querySelector(".habit-card__xp-reward")?.remove()
 
     const reward = document.createElement("span")
     reward.className = `habit-card__xp-reward${removed ? " is-removed" : ""}`
-    reward.textContent = `${removed ? "-" : "+"}${xpAmount} XP`
+    reward.textContent = `${removed ? "-" : "+"}${Number.isInteger(xpAmount) ? xpAmount : xpAmount.toFixed(2)} XP`
     reward.setAttribute("aria-hidden", "true")
 
     card.appendChild(reward)

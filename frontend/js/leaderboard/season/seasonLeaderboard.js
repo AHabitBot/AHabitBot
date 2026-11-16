@@ -185,7 +185,7 @@ function normalizeLeaderboardUser(
             ),
 
         xp:
-            normalizeNonNegativeInteger(
+            normalizeNonNegativeXp(
                 getWeeklyXp(user)
             ),
 
@@ -259,7 +259,7 @@ function normalizeCurrentUser(
         isCurrentUser: true,
 
         xp:
-            normalizeNonNegativeInteger(
+            normalizeNonNegativeXp(
                 getWeeklyXp(user)
             ),
 
@@ -421,6 +421,12 @@ function normalizeRankChange(
     }
 
     return Math.trunc(number);
+}
+
+
+function normalizeNonNegativeXp(value) {
+    const number = Number(value)
+    return Number.isFinite(number) ? Math.max(0, number) : 0
 }
 
 

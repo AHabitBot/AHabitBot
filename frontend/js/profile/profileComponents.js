@@ -65,6 +65,12 @@ function normalizeProfileNumber(
 }
 
 
+function formatProfileXp(value) {
+    const number = Math.max(0, Number(value) || 0)
+    return Number.isInteger(number) ? String(number) : number.toFixed(2)
+}
+
+
 /* =========================================================
    КАРТОЧКА ПОЛЬЗОВАТЕЛЯ
    ========================================================= */
@@ -117,9 +123,7 @@ export function renderProfileUserCard(
         )
 
     const levelXp =
-        normalizeProfileNumber(
-            profile.level_xp
-        )
+        formatProfileXp(profile.level_xp)
 
     const levelXpRequired =
         Math.max(

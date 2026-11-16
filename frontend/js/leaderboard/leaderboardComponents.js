@@ -371,7 +371,7 @@ export function renderCurrentUser(user = null) {
                 )}
 
                 <span class="leaderboard-current-user__xp-value">
-                    ${user.xp}
+                    ${formatNumber(user.xp)}
                 </span>
             </div>
         </section>
@@ -490,10 +490,13 @@ function formatNumber(value) {
 
     const number =
         Number.isFinite(Number(value))
-            ? Math.max(0, Math.floor(Number(value)))
+            ? Math.max(0, Number(value))
             : 0;
 
-    return new Intl.NumberFormat(locale)
+    return new Intl.NumberFormat(locale, {
+        minimumFractionDigits: Number.isInteger(number) ? 0 : 2,
+        maximumFractionDigits: 2
+    })
         .format(number)
         .replaceAll("\u00A0", " ")
         .replaceAll("\u202F", " ");
