@@ -1512,11 +1512,18 @@ async def set_habit_confirmation(
                         or awarded_confirmations_today < DAILY_XP_CONFIRMATIONS_LIMIT
                     )
 
-                    xp_amount = (
-                        int(habit["xp_reward"])
-                        if should_award_xp
-                        else 0
-                    )
+                    xp_amount = Decimal(habit["xp_reward"]) if should_award_xp else Decimal("0.00")
+                    if should_award_xp and development_mode:
+                        # Bonus is permanent after manual improvement, and only
+                        # applies to future confirmations in the same direction.
+                        completed_in_direction = await connection.fetchval(
+                            """SELECT COUNT(*) FROM development_progress
+                               WHERE user_id=$1 AND direction=$2
+                                 AND completed_at IS NOT NULL""",
+                            user_id,
+                            development_row["direction"],
+                        )
+                        xp_amount += Decimal("0.10") * int(completed_in_direction or 0)
 
                     await connection.execute(
                         """
