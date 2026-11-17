@@ -1,5 +1,5 @@
 import { apiRequest } from '../api/apiClient.js';
-import { DIRECTIONS, getResearch, RESEARCH_DAYS } from './developmentCatalog.js';
+import { DIRECTIONS, RESEARCH_CATALOG, getResearch, RESEARCH_DAYS } from './developmentCatalog.js';
 import { directionHtml } from './developmentDirection.js?v=20261115-dev-cancel7';
 import { upgradeHtml } from './developmentDetail.js?v=20261115-dev-cancel7';
 export const icon = name => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
@@ -18,11 +18,13 @@ const activeResearchHtml = () => {
   return `<button type="button" class="development-active-item" data-development-active="${escapeHtml(r.key)}" data-development-cycle="${Number(r.cycle)||1}"><span>${escapeHtml(direction?.name||r.direction)} · ${escapeHtml(item?.name||r.key)} ${progress}/${target}</span>${icon('chevron_right')}</button>`;
  }).join('')}</div>`;
 };
+const totalResearchCount = () => DIRECTIONS.reduce((sum, direction) => sum + (RESEARCH_CATALOG[direction.key]?.items.length || 0) * 3, 0);
+const directionResearchCount = key => (RESEARCH_CATALOG[key]?.items.length || 0) * 3;
 export const rootHtml = () => `<div class="development-screen">
 <header class="development-heading"><h1>Развитие</h1></header>
 <p class="development-intro">Прокачивай ключевые сферы жизни через реальные привычки</p>
-<div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>Общий прогресс</strong><strong>${developmentState.research.filter(r=>r.completed).length} / 144</strong></div><div class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.completed).length/144*100))}%"></span></div></div></div>
-<div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${d.name}</strong><span class="development-direction__count">${developmentState.research.filter(r=>r.direction===d.key&&r.completed).length} / 36</span><span class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.direction===d.key&&r.completed).length/36*100))}%"></span></span></button>`).join('')}</div>
+<div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>Общий прогресс</strong><strong>${developmentState.research.filter(r=>r.completed).length} / ${totalResearchCount()}</strong></div><div class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.completed).length/totalResearchCount()*100))}%"></span></div></div></div>
+<div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${d.name}</strong><span class="development-direction__count">${developmentState.research.filter(r=>r.direction===d.key&&r.completed).length} / ${directionResearchCount(d.key)}</span><span class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.direction===d.key&&r.completed).length/directionResearchCount(d.key)*100))}%"></span></span></button>`).join('')}</div>
 <div class="development-section-title">${icon('science')}<h2>Исследования</h2><span>${developmentState.research.filter(r=>!r.completed).length} активных</span></div>
 ${activeResearchHtml()}
 <p class="development-preview-note">Выбери направление и начни исследование.</p></div>`;
