@@ -33,6 +33,54 @@
         ]
       },
       {
+        "key": "pushups",
+        "name": "Отжимания",
+        "icon": "fitness_center",
+        "requires": [
+          {
+            "key": "strength",
+            "level": 1
+          }
+        ],
+        "tasks": [
+          "Выполнить 25 отжиманий от пола за день",
+          "Выполнить 40 отжиманий от пола за день",
+          "Выполнить 60 отжиманий от пола за день"
+        ]
+      },
+      {
+        "key": "abs",
+        "name": "Пресс",
+        "icon": "fitness_center",
+        "requires": [
+          {
+            "key": "strength",
+            "level": 1
+          }
+        ],
+        "tasks": [
+          "Выполнить 25 скручиваний на пресс за день",
+          "Выполнить 40 скручиваний на пресс за день",
+          "Выполнить 60 скручиваний на пресс за день"
+        ]
+      },
+      {
+        "key": "squats",
+        "name": "Приседания",
+        "icon": "fitness_center",
+        "requires": [
+          {
+            "key": "health",
+            "level": 1
+          }
+        ],
+        "tasks": [
+          "Выполнить 25 приседаний за день",
+          "Выполнить 40 приседаний за день",
+          "Выполнить 60 приседаний за день"
+        ]
+      },
+      {
         "key": "health",
         "name": "Здоровье",
         "icon": "favorite",
@@ -54,7 +102,11 @@
         "icon": "accessibility_new",
         "requires": [
           {
-            "key": "strength",
+            "key": "pushups",
+            "level": 1
+          },
+          {
+            "key": "abs",
             "level": 1
           }
         ],
@@ -70,7 +122,11 @@
         "icon": "nutrition",
         "requires": [
           {
-            "key": "health",
+            "key": "abs",
+            "level": 1
+          },
+          {
+            "key": "squats",
             "level": 1
           }
         ],
@@ -118,6 +174,10 @@
         "icon": "balance",
         "requires": [
           {
+            "key": "speed",
+            "level": 1
+          },
+          {
             "key": "posture",
             "level": 1
           }
@@ -136,6 +196,10 @@
           {
             "key": "posture",
             "level": 1
+          },
+          {
+            "key": "recovery",
+            "level": 1
           }
         ],
         "tasks": [
@@ -150,7 +214,7 @@
         "icon": "speed",
         "requires": [
           {
-            "key": "strength",
+            "key": "flexibility",
             "level": 1
           }
         ],
@@ -166,7 +230,11 @@
         "icon": "directions_run",
         "requires": [
           {
-            "key": "recovery",
+            "key": "balance",
+            "level": 1
+          },
+          {
+            "key": "coordination",
             "level": 1
           }
         ],
@@ -181,14 +249,6 @@
         "name": "Физическая форма",
         "icon": "military_tech",
         "requires": [
-          {
-            "key": "balance",
-            "level": 1
-          },
-          {
-            "key": "coordination",
-            "level": 1
-          },
           {
             "key": "agility",
             "level": 1
