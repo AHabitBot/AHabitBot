@@ -1,24 +1,48 @@
 import { RESEARCH_CATALOG } from './developmentCatalog.js';
 import { icon, rootHtml, researchState, researchRecord } from './development.js?v=20261115-dev-cancel7';
 
-// Positions and routed links generated from the same prerequisites as the backend.
-// Each cycle repeats this layout; the backend remains the authority for access.
-const TREE_LAYOUT = {"body":{"height":878,"nodes":{"endurance":[66.89,50.0],"strength":[41.56,195.97],"health":[66.89,195.97],"flexibility":[20.44,341.97],"nutrition":[71.11,341.97],"recovery":[88.0,341.97],"posture":[12.0,487.98],"balance":[28.89,487.98],"coordination":[28.89,633.98],"speed":[37.33,341.97],"agility":[28.89,779.98],"fitness":[54.22,341.97]},"edges":[{"from":"endurance","to":"strength","points":[[63.88,68.08],[59.39,93.62],[50.9,141.85],[45.78,170.92]]},{"from":"endurance","to":"health","points":[[66.89,76.08],[66.89,99.05],[66.89,133.32],[66.89,159.16]]},{"from":"endurance","to":"fitness","points":[[68.52,73.93],[70.97,108.48],[75.33,169.9],[75.33,169.9],[75.33,169.9],[75.33,222.04],[75.33,222.04],[75.33,222.04],[64.6,282.47],[58.44,317.17]]},{"from":"strength","to":"flexibility","points":[[38.84,215.53],[35.13,240.79],[28.48,286.18],[24.27,314.86]]},{"from":"strength","to":"speed","points":[[40.83,221.75],[40.15,244.82],[39.14,279.47],[38.37,305.48]]},{"from":"strength","to":"fitness","points":[[43.51,219.19],[45.64,243.45],[49.08,282.52],[51.49,309.84]]},{"from":"health","to":"nutrition","points":[[67.61,221.75],[68.29,244.82],[69.31,279.47],[70.07,305.48]]},{"from":"health","to":"recovery","points":[[69.61,215.53],[73.31,240.79],[79.97,286.18],[84.18,314.86]]},{"from":"flexibility","to":"posture","points":[[19.05,366.78],[17.67,390.32],[15.54,426.6],[13.98,453.14]]},{"from":"flexibility","to":"balance","points":[[21.84,366.78],[23.22,390.32],[25.35,426.6],[26.91,453.14]]},{"from":"balance","to":"coordination","points":[[28.89,514.09],[28.89,537.06],[28.89,571.32],[28.89,597.17]]},{"from":"coordination","to":"agility","points":[[28.89,660.09],[28.89,683.06],[28.89,717.33],[28.89,743.17]]}]},"mind":{"height":878,"nodes":{"attention":[73.97,50.0],"memory":[60.2,195.97],"focus":[88.0,195.97],"logic":[18.89,341.97],"learning":[60.2,341.97],"analysis":[12.0,487.98],"creativity":[39.54,487.98],"thinking":[12.0,633.98],"planning":[81.12,633.98],"speech":[39.54,633.98],"erudition":[67.08,487.98],"strategy":[39.54,779.98]},"edges":[{"from":"attention","to":"memory","points":[[71.69,74.77],[69.44,98.32],[65.97,134.59],[63.43,161.13]]},{"from":"attention","to":"focus","points":[[76.25,74.46],[78.56,98.08],[82.13,134.77],[84.74,161.45]]},{"from":"memory","to":"logic","points":[[55.29,214.09],[47.96,239.62],[34.12,287.85],[25.78,316.93]]},{"from":"memory","to":"learning","points":[[60.2,222.08],[60.2,245.05],[60.2,279.32],[60.2,305.16]]},{"from":"focus","to":"planning","points":[[87.61,222.02],[86.44,295.59],[83.03,511.53],[81.68,597.27]]},{"from":"logic","to":"analysis","points":[[17.7,367.75],[16.6,390.82],[14.94,425.47],[13.7,451.48]]},{"from":"learning","to":"creativity","points":[[57.01,365.19],[53.53,389.45],[47.92,428.52],[44.0,455.85]]},{"from":"learning","to":"erudition","points":[[61.38,367.75],[62.48,390.82],[64.14,425.47],[65.38,451.48]]},{"from":"analysis","to":"thinking","points":[[12.0,514.09],[12.0,537.06],[12.0,571.32],[12.0,597.17]]},{"from":"creativity","to":"speech","points":[[39.54,514.09],[39.54,537.06],[39.54,571.32],[39.54,597.17]]},{"from":"thinking","to":"strategy","points":[[15.89,655.34],[20.62,680.09],[28.66,722.06],[34.03,750.14]]},{"from":"planning","to":"strategy","points":[[76.26,651.81],[68.92,677.24],[54.94,725.64],[46.51,754.83]]}]},"will":{"height":732,"nodes":{"discipline":[49.88,50.0],"self_control":[37.25,195.99],"persistence":[62.51,195.99],"responsibility":[12.0,341.99],"patience":[37.25,341.99],"decisiveness":[62.51,341.99],"consistency":[12.0,487.98],"courage":[62.51,487.98],"initiative":[12.0,633.98],"purpose":[88.0,487.98],"resilience":[37.25,487.98],"character":[62.51,633.98]},"edges":[{"from":"discipline","to":"self_control","points":[[47.79,74.81],[45.73,98.35],[42.55,134.62],[40.22,161.15]]},{"from":"discipline","to":"persistence","points":[[51.96,74.81],[54.03,98.35],[57.21,134.62],[59.54,161.15]]},{"from":"self_control","to":"responsibility","points":[[33.69,217.35],[29.35,242.1],[21.98,284.08],[17.05,312.15]]},{"from":"self_control","to":"patience","points":[[37.25,222.11],[37.25,245.07],[37.25,279.34],[37.25,305.19]]},{"from":"persistence","to":"decisiveness","points":[[62.51,222.11],[62.51,245.07],[62.51,279.34],[62.51,305.19]]},{"from":"persistence","to":"purpose","points":[[64.94,219.96],[68.61,254.51],[75.13,315.92],[75.13,315.92],[75.13,315.92],[81.67,402.86],[85.43,452.76]]},{"from":"responsibility","to":"consistency","points":[[12.0,368.1],[12.0,391.07],[12.0,425.34],[12.0,451.18]]},{"from":"patience","to":"resilience","points":[[37.25,368.1],[37.25,391.07],[37.25,425.34],[37.25,451.18]]},{"from":"decisiveness","to":"courage","points":[[62.51,368.1],[62.51,391.07],[62.51,425.34],[62.51,451.18]]},{"from":"consistency","to":"initiative","points":[[12.0,514.1],[12.0,537.07],[12.0,571.34],[12.0,597.18]]},{"from":"purpose","to":"character","points":[[84.4,509.35],[80.02,534.09],[72.58,576.07],[67.61,604.14]]},{"from":"resilience","to":"character","points":[[40.82,509.35],[45.16,534.09],[52.53,576.07],[57.45,604.14]]}]},"psyche":{"height":1024,"nodes":{"awareness":[49.88,50.0],"calm":[37.25,196.04],"self_esteem":[62.75,196.04],"empathy":[12.0,342.0],"confidence":[62.75,342.0],"stress":[37.25,342.0],"emotional_control":[37.01,487.99],"adaptability":[62.99,633.99],"acceptance":[37.01,633.99],"optimism":[88.0,342.0],"inner_balance":[37.01,779.98],"psychological_resilience":[49.88,925.98]},"edges":[{"from":"awareness","to":"calm","points":[[47.79,74.78],[45.73,98.35],[42.55,134.62],[40.22,161.2]]},{"from":"awareness","to":"self_esteem","points":[[51.98,74.48],[54.09,98.13],[57.37,134.77],[59.76,161.5]]},{"from":"calm","to":"empathy","points":[[33.69,217.36],[29.35,242.11],[21.98,284.09],[17.05,312.16]]},{"from":"calm","to":"stress","points":[[37.25,222.11],[37.25,245.08],[37.25,279.35],[37.25,305.19]]},{"from":"self_esteem","to":"confidence","points":[[62.75,222.11],[62.75,245.08],[62.75,279.35],[62.75,305.19]]},{"from":"self_esteem","to":"optimism","points":[[66.31,217.36],[70.66,242.11],[78.02,284.09],[82.95,312.16]]},{"from":"confidence","to":"adaptability","points":[[62.77,368.26],[62.81,419.77],[62.91,537.21],[62.96,596.81]]},{"from":"stress","to":"emotional_control","points":[[37.21,368.11],[37.17,391.08],[37.11,425.34],[37.07,451.19]]},{"from":"emotional_control","to":"acceptance","points":[[37.01,514.11],[37.01,537.07],[37.01,571.34],[37.01,597.19]]},{"from":"adaptability","to":"psychological_resilience","points":[[61.87,659.75],[59.54,711.31],[54.15,830.48],[51.46,889.91]]},{"from":"acceptance","to":"inner_balance","points":[[37.01,660.1],[37.01,683.07],[37.01,717.34],[37.01,743.18]]},{"from":"inner_balance","to":"psychological_resilience","points":[[39.11,804.47],[41.22,828.1],[44.5,864.78],[46.89,891.47]]}]}};
+// Display links are a deliberately sparse, non-crossing tree. Actual access
+// requirements remain in the catalog and will be enforced by the backend.
+// Each direction has its own 12-node silhouette, repeated for cycles I–III.
+// These are display-only connections; access rules stay in developmentCatalog.js.
+const LAYOUTS = {
+ body: [['endurance'],['strength','health'],['flexibility','speed','nutrition'],['posture','recovery'],['balance','coordination','agility'],['fitness']],
+ mind: [['attention'],['memory','focus'],['logic','learning'],['analysis','creativity','planning'],['thinking','speech'],['erudition','strategy']],
+ will: [['discipline'],['self_control','persistence'],['responsibility'],['patience','decisiveness'],['consistency','courage','initiative'],['purpose','resilience','character']],
+ psyche: [['awareness'],['calm','self_esteem','empathy'],['confidence','stress'],['emotional_control','adaptability'],['acceptance','optimism','inner_balance'],['psychological_resilience']]
+};
+const X = {1:[50],2:[26,74],3:[17,50,83]};
+const ROW_STEP = 142;
+const Y0 = 50;
 const R = 33;
 const escapeHtml = value => String(value).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 function renderCycle(direction, cycle) {
- const layout=TREE_LAYOUT[direction.key];
-const items=new Map(direction.items.map(item=>[item.key,item]));
-const points=new Map(Object.entries(layout.nodes).map(([key,[x,y]])=>[key,{x,y}]));
-const height=layout.height;
-// Draw only actual dependency edges; no unrelated decorative crossings.
-const paths=layout.edges.map(edge=>{
- const coords=edge.points;
- if(coords.length<2)return '';
- return `<polyline points="${coords.map(([x,y])=>`${x},${y}`).join(' ')}"/>`;
-});
- const nodes=direction.items.map(({key})=>{
+ const rows=LAYOUTS[direction.key];
+ const items=new Map(direction.items.map(item=>[item.key,item]));
+ const points=new Map();
+ rows.forEach((row,i)=>row.forEach((key,j)=>points.set(key,{x:X[row.length][j],y:Y0+i*ROW_STEP})));
+ const height=Y0+(rows.length-1)*ROW_STEP+92;
+ // Draw only actual prerequisites. A line is shown for each required parent,
+ // even when the parent is in an earlier non-adjacent row.
+ const paths=[];
+ for (const item of direction.items) {
+  const child=points.get(item.key);
+  if (!child) continue;
+  for (const requirement of item.requires) {
+   const parent=points.get(requirement.key);
+   if (!parent) continue;
+   const startY=parent.y+R;
+   const endY=child.y-R;
+   if (direction.key === 'body') {
+    paths.push(`<path d="M ${parent.x} ${startY} L ${child.x} ${endY}"/>`);
+   } else {
+    const midY=Math.round((startY+endY)/2);
+    paths.push(`<path d="M ${parent.x} ${startY} V ${midY} H ${child.x} V ${endY}"/>`);
+   }
+  }
+ }
+ const nodes=rows.flat().map(key=>{
   const item=items.get(key),p=points.get(key);
   const record=researchRecord(key,cycle);
   const done=new Set(researchState().research.filter(r=>r.completed).map(r=>`${r.key}:${r.cycle}`));

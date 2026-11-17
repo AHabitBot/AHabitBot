@@ -39,7 +39,7 @@
         "requires": [
           {
             "key": "endurance",
-            "level": 2
+            "level": 1
           }
         ],
         "tasks": [
@@ -86,8 +86,8 @@
         "icon": "bedtime",
         "requires": [
           {
-            "key": "health",
-            "level": 2
+            "key": "nutrition",
+            "level": 1
           }
         ],
         "tasks": [
@@ -118,8 +118,8 @@
         "icon": "balance",
         "requires": [
           {
-            "key": "flexibility",
-            "level": 2
+            "key": "posture",
+            "level": 1
           }
         ],
         "tasks": [
@@ -134,7 +134,7 @@
         "icon": "sports_gymnastics",
         "requires": [
           {
-            "key": "balance",
+            "key": "posture",
             "level": 1
           }
         ],
@@ -151,7 +151,7 @@
         "requires": [
           {
             "key": "strength",
-            "level": 3
+            "level": 1
           }
         ],
         "tasks": [
@@ -166,8 +166,8 @@
         "icon": "directions_run",
         "requires": [
           {
-            "key": "coordination",
-            "level": 2
+            "key": "recovery",
+            "level": 1
           }
         ],
         "tasks": [
@@ -182,12 +182,16 @@
         "icon": "military_tech",
         "requires": [
           {
-            "key": "strength",
-            "level": 3
+            "key": "balance",
+            "level": 1
           },
           {
-            "key": "endurance",
-            "level": 3
+            "key": "coordination",
+            "level": 1
+          },
+          {
+            "key": "agility",
+            "level": 1
           }
         ],
         "tasks": [
