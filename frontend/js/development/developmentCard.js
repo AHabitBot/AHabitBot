@@ -14,7 +14,9 @@ export function renderDevelopmentCard(habit) {
   const ready = Boolean(d.ready || progress >= target)
   const research = getResearch(d.key)
   const icon = safe(research?.icon || 'auto_awesome')
-  const title = safe(research?.name || habit.name)
+  const cycle = Number(d.cycle)
+  const cycleLabel = ({1:"I",2:"II",3:"III"})[cycle]
+  const title = safe(`${research?.name || habit.name}${cycleLabel ? ` ${cycleLabel}` : ""}`)
   const directionName = safe(research?.directionName || ({body:"Тело",mind:"Разум",will:"Воля",psyche:"Психика"}[d.direction] || "Развитие"))
   const dots = Array.from({length:target}, (_, i) =>
     `<span class="development-habit__dot ${i < progress ? 'is-done' : ''}"></span>`
