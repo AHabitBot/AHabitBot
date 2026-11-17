@@ -7,9 +7,9 @@ import { icon, rootHtml, researchState, researchRecord } from './development.js?
 // These are display-only connections; access rules stay in developmentCatalog.js.
 const LAYOUTS = {
  body: [['endurance'],['strength','health'],['flexibility','speed','nutrition'],['posture','recovery'],['balance','coordination','agility'],['fitness']],
- mind: [['attention'],['memory','focus'],['logic','learning'],['analysis','creativity','planning'],['thinking','speech'],['erudition','strategy']],
- will: [['discipline'],['self_control','persistence'],['responsibility'],['patience','decisiveness'],['consistency','courage','initiative'],['purpose','resilience','character']],
- psyche: [['awareness'],['calm','self_esteem','empathy'],['confidence','stress'],['emotional_control','adaptability'],['acceptance','optimism','inner_balance'],['psychological_resilience']]
+ mind: [["attention"],["memory","focus"],["logic","learning"],["analysis","creativity","planning"],["thinking","speech"],["erudition"],["strategy"]],
+ will: [["discipline"],["self_control"],["responsibility","persistence"],["patience"],["consistency","decisiveness","courage"],["initiative","purpose"],["resilience"],["character"]],
+ psyche: [["awareness"],["calm","self_esteem"],["empathy"],["stress","confidence"],["emotional_control","adaptability","optimism"],["acceptance","inner_balance"],["psychological_resilience"]]
 };
 const X = {1:[50],2:[26,74],3:[17,50,83]};
 const ROW_STEP = 142;

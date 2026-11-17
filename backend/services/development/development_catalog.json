@@ -242,7 +242,7 @@
         "requires": [
           {
             "key": "attention",
-            "level": 2
+            "level": 1
           }
         ],
         "tasks": [
@@ -273,8 +273,8 @@
         "icon": "menu_book",
         "requires": [
           {
-            "key": "memory",
-            "level": 2
+            "key": "focus",
+            "level": 1
           }
         ],
         "tasks": [
@@ -322,7 +322,7 @@
         "requires": [
           {
             "key": "analysis",
-            "level": 2
+            "level": 1
           }
         ],
         "tasks": [
@@ -337,7 +337,7 @@
         "icon": "event_note",
         "requires": [
           {
-            "key": "focus",
+            "key": "learning",
             "level": 1
           }
         ],
@@ -354,7 +354,7 @@
         "requires": [
           {
             "key": "creativity",
-            "level": 2
+            "level": 1
           }
         ],
         "tasks": [
@@ -369,8 +369,12 @@
         "icon": "school",
         "requires": [
           {
-            "key": "learning",
-            "level": 3
+            "key": "thinking",
+            "level": 1
+          },
+          {
+            "key": "speech",
+            "level": 1
           }
         ],
         "tasks": [
@@ -385,12 +389,8 @@
         "icon": "account_tree",
         "requires": [
           {
-            "key": "thinking",
-            "level": 3
-          },
-          {
-            "key": "planning",
-            "level": 2
+            "key": "erudition",
+            "level": 1
           }
         ],
         "tasks": [
@@ -440,8 +440,8 @@
         "icon": "landscape",
         "requires": [
           {
-            "key": "discipline",
-            "level": 2
+            "key": "self_control",
+            "level": 1
           }
         ],
         "tasks": [
@@ -472,8 +472,8 @@
         "icon": "hourglass_empty",
         "requires": [
           {
-            "key": "self_control",
-            "level": 2
+            "key": "responsibility",
+            "level": 1
           }
         ],
         "tasks": [
@@ -488,7 +488,7 @@
         "icon": "bolt",
         "requires": [
           {
-            "key": "persistence",
+            "key": "patience",
             "level": 1
           }
         ],
@@ -504,7 +504,7 @@
         "icon": "repeat",
         "requires": [
           {
-            "key": "responsibility",
+            "key": "patience",
             "level": 1
           }
         ],
@@ -520,8 +520,8 @@
         "icon": "local_fire_department",
         "requires": [
           {
-            "key": "decisiveness",
-            "level": 2
+            "key": "patience",
+            "level": 1
           }
         ],
         "tasks": [
@@ -552,8 +552,8 @@
         "icon": "track_changes",
         "requires": [
           {
-            "key": "persistence",
-            "level": 3
+            "key": "decisiveness",
+            "level": 1
           }
         ],
         "tasks": [
@@ -568,8 +568,12 @@
         "icon": "shield",
         "requires": [
           {
-            "key": "patience",
-            "level": 2
+            "key": "initiative",
+            "level": 1
+          },
+          {
+            "key": "purpose",
+            "level": 1
           }
         ],
         "tasks": [
@@ -584,12 +588,8 @@
         "icon": "workspace_premium",
         "requires": [
           {
-            "key": "purpose",
-            "level": 3
-          },
-          {
             "key": "resilience",
-            "level": 2
+            "level": 1
           }
         ],
         "tasks": [
@@ -640,7 +640,7 @@
         "requires": [
           {
             "key": "awareness",
-            "level": 2
+            "level": 1
           }
         ],
         "tasks": [
@@ -657,6 +657,10 @@
           {
             "key": "calm",
             "level": 1
+          },
+          {
+            "key": "self_esteem",
+            "level": 1
           }
         ],
         "tasks": [
@@ -671,7 +675,7 @@
         "icon": "verified_user",
         "requires": [
           {
-            "key": "self_esteem",
+            "key": "empathy",
             "level": 1
           }
         ],
@@ -687,8 +691,8 @@
         "icon": "health_and_safety",
         "requires": [
           {
-            "key": "calm",
-            "level": 2
+            "key": "empathy",
+            "level": 1
           }
         ],
         "tasks": [
@@ -720,7 +724,7 @@
         "requires": [
           {
             "key": "confidence",
-            "level": 2
+            "level": 1
           }
         ],
         "tasks": [
@@ -737,6 +741,10 @@
           {
             "key": "emotional_control",
             "level": 1
+          },
+          {
+            "key": "adaptability",
+            "level": 1
           }
         ],
         "tasks": [
@@ -751,8 +759,8 @@
         "icon": "wb_sunny",
         "requires": [
           {
-            "key": "self_esteem",
-            "level": 3
+            "key": "confidence",
+            "level": 1
           }
         ],
         "tasks": [
@@ -767,8 +775,12 @@
         "icon": "balance",
         "requires": [
           {
-            "key": "acceptance",
-            "level": 2
+            "key": "adaptability",
+            "level": 1
+          },
+          {
+            "key": "optimism",
+            "level": 1
           }
         ],
         "tasks": [
@@ -783,12 +795,12 @@
         "icon": "shield",
         "requires": [
           {
-            "key": "inner_balance",
-            "level": 3
+            "key": "acceptance",
+            "level": 1
           },
           {
-            "key": "adaptability",
-            "level": 2
+            "key": "inner_balance",
+            "level": 1
           }
         ],
         "tasks": [
