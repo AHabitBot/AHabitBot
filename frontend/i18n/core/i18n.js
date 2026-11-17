@@ -100,6 +100,11 @@ import settingsTimezoneEn from "../profile/settings/timezone/en.js";
 import settingsTimezoneDe from "../profile/settings/timezone/de.js";
 
 
+import developmentRu from "../development/ru.js";
+import developmentUk from "../development/uk.js";
+import developmentEn from "../development/en.js";
+import developmentDe from "../development/de.js";
+
 export const SUPPORTED_LANGUAGES = Object.freeze(["ru", "uk", "en", "de"]);
 
 const LANGUAGE_STORAGE_KEY = "ahabit_language";
@@ -146,6 +151,7 @@ const dictionaries = Object.freeze({
         profileArchiveRu,
         navigationRu,
         commonAppRu,
+        developmentRu,
     ),
     uk: mergeDictionaries(
         settingsMainUk,
@@ -168,6 +174,7 @@ const dictionaries = Object.freeze({
         profileArchiveUk,
         navigationUk,
         commonAppUk,
+        developmentUk,
     ),
     en: mergeDictionaries(
         settingsMainEn,
@@ -190,6 +197,7 @@ const dictionaries = Object.freeze({
         profileArchiveEn,
         navigationEn,
         commonAppEn,
+        developmentEn,
     ),
     de: mergeDictionaries(
         settingsMainDe,
@@ -212,6 +220,7 @@ const dictionaries = Object.freeze({
         profileArchiveDe,
         navigationDe,
         commonAppDe,
+        developmentDe,
     ),
 });
 
