@@ -34,12 +34,9 @@ function renderCycle(direction, cycle) {
    if (!parent) continue;
    const startY=parent.y+R;
    const endY=child.y-R;
-   if (direction.key === 'body') {
-    paths.push(`<path d="M ${parent.x} ${startY} L ${child.x} ${endY}"/>`);
-   } else {
-    const midY=Math.round((startY+endY)/2);
-    paths.push(`<path d="M ${parent.x} ${startY} V ${midY} H ${child.x} V ${endY}"/>`);
-   }
+   // Consistent game-style diagonal links in every direction.
+   // Only the visual connector changes; prerequisites stay untouched.
+   paths.push(`<path d="M ${parent.x} ${startY} L ${child.x} ${endY}"/>`);
   }
  }
  const nodes=rows.flat().map(key=>{
