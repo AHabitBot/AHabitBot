@@ -1,3 +1,4 @@
+import { t } from '../../i18n/core/i18n.js';
 // Исследования используют кнопку и анимации обычных привычек,
 // но сохраняют собственный endpoint и собственный прогресс.
 import { apiRequest } from '../api/apiClient.js'
@@ -34,7 +35,7 @@ function animateResearchResult(card, action, response, desired) {
     }
     action.classList.toggle('is-completed', desired)
     action.setAttribute('aria-pressed', String(desired))
-    action.setAttribute('aria-label', desired ? 'Отменить подтверждение исследования' : 'Подтвердить исследование')
+    action.setAttribute('aria-label', desired ? t('development.undoConfirm') : t('development.confirmResearch'))
     const confirmation = response?.confirmation || {}
     const changed = Boolean(confirmation.confirmation_state_changed)
     const habit = confirmation.habit || {}
@@ -79,7 +80,7 @@ export function initDevelopmentCardEvents(card, { getCompletedToday = () => fals
         try {
             if (isImprove) {
                 await apiRequest(`/api/development/${encodeURIComponent(id)}/improve`, { method: 'POST' })
-                action.textContent = 'Улучшено'
+                action.textContent = t('development.upgraded')
                 card.dataset.developmentCompleted = '1'
             } else {
                 const response = await apiRequest(`/api/development/${encodeURIComponent(id)}/confirmation`, {
@@ -98,7 +99,7 @@ export function initDevelopmentCardEvents(card, { getCompletedToday = () => fals
                     improve.type = 'button'
                     improve.className = 'development-habit__improve'
                     improve.dataset.developmentImproveHabit = id
-                    improve.textContent = 'Улучшить'
+                    improve.textContent = t('development.improve')
                     action.replaceWith(improve)
                     // Новый обработчик для кнопки «Улучшить» привязывается к этой карточке.
                     initDevelopmentCardEvents(card)

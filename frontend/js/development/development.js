@@ -1,3 +1,5 @@
+import { developmentDirectionName, developmentResearchName } from './developmentTranslations.js';
+import { t } from '../../i18n/core/i18n.js';
 import { apiRequest } from '../api/apiClient.js';
 import { DIRECTIONS, RESEARCH_CATALOG, getResearch, RESEARCH_DAYS } from './developmentCatalog.js';
 import { directionHtml } from './developmentDirection.js?v=20261115-dev-cancel7';
@@ -9,25 +11,25 @@ export const researchRecord = (key,cycle) => developmentState.research.find(r=>r
 const escapeHtml = value => String(value).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const activeResearchHtml = () => {
  const active=developmentState.research.filter(r=>!r.completed);
- if(!active.length)return '<div class="development-empty">Нет активных исследований</div>';
+ if(!active.length)return '<div class="development-empty">${t("development.empty")}</div>';
  return `<div class="development-active-list">${active.map(r=>{
   const direction=DIRECTIONS.find(d=>d.key===r.direction);
   const item=getResearch(r.key);
   const target=Number(r.target)||RESEARCH_DAYS[Number(r.cycle)-1]||7;
   const progress=Math.max(0,Math.min(target,Number(r.progress)||0));
-  return `<button type="button" class="development-active-item" data-development-active="${escapeHtml(r.key)}" data-development-cycle="${Number(r.cycle)||1}"><span>${escapeHtml(direction?.name||r.direction)} · ${escapeHtml(item?.name||r.key)} ${progress}/${target}</span>${icon('chevron_right')}</button>`;
+  return `<button type="button" class="development-active-item" data-development-active="${escapeHtml(r.key)}" data-development-cycle="${Number(r.cycle)||1}"><span>${escapeHtml(direction?developmentDirectionName(direction.key):r.direction)} · ${escapeHtml(item?developmentResearchName(item.key):r.key)} ${progress}/${target}</span>${icon('chevron_right')}</button>`;
  }).join('')}</div>`;
 };
 const totalResearchCount = () => DIRECTIONS.reduce((sum, direction) => sum + (RESEARCH_CATALOG[direction.key]?.items.length || 0) * 3, 0);
 const directionResearchCount = key => (RESEARCH_CATALOG[key]?.items.length || 0) * 3;
 export const rootHtml = () => `<div class="development-screen">
-<header class="development-heading"><h1>Развитие</h1></header>
-<p class="development-intro">Прокачивай ключевые сферы жизни через реальные привычки</p>
-<div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>Общий прогресс</strong><strong>${developmentState.research.filter(r=>r.completed).length} / ${totalResearchCount()}</strong></div><div class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.completed).length/totalResearchCount()*100))}%"></span></div></div></div>
-<div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${d.name}</strong><span class="development-direction__count">${developmentState.research.filter(r=>r.direction===d.key&&r.completed).length} / ${directionResearchCount(d.key)}</span><span class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.direction===d.key&&r.completed).length/directionResearchCount(d.key)*100))}%"></span></span></button>`).join('')}</div>
-<div class="development-section-title">${icon('science')}<h2>Исследования</h2><span>${developmentState.research.filter(r=>!r.completed).length} активных</span></div>
+<header class="development-heading"><h1>${t("development.title")}</h1></header>
+<p class="development-intro">${t("development.intro")}</p>
+<div class="development-overall"><div class="development-overall__icon">${icon('hexagon')}</div><div class="development-overall__main"><div class="development-line"><strong>${t("development.overall")}</strong><strong>${developmentState.research.filter(r=>r.completed).length} / ${totalResearchCount()}</strong></div><div class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.completed).length/totalResearchCount()*100))}%"></span></div></div></div>
+<div class="development-directions">${DIRECTIONS.map(d=>`<button type="button" class="development-direction development-direction--${d.color}" data-development-direction="${d.key}"><span class="development-direction__icon">${icon(d.icon)}</span><span class="development-direction__arrow">${icon('chevron_right')}</span><strong>${escapeHtml(developmentDirectionName(d.key))}</strong><span class="development-direction__count">${developmentState.research.filter(r=>r.direction===d.key&&r.completed).length} / ${directionResearchCount(d.key)}</span><span class="development-progress"><span style="width:${Math.min(100,Math.round(developmentState.research.filter(r=>r.direction===d.key&&r.completed).length/directionResearchCount(d.key)*100))}%"></span></span></button>`).join('')}</div>
+<div class="development-section-title">${icon('science')}<h2>${t("development.research")}</h2><span>${t("development.activeCount", {count:developmentState.research.filter(r=>!r.completed).length})}</span></div>
 ${activeResearchHtml()}
-<p class="development-preview-note">Выбери направление и начни исследование.</p></div>`;
+<p class="development-preview-note">${t("development.choose")}</p></div>`;
 // Keep the actual direction DOM when opening a research detail. This avoids
 // rebuilding the tree and preserves the exact scroll position on return.
 export function renderDevelopment(root,{reset=false}={}){
@@ -43,7 +45,7 @@ export function renderDevelopment(root,{reset=false}={}){
   const sequence=++refreshSequence;
   const next=await apiRequest('/api/development');
   if(sequence!==refreshSequence)return false;
-  if(!next || !Array.isArray(next.research))throw new Error('Некорректный ответ /api/development');
+  if(!next || !Array.isArray(next.research))throw new Error(t('development.invalidResponse'));
   developmentState=next;
   return true;
  };
@@ -87,6 +89,9 @@ export function renderDevelopment(root,{reset=false}={}){
  root.dataset.developmentPage='root';
  const refresh = async () => { try {if(await refreshState())refreshVisible();}catch(error){console.error('Развитие:',error); throw error;} };
  refresh();
+ window.addEventListener('app:languagechange', () => {
+  refreshVisible();
+ });
  window.addEventListener('ahabit:habits-refresh', event => {
   const task = refresh();
   if (Array.isArray(event.detail?.waitFor)) event.detail.waitFor.push(task);
@@ -96,14 +101,14 @@ export function renderDevelopment(root,{reset=false}={}){
   const button=event.target.closest('[data-development-direction], [data-development-back], [data-development-upgrade], [data-development-start], [data-development-improve], [data-development-go-habits], [data-development-active], [data-development-next-cycle], [data-development-cancel]');
   if(!button||!root.contains(button))return;
   if(button.hasAttribute('data-development-cancel')){
-   if(!window.confirm('Отменить исследование? Прогресс сбросится, но заработанный XP сохранится.'))return;
+   if(!window.confirm(t('development.cancelConfirm')))return;
    button.disabled=true;
    try{
     await apiRequest(`/api/development/${encodeURIComponent(button.dataset.developmentCancel)}/cancel`,{method:'POST'});
     await refreshState();
     refreshVisible();
     window.dispatchEvent(new Event('ahabit:habits-refresh'));
-   }catch(error){alert(error?.message||'Не удалось отменить исследование');button.disabled=false;}
+   }catch(error){alert(error?.message||t('development.cancelError'));button.disabled=false;}
    return;
   }
   if(button.hasAttribute('data-development-next-cycle')){
@@ -149,7 +154,7 @@ export function renderDevelopment(root,{reset=false}={}){
     refreshVisible();
     window.dispatchEvent(new Event('ahabit:habits-refresh'));
     window.dispatchEvent(new Event('focus'));
-   }catch(error){alert(error.message||'Не удалось выполнить действие');button.disabled=false;}
+   }catch(error){alert(error.message||t('development.actionError'));button.disabled=false;}
    return;
   }
   if(button.dataset.developmentDirection){
